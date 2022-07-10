@@ -67,12 +67,7 @@ if ( !defined( 'ACTIONAPP_WP_CORE_LIB' ) ) {
 	define( 'ACTIONAPP_WP_CORE_LIB', ACTIONAPP_WP_BASE_DIR . '/core' );
 }
 
-if ( !defined( 'ACTIONAPP_WP_SLEEKDB_LIB' ) ) {
-	define( 'ACTIONAPP_WP_SLEEKDB_LIB', ACTIONAPP_WP_BASE_DIR . '/SleekDB' );
-}
-
 require_once ACTIONAPP_WP_BASE_DIR . '/cls/ActAppCommon.php';
-require_once ACTIONAPP_WP_SLEEKDB_LIB . '/SleekDB.php';
 
 
 //---- Blocks Module

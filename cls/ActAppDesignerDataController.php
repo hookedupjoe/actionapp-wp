@@ -1184,7 +1184,7 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 	
 
 	public function get_users($request) {
-		$blogusers = get_users( array( 'role__in' => array( 'administrator', 'author', 'editor' ) ) );
+		$blogusers = get_users( array( 'role__in' => array( 'administrator', 'author', 'editor', 'contributor', 'subscriber' ) ) );
 		$tmpData = [];
 		foreach ( $blogusers as $user ) {
 			$tmpID = $user->ID;
