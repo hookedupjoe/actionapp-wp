@@ -1,0 +1,12 @@
+{
+	"options": {
+		"padding": false
+	},
+	"content": [
+		{
+			"ctl": "panel",
+			"controlname": "/staylitart/wp-json/actappdesigner/more?open",
+			"name": "ws"
+		}
+	]
+}

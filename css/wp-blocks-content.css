@@ -1,0 +1,38 @@
+
+.block-editor-block-list__block .block-editor-url-input input[type=text], .block-editor-url-input input[type=text], .components-popover .block-editor-url-input input[type=text] {
+    width: 100%;
+    font-size: 13px;    
+}
+
+i.arrow:after {
+    z-index: auto;
+    background-color: transparent;
+    box-shadow: none;
+}
+
+.wp-block-quote {
+    border-left:solid 5px;
+    margin-left:20px;
+}
+.wp-block.wp-block-quote {
+    border-left:solid 5px  !important;
+    margin-left:20px !important;
+}
+
+
+.ui.segment.blue .wp-block-quote {
+    border-left:solid 5px #2185d0 !important;
+}
+.ui.segment.green .wp-block-quote {
+    border-left:solid 5px #21ba45  !important;
+}
+
+/* .ui.message:after,.ui.clearing:after {
+    content: "";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+} */
+  
+  

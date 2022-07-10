@@ -1,0 +1,29 @@
+
+
+.block-editor-block-list__block .block-editor-url-input input[type=text], .block-editor-url-input input[type=text], .components-popover .block-editor-url-input input[type=text] {
+    width: 100%;
+    font-size: 13px;    
+}
+
+i.arrow:after {
+    z-index: auto;
+    background-color: transparent;
+    box-shadow: none;
+}
+
+.actapp-block-is-selected {
+    border:dashed 5px purple;
+    min-height:80px;
+}
+.actapp-block-box {
+    border:dashed 3px gray !important;
+    min-height:30px !important;
+}
+.block-editor-block-list__layout {
+    min-height: 40px;
+}
+.actapp-be-drop-indicator {
+    /* border:dashed 2px blue !important; */
+    min-height:40px;
+}
+

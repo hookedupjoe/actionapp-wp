@@ -1,0 +1,19 @@
+@font-face {
+    font-family: 'demo1';
+    src: url('../fonts/demo1.eot');
+    src: url('../fonts/demo1.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/demo1.woff') format('woff'),
+         url('../fonts/demo1.ttf') format('truetype'),
+         url('../fonts/demo1.svg#demo1') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+[class*='icon-demo1']:before{
+	display: inline-block;
+   font-family: 'demo1';
+   font-style: normal;
+   font-weight: normal;
+   line-height: 1;
+   -webkit-font-smoothing: antialiased;
+   -moz-osx-font-smoothing: grayscale
+}
