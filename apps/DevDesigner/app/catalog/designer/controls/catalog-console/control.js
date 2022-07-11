@@ -124,7 +124,7 @@ License: MIT
 								"ctl": "button",
 								"color": "brown",
 								"size": "small",
-								hidden: true,
+								hidden: false,
 								basic: false,
 								compact: true,
 								"onClick": {
