@@ -360,7 +360,7 @@ table.outline > tbody > tr > td.tbl-details {
 
 
 
-.ui-layout-pane {
+.ui-layout-container > .ui-layout-pane {
   padding: 0px;
 }
 
@@ -935,4 +935,3 @@ div.ui.message.floating {
   padding-right:7px !important;
   padding-left:4px !important;
 }
-
