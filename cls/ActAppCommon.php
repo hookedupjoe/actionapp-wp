@@ -52,6 +52,9 @@ class ActAppCommon {
 		wp_register_style( 'tabulator_css',    $tmplibloc . 'lib/tabulator/css/tabulator.min.css', false,   $my_css_ver );
 		wp_enqueue_style ( 'tabulator_css' );
 
+//		wp_register_style( 'tabulator_sem_css',    $tmplibloc . 'lib/tabulator/css/tabulator_semanticui.min.css', false,   $my_css_ver );
+//		wp_enqueue_style ( 'tabulator_sem_css' );
+
 		wp_enqueue_script( 'support_libs', $tmplibloc . 'built-lib/support-libs.js', array(), $my_js_ver );
 		wp_enqueue_script( 'semantic_js', $tmplibloc . 'lib/semantic/dist/semantic.min.js', array(), $my_js_ver );
 		wp_enqueue_script( 'actionapp', $tmplibloc . 'lib/actionapp/actionapp.js', array(), $my_js_ver );

@@ -181,7 +181,7 @@
   };
 
   ControlCode.refreshSize = function() {
-    // ThisApp.resizeToLayout($(tmpThis.mainTableEl.parent()));
+    // ThisApp.resizeToLayout($(this.mainTableEl));
     // if (this.mainTable) {
     //   this.mainTable.redraw();
     // }
@@ -234,14 +234,14 @@
         var tmpWH = $(window).height();
         //-- Current blank view height
         var tmpVH = $('[spot="viewer"]').height();
-        var tmpBuffer = 60;
+        var tmpBuffer = 265;
 
         tmpWH = tmpWH - tmpVH - tmpBuffer;
         
-        if( tmpWH < 300){
-          tmpWH = 300;
+        if( tmpWH < 250){
+          tmpWH = 250;
         }
-        
+        console.log('tmpWH',tmpWH)
         this.tableConfig = $.extend({
           height: tmpWH,
           selectableRangeMode: "click",
