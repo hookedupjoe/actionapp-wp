@@ -11,8 +11,11 @@
  *
  * @package SemActionStandardPage
  */
+?>
 
+<?php
 get_header();
+//wp_head();
 // $tmpLoc = ActAppCommon::getCurrentLocation();
 // $tmpRoot = ActAppCommon::getRootPath();
 // //echo '$menu: '.$menu;
@@ -30,9 +33,9 @@ get_header();
 // var_dump($tmpObj);
 ?>
 
-<div class="row">
-	<div class="col-sm-12 col-md-12 pad3">  
-		<div class="ui segment black">
+<div class="ui segment pad0">
+	
+	
 		<?php
 		while ( have_posts() ) :
 			the_post();
@@ -45,9 +48,8 @@ get_header();
 		endwhile; // End of the loop.
 		?>
 		
-		</div>
-	</div>  <?php // End Content ?>
-	
+		 <?php // End Content ?>
+		 
 </div> <?php // End Row ?>
 <?php get_footer(); ?>
 
