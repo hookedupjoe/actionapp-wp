@@ -241,7 +241,7 @@
         if( tmpWH < 250){
           tmpWH = 250;
         }
-        console.log('tmpWH',tmpWH)
+        //console.log('tmpWH',tmpWH)
         this.tableConfig = $.extend({
           height: tmpWH,
           selectableRangeMode: "click",
@@ -249,18 +249,19 @@
           persistence: false,
           reactiveData: true,
           data: this.tableData,
-          columns: this.columnSpecs,
-          tableBuilt: onTableBuilt.bind(this),
-          scrollVertical: onScrollVert.bind(this),
-          scrollHorizontal: onScrollHoriz.bind(this),
-          rowSelected: tmpRowSelected.bind(this),
-          rowClick: tmpRowSelected.bind(this),
-          rowDeselected: rowDeselected.bind(this)
+          columns: this.columnSpecs
         },
           this.tableConfig);
 
+        //--- New Version 5, just subscribe to events now ...
         this.mainTable = new Tabulator(this.mainTableEl.get(0),
           this.tableConfig);
+          this.mainTable.on("tableBuilt", onTableBuilt.bind(this));
+          this.mainTable.on("scrollVertical", onScrollVert.bind(this));
+          this.mainTable.on("scrollHorizontal", onScrollHoriz.bind(this));
+          this.mainTable.on("rowSelected", tmpRowSelected.bind(this));
+          this.mainTable.on("rowClick", tmpRowSelected.bind(this));
+          this.mainTable.on("rowDeselected", rowDeselected.bind(this));
       }
 
       //--- Add default filter to excluded deleted records (one tie)
@@ -450,7 +451,6 @@
 
 
   ControlCode.refreshSelection = function() {
-
     var tmpLastCounts = this.counts || {
       all: 0,
       filered: 0,
