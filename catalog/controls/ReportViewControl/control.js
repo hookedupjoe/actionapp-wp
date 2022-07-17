@@ -249,19 +249,25 @@
           persistence: false,
           reactiveData: true,
           data: this.tableData,
-          columns: this.columnSpecs
+          columns: this.columnSpecs,
+          scrollVertical: onScrollVert.bind(this),
+          scrollHorizontal: onScrollHoriz.bind(this),
+          rowSelected: tmpRowSelected.bind(this),
+          rowClick: tmpRowSelected.bind(this),
+          rowDeselected: rowDeselected.bind(this)
         },
           this.tableConfig);
 
-        //--- New Version 5, just subscribe to events now ...
         this.mainTable = new Tabulator(this.mainTableEl.get(0),
           this.tableConfig);
-          this.mainTable.on("tableBuilt", onTableBuilt.bind(this));
-          this.mainTable.on("scrollVertical", onScrollVert.bind(this));
-          this.mainTable.on("scrollHorizontal", onScrollHoriz.bind(this));
-          this.mainTable.on("rowSelected", tmpRowSelected.bind(this));
-          this.mainTable.on("rowClick", tmpRowSelected.bind(this));
-          this.mainTable.on("rowDeselected", rowDeselected.bind(this));
+
+          //--- New Version 5, just subscribe to events now ...
+          // this.mainTable.on("tableBuilt", onTableBuilt.bind(this));
+          // this.mainTable.on("scrollVertical", onScrollVert.bind(this));
+          // this.mainTable.on("scrollHorizontal", onScrollHoriz.bind(this));
+          // this.mainTable.on("rowSelected", tmpRowSelected.bind(this));
+          // this.mainTable.on("rowClick", tmpRowSelected.bind(this));
+          // this.mainTable.on("rowDeselected", rowDeselected.bind(this));
       }
 
       //--- Add default filter to excluded deleted records (one tie)
@@ -383,7 +389,7 @@
     var tmpCheckBoxIcon = {
       formatter: this.selectIcon,
       headerSort: false,
-      align: "left",
+      hozAlign: "left",
       frozen: true
     };
     this.reportCols.unshift(tmpCheckBoxIcon);
