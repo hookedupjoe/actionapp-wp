@@ -4548,7 +4548,8 @@ License: MIT
 
         tmpHTML.push('<div appuse="_prompter:prompt-dialog" class="ui modal">');
         tmpHTML.push('	<div appuse="_prompter:prompt-dialog-title" class="header"></div>');
-        tmpHTML.push('	<div appuse="_prompter:prompt-dialog-scroller" class="NOTscrolling content">');
+        //ToDo: remove scrolling content class for cordova apps (bug in scrolling)
+        tmpHTML.push('	<div appuse="_prompter:prompt-dialog-scroller" class="scrolling content">');
         tmpHTML.push('	<div appuse="_prompter:prompt-dialog-text-top" class="forms-top-content"></div>');
         tmpHTML.push('	<div appuse="_prompter:prompt-dialog-text" class="app-layout-pane">');
         tmpHTML.push('  </div>');
