@@ -80,6 +80,7 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 	  );
 	  register_rest_route( $namespace, '/' . $path, [$routeInfo]);     
 
+	  
 	  $path = 'people';
 	  $routeInfo = array(
 		'methods'             => 'GET',
@@ -91,7 +92,7 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 	  $path = 'dataview';
 	  $routeInfo = array(
 		'methods'             => 'GET',
-		'callback'            => array( $this, 'get_dataview' ),
+		'callback'            => array( $this, 'get_data_view' ),
 		'permission_callback' => array( $this, 'get_edit_permissions_check' )
 	  );
 	  register_rest_route( $namespace, '/' . $path, [$routeInfo]);     
@@ -360,10 +361,9 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 		echo $tmpRet;
 		exit();
 	}
-	
-	
-	
-	
+
+
+
 	public function save_catalog_res($request) {
 		$json = $request->get_body();
 		$body = json_decode($json);
@@ -906,6 +906,93 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 		
 	}
 
+	public function getDataViewDoc($theName) {
+	
+		$tmpDocType = 'dataview';
+		//--- Start with blank query
+		$tmpExtraQuery = array();
+		
+		array_push($tmpExtraQuery, array(
+			'key'     => 'name',
+			'value'   => $theName,
+			'compare' => '=',
+			)
+		);
+
+		$tmpDocs = self::getDesignDocs($tmpDocType,$tmpExtraQuery);
+		$tmpLen = count($tmpDocs);
+		$tmpRet = '{}';
+		if( $tmpLen == 1){
+			$tmpDoc = $tmpDocs[0];
+			$tmpRet = $tmpDoc;
+		} else {
+			$tmpRet = $tmpLen; //["__error"=>"Invalid count " . $tmpLen]
+		}
+		return $tmpRet;
+	}
+
+
+	public function get_data_view($request) {
+		$tmpName = $_GET['name'];
+		//--- Get data view doc
+		$tmpDoc = self::getDataViewDoc($tmpName);
+
+		$posttype = $tmpDoc['sourceposttype'];
+		$doctype = $tmpDoc['sourcedoctype'];
+		$capabilities = $tmpDoc['capabilities'];
+		//ToDo: $capabilities check here
+
+		$tmpQuery = array(
+			array(
+				'key'     => '__doctype',
+				'value'   => $doctype,
+				'compare' => '=',
+			),
+		);
+
+		$args = array(
+			'post_type' => $posttype,
+			'posts_per_page' => -1,
+			'meta_query' => $tmpQuery
+		);
+		$query = new WP_Query( $args );
+
+		$tmpRet = '{"q":' . json_encode($tmpQuery) .',"data":[';
+		$tmpAdded = false;
+		if ( $query->have_posts() ) {
+			while ( $query->have_posts() ) {
+				$query->the_post();
+				$tmpID = get_the_ID();
+
+				$tmpJson = get_post_meta($tmpID);
+				
+				foreach($tmpJson as $iField => $iVal) {
+					if( count($iVal) == 1){
+						$tmpVal = $iVal[0];
+						$tmpJson[$iField] = maybe_unserialize($tmpVal);
+					}
+				}
+				$tmpJson = json_encode($tmpJson);
+				if( $tmpAdded ){
+					$tmpRet .= ',';			
+				} else {
+					$tmpAdded = true;
+				}
+				$tmpRet .= $tmpJson;			
+			}
+		}
+		/* Restore original Post Data */
+		wp_reset_postdata();
+
+
+		$tmpRet .= ']}';
+		header('Content-Type: application/json');
+
+		echo $tmpRet;
+		
+		exit();
+	}
+
 	public function getCatalogResource($request) {
 		$catname = $_GET['catname'];
 		$resname = $_GET['resname'];
@@ -1100,87 +1187,87 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 		exit();
 	}
 
-	public function get_dataview($request, $theIsRequest = true) {
+	// public function get_dataview($request, $theIsRequest = true) {
 
-		$tmpName = $_GET['name'];
-		$qs = $_GET['qs'];
-		if( $theIsRequest ){
+	// 	$tmpName = $_GET['name'];
+	// 	$qs = $_GET['qs'];
+	// 	if( $theIsRequest ){
 
-		} else {
+	// 	} else {
 
-		}
+	// 	}
 
-		//--- Get design doc for data view
-		$tmpDesignDoc = self::get_design_doc($tmpName,'dataview');
+	// 	//--- Get design doc for data view
+	// 	$tmpDesignDoc = self::get_design_doc($tmpName,'dataview');
 
-		//-- populate this from the details
-		$tmpDocType = $tmpDesignDoc["doctype"]; 
-		$tmpPostType = $tmpDesignDoc["posttype"];
+	// 	//-- populate this from the details
+	// 	$tmpDocType = $tmpDesignDoc["doctype"]; 
+	// 	$tmpPostType = $tmpDesignDoc["posttype"];
 
-		//--- Start with blank query
-		$tmpQuery = array();
+	// 	//--- Start with blank query
+	// 	$tmpQuery = array();
 
-		//--- If getting a doc type then add to the query
-		if( $tmpDocType != ''){
-			array_push($tmpQuery, array(
-				'key'     => '__doctype',
-				'value'   => $tmpDocType,
-				'compare' => '=',
-				)
-			);
-		}
+	// 	//--- If getting a doc type then add to the query
+	// 	if( $tmpDocType != ''){
+	// 		array_push($tmpQuery, array(
+	// 			'key'     => '__doctype',
+	// 			'value'   => $tmpDocType,
+	// 			'compare' => '=',
+	// 			)
+	// 		);
+	// 	}
 
-		//--- Get and use query string values from the setup doc
-		if( $qs != '' ){
-			array_push($tmpQuery,array(
-				'key'     => 'topic',
-				'value'   => '"'.$qs.'"',
-				'compare' => 'Like',
-			));
-		}
+	// 	//--- Get and use query string values from the setup doc
+	// 	if( $qs != '' ){
+	// 		array_push($tmpQuery,array(
+	// 			'key'     => 'topic',
+	// 			'value'   => '"'.$qs.'"',
+	// 			'compare' => 'Like',
+	// 		));
+	// 	}
 
-		$args = array(
-			'post_type' => $tmpPostType,
-			'posts_per_page' => -1,
-			'meta_query' => $tmpQuery
-		);
-		$query = new WP_Query( $args );
-		//$tmpQuery["design"] = $tmpDesignDoc;
-		$tmpRet = '{"q":' . json_encode($tmpQuery);
-		$tmpRet .= ',"design":' . json_encode($tmpDesignDoc);
-		$tmpRet .= ',"data":[';
-		$tmpAdded = false;
-		if ( $query->have_posts() ) {
-			while ( $query->have_posts() ) {
-				$query->the_post();
-				$tmpID = get_the_ID();
-				$tmpJson = get_post_meta($tmpID);
+	// 	$args = array(
+	// 		'post_type' => $tmpPostType,
+	// 		'posts_per_page' => -1,
+	// 		'meta_query' => $tmpQuery
+	// 	);
+	// 	$query = new WP_Query( $args );
+	// 	//$tmpQuery["design"] = $tmpDesignDoc;
+	// 	$tmpRet = '{"q":' . json_encode($tmpQuery);
+	// 	$tmpRet .= ',"design":' . json_encode($tmpDesignDoc);
+	// 	$tmpRet .= ',"data":[';
+	// 	$tmpAdded = false;
+	// 	if ( $query->have_posts() ) {
+	// 		while ( $query->have_posts() ) {
+	// 			$query->the_post();
+	// 			$tmpID = get_the_ID();
+	// 			$tmpJson = get_post_meta($tmpID);
 				
-				foreach($tmpJson as $iField => $iVal) {
-					if( count($iVal) == 1){
-						$tmpVal = $iVal[0];
-						$tmpJson[$iField] = maybe_unserialize($tmpVal);
-					}
-				}
-				$tmpJson = json_encode($tmpJson);
-				if( $tmpAdded ){
-					$tmpRet .= ',';			
-				} else {
-					$tmpAdded = true;
-				}
-				$tmpRet .= $tmpJson;			
-			}
-		}
-		/* Restore original Post Data */
-		wp_reset_postdata();
+	// 			foreach($tmpJson as $iField => $iVal) {
+	// 				if( count($iVal) == 1){
+	// 					$tmpVal = $iVal[0];
+	// 					$tmpJson[$iField] = maybe_unserialize($tmpVal);
+	// 				}
+	// 			}
+	// 			$tmpJson = json_encode($tmpJson);
+	// 			if( $tmpAdded ){
+	// 				$tmpRet .= ',';			
+	// 			} else {
+	// 				$tmpAdded = true;
+	// 			}
+	// 			$tmpRet .= $tmpJson;			
+	// 		}
+	// 	}
+	// 	/* Restore original Post Data */
+	// 	wp_reset_postdata();
 
 		
-		$tmpRet .= ']}';
-		header('Content-Type: application/json');
-		echo $tmpRet;
+	// 	$tmpRet .= ']}';
+	// 	header('Content-Type: application/json');
+	// 	echo $tmpRet;
 		
-		exit();
-	}
+	// 	exit();
+	// }
 	
 
 	public function get_users($request) {
@@ -1336,7 +1423,7 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 	public function getPostDocs($thePostType,$theDocType,$theAdditionalArgs = null){
 		$tmpDocType = $theDocType; 
 		$tmpPostType = 'actappdesigndoc';
-
+		
 		//--- Start with blank query
 		$tmpQuery = array();
 
@@ -1355,8 +1442,6 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 				array_push($tmpQuery,$iValue);	
 			}
 		}
-
-		
 
 		$args = array(
 			'post_type' => $tmpPostType,
