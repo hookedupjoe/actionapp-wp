@@ -69,8 +69,8 @@ class ActAppWidgetManager {
 		wp_register_style( 'actapp-blocks-content_css',   ACTIONAPP_WP_BLOCKS_URL . '/css/wp-blocks-content.css', false,  $my_css_ver );
 		wp_enqueue_style ( 'actapp-blocks-content_css' );
 
-		wp_register_style( 'actapp-blocks-fonts_css',   ACTIONAPP_WP_BLOCKS_URL . '/css/fonts/demo2/css/demo2.css', false,  $my_css_ver );
-		wp_enqueue_style ( 'actapp-blocks-fonts_css' );
+		// wp_register_style( 'actapp-blocks-fonts_css',   ACTIONAPP_WP_BLOCKS_URL . '/css/fonts/demo2/css/demo2.css', false,  $my_css_ver );
+		// wp_enqueue_style ( 'actapp-blocks-fonts_css' );
 
 		$tmpJson = json_encode($tmpConfig);
 		$tmpScript = 'window.ActionAppCore.BlockManagerConfig = ' . $tmpJson;
