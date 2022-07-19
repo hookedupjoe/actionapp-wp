@@ -32,10 +32,8 @@ get_header();
 // $tmpObj = json_decode($tmpJson);
 // var_dump($tmpObj);
 ?>
-
-<div class="ui segment pad0">
-	
-	
+<div appuse="website-frame-border" ctlcomp="layout"  class="ui-layout-pane" style="height:400px;padding:0;margin:0;">
+<div class="ui-layout-center" >
 		<?php
 		while ( have_posts() ) :
 			the_post();
@@ -50,6 +48,37 @@ get_header();
 		
 		 <?php // End Content ?>
 		 
-</div> <?php // End Row ?>
+</div> 
+	</div>
+
+<script>
+function waitForApp(callback, maxTimes = false) {
+	if (typeof(ThisApp) == 'object') {
+	callback();
+	} else {
+		if (maxTimes === false || maxTimes > 0) {
+			(maxTimes != false) && maxTimes-- ;
+			setTimeout(function () {
+				waitForApp(callback, maxTimes);
+			}, 100);
+		}
+	}
+};	
+
+function whenReady(){
+	ThisApp.subscribe('resize', function(){
+		var tmpFrame = ThisApp.getByAttr$({appuse:"website-frame-border"});
+		var tmpH = window.innerHeight - $('#primary').offset().top - 10;
+		if( tmpFrame.height() != tmpH ){
+			tmpFrame.height(tmpH);
+			$(window).trigger('resize');
+		};
+	});
+}
+
+waitForApp(whenReady,100);
+
+	</script>
+<?php // End Row ?>
 <?php get_footer(); ?>
 
