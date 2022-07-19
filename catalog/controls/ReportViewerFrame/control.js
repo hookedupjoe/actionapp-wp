@@ -181,6 +181,7 @@
       ThisApp.resizeToLayout($(this.mainTableEl));
       if (this.mainTable) {
         this.mainTable.redraw();
+        this.mainTable.setHeight('100%');
       }
     };
   
