@@ -2475,6 +2475,7 @@ window.ActionAppCore = window.ActionAppCore || ActionAppCore;
         if (ThisApp.siteLayout) {
             ThisApp.siteLayout.resizeAll();
         }
+        ThisApp.publish('resize');
     }, 200);
 
     me.resizeLayouts = function (name, $pane, paneState) {
