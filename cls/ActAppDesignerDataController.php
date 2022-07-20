@@ -124,6 +124,15 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 	  );
 	  register_rest_route( $namespace, '/' . $path, [$routeInfo]);     
 
+	  $path = 'alldocs';
+	  $routeInfo = array(
+		'methods'             => 'GET',
+		'callback'            => array( $this, 'get_all_docs' ),
+		'permission_callback' => array( $this, 'get_design_permissions_check' )
+	  );
+	  register_rest_route( $namespace, '/' . $path, [$routeInfo]);     
+
+
 	  $path = 'savedesign';
 	  $routeInfo = array(
 		'methods'             => 'POST',
@@ -1079,6 +1088,34 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 		echo $tmpRet;
 		exit();
 	}
+	public function get_all_docs($request) {
+		$posttype = $_GET['posttype'];		
+		$doctype = $_GET['doctype'];
+		$tmpDocs = self::getPostDocs($posttype,$doctype);
+		
+		header('Content-Type: application/json');
+		//header('Content-Type: text/html');
+		$tmpJsonArray = self::getJsonFromDocs($tmpDocs);
+		echo '{"data":'.$tmpJsonArray.'}';
+		exit();
+	}
+
+	public function getJsonFromDocs($theDocs, $theInfo = null){
+		$tmpRet = '[';
+		$tmpAdded = false;
+		foreach ($theDocs as $tmpJson) {
+			$tmpJsonText = json_encode($tmpJson);
+			if( $tmpAdded ){
+				$tmpRet .= ',';			
+			} else {
+				$tmpAdded = true;
+			}
+			$tmpRet .= $tmpJsonText;
+		}
+		
+		$tmpRet .= ']';
+		return $tmpRet;
+	}
 	
 	public function get_catalog_form($request) {
 		$tmpPath = "todo";
@@ -1422,7 +1459,10 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 
 	public function getPostDocs($thePostType,$theDocType,$theAdditionalArgs = null){
 		$tmpDocType = $theDocType; 
-		$tmpPostType = 'actappdesigndoc';
+		$tmpPostType = 'actappdoc';
+		if( !empty($thePostType) ){
+			$tmpPostType = $thePostType;
+		}
 		
 		//--- Start with blank query
 		$tmpQuery = array();
