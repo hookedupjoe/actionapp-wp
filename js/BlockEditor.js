@@ -353,9 +353,10 @@
                 }
                 tmpObjAtts[theAttName] = tmpVal;
                 theProps.setAttributes( tmpObjAtts );
-                //if( theControlType == 'number' || theControlType == 'string' ){
-                    BlockEditor.refreshBlockEditor();
-                //}
+
+                //--- The below refresh cause issues with editor in widgets area
+                //BlockEditor.refreshBlockEditor();
+                //--- ToDo: Review usage / initial need of the above call
                
             };
 
