@@ -5,7 +5,7 @@
     //~thisPageSpecs//~
 var thisPageSpecs = {
 	"pageName": "Home",
-	"pageTitle": "Workspace",
+	"pageTitle": "Designer",
 	"navOptions": {
 		"topLink": true,
 		"sideLink": true
@@ -24,12 +24,12 @@ thisPageSpecs.layoutOptions = {
   },
   east: false,
   west: {
-    catalog: '_common',
+    source: '_designer',
     control: "TabsContainer",
     name :'nav'
   },
   center: {
-    catalog: '_common',
+    source: '_designer',
     control: "TabsContainer",
     name :'body'
   },
@@ -39,33 +39,12 @@ thisPageSpecs.layoutOptions = {
   }
 };
 
-thisPageSpecs.fulllayoutOptions = {
-  baseURL: pageBaseURL,
-  north: {
-    control: "MainHeader",
-    name :'header'
-  },
-  east: {
-    control: "MainPreviewPanel",
-    name :'preview'
-  },
-  west: {
-    source: 'common',
-    control: "TabsContainer",
-    name :'nav'
-  },
-  center: {
-    source: 'common',
-    control: "TabsContainer",
-    name :'body'
-  },
-  south: false
-};
+
 //~layoutOptions~//~
 
     //~layoutConfig//~
 thisPageSpecs.layoutConfig = {
-        west__size: "200"
+        west__size: "375"
         , east__size: "250"
     }
 //~layoutConfig~//~
@@ -121,7 +100,7 @@ ThisPage.ctlBody.loadTabSpot('home','Initial Page, Welcome');
 ThisPage.ctlBody.addTab({item:'doctypes',text: 'Document Types', icon: 'icon circle green', content:'Initial Content for Doc Types'});
 ThisPage.ctlBody.gotoTab('home');
 
-ThisPage.ctlNav.addTab({item:'resources',text: 'Resources', icon: 'icon box blue', content:'Resources Quick Access Here'});
+ThisPage.ctlNav.addTab({item:'catalogs',text: 'Catalogs', icon: 'icon archive blue', content:''});
 
 ThisPage.ctlStatusbar.setContent('Welcome to the developer workspace');
 //~_onFirstLoad~//~

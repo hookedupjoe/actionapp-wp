@@ -330,7 +330,7 @@ License: MIT
             loadedApps[tmpAppName] = tmpNewApp;
 
             //--- For Debugging
-            window[tmpAppName] = tmpNewApp;
+            //window[tmpAppName] = tmpNewApp;
 
             //--- Create a new card for this app
             ThisPage.addToSpot('ws-work-area', '<div appuse="cards" group="' + wsOutlineName + '" item="' + tmpAppName + '"></div>');
@@ -409,7 +409,7 @@ License: MIT
 
 
             //--- For Debugging
-            window[tmpEntryName] = tmpNewResource;
+            //window[tmpEntryName] = tmpNewResource;
 
             //--- Create a new card for this app
             ThisPage.addToSpot('ws-work-area', '<div appuse="cards" group="' + wsOutlineName + '" item="' + tmpEntryName + '"></div>');
@@ -465,7 +465,7 @@ License: MIT
             loadedPages[tmpEntryName] = tmpNewPage;
 
             //--- For Debugging
-            window[tmpEntryName] = tmpNewPage;
+            //window[tmpEntryName] = tmpNewPage;
 
             //--- Create a new card for this app
             ThisPage.addToSpot('ws-work-area', '<div appuse="cards" group="' + wsOutlineName + '" item="' + tmpEntryName + '"></div>');
