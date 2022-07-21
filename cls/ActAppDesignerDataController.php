@@ -1505,6 +1505,12 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 						$tmpJson[$iField] = maybe_unserialize($tmpVal);
 					}
 				}
+				$tmpJson['__id'] = $tmpID;
+				$tmpJson['__posttype'] = get_post_type();
+				$tmpJson['__url'] = get_post_permalink();
+				$tmpJson['__posttitle'] = get_the_title();
+				$tmpJson['__postdate'] = get_the_date();
+
 				array_push($tmpRet,$tmpJson);
 			}
 		}
