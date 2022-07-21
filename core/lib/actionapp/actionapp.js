@@ -18,7 +18,13 @@ var ActionAppCore = {
     //--- Directory of where stuff is located
     dir: {
         catalogs: {
-            common: '/catalogs/common/'
+            common: '/catalogs/common/',
+            getResourceCatalogURL: function(theCatName, theResType, theResName){
+                var tmpBaseURL = '/';
+                var tmpResType = ThisApp.controls.getUnifiedPluralName(theResType);
+                var tmpURL = tmpBaseURL + "catalogs/" + theCatName + '/' + tmpResType + '/' + theResName;
+                return tmpURL
+            }
         },
         sources: {
 
@@ -5071,6 +5077,29 @@ License: MIT
         return generalCounter;
     }
 
+    me.getUnifiedPluralName = getUnifiedPluralName;
+    function getUnifiedPluralName(theName){
+        if (!isStr(theName)) {
+            return "";
+        }
+        
+        var tmpNameCheck = getUnifiedName(theName);
+        if (tmpNameCheck == 'Control') {
+            return 'controls';
+        }
+        if (tmpNameCheck == 'Panel') {
+            return 'panels';
+        }
+        if (tmpNameCheck == 'HTML') {
+            return 'html';
+        }
+        if (tmpNameCheck == 'Template' || tmpNameCheck == 'templates') {
+            return 'templates';
+        }
+
+        
+        
+    }
     me.getUnifiedName = getUnifiedName;
     function getUnifiedName(theName) {
         if (!isStr(theName)) {
@@ -7120,12 +7149,10 @@ License: MIT
         
         tmpThis.getConfig().options = tmpThis.getConfig().options || {};
 
-console.log('before tmpThis.initControlComponents',typeof(tmpThis.initControlComponents));
         this.assureRequired().then(function () {
         
-            console.log('after tmpThis.initControlComponents',typeof(tmpThis.initControlComponents));
             var tmpProm = tmpThis.initControlComponents();
-            console.log('tmpProm',typeof(tmpProm),tmpProm);
+           
             tmpProm.then(function (theReply) {
 
                 if (isFunc(tmpThis._onInit)) {
@@ -7322,8 +7349,11 @@ console.log('before tmpThis.initControlComponents',typeof(tmpThis.initControlCom
                                 if( tmpAppComp == 'panel'){
                                     tmpControlType = "Panel";
                                 }
+                                
                                 if( ActionAppCore.dir.catalogs.getResourceURL ){
                                     tmpControlName = ActionAppCore.dir.catalogs.getResourceURL(tmpCatalog,tmpControlType,tmpControlName)
+                                } else {
+                                    tmpControlName = ActionAppCore.dir.catalogs.getResourceCatalogURL(tmpCatalog,tmpControlType,tmpControlName)
                                 }
                             }
                         }
@@ -8255,6 +8285,8 @@ console.log('before tmpThis.initControlComponents',typeof(tmpThis.initControlCom
                 } else {
                     if( ActionAppCore.dir.catalogs.getResourceURL ){
                         tmpControlName = ActionAppCore.dir.catalogs.getResourceURL(tmpCatalog,tmpControlType,tmpControlName)
+                    } else {
+                        tmpControlName = ActionAppCore.dir.catalogs.getResourceCatalogURL(tmpCatalog,tmpControlType,tmpControlName)
                     }
                 }
             }
