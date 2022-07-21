@@ -4,7 +4,7 @@
 
     //~thisPageSpecs//~
 var thisPageSpecs = {
-	"pageName": "Home",
+	"pageName": "Designer",
 	"pageTitle": "Designer",
 	"navOptions": {
 		"topLink": true,
@@ -19,6 +19,7 @@ var thisPageSpecs = {
 thisPageSpecs.layoutOptions = {
   baseURL: pageBaseURL,
   north: {
+    source: '_designer',
     control: "MainHeader",
     name :'header'
   },
@@ -34,6 +35,7 @@ thisPageSpecs.layoutOptions = {
     name :'body'
   },
   south: {
+    source: '_designer',
     control: "MainStatusBar",
     name :'statusbar'
   }
@@ -44,7 +46,7 @@ thisPageSpecs.layoutOptions = {
 
     //~layoutConfig//~
 thisPageSpecs.layoutConfig = {
-        west__size: "375"
+        west__size: "300"
         , east__size: "250"
     }
 //~layoutConfig~//~
@@ -91,10 +93,10 @@ ThisPage.ctlStatusbar = ThisPage.parts.statusbar;
 
 //setup initial ui
 ThisPage.ctlHeader.setHeader('Developer Workspace');
-ThisPage.ctlHeader.addSideContent('<div class="ui label green basic right pointing">Need Help?</div>');
-ThisPage.ctlHeader.addSideContent('<div type="button" pageaction="showDocs" class="ui button  blue icon">Docs</div>');
+//ThisPage.ctlHeader.addSideContent('<div class="ui label green basic right pointing">Need Help?</div>');
+//ThisPage.ctlHeader.addSideContent('<div type="button" pageaction="showDocs" class="ui button  blue icon">Docs</div>');
 
-ThisPage.ctlBody.addTab({item:'home',text: 'Home', icon: 'icon circle blue', content:'init'});
+ThisPage.ctlBody.addTab({item:'home',text: '', icon: 'icon home blue', content:''});
 ThisPage.ctlBody.loadTabSpot('home','Initial Page, Welcome');
 
 ThisPage.ctlBody.addTab({item:'doctypes',text: 'Document Types', icon: 'icon circle green', content:'Initial Content for Doc Types'});
@@ -102,7 +104,7 @@ ThisPage.ctlBody.gotoTab('home');
 
 ThisPage.ctlNav.addTab({item:'catalogs',text: 'Catalogs', icon: 'icon archive blue', content:''});
 
-ThisPage.ctlStatusbar.setContent('Welcome to the developer workspace');
+ThisPage.ctlStatusbar.setContent('Welcome to the designer console');
 //~_onFirstLoad~//~
                 ThisPage._onActivate();
             }

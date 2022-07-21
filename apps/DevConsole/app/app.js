@@ -5,7 +5,7 @@
   try {
 
 
-    var tmpPageNames = ["Home","JSON"];
+    var tmpPageNames = ["Data","Designer","Admin","JSON"];
     var tmpPluginNames = [];
 
     if (typeof (window.cordova) == 'undefined') {
