@@ -5051,26 +5051,7 @@ License: MIT
 
     me.detailsIndex = {
         "getDetails": function (theName) {
-            return this[this.getUnifiedName(theName)];
-        },
-        "getUnifiedName": function (theName) {
-            if (!isStr(theName)) {
-                return "";
-            }
-            var tmpNameCheck = theName.toLowerCase();
-            if (tmpNameCheck == 'control' || tmpNameCheck == 'controls') {
-                return 'Control';
-            }
-            if (tmpNameCheck == 'panel' || tmpNameCheck == 'panels') {
-                return 'Panel';
-            }
-            if (tmpNameCheck == 'html') {
-                return 'HTML';
-            }
-            if (tmpNameCheck == 'template' || tmpNameCheck == 'templates') {
-                return 'Template';
-            }
-
+            return this[getUnifiedName(theName)];
         },
         "Control": { name: "Control", category: 'Controls', dir: "controls", icon: 'newspaper', lang: 'javascript' },
         "Panel": { name: "Panel", category: 'Panels', dir: "panels", icon: 'newspaper outline', lang: 'javascript', type: 'json' },
@@ -5082,6 +5063,33 @@ License: MIT
     me.getNextLayoutName = function () {
         me.layoutCounter++;
         return 'layout-' + me.layoutCounter;
+    }
+
+    var generalCounter = 0;
+    me.getGlobalCounter = function () {
+        generalCounter++;
+        return generalCounter;
+    }
+
+    me.getUnifiedName = getUnifiedName;
+    function getUnifiedName(theName) {
+        if (!isStr(theName)) {
+            return "";
+        }
+        var tmpNameCheck = theName.toLowerCase();
+        if (tmpNameCheck == 'control' || tmpNameCheck == 'controls') {
+            return 'Control';
+        }
+        if (tmpNameCheck == 'panel' || tmpNameCheck == 'panels') {
+            return 'Panel';
+        }
+        if (tmpNameCheck == 'html') {
+            return 'HTML';
+        }
+        if (tmpNameCheck == 'template' || tmpNameCheck == 'templates') {
+            return 'Template';
+        }
+
     }
 
     me.genericCounter = 0;
@@ -6927,6 +6935,9 @@ License: MIT
         var dfd = jQuery.Deferred();
         var tmpEl = this.parentEl;
         var tmpDefs = [];
+        try {
+            
+        
         var tmpControls = ThisApp.getByAttr$({ ctlcomp: 'control' }, tmpEl);
         if (tmpControls.length) {
             for (var iControl = 0; iControl < tmpControls.length; iControl++) {
@@ -6937,7 +6948,7 @@ License: MIT
 
                     var tmpCtl = this.parentControl.getControl(tmpControlName);
                     if (!(tmpCtl)) {
-                        var tmpCached = ThisApp.resCache['controls'][tmpControlName];
+                        //var tmpCached = ThisApp.resCache['controls'][tmpControlName];
                         console.warn("initControlComponents Could not find parent control " + tmpControlName)
                     } else {
                         var tmpPart = tmpCtl.create(tmpPartName, {parent:this});
@@ -6959,13 +6970,36 @@ License: MIT
                     var tmpCtl = this.parentControl.getPanel(tmpControlName);
                     if (!(tmpCtl)) {
                         console.warn("Could not find parent control " + tmpControlName)
-                        return false;
+                        
+                    } else {
+                        var tmpPart = tmpCtl.create(tmpPartName, {parent:this});
+                        this.parts[tmpPartName] = tmpPart;
+                        tmpDefs.push(tmpPart.loadToElement(tmpControlEl));
                     }
-                    var tmpPart = tmpCtl.create(tmpPartName, {parent:this});
-                    this.parts[tmpPartName] = tmpPart;
-                    tmpDefs.push(tmpPart.loadToElement(tmpControlEl));
                 }
 
+            }
+        }
+
+        var tmpTplCtls = ThisApp.getByAttr$({ ctlcomp: 'template' }, tmpEl);
+        if (tmpTplCtls.length) {
+            for (var iControl = 0; iControl < tmpTplCtls.length; iControl++) {
+                var tmpControlEl = $(tmpTplCtls[iControl]);
+                var tmpControlName = tmpControlEl.attr('controlname');
+                var tmpTplName = tmpControlEl.attr('templatename') || '';
+                tmpDefs.push(this.loadTemplate(tmpControlName, tmpTplName, tmpControlEl));
+            }
+        }
+
+        var tmpHTMLs = ThisApp.getByAttr$({ ctlcomp: 'html' }, tmpEl);
+        if (tmpHTMLs.length) {
+            for (var iControl = 0; iControl < tmpHTMLs.length; iControl++) {
+                var tmpControlEl = $(tmpHTMLs[iControl]);
+                var tmpControlName = tmpControlEl.attr('controlname');
+                if (tmpControlName) {
+                    this.parts[tmpPartName] = tmpPart;                    
+                    tmpDefs.push(this.loadHTML(tmpControlName, tmpControlEl));
+                }
             }
         }
 
@@ -7028,10 +7062,34 @@ License: MIT
                 this.liveIndex.layouts['layout-' + this.layoutCount] = tmpControlLayout;
             }
         }
-
+    } catch (theError) {
+            console.error('error in control init',theError);
+    }
         $.whenAll(tmpDefs).then(function (theReply) {
             //--- Tell the app to resize it's layouts
             ThisApp.resizeLayouts();
+            dfd.resolve(true);
+        })
+        return dfd.promise();
+    }
+
+    meInstance.loadTemplate = function(theControlName, theTplName, theControlEl){
+        var dfd = jQuery.Deferred();        
+        ThisApp.apiCall(theControlName).then(function(theReply){
+            if( theTplName ){
+                ThisApp.addTemplate(theTplName, theReply);
+            } else {
+                $(theControlEl).html(theReply);
+            }
+            dfd.resolve(true);
+        })
+        return dfd.promise();
+    }
+
+    meInstance.loadHTML = function(theControlName, theControlEl){
+        var dfd = jQuery.Deferred();
+        ThisApp.apiCall(theControlName).then(function(theReply){
+            $(theControlEl).html(theReply);
             dfd.resolve(true);
         })
         return dfd.promise();
@@ -7062,10 +7120,13 @@ License: MIT
         
         tmpThis.getConfig().options = tmpThis.getConfig().options || {};
 
-
+console.log('before tmpThis.initControlComponents',typeof(tmpThis.initControlComponents));
         this.assureRequired().then(function () {
         
-            tmpThis.initControlComponents().then(function (theReply) {
+            console.log('after tmpThis.initControlComponents',typeof(tmpThis.initControlComponents));
+            var tmpProm = tmpThis.initControlComponents();
+            console.log('tmpProm',typeof(tmpProm),tmpProm);
+            tmpProm.then(function (theReply) {
 
                 if (isFunc(tmpThis._onInit)) {
                     tmpThis._onInit();
@@ -8165,8 +8226,8 @@ License: MIT
     me.ControlPanelAndControl = {
         getHTML: function (theControlName, theObject, theControlObj) {
             var tmpObject = theObject || {};
-            var tmpName = tmpObject.name || tmpObject.control || 'control-spot';
-            var tmpControlName = tmpObject.controlname || tmpObject.name || '';
+            var tmpName = tmpObject.name || tmpObject.controlname || ('control-res-' + me.getGlobalCounter());
+            var tmpControlName = tmpObject.controlname || tmpObject.resourcename || tmpObject.name || '';
 
             if (!(tmpControlName)) {
                 console.warn("Could not create control, no control name or name. ", theControlName, theObject)
@@ -8177,15 +8238,12 @@ License: MIT
             
             var tmpHTML = [];
 
-            var tmpAppComp = 'control'
-            if (theControlName == 'panel') {
-                tmpAppComp = 'panel'
+            if (tmpObject.hidden === true) {
+                tmpClasses += ' hidden ';
             }
-            //--- ToDo: Use get common name call here
-            var tmpControlType = 'Control';
-            if( tmpAppComp == 'panel'){
-                tmpControlType = 'Panel';
-            }
+
+            var tmpAppComp = theControlName;
+            var tmpControlType = ThisApp.controls.getUnifiedName(tmpAppComp);
             var tmpItem = tmpObject;
 
             var tmpCatalog = tmpItem.catalog || tmpItem.source || '';
@@ -8201,6 +8259,9 @@ License: MIT
                 }
             }
             var tmpMyAttr = ' name="' + tmpName + '" ctlcomp="' + tmpAppComp + '" ' + 'controlname="' + tmpControlName + '" '
+            if( tmpItem.templatename ){
+                tmpMyAttr += ' templatename="' + tmpItem.templatename + '"'
+            }
             tmpHTML.push('<div ' + getItemAttrString(theObject) + ' class="' + tmpClasses + '" style="' + tmpStyles + '" ' + tmpMyAttr + '></div>')
             tmpHTML = tmpHTML.join('');
             return tmpHTML;
@@ -9255,6 +9316,8 @@ License: MIT
     //=== Root Common Web Controls ..
     me.webControls.add('control', me.ControlPanelAndControl);
     me.webControls.add('panel', me.ControlPanelAndControl);
+    me.webControls.add('template', me.ControlPanelAndControl);
+    me.webControls.add('html', me.ControlPanelAndControl);
 
     me.webControls.add('pagespot', me.ControlSpot);
     me.webControls.add('spot', me.ControlSpot);
