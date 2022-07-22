@@ -56,7 +56,7 @@ echo '<img class="ui image medium" src="'.ACTIONAPP_WP_IMAGE_PATH.'single-page-h
         function doRefresh(){
             
             var tmpHTML = [];
-            ThisApp.apiCall('/actappdev/wp-json/actappdesigner/alldocs?posttype=actappdesign').then(function(theReply){
+            ThisApp.apiCall(ActionAppCore.ActAppWP.rootPath + '/wp-json/actappdesigner/alldocs?posttype=actappdesign').then(function(theReply){
                 console.log(theReply,theReply.data.length);
                 for( var iPos = 0 ; iPos < theReply.data.length ; iPos++){
                     var tmpDoc = theReply.data[iPos];
