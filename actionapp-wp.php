@@ -18,18 +18,18 @@
  * @package actionappwp
  * @since actionappwp 1.0.0
  *
- * Plugin Name: Action Application
+ * Plugin Name: Action Application Development Environment for WordPress
  * Plugin URI: https://github.com/hookedupjoe/actionapp-wp
- * Description: The designer component used with blocks and standard Action App functionality with Semantic UI and jQuery * 
+ * Description: An advanced development environment with Semantic UI front end.
  * Author: Joseph Francis
  * Author URI: https://www.hookedup.com
  * Donate-Link: https://www.hookedup.com/
  * Text Domain: actapp
  * License: GPLv3
  * 
- * Version: 1.0.4
+ * Version: 1.0.5
  */
-define( 'ACTIONAPP_WP_CORE_VERSION', '1.0.4' );
+define( 'ACTIONAPP_WP_CORE_VERSION', '1.0.5' );
  
 if ( !defined( 'ABSPATH' ) ) {
 	exit;
@@ -69,9 +69,7 @@ if ( !defined( 'ACTIONAPP_WP_CORE_LIB' ) ) {
 
 require_once ACTIONAPP_WP_BASE_DIR . '/cls/ActAppCommon.php';
 
-
 //---- Blocks Module
-
 define( 'ACTIONAPP_WP_BLOCKS_VERSION', '1.0.3' );
 define( 'ACTIONAPP_WP_BLOCKS_FILE', __FILE__ );
 
@@ -86,7 +84,5 @@ if ( !defined( 'ACTIONAPP_WP_BLOCKS_URL' ) ) {
 require_once ACTIONAPP_WP_BLOCKS_DIR . '/cls/ActAppWidgetManager.php';
 require_once ACTIONAPP_WP_BLOCKS_DIR . '/cls/ActAppWidgetManangerDataController.php';
 
-
 require_once ACTIONAPP_WP_DIR . '/cls/ActAppDesignerDataController.php';
 require_once ACTIONAPP_WP_DIR . '/cls/ActAppDesigner.php';
-
