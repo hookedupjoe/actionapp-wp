@@ -254,7 +254,8 @@
             scrollHorizontal: onScrollHoriz.bind(this),
             rowSelected: tmpRowSelected.bind(this),
             rowClick: tmpRowSelected.bind(this),
-            rowDeselected: rowDeselected.bind(this)
+            rowDeselected: rowDeselected.bind(this),
+            groupToggleElement: "header"
           },
             this.tableConfig);
   
@@ -314,7 +315,7 @@
       var key = '';
       if (filterParams.startsWith === true) {
         for (key in tmpKeyList) {
-          if (data[key].toLowerCase().indexOf(checkVal) === 0) {
+          if (data[key].toLowerCase && data[key].toLowerCase().indexOf(checkVal) === 0) {
             match = true;
             break;
           }
@@ -325,7 +326,7 @@
           if (!data[key]) {
             console.warn("no data for " + key);
           } else {
-            if (data[key].toLowerCase().indexOf(checkVal) > -1) {
+            if (data[key].toLowerCase && data[key].toLowerCase().indexOf(checkVal) > -1) {
               match = true;
               break;
             }
