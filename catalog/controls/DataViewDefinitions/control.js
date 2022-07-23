@@ -9,7 +9,7 @@
         classes: 'hidden',
         content: [{
           "ctl": "control",
-          "catalog": "design",
+          "catalog": "_designer",
           "controlname": "DataViewDefinition",
           "name": "mainform"
         }]
