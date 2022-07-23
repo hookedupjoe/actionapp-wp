@@ -225,7 +225,7 @@ class ActAppDesigner {
 		$tmpScript .= 'ActionAppCore.dir.catalogs._designer = "' . self::baseURL() . '/catalog/' . '";';
 		$tmpScript .= 'window.ActionAppCore.addSources('. json_encode(ActAppDesigner::get_sources()) .')';
 		
-		ActAppCommon::setup_scripts($theHook);
+		//ActAppCommon::setup_scripts($theHook);
 		wp_add_inline_script( 'app-only-preinit', $tmpScript );
 
 
@@ -611,16 +611,16 @@ class ActAppDesigner {
 		 remove_menu_page( 'edit.php?post_type=actappdoc' );
 		 remove_menu_page( 'edit.php?post_type=actappdesigndoc' );
 		
-		//--- Adds "Applications" tab for those with the 'actappapps' capability (cap)
-		add_menu_page( 
-			__( 'My Applications'),
-			'Applications',
-			'actappapps',
-			'actapps',
-			array( 'ActAppDesigner', 'showApplications' ),
-			'dashicons-list-view',
-			70
-		); 
+		// //--- Adds "Applications" tab for those with the 'actappapps' capability (cap)
+		// add_menu_page( 
+		// 	__( 'My Applications'),
+		// 	'Applications',
+		// 	'actappapps',
+		// 	'actapps',
+		// 	array( 'ActAppDesigner', 'showApplications' ),
+		// 	'dashicons-list-view',
+		// 	70
+		// ); 
 		
 		//--- Demo of how to add a page on the left panel.  		
 		add_menu_page( 
