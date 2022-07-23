@@ -382,7 +382,7 @@ class ActAppDesigner {
 		'show_in_rest' => true,
 		'supports'          => array( 'title', 'editor', 'custom-fields' ),
 		'has_archive'       => false,
-		'show_in_admin_bar' => false,
+		'show_in_admin_bar' => true,
 		'show_in_nav_menus' => true,
 		'query_var'         => true,
 		'capabilities' => array(
@@ -606,9 +606,10 @@ class ActAppDesigner {
 		// 	remove_menu_page( 'index.php' );
 		// 	remove_menu_page( 'tools.php' );
 		// }
-		// remove_menu_page( 'edit.php?post_type=actappelem' );
-		// remove_menu_page( 'edit.php?post_type=actappdesign' );
-		// remove_menu_page( 'edit.php?post_type=actappdoc' );
+		 //remove_menu_page( 'edit.php?post_type=actappelem' );
+		 remove_menu_page( 'edit.php?post_type=actappdesign' );
+		 remove_menu_page( 'edit.php?post_type=actappdoc' );
+		 remove_menu_page( 'edit.php?post_type=actappdesigndoc' );
 		
 		//--- Adds "Applications" tab for those with the 'actappapps' capability (cap)
 		add_menu_page( 
@@ -618,7 +619,7 @@ class ActAppDesigner {
 			'actapps',
 			array( 'ActAppDesigner', 'showApplications' ),
 			'dashicons-list-view',
-			20
+			70
 		); 
 		
 		//--- Demo of how to add a page on the left panel.  		
@@ -629,7 +630,7 @@ class ActAppDesigner {
 			'actappdesigner',
 			array( 'ActAppDesigner', 'showDesigner' ),
 			'dashicons-editor-kitchensink',
-			81
+			71
 		); 
 
 
