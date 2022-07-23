@@ -64,14 +64,33 @@
     if (this.tabIndex.hasOwnProperty(tmpItem)) {
       var tmpSpotName = this.getSpotName(theTabName);
       if (!(tmpSpotName)) {
-        console.Error("Spot not found for " + theTabName);
+        console.error("Spot not found for " + theTabName);
         return;
       }
       this.loadSpot(tmpSpotName, theContent, theOptionalTemplate);
     } else {
-      console.Error("Spot not found for " + theTabName);
+      console.error("Spot not found for " + theTabName);
       return;
     }
+  }
+  
+  //--- ToDo: Add control mgmt with destroy and reopen tab
+  ControlCode.closeTab = closeTab;
+  function closeTab(theTabName) {
+    var tmpAttrs = this.getByAttr$({group:this.config.group,item:theTabName});
+    //console.log('tmpAttrs',tmpAttrs);
+    //window.tmpAttrs = tmpAttrs;
+    tmpAttrs.remove();
+    tmpAttrs = this.getByAttr$({group:this.config.group,item:''});
+    if( tmpAttrs && tmpAttrs.length > 0){
+      var tmpItem = $(tmpAttrs.get(tmpAttrs.length-1)).attr('item');
+      this.gotoTab(tmpItem);
+    }
+    if( this.tabIndex.hasOwnProperty(theTabName) ){
+      delete this.tabIndex[theTabName];
+    }
+    
+
   }
 
   ControlCode.getTabSpot = getTabSpot;

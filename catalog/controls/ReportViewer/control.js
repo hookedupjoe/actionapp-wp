@@ -288,6 +288,12 @@
     this.refreshSelection();
   }
 
+  ControlCode._onDestroy = function() {
+    if(this.mainTable && this.mainTable.destroy){
+      this.mainTable.destroy();
+    }
+  }
+  
   ControlCode._onInit = function () {
     //ToDo: Why do we need this?
     if (this.initRan === true) {

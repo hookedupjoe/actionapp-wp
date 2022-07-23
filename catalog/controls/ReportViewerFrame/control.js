@@ -225,7 +225,6 @@
             }
             this.refreshSelection();
             //this.publish('data-selected', [this, row.getData()]);
-            //console.log('pub data', row.getData());
           },
             200);
   
@@ -515,7 +514,6 @@
     };
   
     ControlCode.quickSearch = function() {
-      console.log('quickSearch');
       var tmpSS = this.getFieldValue('search');
       this.mainTable.clearFilter();
       this.mainTable.addFilter(matchAny, {
@@ -532,7 +530,13 @@
       this.setFieldValue('search', '');
       this.refreshSelection();
     };
-  
+
+    ControlCode._onDestroy = function() {
+      if(this.mainTable && this.mainTable.destroy){
+        this.mainTable.destroy();
+      }
+    }
+
     ControlCode._onInit = function() {
       this.initSearch();
     }

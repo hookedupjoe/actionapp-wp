@@ -408,7 +408,7 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 		if( $tmpLen != 1){
 			//--- Blank JSON Reply
 			header('Content-Type: application/json');
-			echo '{"status":false,"error":"Invalid Count: "'.$tmpLen.' catname: '.$catname.' resname: '.$resname.' restype: '.$restype.'}';
+			echo '{"status":false,"error":"Invalid Count: '.$tmpLen.'", catname: '.$catname.' resname: '.$resname.' restype: '.$restype.'}';
 			exit();
 		}
 		$tmpDoc = $tmpDocs[0];
@@ -542,7 +542,7 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 		if( $tmpLen != 1){
 			//--- Blank JSON Reply
 			header('Content-Type: application/json');
-			echo '{"status":false,"error":"Invalid Count: "'.$tmpLen.' catname: '.$catname.'"}';
+			echo '{"status":false,"error":"Invalid Count: '.$tmpLen.'", catname: '.$catname.'"}';
 			exit();
 		}
 		$tmpDoc = $tmpDocs[0];
@@ -1088,10 +1088,14 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 		echo $tmpRet;
 		exit();
 	}
+
 	public function get_all_docs($request) {
 		$posttype = $_GET['posttype'];		
 		$doctype = $_GET['doctype'];
-		$tmpDocs = self::getPostDocs($posttype,$doctype);
+		$query = $_GET['query'];
+		$fields = $_GET['fields'];
+//ToDo: Translate query
+		$tmpDocs = self::getPostDocs($posttype,$doctype,$query,$fields);
 		
 		header('Content-Type: application/json');
 		//header('Content-Type: text/html');
@@ -1457,7 +1461,7 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 		return $tmpRet;
 	}
 
-	public function getPostDocs($thePostType,$theDocType,$theAdditionalArgs = null){
+	public function getPostDocs($thePostType,$theDocType,$theAdditionalArgs = null,$theFields = null){
 		$tmpDocType = $theDocType; 
 		$tmpPostType = 'actappdoc';
 		if( !empty($thePostType) ){
@@ -1497,15 +1501,40 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 			while ( $query->have_posts() ) {
 				$query->the_post();
 				$tmpID = get_the_ID();
-				$tmpJson = get_post_meta($tmpID);
-				
-				foreach($tmpJson as $iField => $iVal) {
-					if( count($iVal) == 1){
-						$tmpVal = $iVal[0];
-						$tmpJson[$iField] = maybe_unserialize($tmpVal);
+				$tmpMeta = get_post_meta($tmpID);
+
+
+				if( $theFields == '(none)' ){
+					$tmpJson = array();
+					
+					$tmpDocType = $tmpMeta['__doctype'];
+					if( count($tmpDocType) == 1){
+						$tmpJson['__doctype'] = $tmpDocType[0];
+					}
+					
+				} else {
+					if( $theFields == null || $theFields == '(all)'){
+						$tmpJson = $tmpMeta;
+					} else {
+						$tmpFieldList = explode(',',$tmpFields);
+						$tmpJson = array();
+						foreach ($tmpFieldList as $iFieldName) {
+							$tmpJson[$iFieldName] = array();
+							array_push($tmpJson[$iFieldName], $tmpMeta[$iFieldName]);
+						}
+					}
+					foreach($tmpJson as $iField => $iVal) {
+						if( count($iVal) == 1){
+							$tmpVal = $iVal[0];
+							$tmpJson[$iField] = maybe_unserialize($tmpVal);
+						}
 					}
 				}
+				
+				
+				$tmpJson['id'] = $tmpID;
 				$tmpJson['__id'] = $tmpID;
+				
 				$tmpJson['__posttype'] = get_post_type();
 				$tmpJson['__url'] = get_post_permalink();
 				$tmpJson['__posttitle'] = get_the_title();
