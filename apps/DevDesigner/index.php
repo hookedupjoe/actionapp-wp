@@ -83,7 +83,7 @@
   <script src="<?php echo ACTIONAPP_WP_URL ?>/apps/DevDesigner/app/app.js"></script>
 
 <script>
-ActionAppCore.wp_siteInfo = <?php echo( wp_json_encode(get_blog_details()) ); ?>;
+
 </script>
 
 </body>
