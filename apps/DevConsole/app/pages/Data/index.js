@@ -56,7 +56,8 @@ var thisPageSpecs = {
         controls: {
             baseURL: pageBaseURL + 'controls/',
             map: {
-                "PostsView": "PostsView"
+                "PostsView": "PostsView",
+                "DataViewDefinitions": "DataViewDefinitions"
             }
         }
     }
@@ -112,8 +113,15 @@ var thisPageSpecs = {
         ThisPage.ctlNav.gotoTab('posts');
 
         var tmpHTML = [];
+        tmpHTML.push('<div class="ui segment ">');
+        tmpHTML.push('<div pageaction="showDataViewDefs" class="ui fluid button blue">Show Definitions</div>');
+        tmpHTML.push('</div>');
+        tmpHTML = tmpHTML.join('\n');
+        ThisApp.addTemplate('DevConsole:DataViewConsole', tmpHTML);
+
+        tmpHTML = [];
         tmpHTML.push('<div class="ui segment raised">');
-        tmpHTML.push('<div class="ui top attached header">Document Types</div>');
+        tmpHTML.push('<div class="ui top attached header">Data Views</div>');
         tmpHTML.push('<div class="ui attached segment">');
         tmpHTML.push('<div class="basic slim buttons vertical fluid">');
         tmpHTML.push('  {{#each data}}');
@@ -141,6 +149,9 @@ var thisPageSpecs = {
         ]}
 
         ThisPage.ctlNav.loadTabSpot('posts',tmpPostItems,'DevConsole:SelectionList');
+        var tmpDataViewItems = {};
+        ThisPage.ctlNav.loadTabSpot('dataviews',tmpDataViewItems,'DevConsole:DataViewConsole');
+        
 
         ThisPage.ctlStatusbar.setContent('Welcome to the developer data manager');
 
@@ -164,6 +175,34 @@ var thisPageSpecs = {
             delete loadedTabs[tmpTabName];
         }
         ThisPage.ctlBody.closeTab(tmpTabName);
+    }
+
+    
+    actions.showDataViewDefs = function(theParams, theTarget){
+        //var tmpParams = ThisApp.getActionParams(theParams, theTarget, ['aaa','bbb']);
+        console.log('showDataViewDefs');
+        var tmpTabKey = 'tab-showDataViewDefs';
+        var tmpTabTitle = 'Data Views';
+        if( loadedTabs[tmpTabKey] ){
+            ThisPage.ctlBody.gotoTab(tmpTabKey);
+        } else {
+            var tmpCloseMe = '<i style="margin-right:-5px;margin-left:10px;" tab="' + tmpTabKey + '" pageaction="closeTab" class="icon close grey inverted"></i>';
+            var tmpNewTabControl = ThisPage.getControl('DataViewDefinitions').create(tmpTabKey);
+            ThisPage.ctlBody.addTab({item:tmpTabKey,text: tmpTabTitle + tmpCloseMe, icon: 'table', content:''})
+            var tmpNewSpot = ThisPage.ctlBody.getTabSpot(tmpTabKey);
+            tmpNewTabControl.loadToElement(tmpNewSpot).then(function (theReply) {
+                loadedTabs[tmpTabKey] = tmpNewTabControl;
+                //--- Go to the newly added card (to show it and hide others)
+                if( tmpNewTabControl.setup ){
+                    tmpNewTabControl.setup(tmpParams);
+                }
+                ThisApp.delay(1).then(function(){
+                    ThisPage.ctlBody.gotoTab(tmpTabKey);
+                })
+                
+            });
+
+        }
     }
 
     actions.selectListItem = function(theParams, theTarget){
