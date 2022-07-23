@@ -53,7 +53,6 @@ var thisPageSpecs = {
     //~layoutConfig~//~
     //~required//~
     thisPageSpecs.required = {
-        
         controls: {
             baseURL: pageBaseURL + 'controls/',
             map: {
@@ -126,27 +125,6 @@ var thisPageSpecs = {
         tmpHTML = tmpHTML.join('\n');
         ThisApp.addTemplate('DevConsole:SelectionList', tmpHTML);
 
-        tmpHTML = [];
-        tmpHTML.push('<div class="ui segment blue"><table class="ui table stackable">');
-        tmpHTML.push('<tr>');
-        tmpHTML.push('  <th>ID</th>');
-        tmpHTML.push('  <th>Title</th>');
-        tmpHTML.push('  <th>Created</th>');
-        tmpHTML.push('  <th>&nbsp;</th>');
-        tmpHTML.push('  </tr>');
-        tmpHTML.push('  {{#each data}}');
-        tmpHTML.push('  <tr>');
-        tmpHTML.push('    <td>{{__id}}</td>');
-        tmpHTML.push('    <td>{{__posttitle}}</td>');
-        tmpHTML.push('    <td>{{__postdate}}</td>');
-        tmpHTML.push('    <td><a href="{{__url}}" target="_blank" class="ui botton basic icon"><i class="icon right arrow"></i>'); tmpHTML.push('Open</a></td>');
-        tmpHTML.push('  </tr>');
-        tmpHTML.push('  {{/each}}');
-        tmpHTML.push('</table></div>');
-        tmpHTML = tmpHTML.join('\n');
-        ThisApp.addTemplate('DevConsole:PostsTable', tmpHTML);
-
-
         var tmpPostItems = {data:[
             {
                 name:'actappdoc',
@@ -190,11 +168,9 @@ var thisPageSpecs = {
 
     actions.selectListItem = function(theParams, theTarget){
         var tmpParams = ThisApp.getActionParams(theParams, theTarget, ['itemname','itemtitle']);
-        //console.log('itemname: ' + tmpParams.itemname);
         var tmpTabKey = 'tab-' + tmpParams.itemname;
         var tmpTabTitle = tmpParams.itemtitle || tmpParams.itemname;
         if( loadedTabs[tmpTabKey] ){
-            console.log('loaded');
             ThisPage.ctlBody.gotoTab(tmpTabKey);
         } else {
             var tmpCloseMe = '<i style="margin-right:-5px;margin-left:10px;" tab="' + tmpTabKey + '" pageaction="closeTab" class="icon close grey inverted"></i>';
@@ -216,10 +192,6 @@ var thisPageSpecs = {
         }
         
 
-        // ThisApp.apiCall(ActionAppCore.ActAppWP.rootPath + '/wp-json/actappdesigner/alldocs?fields=(none)&doctype=&posttype=' + tmpParams.itemname + '').then(function(theReply){
-        //     //console.log('theReply',theReply);
-        //     ThisPage.ctlBody.loadTabSpot('home',theReply,'DevConsole:PostsTable');
-        // })
     }
 
     ThisPage._onActivate = function () {
