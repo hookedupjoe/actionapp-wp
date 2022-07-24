@@ -56,8 +56,7 @@ var thisPageSpecs = {
         controls: {
             baseURL: pageBaseURL + 'controls/',
             map: {
-                "PostsView": "PostsView",
-                "DataViewDefinitions": "DataViewDefinitions"
+                "PostsView": "PostsView"
             }
         }
     }
@@ -187,7 +186,10 @@ var thisPageSpecs = {
             ThisPage.ctlBody.gotoTab(tmpTabKey);
         } else {
             var tmpCloseMe = '<i style="margin-right:-5px;margin-left:10px;" tab="' + tmpTabKey + '" pageaction="closeTab" class="icon close grey inverted"></i>';
-            var tmpNewTabControl = ThisPage.getControl('DataViewDefinitions').create(tmpTabKey);
+            ThisApp.getResourceFromSource('control','DataViewDefinitions','_designer','DataViewDefinitions').then(function(theReply){
+                var tmpNewTabControl = theReply.create(tmpTabKey);
+                //var tmpNewTabControl = ThisPage.getControl('DataViewDefinitions').create(tmpTabKey);
+
             ThisPage.ctlBody.addTab({item:tmpTabKey,text: tmpTabTitle + tmpCloseMe, icon: 'table', content:''})
             var tmpNewSpot = ThisPage.ctlBody.getTabSpot(tmpTabKey);
             tmpNewTabControl.loadToElement(tmpNewSpot).then(function (theReply) {
@@ -201,6 +203,8 @@ var thisPageSpecs = {
                 })
                 
             });
+            });
+            
 
         }
     }
