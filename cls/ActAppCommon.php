@@ -70,6 +70,7 @@ class ActAppCommon {
 			'actappCatalogURL'=> ACTIONAPP_WP_BASE_URL . '/catalog/', 
 			'libCatalogsURL'=> ACTIONAPP_WP_BASE_URL . '/core/catalogs/', 
 			'restPath' => esc_url_raw( rest_url() ),
+			'currentUser' => get_current_user_id(),
 			'nonce' => wp_create_nonce( 'wp_rest' )
 		);
 		$tmpCats = array(
@@ -94,6 +95,65 @@ class ActAppCommon {
 			}
 			return tmpOptions;
 		};';
+
+		$tmpScript .= 'ActionAppCore.apiFailAction = function(){
+			var dfd = $.Deferred();
+			//ThisApp.fullScreenFlyover("<iframe appuse=\"flyoverlogin\" style=\"height:100%;min-height:400px;width:100%\"></iframe>");
+			ThisApp.loadSpot("flyover-menu", "<iframe appuse=\"flyoverlogin\" style=\"height:100%;min-height:400px;width:100%\"></iframe>");
+
+			var tmpFrame = ThisApp.getByAttr$({appuse:"flyoverlogin"});
+		
+			if( tmpFrame && tmpFrame.length == 1 ){
+				tmpFrame = tmpFrame.get(0);
+			} else {
+				alert("Sign in again please","Log-in expired or failed");
+				window.location = window.location;
+				dfd.resolve(false);
+				return dfd.promise();
+			}
+			function tmpOnLoginLoad(){
+				var tmpNewNonce = "";
+				var tmpNewUser = "";
+				var tmpFrame = this;
+				if( tmpFrame.contentWindow && tmpFrame.contentWindow.ActionAppCore && tmpFrame.contentWindow.ActionAppCore.ActAppWP && tmpFrame.contentWindow.ActionAppCore.ActAppWP ){
+					var tmpWPInfo = tmpFrame.contentWindow.ActionAppCore.ActAppWP;
+					tmpNewNonce = tmpWPInfo.nonce
+					tmpNewUser = tmpWPInfo.currentUser
+				}
+				if( this._loadedOnce ){
+					//alert("refresh now");
+					//--- Refreshed page, assuming logged in - check
+					
+					if( tmpNewNonce ){
+						window.ActionAppCore.ActAppWP.nonce = tmpNewNonce;
+						ThisApp.clearFlyover();
+						dfd.resolve(true);
+					} else {
+						//---  Do nothing, log-in failed?
+						
+						// or ...
+						alert("Sign in again please","Log-in expired or failed");
+						window.location = window.location;
+						dfd.resolve(false);
+					}
+				} else {
+					this._loadedOnce = true;
+					if( (tmpNewUser > 0) && tmpNewNonce && window.ActionAppCore.ActAppWP.nonce != tmpNewNonce ){
+						window.ActionAppCore.ActAppWP.nonce = tmpNewNonce;
+						ThisApp.clearFlyover();
+						dfd.resolve(true);
+						return;
+					};
+					ThisApp.fullScreenFlyover();
+				}
+			}
+			
+		
+			tmpFrame.onload = tmpOnLoginLoad.bind(tmpFrame);
+			tmpFrame.src="http://localhost/actappdev/login/";
+			return dfd.promise();
+		}
+		';
 		
 		wp_add_inline_script( 'app-only-preinit', $tmpScript );
 

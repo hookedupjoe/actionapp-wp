@@ -2287,6 +2287,10 @@ window.ActionAppCore = window.ActionAppCore || ActionAppCore;
             dfd.reject("No api call details provided");
             return;
         }
+        if( theOptions._retryCounter && theOptions._retryCounter > 1){
+            dfd.reject("Too many failures");
+            return;
+        }
 
         var tmpOptions = theOptions || '';
         if (typeof (tmpOptions) == 'string') {
@@ -2316,7 +2320,34 @@ window.ActionAppCore = window.ActionAppCore || ActionAppCore;
         }
         tmpError = function (theError) {
             ThisApp.hideLoading(tmpLoaderOptions);
-            dfd.reject(theError)
+            
+            if( theError.status == 403 ){
+                
+                if( ActionAppCore.apiFailAction ){
+                    var tmpPromise = ActionAppCore.apiFailAction();
+                    if( tmpPromise && tmpPromise.then ){
+                        tmpPromise.then(function(){
+                            if( theOptions._retryCounter ){
+                                theOptions._retryCounter++
+                            } else {
+                                theOptions._retryCounter = 1;
+                            }
+                            ThisApp.apiCall(theOptions).then(function(theRetryResp){
+                                //--- ToDo: Check for second failure?
+                                ThisApp.hideLoading(tmpLoaderOptions);
+                                dfd.resolve(theRetryResp);
+                            })
+                        })
+                    } else {
+                        //--- ToDo: If function does not know to wait, do what?
+
+                    }
+                }
+            } else {
+                console.error('error in api call',theError);                
+                dfd.reject(theError)
+            }
+            
         }
 
 
