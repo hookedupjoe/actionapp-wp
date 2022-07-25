@@ -2273,23 +2273,13 @@ window.ActionAppCore = window.ActionAppCore || ActionAppCore;
         return commonDialog;
     }
 
-
-
-
-
-
-
     me.apiCall = apiCall;
     function apiCall(theOptions) {
         var dfd = $.Deferred();
 
-        if (!theOptions) {
-            dfd.reject("No api call details provided");
-            return;
-        }
         if( theOptions._retryCounter && theOptions._retryCounter > 1){
             dfd.reject("Too many failures");
-            return;
+            return dfd.promise();
         }
 
         var tmpOptions = theOptions || '';
@@ -2321,7 +2311,7 @@ window.ActionAppCore = window.ActionAppCore || ActionAppCore;
         tmpError = function (theError) {
             ThisApp.hideLoading(tmpLoaderOptions);
             
-            if( theError.status == 403 ){
+            if( theError.status == 403 || theError.status == 401 ){
                 
                 if( ActionAppCore.apiFailAction ){
                     var tmpPromise = ActionAppCore.apiFailAction();
