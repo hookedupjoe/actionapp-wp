@@ -86,7 +86,8 @@ class ActAppCommon {
 			var tmpURL = tmpBaseURL + "/wp-json/actappdesigner/get-catalog-res.json?catname=" + theCatName + "&restype=" + theResType + "&resname=" + theResName + "&alttype=";
 			return tmpURL
 		};';
-		$tmpScript .= 'ActionAppCore.apiCallOptions = ActionAppCore.apiCallOptions || {};ActionAppCore.apiCallOptions.filterOptions = function(theOptions){
+		$tmpScript .= 'ActionAppCore.apiCallOptions = ActionAppCore.apiCallOptions || {};
+			ActionAppCore.apiCallOptions.filterOptions = function(theOptions){
 			var tmpOptions = theOptions || {};
 			if( ActionAppCore.ActAppWP && ActionAppCore.ActAppWP.nonce ){
 				tmpOptions.beforeSend = function ( xhr ) {
@@ -95,62 +96,129 @@ class ActAppCommon {
 			}
 			return tmpOptions;
 		};';
-
-		$tmpScript .= 'ActionAppCore.apiFailAction = function(){
+		$tmpScript .= 'ActionAppCore.ActAppWP.nonceCheck = function(){
 			var dfd = $.Deferred();
-			//ThisApp.fullScreenFlyover("<iframe appuse=\"flyoverlogin\" style=\"height:100%;min-height:400px;width:100%\"></iframe>");
-			ThisApp.loadSpot("flyover-menu", "<iframe appuse=\"flyoverlogin\" style=\"height:100%;min-height:400px;width:100%\"></iframe>");
-
-			var tmpFrame = ThisApp.getByAttr$({appuse:"flyoverlogin"});
-		
-			if( tmpFrame && tmpFrame.length == 1 ){
-				tmpFrame = tmpFrame.get(0);
-			} else {
-				alert("Sign in again please","Log-in expired or failed");
-				window.location = window.location;
-				dfd.resolve(false);
+			tmpSuccess = function (theResponse) {
+				ActionAppCore.ActAppWP.nonce = theResponse;
+				dfd.resolve(true);
+			}
+			tmpError = function (theError) {
+				dfd.resolve(false)
+			}
+			var tmpURL = this.rootPath + "/wp-admin/admin-ajax.php?action=rest-nonce";
+			$.ajax({url:tmpURL}).then(tmpSuccess, tmpError);
+			return dfd.promise();
+		};';
+		$tmpScript .= 'ActionAppCore.ActAppWP.heartBeat = function(){
+			var dfd = $.Deferred();
+			var tmpPayload = {
+				"interval": 0,
+				"_nonce": ActionAppCore.ActAppWP.nonce,
+				"action": "heartbeat",
+				"screen_id": "custom",
+				"has_focus": true
+			}
+			ActionAppCore.apiCall({url: ActionAppCore.ActAppWP.rootPath + "/wp-admin/admin-ajax.php", data:tmpPayload, formSubmit: true}).then(function(theReply){
+				if(theReply["wp-auth-check"] === false){
+					dfd.resolve(false);
+				} else {
+					var tmpCurrN = theReply.rest_nonce || "";
+					if( tmpCurrN && tmpCurrN != ActionAppCore.ActAppWP.nonce ){
+						ActionAppCore.ActAppWP.nonce = tmpCurrN;
+						ThisApp.delay(1).then(function(){
+							dfd.resolve(true);
+						})
+					} else {
+						dfd.resolve(true);
+					}
+				}
+			})
+			return dfd.promise();
+		};';
+		$tmpScript .= 'ActionAppCore.apiCallOptions = ActionAppCore.apiCallOptions || {};
+		ActionAppCore.apiCallOptions.onBeforeRun = function(){
+			var dfd = $.Deferred();
+			if( ActionAppCore.apiCallOptions.onBeforeRunLastTime && (Date.now() < ActionAppCore.apiCallOptions.onBeforeRunLastTime) ){
+				dfd.resolve(true);
 				return dfd.promise();
 			}
-			function tmpOnLoginLoad(){
-				var tmpNewNonce = "";
-				var tmpNewUser = "";
-				var tmpFrame = this;
-				if( tmpFrame.contentWindow && tmpFrame.contentWindow.ActionAppCore && tmpFrame.contentWindow.ActionAppCore.ActAppWP && tmpFrame.contentWindow.ActionAppCore.ActAppWP ){
-					var tmpWPInfo = tmpFrame.contentWindow.ActionAppCore.ActAppWP;
-					tmpNewNonce = tmpWPInfo.nonce
-					tmpNewUser = tmpWPInfo.currentUser
+			//--- Do this if the last call was over this many seconds
+			var tmpNextCheck = new Date(Date.now() + (1000*30) ); 
+			ActionAppCore.apiCallOptions.onBeforeRunLastTime = tmpNextCheck;
+			ActionAppCore.ActAppWP.heartBeat().then(function(theIsValid){
+				if(theIsValid){
+					dfd.resolve(true);
+				} else {
+					//--- Show dialog to log in, once logged in then resolve true;
+					ActionAppCore.apiFailAction().then(function(theReply){
+						dfd.resolve(theReply);
+					})
 				}
-				if( this._loadedOnce ){
-					//alert("refresh now");
-					//--- Refreshed page, assuming logged in - check
-					
-					if( tmpNewNonce ){
-						window.ActionAppCore.ActAppWP.nonce = tmpNewNonce;
-						ThisApp.clearFlyover();
-						dfd.resolve(true);
+			})
+			return dfd.promise();
+		};';
+		$tmpScript .= 'ActionAppCore.apiFailAction = function(){
+			var dfd = $.Deferred();
+			ActionAppCore.ActAppWP.nonceCheck().then(function(theIsNowValid){
+				if( theIsNowValid ){
+					dfd.resolve(true);
+					return dfd.promise();
+				} else {
+					ThisApp.loadSpot("flyover-menu", "<iframe appuse=\"flyoverlogin\" style=\"height:100%;min-height:400px;width:100%\"></iframe>");
+
+					var tmpFrame = ThisApp.getByAttr$({appuse:"flyoverlogin"});
+				
+					if( tmpFrame && tmpFrame.length == 1 ){
+						tmpFrame = tmpFrame.get(0);
 					} else {
-						//---  Do nothing, log-in failed?
-						
-						// or ...
 						alert("Sign in again please","Log-in expired or failed");
 						window.location = window.location;
 						dfd.resolve(false);
+						return dfd.promise();
 					}
-				} else {
-					this._loadedOnce = true;
-					if( (tmpNewUser > 0) && tmpNewNonce && window.ActionAppCore.ActAppWP.nonce != tmpNewNonce ){
-						window.ActionAppCore.ActAppWP.nonce = tmpNewNonce;
-						ThisApp.clearFlyover();
-						dfd.resolve(true);
-						return;
-					};
-					ThisApp.fullScreenFlyover();
-				}
+					function tmpOnLoginLoad(){
+						var tmpNewNonce = "";
+						var tmpNewUser = "";
+						var tmpFrame = this;
+						if( tmpFrame.contentWindow && tmpFrame.contentWindow.ActionAppCore && tmpFrame.contentWindow.ActionAppCore.ActAppWP && tmpFrame.contentWindow.ActionAppCore.ActAppWP ){
+							var tmpWPInfo = tmpFrame.contentWindow.ActionAppCore.ActAppWP;
+							tmpNewNonce = tmpWPInfo.nonce
+							tmpNewUser = tmpWPInfo.currentUser
+						}
+						if( this._loadedOnce ){
+							//alert("refresh now");
+							//--- Refreshed page, assuming logged in - check
+							
+							if( tmpNewNonce ){
+								window.ActionAppCore.ActAppWP.nonce = tmpNewNonce;
+								ThisApp.clearFlyover();
+								dfd.resolve(true);
+							} else {
+								//---  Do nothing, log-in failed?
+								
+								// or ...
+								alert("Sign in again please","Log-in expired or failed");
+								window.location = window.location;
+								dfd.resolve(false);
+							}
+						} else {
+							this._loadedOnce = true;
+							if( (tmpNewUser > 0) && tmpNewNonce && window.ActionAppCore.ActAppWP.nonce != tmpNewNonce ){
+								window.ActionAppCore.ActAppWP.nonce = tmpNewNonce;
+								ThisApp.clearFlyover();
+								dfd.resolve(true);
+								return;
+							};
+							ThisApp.fullScreenFlyover();
+						}
+					}
+					
+				
+					tmpFrame.onload = tmpOnLoginLoad.bind(tmpFrame);
+					tmpFrame.src="http://localhost/actappdev/login/";
 			}
-			
-		
-			tmpFrame.onload = tmpOnLoginLoad.bind(tmpFrame);
-			tmpFrame.src="http://localhost/actappdev/login/";
+
+			})
 			return dfd.promise();
 		}
 		';
