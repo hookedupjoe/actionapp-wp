@@ -18,9 +18,9 @@
  * @package actionappwp
  * @since actionappwp 1.0.0
  *
- * Plugin Name: Action Application Development Environment for WordPress
+ * Plugin Name: Action App for WordPress
  * Plugin URI: https://github.com/hookedupjoe/actionapp-wp
- * Description: An advanced development environment with Semantic UI front end.
+ * Description: An advanced development environment for WordPress.
  * Author: Joseph Francis
  * Author URI: https://www.hookedup.com
  * Donate-Link: https://www.hookedup.com/
