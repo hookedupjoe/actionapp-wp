@@ -164,7 +164,7 @@ class ActAppCommon {
 					dfd.resolve(true);
 					return dfd.promise();
 				} else {
-					ThisApp.loadSpot("flyover-menu", "<iframe appuse=\"flyoverlogin\" style=\"height:100%;min-height:400px;width:100%\"></iframe>");
+					ThisApp.loadSpot("flyover-menu", "<center><iframe appuse=\"flyoverlogin\" style=\"height:100%;margin:auto;min-height:450px;width:100%;max-width:450px;\"></iframe></center>");
 
 					var tmpFrame = ThisApp.getByAttr$({appuse:"flyoverlogin"});
 				
@@ -215,7 +215,7 @@ class ActAppCommon {
 					
 				
 					tmpFrame.onload = tmpOnLoginLoad.bind(tmpFrame);
-					tmpFrame.src="http://localhost/actappdev/login/";
+					tmpFrame.src = ActionAppCore.ActAppWP.rootPath + "/actappdesign/login/";
 			}
 
 			})

@@ -29,7 +29,7 @@ class ActAppDesigner {
 	}
 
 	public static function getDataVersion(){
-		return 1.09;
+		return 1.10;
 	}
 
 	public static function actapp_block_category( $categories, $post ) {
@@ -98,6 +98,7 @@ class ActAppDesigner {
 			$template = ACTIONAPP_WP_DIR . '/tpl/actappelem.php';
 			return $template;
 		}
+
 		
 		return $template;
 	}
@@ -207,6 +208,11 @@ class ActAppDesigner {
 
 		$slug = 'resources';
         $title = 'Designer Resources';
+        $content = 'Internal Use';
+		$tmpNewDoc = ActAppCommon::assure_doc($slug, $post_type, $title, $content);
+
+		$slug = 'login';
+        $title = 'Log In Form';
         $content = 'Internal Use';
 		$tmpNewDoc = ActAppCommon::assure_doc($slug, $post_type, $title, $content);
 
