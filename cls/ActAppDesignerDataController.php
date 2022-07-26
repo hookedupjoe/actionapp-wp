@@ -721,10 +721,13 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 		$tmpLog = [];
 		$tmpLen = 0;
 		$tmpData = $body->data;
+		$tmpUpdated = 0;
+		$tmpSkipped = 0;
+		
 		if( $tmpData ){
 			$tmpLen = count($tmpData);
 			if( $tmpLen ){
-				array_push($tmpLog,'Found '.$tmpLen.' docs');
+				array_push($tmpLog,'Importing '.$tmpLen.' docs');
 			} else {
 				array_push($tmpLog,'Nothing passed in data array');				
 			}
@@ -735,12 +738,16 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 		if( $tmpLen ){
 			//--- We have data, process it
 			foreach ($tmpData as $tmpDoc) {
-				array_push($tmpLog,'Importing: '.$tmpDoc->{'__uid'});
+				
 				$tmpResult = self::import_doc($tmpDoc,$tmpLog);
-				// if($tmpResult){
-				// 	//--- count good and bad?
-				// }
-
+				if($tmpResult){
+					$tmpUpdated++;
+					$tmpImportPostID = 5;
+					array_push($tmpLog,'Imported: '.$tmpDoc->{'__uid'}.' as post id '.$tmpResult['post_id']);
+				} else {
+					$tmpSkipped++;
+					array_push($tmpLog,'Skipped: '.$tmpDoc->{'__uid'});
+				}
 			}
 		}
 
@@ -748,7 +755,8 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 		$tmpRet = wp_json_encode(array(
 			'action' => 'import_docs',
 			'result' => $tmpResultCode,
-			'body' => $body,
+			'updated' => $tmpUpdated,
+			'skipped' => $tmpSkipped,
 			'log' => $tmpLog
 		));
 
@@ -758,11 +766,8 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 		exit();
 	}
 
-	public function import_doc($theDoc,&$tmpLog){
-		//$tmpDoc = $theDoc;
-		
+	public function import_doc($theDoc){
 		if( !is_object($theDoc) ){
-			array_push($tmpLog,'Error, nothing passed');
 			return false;
 		}
 		$tmpSlug = $theDoc->__uid;
@@ -771,7 +776,6 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 		
 		$tmpIsDesign = ($tmpPostType == 'actappdesigndoc');
 		if( !$tmpIsDesign && ($tmpPostType !== 'actappdoc')){
-			array_push($tmpLog,'Error, invalid post type '.$tmpPostType);
 			return false;
 		}
 		
@@ -782,15 +786,12 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 			$tmpPost = get_post( $tmpExistingID );
 			if( 'trash' == $tmpExistingStatus ){
 				wp_delete_post($tmpExistingID, true);
-				array_push($tmpLog,'Trashed post for'.$tmpSlug);
 				$tmpExistingID = false;
 			}
 		}
-		array_push($tmpLog, 'status:'.$tmpExistingStatus);
 		if($tmpExistingID){
 			$theDoc->id = $tmpExistingID;
 			$theDoc->_id = $tmpExistingID;
-//			unset($theDoc->__uid);
 		} else {
 			unset($theDoc->id);
 			unset($theDoc->__id);
@@ -800,18 +801,9 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 		unset($theDoc->__postdate);
 		unset($theDoc->__posttype);
 		
-		array_push($tmpLog,$theDoc);
 		$tmpResults = self::save_doc(wp_json_encode($theDoc),$tmpIsDesign,false);
-		array_push($tmpLog, $tmpResults);
-		array_push($tmpLog,' - '.$tmpPostType.'-'.$tmpSlug.': existing id is '.$tmpExistingID);
-		//array_push($tmpLog,' - '.$tmpFieldName.'='.$tmpVal);
-		// foreach($theDoc as $tmpFieldName => $tmpVal) {
-		// 	//array_push($tmpLog,' - '.$tmpFieldName.'='.$tmpVal);
-		// }
-
-
 		//--- Return new post id or slug?
-		return true;
+		return $tmpResults;
 	}
 	public function save_user($request) {
 		//ToDo: Use wp user update / add caps instead
@@ -1042,7 +1034,7 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 		}
 
 		//--- Make return as array and encode it
-		$tmpRet = wp_json_encode(array(
+		$tmpRet = array(
 			'action' => 'savedoc',
 			'post_id' => $newid ? $newid : $tmpPostID,
 			'full_id' => $body->id,
@@ -1051,16 +1043,16 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 			'doctype' => $doctype,
 			'newpost' => $newpost,
 			'result' => $tmpResultCode,
-			'body' => $body,
+			//'body' => $body,
 			'storeid' => ActAppDesigner::getSUID(),
 			'data_version' => ActAppDesigner::getPluginSetupVersion(),
 			'base_url' => ActAppCommon::getRootPath(),
-		));
+		);
 
 		if( $theIsRequest ){
 			//--- Standard JSON reply
 			header('Content-Type: application/json');
-			echo $tmpRet;
+			echo wp_json_encode($tmpRet);
 			exit();
 		} else {
 			return $tmpRet;
