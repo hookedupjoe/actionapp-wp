@@ -240,7 +240,6 @@ class ActAppCommon {
 	public static function post_exists_by_slug( $post_slug, $post_type = 'post') {
 		$args_posts = array(
 			'post_type'      => $post_type,
-			'post_status'    => 'any',
 			'name'           => $post_slug,
 			'posts_per_page' => 1,
 		);
@@ -249,6 +248,44 @@ class ActAppCommon {
 			return false;
 		} else {
 			$loop_posts->the_post();
+			return $loop_posts->post->ID;
+		}
+	}
+
+	/**
+	 * post_exists_by_slug.
+	 *
+	 * @return mixed boolean false if no post exists; post ID otherwise.
+	 */
+	public static function post_exists_by_uid( $post_uid ) {
+		//--- Start with blank query
+		$tmpQuery = array();
+
+		//--- If getting a doc type then add to the query
+		array_push($tmpQuery, array(
+			'key'     => '__uid',
+			'value'   => $post_uid,
+			'compare' => '=',
+			)
+		);
+
+		$args_posts = array(
+			'post_type' => array('any'),
+			'post_status' => array('any','trash'),
+			'posts_per_page' => -1,
+			'meta_query' => $tmpQuery
+		);
+		
+		$loop_posts = new WP_Query( $args_posts );
+		//return $loop_posts->found_posts;
+		if ( ! $loop_posts->have_posts() ) {
+			return false;
+		} else {
+			
+			$loop_posts->the_post();
+			if( $tmpFound == 1){
+				return false;
+			}
 			return $loop_posts->post->ID;
 		}
 	}

@@ -81,7 +81,39 @@ var thisPageSpecs = {
 
     var loadedTabs = {};
     
+    var demoImportData = {
+        "data": [
+            {
+                "name": "app4",
+                "title": "Application Four",
+                "writecaps": "actappapps",
+                "readcaps": "actappapps",
+                "__doctype": "app",
+                "__posttype": "actappdesigndoc",
+                "__doctitle": "Application Four"
+            },
+            {
+                "name": "app3",
+                "title": "Application Three",
+                "writecaps": "actappapps",
+                "readcaps": "actappapps",
+                "__doctype": "app",
+                "__posttype": "actappdesigndoc",
+                "__doctitle": "Application Three"
+            }
+        ]
+    }
     
+    function demoImport(){
+        var tmpData = demoImportData;
+        var tmpURL = ActionAppCore.ActAppWP.rootPath + '/wp-json/actappdesigner/import-docs';
+        ThisApp.apiCall({url:tmpURL,data:tmpData}).then(
+            function(theReply){
+console.log('demoImport',theReply);
+            }
+        );
+    }
+
     ThisPage._onFirstActivate = function (theApp) {
         //~_onFirstActivate//~
 
@@ -90,6 +122,7 @@ var thisPageSpecs = {
             function () {
                 //~_onFirstLoad//~
         window.tmpDataPage = ThisPage;
+        ThisPage.demoImport = demoImport;
 
         ThisPage.loadedTabs = loadedTabs;       
         //quick access

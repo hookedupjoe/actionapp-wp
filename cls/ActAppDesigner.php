@@ -613,9 +613,9 @@ class ActAppDesigner {
 		// 	remove_menu_page( 'tools.php' );
 		// }
 		 //remove_menu_page( 'edit.php?post_type=actappelem' );
-		 remove_menu_page( 'edit.php?post_type=actappdesign' );
-		 remove_menu_page( 'edit.php?post_type=actappdoc' );
-		 remove_menu_page( 'edit.php?post_type=actappdesigndoc' );
+		 //remove_menu_page( 'edit.php?post_type=actappdesign' );
+		 //remove_menu_page( 'edit.php?post_type=actappdoc' );
+		 //remove_menu_page( 'edit.php?post_type=actappdesigndoc' );
 		
 		// //--- Adds "Applications" tab for those with the 'actappapps' capability (cap)
 		// add_menu_page( 

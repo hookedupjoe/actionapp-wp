@@ -121,7 +121,7 @@
       // Define columns based on Tabulator column documentation
       var tmpTableCols = [ {
         "title": "Title",
-        "field": "__posttitle",
+        "field": "__doctitle",
         frozen: true
       },
         {

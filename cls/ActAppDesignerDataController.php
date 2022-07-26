@@ -46,7 +46,16 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 		'permission_callback' => array( $this, 'get_permissions_check' )
 	  );
 	  register_rest_route( $namespace, '/' . $path, [$routeInfo]);     
-	  
+
+	  $path = 'debug';
+	  $routeInfo = array(
+		'methods'             => 'GET',
+		'callback'            => array( $this, 'get_debug' ),
+		'permission_callback' => array( $this, 'get_permissions_check' )
+	  );
+	  register_rest_route( $namespace, '/' . $path, [$routeInfo]);     
+
+
 	  $path = 'get-catalog-res.json';
 	  $routeInfo = array(
 		'methods'             => 'GET',
@@ -107,6 +116,14 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 	  register_rest_route( $namespace, '/' . $path, [$routeInfo]);     
 
 
+	  
+	  $path = 'import-docs';
+	  $routeInfo = array(
+		'methods'             => 'POST',
+		'callback'            => array( $this, 'import_docs' ),
+		'permission_callback' => array( $this, 'get_users_permissions_check' )
+	  );
+	  register_rest_route( $namespace, '/' . $path, [$routeInfo]);     
 
 	  $path = 'saveuser';
 	  $routeInfo = array(
@@ -354,6 +371,14 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 		return new WP_REST_Response($tmpRet, 200);
 	}
 
+	public function get_debug($request) {
+		$tmpSlug = '316062cae38715a25_594762d46d124981a';
+		$tmpExistingID = ActAppCommon::post_exists_by_uid($tmpSlug);
+		$tmpStatus = get_post_status($tmpExistingID);
+		$tmpRet = array('debug'=>'true','existing'=> $tmpExistingID,'status'=>$tmpStatus);	
+		return new WP_REST_Response($tmpRet, 200);
+	}
+	
 	
 
 	public function get_page_code($request) {
@@ -684,6 +709,109 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 		return $tmpRet[0];
 	}
 	
+	
+	public function import_docs($request) {
+		if( !current_user_can('actappdesign') ){
+			return new WP_Error('actapp_data_error', 'Not autorized', array('status' => 403));
+		}
+		$json = $request->get_body();
+		$body = json_decode($json);
+		$docs = [];
+		$tmpResultCode = '';
+		$tmpLog = [];
+		$tmpLen = 0;
+		$tmpData = $body->data;
+		if( $tmpData ){
+			$tmpLen = count($tmpData);
+			if( $tmpLen ){
+				array_push($tmpLog,'Found '.$tmpLen.' docs');
+			} else {
+				array_push($tmpLog,'Nothing passed in data array');				
+			}
+			
+		} else {
+			array_push($tmpLog,'No data array passed');
+		}
+		if( $tmpLen ){
+			//--- We have data, process it
+			foreach ($tmpData as $tmpDoc) {
+				array_push($tmpLog,'Importing: '.$tmpDoc->{'__uid'});
+				$tmpResult = self::import_doc($tmpDoc,$tmpLog);
+				// if($tmpResult){
+				// 	//--- count good and bad?
+				// }
+
+			}
+		}
+
+		//--- Make return as array and encode it
+		$tmpRet = wp_json_encode(array(
+			'action' => 'import_docs',
+			'result' => $tmpResultCode,
+			'body' => $body,
+			'log' => $tmpLog
+		));
+
+		//--- Standard JSON reply
+		header('Content-Type: application/json');
+		echo $tmpRet;
+		exit();
+	}
+
+	public function import_doc($theDoc,&$tmpLog){
+		//$tmpDoc = $theDoc;
+		
+		if( !is_object($theDoc) ){
+			array_push($tmpLog,'Error, nothing passed');
+			return false;
+		}
+		$tmpSlug = $theDoc->__uid;
+		$tmpPostType = $theDoc->__posttype;
+		$tmpPostTitle = $theDoc->__doctitle;
+		
+		$tmpIsDesign = ($tmpPostType == 'actappdesigndoc');
+		if( !$tmpIsDesign && ($tmpPostType !== 'actappdoc')){
+			array_push($tmpLog,'Error, invalid post type '.$tmpPostType);
+			return false;
+		}
+		
+		$tmpExistingID = ActAppCommon::post_exists_by_uid($tmpSlug);
+		$tmpExistingStatus = 'na';
+		if($tmpExistingID){
+			$tmpExistingStatus = get_post_status($tmpExistingID);
+			$tmpPost = get_post( $tmpExistingID );
+			if( 'trash' == $tmpExistingStatus ){
+				wp_untrash_post($tmpExistingStatus, true);
+				array_push($tmpLog,'Untrashed post for'.$tmpSlug);
+			}
+		}
+		array_push($tmpLog, 'status:'.$tmpExistingStatus);
+		if($tmpExistingID){
+			$theDoc->id = $tmpExistingID;
+			$theDoc->_id = $tmpExistingID;
+//			unset($theDoc->__uid);
+		} else {
+			unset($theDoc->id);
+			unset($theDoc->__id);
+		}
+
+		unset($theDoc->__url);
+		unset($theDoc->__postdate);
+		unset($theDoc->__posttype);
+		
+		array_push($tmpLog,$theDoc);
+		$tmpResults = self::save_doc(wp_json_encode($theDoc),$tmpIsDesign,false);
+		array_push($tmpLog, $tmpResults);
+		array_push($tmpLog,' - '.$tmpPostType.'-'.$tmpSlug.': existing id is '.$tmpExistingID);
+		//array_push($tmpLog,' - '.$tmpFieldName.'='.$tmpVal);
+		// foreach($theDoc as $tmpFieldName => $tmpVal) {
+		// 	//array_push($tmpLog,' - '.$tmpFieldName.'='.$tmpVal);
+		// }
+
+
+		//--- Return new post id or slug?
+		return true;
+	}
 	public function save_user($request) {
 		//ToDo: Use wp user update / add caps instead
 		if( !current_user_can('actappdesign') ){
@@ -834,6 +962,10 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 		if ($body->id != null && $body->id != ""){
 			$tmpPostID = $body->id;
 			$tmpDocID = $body->id;
+			//--- If being updated, assure $doctitle
+			if( $doctitle == ''){
+				$doctitle = get_the_title($tmpPostID);
+			}
 		} else {
 			if($body->id != null){
 				unset($body["id"]);
@@ -884,6 +1016,8 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 			$tmpResultCode = 'updated json';
 			wp_update_post(array(
 				'ID'        => $tmpPostID,
+				'post_title'        =>   $doctitle,
+				'post_status'       =>   'publish',
 				'meta_input'=> $body,
 			));
 		}
@@ -1094,8 +1228,13 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 		$doctype = $_GET['doctype'];
 		$query = $_GET['query'];
 		$fields = $_GET['fields'];
+		$status = $_GET['status'];		
+		if( empty($status) ){
+			$status = array('any');
+		}
 //ToDo: Translate query
-		$tmpDocs = self::getPostDocs($posttype,$doctype,$query,$fields);
+
+		$tmpDocs = self::getPostDocs($posttype,$doctype,$query,$fields,$status);
 		
 		header('Content-Type: application/json');
 		//header('Content-Type: text/html');
@@ -1461,7 +1600,7 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 		return $tmpRet;
 	}
 
-	public function getPostDocs($thePostType,$theDocType,$theAdditionalArgs = null,$theFields = null){
+	public function getPostDocs($thePostType,$theDocType,$theAdditionalArgs = null,$theFields = null, $theOptionalPostStatus = array('any')){
 		$tmpDocType = $theDocType; 
 		$tmpPostType = 'actappdoc';
 		if( !empty($thePostType) ){
@@ -1490,6 +1629,7 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 		$args = array(
 			'post_type' => $tmpPostType,
 			'posts_per_page' => -1,
+			'post_status'    => $theOptionalPostStatus,
 			'meta_query' => $tmpQuery
 		);
 
@@ -1513,7 +1653,7 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 					}
 					
 				} else {
-					if( $theFields == null || $theFields == '(all)'){
+					if( $theFields == null || $theFields == '(all)' || $theFields == '(export)'){
 						$tmpJson = $tmpMeta;
 					} else {
 						$tmpFieldList = explode(',',$tmpFields);
@@ -1531,13 +1671,11 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 					}
 				}
 				
-				
 				$tmpJson['id'] = $tmpID;
 				$tmpJson['__id'] = $tmpID;
-				
 				$tmpJson['__posttype'] = get_post_type();
 				$tmpJson['__url'] = get_post_permalink();
-				$tmpJson['__posttitle'] = get_the_title();
+				$tmpJson['__doctitle'] = get_the_title();				
 				$tmpJson['__postdate'] = get_the_date();
 
 				array_push($tmpRet,$tmpJson);

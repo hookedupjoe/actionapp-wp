@@ -63,7 +63,7 @@ echo '<img class="ui image medium" src="'.ACTIONAPP_WP_IMAGE_PATH.'single-page-h
                     console.log(tmpDoc);
                     var tmpURL = tmpDoc['__url'];
                     var tmpID = tmpDoc['__id'];
-                    var tmpTitle = tmpDoc['__posttitle'];
+                    var tmpTitle = tmpDoc['__doctitle'];
                     var tmpOut = '<div class="pad5"></div><a class="ui button blue large basic fluid" target="actappdesign_' + tmpID + '" href="' + tmpURL + '">' + tmpTitle + '</a>';
                     tmpHTML.push(tmpOut);
                 }
