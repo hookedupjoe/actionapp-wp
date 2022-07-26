@@ -1242,6 +1242,8 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 		$status = $_GET['status'];		
 		if( empty($status) ){
 			$status = array('any');
+		} else {
+			$status = array($status);
 		}
 //ToDo: Translate query
 
