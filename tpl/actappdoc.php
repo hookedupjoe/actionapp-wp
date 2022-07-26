@@ -20,6 +20,7 @@ $docauthor = get_post_field('post_author');
 echo ('<br/>slug: ' . $post_slug  );
 echo ('<br/>GUID: ' . get_the_guid() );
 echo ('<br/>Title: ' . get_the_title() );
+echo ('<br/>Status: ' . get_post_status($tmpID) );
 echo ('<br/>doctype: ' . $doctype  );
 echo ('<br/>author id: ' . $docauthor  );
 
