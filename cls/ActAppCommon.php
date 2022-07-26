@@ -277,15 +277,13 @@ class ActAppCommon {
 		);
 		
 		$loop_posts = new WP_Query( $args_posts );
-		//return $loop_posts->found_posts;
 		if ( ! $loop_posts->have_posts() ) {
 			return false;
 		} else {
-			
-			$loop_posts->the_post();
-			if( $tmpFound == 1){
+			if( $loop_posts->found_posts != 1){
 				return false;
 			}
+			$loop_posts->the_post();
 			return $loop_posts->post->ID;
 		}
 	}

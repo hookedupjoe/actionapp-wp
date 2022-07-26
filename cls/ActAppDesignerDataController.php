@@ -372,7 +372,7 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 	}
 
 	public function get_debug($request) {
-		$tmpSlug = '316062cae38715a25_594762d46d124981a';
+		$tmpSlug = '316062cae38715a25_462662df4d05d5930';
 		$tmpExistingID = ActAppCommon::post_exists_by_uid($tmpSlug);
 		$tmpStatus = get_post_status($tmpExistingID);
 		$tmpRet = array('debug'=>'true','existing'=> $tmpExistingID,'status'=>$tmpStatus);	
@@ -781,8 +781,9 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 			$tmpExistingStatus = get_post_status($tmpExistingID);
 			$tmpPost = get_post( $tmpExistingID );
 			if( 'trash' == $tmpExistingStatus ){
-				wp_untrash_post($tmpExistingStatus, true);
-				array_push($tmpLog,'Untrashed post for'.$tmpSlug);
+				wp_delete_post($tmpExistingID, true);
+				array_push($tmpLog,'Trashed post for'.$tmpSlug);
+				$tmpExistingID = false;
 			}
 		}
 		array_push($tmpLog, 'status:'.$tmpExistingStatus);
@@ -825,6 +826,7 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 		if ($body->id != null && $body->id != ""){
 			$tmpPostID = $body->id;
 			$tmpDocID = $body->id;
+			$body->tag = get_post_meta($tmpPostID,'__uid',true);
 		} else {
 			if($body->id != null){
 				unset($body["id"]);
@@ -958,6 +960,18 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 
 		$tmpDocID = '';
 		$tmpPostID = false;
+		if (!empty($body->__uid) && empty($body->id)){
+			$tmpExistingID = ActAppCommon::post_exists_by_uid($tmpSlug);
+			if($tmpExistingID){
+				
+				$tmpExistingStatus = get_post_status($tmpExistingID);
+				$tmpPost = get_post( $tmpExistingID );
+				if( 'trash' == $tmpExistingStatus ){
+					wp_untrash_post($tmpExistingStatus, true);
+				}
+				$body->id = $tmpExistingID;
+			}
+		}
 		
 		if ($body->id != null && $body->id != ""){
 			$tmpPostID = $body->id;
@@ -969,8 +983,13 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 		} else {
 			if($body->id != null){
 				unset($body["id"]);
-			}			
-			$tmpDocID = (ActAppDesigner::getSUID() . '_' . uniqid('' . random_int(1000, 9999)));
+			}
+			if( empty($body->__uid) ){
+				$tmpDocID = (ActAppDesigner::getSUID() . '_' . uniqid('' . random_int(1000, 9999)));
+			} else {
+				//--- Allow created document to use non-used uid
+				$tmpDocID = $body->__uid;
+			}
 			if( $doctitle == ''){
 				$doctitle = $tmpDocID;
 			}
