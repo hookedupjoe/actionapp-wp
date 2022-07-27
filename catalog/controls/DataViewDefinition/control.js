@@ -16,7 +16,7 @@
                   "size": "large",
                   "name": "welcome",
                   "hidden": false,
-                  "text": "Provide details about this data view below."
+                  "text": "Defines a view of data used by apis"
               },
               {
                   "ctl": "fieldrow",
@@ -47,7 +47,7 @@
                           "note": "Select Post Type",
                           "name": "sourceposttype",
                           "default": "actappdoc",
-                          "list": "Document|actappdoc,Design Doc|actappdesigndoc",
+                          "list": "Document|actappdoc,Design Doc|actappdesigndoc,Design Element|actappelem,Any Action App Doc|(any)",
                           "req": true
                       },
                       {
@@ -59,25 +59,7 @@
                       }
                   ]
               },
-              {
-                  "ctl": "fieldrow",
-                  "items": [
-                      {
-                          "label": "Default Form",
-                          "ctl": "field",
-                          "note": "Name of the form to use by default",
-                          "name": "formname",
-                          "req": false
-                      },
-                      {
-                          "label": "Default Form Catalog",
-                          "ctl": "field",
-                          "name": "catalog",
-                          "note": "The name of the catalog to find the form control",
-                          "req": false
-                      }
-                  ]
-              },
+              
               {
                   "ctl": "fieldrow",
                   "items": [

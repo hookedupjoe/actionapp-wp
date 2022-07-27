@@ -238,10 +238,29 @@ console.log('demoImport',theReply);
                 title: 'Design Element Docs'
             },
             {
-                name:'actapptrash',
+                name:'thetrash',
                 isTrash: true,
                 title: 'The Trash Bin'
             }
+            // },
+            // {
+            //     name:'dvpeople',
+            //     isDataView: true,
+            //     viewname: 'people',
+            //     title: 'People'
+            // },
+            // {
+            //     name:'dvapps',
+            //     isDataView: true,
+            //     viewname: 'apps',
+            //     title: 'Tiny Apps'
+            // },
+            // {
+            //     name:'dvtests',
+            //     isDataView: true,
+            //     viewname: 'tests',
+            //     title: 'Tests'
+            // }
         ]}
         //--- Load to index
         for( var iPos in tmpPostItems.data ){

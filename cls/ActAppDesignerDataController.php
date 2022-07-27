@@ -1281,6 +1281,8 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 		$query = $_GET['query'];
 		$fields = $_GET['fields'];
 		$status = $_GET['status'];		
+		$dataview = $_GET['dataview'];
+
 		if( empty($status) ){
 			$status = array('any');
 		} else {
@@ -1288,15 +1290,25 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 		}
 
 		//--- Only process supported types for the designer level onyly api
-		if( empty($doctype) ){
-			$doctype = array('actappdoc','actappdesigndoc','actappelem','actappdesign');
+		if( empty($posttype) ){
+			$posttype = array('actappdoc','actappdesigndoc','actappelem','actappdesign');
 		}
-//ToDo: Translate query
+
+		if (!empty($dataview)){
+			$tmpDoc = self::getDataViewDoc($dataview);
+
+			$posttype = $tmpDoc['sourceposttype'];
+			$doctype = $tmpDoc['sourcedoctype'];
+			//$capabilities = $tmpDoc['capabilities'];
+			
+			// $doctype = 'person';
+			// $posttype = 'actappdoc';
+			//--- Get access control and apply it here
+			
+		}
 
 		$tmpDocs = self::getPostDocs($posttype,$doctype,$query,$fields,$status);
-		
 		header('Content-Type: application/json');
-		//header('Content-Type: text/html');
 		$tmpJsonArray = self::getJsonFromDocs($tmpDocs);
 		echo '{"data":'.$tmpJsonArray.'}';
 		exit();
@@ -1707,7 +1719,7 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 					$tmpJson = array();
 					
 					$tmpDocType = $tmpMeta['__doctype'];
-					if( count($tmpDocType) == 1){
+					if( is_array($tmpDocType) && count($tmpDocType) == 1){
 						$tmpJson['__doctype'] = $tmpDocType[0];
 					}
 					

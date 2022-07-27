@@ -129,9 +129,15 @@
     ControlCode.setup = function(theOptions) {
       var tmpPostType = theOptions.itemname || theOptions.name;
       var tmpIsTrash = theOptions.isTrash || false;
+      var tmpIsDataView = theOptions.isDataView || false;
+      var tmpDataViewName = '';
+
+      if( tmpIsDataView ){
+        tmpDataViewName = theOptions.viewname || '';
+      }
 
       isTrashView = tmpIsTrash;
-      console.log('isTrashView',isTrashView);
+      //console.log('tmpIsDataView',tmpIsDataView,tmpDataViewName);
       this.posttype = tmpPostType;
       window.tmpView = this;
       this.setItemDisplay('btn-page-tb-untrash', isTrashView)
@@ -144,7 +150,12 @@
       if( tmpIsTrash ){
         this.getViewControl().setReportURL(ActionAppCore.ActAppWP.rootPath + '/wp-json/actappdesigner/alldocs?fields=(none)&doctype=&posttype=any&status=trash');
       } else {
-        this.getViewControl().setReportURL(ActionAppCore.ActAppWP.rootPath + '/wp-json/actappdesigner/alldocs?fields=(none)&doctype=&posttype=' + tmpPostType + '');
+        if( tmpIsDataView ){
+          this.getViewControl().setReportURL(ActionAppCore.ActAppWP.rootPath + '/wp-json/actappdesigner/alldocs?fields=(none)&dataview=' + tmpDataViewName + '');
+        } else {
+          this.getViewControl().setReportURL(ActionAppCore.ActAppWP.rootPath + '/wp-json/actappdesigner/alldocs?fields=(none)&doctype=&posttype=' + tmpPostType + '');
+        }
+
       }
       this.thisReportSetup();
     }

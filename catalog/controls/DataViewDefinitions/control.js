@@ -162,14 +162,6 @@
         {
           "title": "Read Caps",
           "field": "readcaps"
-        },
-        {
-          "title": "Form",
-          "field": "formname"
-        },
-        {
-          "title": "Form Catalog",
-          "field": "catalog"
         }];
   
   
