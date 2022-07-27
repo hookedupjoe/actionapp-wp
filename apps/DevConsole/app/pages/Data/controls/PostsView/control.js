@@ -33,19 +33,34 @@
   
                 }
               },
-                {
-                  "ctl": "button",
-                  "toLeft": true,
-                  "color": "blue",
-                  "icon": "trash",
-                  compact: true,
-                  "name": "btn-page-tb-recycle",
-                  "label": "Recycle",
-                  "onClick": {
-                    "run": "action",
-                    "action": "recycleSelected"
-                  }
-                }]
+              {
+                "ctl": "button",
+                "toLeft": true,
+                "color": "blue",
+                "icon": "trash",
+                compact: true,
+                "name": "btn-page-tb-recycle",
+                "label": "Recycle",
+                "onClick": {
+                  "run": "action",
+                  "action": "recycleSelected"
+                }
+              },
+              {
+                "ctl": "button",
+                "toLeft": true,
+                "color": "green",
+                "icon": "undo",
+                compact: true,
+                hidden: true,
+                "name": "btn-page-tb-untrash",
+                "label": "Restore",
+                "onClick": {
+                  "run": "action",
+                  "isTrash": true,
+                  "action": "restoreSelected"
+                }
+              }]
             },
               {
                 ctl: 'divider',
@@ -64,7 +79,8 @@
     };
   
     var ControlCode = {};
-  
+    var isTrashView = false;
+
     function onTableBuilt() {
      //--- Anything when initially created the table
     }
@@ -111,9 +127,25 @@
     // }
 
     ControlCode.setup = function(theOptions) {
-      var tmpPostType = theOptions.itemname;
+      var tmpPostType = theOptions.itemname || theOptions.name;
+      var tmpIsTrash = theOptions.isTrash || false;
+
+      isTrashView = tmpIsTrash;
+      console.log('isTrashView',isTrashView);
       this.posttype = tmpPostType;
-      this.getViewControl().setReportURL(ActionAppCore.ActAppWP.rootPath + '/wp-json/actappdesigner/alldocs?fields=(none)&doctype=&posttype=' + tmpPostType + '');
+      window.tmpView = this;
+      this.setItemDisplay('btn-page-tb-untrash', isTrashView)
+      if( isTrashView ){
+        $(this.getItem('btn-page-tb-recycle').el).html('<i class="trash icon"></i> Trash It!')
+      } else {
+        $(this.getItem('btn-page-tb-recycle').el).html('<i class="trash icon"></i> Recycle')
+      }
+
+      if( tmpIsTrash ){
+        this.getViewControl().setReportURL(ActionAppCore.ActAppWP.rootPath + '/wp-json/actappdesigner/alldocs?fields=(none)&doctype=&posttype=any&status=trash');
+      } else {
+        this.getViewControl().setReportURL(ActionAppCore.ActAppWP.rootPath + '/wp-json/actappdesigner/alldocs?fields=(none)&doctype=&posttype=' + tmpPostType + '');
+      }
       this.thisReportSetup();
     }
 
@@ -153,56 +185,7 @@
       });
     };
   
-    ControlCode.newDoc = function() {
-      var self = this;
-  
-      var tmpBaseURL = ActionAppCore.ActAppWP.rootPath;
-      var tmpThis = this;
-      var tmpViewer = this.getViewControl();
-  
-      self.parts.mainform.prompt({
-        title: 'Add Application', submitLabel: 'Save Application'
-      }).then(function(theSubmit, theData) {
-        if (!theSubmit) {
-          return;
-        }
-  
-        self.parts.mainform.submitForm().then(function() {
-          tmpViewer.showReport();
-        });
-  
-      });
-  
-  
-  
-    };
-  
-    ControlCode.editDoc = function() {
-      var tmpViewer = this.getViewControl();
-      var tmpSelected = tmpViewer.getSelectedKeys();
-      var tmpRow = tmpViewer.mainTable.getRow(tmpSelected[0]);
-      var self = this;
-  
-      self.parts.mainform.prompt({
-        title: 'Edit Application Definition',
-        submitLabel: 'Save Changes',
-        doc: tmpRow._row.data
-      }).then(function(theSubmit,
-        theData) {
-        if (!theSubmit) {
-          return;
-        }
-  
-        self.parts.mainform.submitForm().then(function() {
-          tmpViewer.showReport();
-        });
-  
-      });
-  
-    };
-  
-  
-  
+    
     ControlCode.openURL = function() {
       var tmpViewer = this.getViewControl();
       var tmpData = tmpViewer.mainTable.getSelectedData();
@@ -218,6 +201,18 @@
       }
       window.open(tmpURL,'_blank');
     };
+
+    ControlCode.restoreSelected = function() {
+      var self = this;
+      var tmpViewer = this.getViewControl();
+      ThisApp.confirm('Restore the selected documents?',
+        'Restore?').then(function(theIsYes) {
+          if (theIsYes) {
+            self.restoreSelectedRun();
+          }
+        });
+    };
+
     ControlCode.recycleSelected = function() {
       var self = this;
       var tmpViewer = this.getViewControl();
@@ -229,6 +224,30 @@
         });
     };
   
+    
+
+    ControlCode.restoreSelectedRun = function() {
+      var tmpViewer = this.getViewControl();
+      var tmpSelected = tmpViewer.getSelectedKeys();
+      var self = this;
+      var tmpData = {
+        ids: tmpSelected
+      };
+  
+      var tmpBaseURL = ActionAppCore.ActAppWP.rootPath;
+      var tmpPostOptions = {
+        formSubmit: false,
+        data: tmpData,
+        url: tmpBaseURL + '/wp-json/actappdesigner/restore?open'
+      };
+  
+      ThisApp.apiCall(tmpPostOptions).then(function() {
+        tmpViewer.showReport();
+      });
+  
+  
+    };
+
     ControlCode.recycleSelectedRun = function() {
       var tmpViewer = this.getViewControl();
       var tmpSelected = tmpViewer.getSelectedKeys();
@@ -264,6 +283,8 @@
   
       var tmpNoneDisabled = (tmpViewer.counts.selected === 0);
       this.setItemDisabled('btn-page-tb-recycle',
+        tmpNoneDisabled);
+        this.setItemDisabled('btn-page-tb-untrash',
         tmpNoneDisabled);
   
       var tmpNotOneDisabled = (tmpViewer.counts.selected !== 1);

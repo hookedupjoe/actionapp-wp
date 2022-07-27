@@ -158,6 +158,15 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 	  );
 	  register_rest_route( $namespace, '/' . $path, [$routeInfo]);     
 
+	  
+	  $path = 'restore';
+	  $routeInfo = array(
+		'methods'             => 'POST',
+		'callback'            => array( $this, 'restore_docs' ),
+		'permission_callback' => array( $this, 'get_edit_permissions_check' )
+	  );
+	  register_rest_route( $namespace, '/' . $path, [$routeInfo]);     
+
 	  $path = 'recycle';
 	  $routeInfo = array(
 		'methods'             => 'POST',
@@ -623,13 +632,45 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 		exit();
 	}
 
+	
+	
+	public function restore_docs($request) {
+		$json = $request->get_body();
+		$body = json_decode($json);
+		$ids = $body->ids;
+		foreach( $ids as $id){
+			$tmpStatus = get_post_status( $id );
+			if( 'trash' == $tmpStatus ){
+				wp_untrash_post( $id );
+				wp_publish_post( $id );
+			} else {
+				//--- Skip it ... log it?
+			}
+		}
+		//--- Make return as array and encode it
+		$tmpRet = wp_json_encode(array(
+			'action' => 'restore',
+			'ids' => $ids,
+		));
+
+		//--- Standard JSON reply
+		header('Content-Type: application/json');
+		echo $tmpRet;
+		exit();
+	}	
+
 	public function recycle_docs($request) {
 		$json = $request->get_body();
 		$body = json_decode($json);
 		$ids = $body->ids;
 		foreach( $ids as $id){
 			//set_post_type( $id, get_post_type($id)."_recycled" );
-			wp_trash_post( $id );
+			$tmpStatus = get_post_status( $id );
+			if( 'trash' == $tmpStatus ){
+				wp_delete_post( $id, true );
+			} else {
+				wp_trash_post( $id );
+			}
 		}
 		//--- Make return as array and encode it
 		$tmpRet = wp_json_encode(array(
@@ -1244,6 +1285,11 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 			$status = array('any');
 		} else {
 			$status = array($status);
+		}
+
+		//--- Only process supported types for the designer level onyly api
+		if( empty($doctype) ){
+			$doctype = array('actappdoc','actappdesigndoc','actappelem','actappdesign');
 		}
 //ToDo: Translate query
 

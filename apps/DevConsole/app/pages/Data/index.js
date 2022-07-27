@@ -171,6 +171,7 @@ console.log('demoImport',theReply);
             }
         );
     }
+    var selectionListIndex = {};
 
     ThisPage._onFirstActivate = function (theApp) {
         //~_onFirstActivate//~
@@ -235,9 +236,19 @@ console.log('demoImport',theReply);
             {
                 name:'actappelem',
                 title: 'Design Element Docs'
+            },
+            {
+                name:'actapptrash',
+                isTrash: true,
+                title: 'The Trash Bin'
             }
         ]}
-
+        //--- Load to index
+        for( var iPos in tmpPostItems.data ){
+            var tmpDetails = tmpPostItems.data[iPos];
+            selectionListIndex[tmpDetails.name] = tmpDetails;
+        }
+        
         ThisPage.ctlNav.loadTabSpot('posts',tmpPostItems,'DevConsole:SelectionList');
         var tmpDataViewItems = {};
         ThisPage.ctlNav.loadTabSpot('dataviews',tmpDataViewItems,'DevConsole:DataViewConsole');
@@ -302,6 +313,7 @@ console.log('demoImport',theReply);
 
     actions.selectListItem = function(theParams, theTarget){
         var tmpParams = ThisApp.getActionParams(theParams, theTarget, ['itemname','itemtitle']);
+        
         var tmpTabKey = 'tab-' + tmpParams.itemname;
         var tmpTabTitle = tmpParams.itemtitle || tmpParams.itemname;
         if( loadedTabs[tmpTabKey] ){
@@ -315,7 +327,8 @@ console.log('demoImport',theReply);
                 loadedTabs[tmpTabKey] = tmpNewTabControl;
                 //--- Go to the newly added card (to show it and hide others)
                 if( tmpNewTabControl.setup ){
-                    tmpNewTabControl.setup(tmpParams);
+                    var tmpSetupDetails = selectionListIndex[tmpParams.itemname] || tmpParams;
+                    tmpNewTabControl.setup(tmpSetupDetails);
                 }
                 ThisApp.delay(1).then(function(){
                     ThisPage.ctlBody.gotoTab(tmpTabKey);
