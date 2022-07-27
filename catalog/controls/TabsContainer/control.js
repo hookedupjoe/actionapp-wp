@@ -34,15 +34,16 @@
 
   ControlCode._onInit = _onInit;
   function _onInit() {
+    this.uniqueName = 'tab-group' + ThisApp.controls.getNextCounter();
     this.config = {
-      group: 'tab-group' + ThisApp.controls.getNextCounter()
+      group: this.uniqueName
     };
 
     this.tabIndex = {};
-
+    var tmpPostFix = '-' + this.uniqueName;
     //--- Load initial wrapper with new spot names "myspot"
-    this.loadSpot('nav', '<div myspot="navbody" ctluse="dev-console-nav" class="pad0 ui top attached tabular slim menu"></div>');
-    this.loadSpot('cards', '<div myspot="cardbody" ctluse="dev-console-cards"></div>');
+    this.loadSpot('nav', '<div myspot="navbody' + tmpPostFix + '" ctluse="dev-console-nav" class="pad0 ui top attached tabular slim menu"></div>');
+    this.loadSpot('cards', '<div myspot="cardbody' + tmpPostFix + '" ctluse="dev-console-cards"></div>');
 
   }
 
@@ -78,8 +79,6 @@
   ControlCode.closeTab = closeTab;
   function closeTab(theTabName) {
     var tmpAttrs = this.getByAttr$({group:this.config.group,item:theTabName});
-    //console.log('tmpAttrs',tmpAttrs);
-    //window.tmpAttrs = tmpAttrs;
     tmpAttrs.remove();
     tmpAttrs = this.getByAttr$({group:this.config.group,item:''});
     if( tmpAttrs && tmpAttrs.length > 0){
@@ -166,8 +165,9 @@
     var tmpCard = '<div appuse="cards" class="hidden" myspot="' + tmpSpotName + '" group="' + tmpGroup + '" item="' + tmpItem + '">';
     tmpCard += tmpContent + '</div>';
 
-    this.addToSpot('navbody', tmpNav);
-    this.addToSpot('cardbody', tmpCard);
+    var tmpPostFix = '-' + this.uniqueName;
+    this.addToSpot('navbody' + tmpPostFix, tmpNav);
+    this.addToSpot('cardbody' + tmpPostFix, tmpCard);
     this.gotoTab(tmpItem);
   }
 
