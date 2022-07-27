@@ -138,7 +138,7 @@ var thisPageSpecs = {
 
         tmpHTML = [];
         tmpHTML.push('<div class="ui segment raised">');
-        tmpHTML.push('<div class="ui top attached header">Data Views</div>');
+        tmpHTML.push('<div class="ui top attached header">Action App Docs</div>');
         tmpHTML.push('<div class="ui attached segment">');
         tmpHTML.push('<div class="basic slim buttons vertical fluid">');
         tmpHTML.push('  {{#each data}}');
@@ -147,6 +147,7 @@ var thisPageSpecs = {
         tmpHTML.push('</div>');
         tmpHTML.push('</div>');
         tmpHTML.push('</div>');
+        //tmpHTML.push('<div class="ui segment raised"><div itemname="importexport" itemtitle="Import / Export" pageaction="selectListItem" class="ui button fluid basic blue">Import / Export</div></div>');
         tmpHTML = tmpHTML.join('\n');
         ThisApp.addTemplate('DevConsole:SelectionList', tmpHTML);
 
@@ -232,7 +233,6 @@ var thisPageSpecs = {
     
     actions.showDataViewDefs = function(theParams, theTarget){
         //var tmpParams = ThisApp.getActionParams(theParams, theTarget, ['aaa','bbb']);
-        console.log('showDataViewDefs');
         var tmpTabKey = 'tab-showDataViewDefs';
         var tmpTabTitle = 'Data Views';
         if( loadedTabs[tmpTabKey] ){
