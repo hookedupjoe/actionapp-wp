@@ -279,8 +279,6 @@
     function refreshSelection() {
   
       var tmpViewer = this.getViewControl();
-      console.log('refreshSelection',
-        tmpViewer);
   
       var tmpSelDisabled = (tmpViewer.counts.filtered === 0);
       this.setItemDisabled('btn-select-filtered-footer',

@@ -52,14 +52,14 @@ var thisPageSpecs = {
 
     //~layoutConfig~//~
     //~required//~
-    thisPageSpecs.required = {
-        controls: {
-            baseURL: pageBaseURL + 'controls/',
-            map: {
-                "PostsView": "PostsView"
-            }
-        }
-    }
+
+    // thisPageSpecs.required = {
+    //     controls: {
+    //         baseURL: pageBaseURL + 'controls/',
+    //         map: {}
+    //     }
+    // }
+
     //~required~//~
 
     var ThisPage = new SiteMod.SitePage(thisPageSpecs);
@@ -83,82 +83,7 @@ var thisPageSpecs = {
     
     var demoImportData = {
         "data": [
-            {
-                "name": "app4",
-                "title": "Application Four",
-                "writecaps": "actappapps",
-                "readcaps": "actappapps",
-                "__doctype": "app",
-                "tag": "316062cae38715a25_462662df4d05d5930",
-                "__doctitle": "Application Four",
-                "__uid": "316062cae38715a25_462662df4d05d5930",
-                "__title": "Application Four",
-                "id": 529,
-                "_edit_lock": "1658803546:1",
-                "_edit_last": "1",
-                "__id": 529,
-                "__posttype": "actappdesigndoc",
-                "__url": "http://localhost/actappdev/actappdesigndoc/316062cae38715a25_462662df4d05d5930/",
-                "__postdate": "July 26, 2022"
-            },
-            {
-                "name": "app3",
-                "title": "Application Three",
-                "writecaps": "actappapps",
-                "readcaps": "actappapps",
-                "__doctype": "app",
-                "tag": "316062cae38715a25_958462df4d05e0ec9",
-                "__doctitle": "Application Three",
-                "__uid": "316062cae38715a25_958462df4d05e0ec9",
-                "__title": "Application Three",
-                "id": 530,
-                "__id": 530,
-                "__posttype": "actappdesigndoc",
-                "__url": "http://localhost/actappdev/actappdesigndoc/316062cae38715a25_958462df4d05e0ec9/",
-                "__postdate": "July 26, 2022"
-            },
-            {
-                "name": "app2",
-                "title": "Application Two",
-                "writecaps": "actappapps",
-                "readcaps": "actappapps",
-                "id": 415,
-                "__doctype": "app",
-                "__title": "Application Two",
-                "tag": "316062cae38715a25_696262d46d1d0a869",
-                "__uid": "316062cae38715a25_696262d46d1d0a869",
-                "_wp_trash_meta_status": "publish",
-                "_wp_trash_meta_time": "1658801034",
-                "__id": 415,
-                "__doctitle": "Application Two",
-                "_id": "415",
-                "_wp_old_slug": "316062cae38715a25_696262d46d1d0a869__trashed",
-                "_edit_last": "1",
-                "_edit_lock": "1658801083:1",
-                "__posttype": "actappdesigndoc",
-                "__url": "http://localhost/actappdev/actappdesigndoc/316062cae38715a25_696262d46d1d0a869/",
-                "__postdate": "July 17, 2022"
-            },
-            {
-                "name": "app1",
-                "title": "Application One",
-                "writecaps": "actappapps",
-                "readcaps": "actappapps",
-                "id": 414,
-                "__doctype": "app",
-                "__title": "Application One",
-                "tag": "316062cae38715a25_594762d46d124981a",
-                "__uid": "316062cae38715a25_594762d46d124981a",
-                "__id": 414,
-                "__doctitle": "Application One",
-                "_id": "414",
-                "_wp_old_slug": "316062cae38715a25_594762d46d124981a__trashed",
-                "_edit_last": "1",
-                "_edit_lock": "1658802195:1",
-                "__posttype": "actappdesigndoc",
-                "__url": "http://localhost/actappdev/actappdesigndoc/316062cae38715a25_594762d46d124981a/",
-                "__postdate": "July 17, 2022"
-            }
+           
         ]
     }
     
@@ -167,10 +92,11 @@ var thisPageSpecs = {
         var tmpURL = ActionAppCore.ActAppWP.rootPath + '/wp-json/actappdesigner/import-docs';
         ThisApp.apiCall({url:tmpURL,data:tmpData}).then(
             function(theReply){
-console.log('demoImport',theReply);
+                console.log('demoImport Reply',theReply);
             }
         );
     }
+
     var selectionListIndex = {};
 
     ThisPage._onFirstActivate = function (theApp) {
@@ -241,6 +167,12 @@ console.log('demoImport',theReply);
                 name:'thetrash',
                 isTrash: true,
                 title: 'The Trash Bin'
+            },
+            {
+                name:'importexport',
+                catalog: 'design',
+                controlname: 'ImportExport',
+                title: 'Import / Export'
             }
             // },
             // {
@@ -307,23 +239,23 @@ console.log('demoImport',theReply);
             ThisPage.ctlBody.gotoTab(tmpTabKey);
         } else {
             var tmpCloseMe = '<i style="margin-right:-5px;margin-left:10px;" tab="' + tmpTabKey + '" pageaction="closeTab" class="icon close grey inverted"></i>';
-            ThisApp.getResourceFromSource('control','DataViewDefinitions','_designer','DataViewDefinitions').then(function(theReply){
-                var tmpNewTabControl = theReply.create(tmpTabKey);
+            ThisApp.getResourceFromSource('control','DataViewDefinitions','_designer','DataViewDefinitions').then(function(theLoadedControl){
+                var tmpNewTabControl = theLoadedControl.create(tmpTabKey);
                 //var tmpNewTabControl = ThisPage.getControl('DataViewDefinitions').create(tmpTabKey);
 
-            ThisPage.ctlBody.addTab({item:tmpTabKey,text: tmpTabTitle + tmpCloseMe, icon: 'table', content:''})
-            var tmpNewSpot = ThisPage.ctlBody.getTabSpot(tmpTabKey);
-            tmpNewTabControl.loadToElement(tmpNewSpot).then(function (theReply) {
-                loadedTabs[tmpTabKey] = tmpNewTabControl;
-                //--- Go to the newly added card (to show it and hide others)
-                if( tmpNewTabControl.setup ){
-                    tmpNewTabControl.setup(tmpParams);
-                }
-                ThisApp.delay(1).then(function(){
-                    ThisPage.ctlBody.gotoTab(tmpTabKey);
-                })
-                
-            });
+                ThisPage.ctlBody.addTab({item:tmpTabKey,text: tmpTabTitle + tmpCloseMe, icon: 'table', content:''})
+                var tmpNewSpot = ThisPage.ctlBody.getTabSpot(tmpTabKey);
+                tmpNewTabControl.loadToElement(tmpNewSpot).then(function () {
+                    loadedTabs[tmpTabKey] = tmpNewTabControl;
+                    //--- Go to the newly added card (to show it and hide others)
+                    if( tmpNewTabControl.setup ){
+                        tmpNewTabControl.setup(tmpParams);
+                    }
+                    ThisApp.delay(1).then(function(){
+                        ThisPage.ctlBody.gotoTab(tmpTabKey);
+                    })
+                    
+                });
             });
             
 
@@ -339,21 +271,28 @@ console.log('demoImport',theReply);
             ThisPage.ctlBody.gotoTab(tmpTabKey);
         } else {
             var tmpCloseMe = '<i style="margin-right:-5px;margin-left:10px;" tab="' + tmpTabKey + '" pageaction="closeTab" class="icon close grey inverted"></i>';
-            var tmpNewTabControl = ThisPage.getControl('PostsView').create(tmpTabKey);
-            ThisPage.ctlBody.addTab({item:tmpTabKey,text: tmpTabTitle + tmpCloseMe, icon: 'table', content:''})
-            var tmpNewSpot = ThisPage.ctlBody.getTabSpot(tmpTabKey);
-            tmpNewTabControl.loadToElement(tmpNewSpot).then(function (theReply) {
-                loadedTabs[tmpTabKey] = tmpNewTabControl;
-                //--- Go to the newly added card (to show it and hide others)
-                if( tmpNewTabControl.setup ){
-                    var tmpSetupDetails = selectionListIndex[tmpParams.itemname] || tmpParams;
-                    tmpNewTabControl.setup(tmpSetupDetails);
-                }
-                ThisApp.delay(1).then(function(){
-                    ThisPage.ctlBody.gotoTab(tmpTabKey);
-                })
-                
-            });
+
+            var tmpSetupDetails = selectionListIndex[tmpParams.itemname] || tmpParams;
+            var tmpControlName = tmpSetupDetails.controlname || 'PostsView';
+            var tmpControlSource = tmpSetupDetails.catalog || '_designer';
+            ThisApp.getResourceFromSource('control',tmpControlName,tmpControlSource,tmpControlName).then(function(theLoadedControl){
+                var tmpNewTabControl = theLoadedControl.create(tmpTabKey);
+                //var tmpNewTabControl = ThisPage.getControl('PostsView').create(tmpTabKey);
+                ThisPage.ctlBody.addTab({item:tmpTabKey,text: tmpTabTitle + tmpCloseMe, icon: 'table', content:''})
+                var tmpNewSpot = ThisPage.ctlBody.getTabSpot(tmpTabKey);
+                tmpNewTabControl.loadToElement(tmpNewSpot).then(function () {
+                    loadedTabs[tmpTabKey] = tmpNewTabControl;
+                    //--- Go to the newly added card (to show it and hide others)
+                    if( tmpNewTabControl.setup ){
+                        tmpNewTabControl.setup(tmpSetupDetails);
+                    }
+                    ThisApp.delay(1).then(function(){
+                        ThisPage.ctlBody.gotoTab(tmpTabKey);
+                    })
+                    
+                });
+            })
+            
 
         }
         
