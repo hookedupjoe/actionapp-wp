@@ -25,7 +25,6 @@ License: MIT
 	
 	ControlCode.resizeToParent = resizeToParent;
 	function resizeToParent(theParentEl) {
-		window.tmpLastEditor = this;
 		var tmpSpot = this.getSpot$('code-editor');
 		tmpSpot.height($(tmpSpot.context).height());
 
@@ -67,7 +66,6 @@ License: MIT
 	
 	ControlCode._onInit = _onInit;
 	function _onInit() {
-		//console.log(this.getSpot$('code-editor'));
 		this.codeEditorEl = this.getSpot$('code-editor')
 
 		this.codeEditor = ace.edit(this.codeEditorEl.get(0));
@@ -77,10 +75,62 @@ License: MIT
 		this.codeEditor.session.setTabSize(2);
 
 		this.codeEditor.setValue(ThisApp.json({}));
-		if( this.context && this.context.page && this.context.page.controller ){
-			this.parent.subscribe('resized', this.resizeToParent.bind(this) );
+		
+		if( this.parentControl ){
+			this.subscribeEvent(this.parentControl, 'resized', this.resizeToParent.bind(this) );
+		} else if( this.context && this.context.page && this.context.page.controller ){
+			this.subscribeEvent(this.parent, 'resized', this.resizeToParent.bind(this) );
 		}
+		this.resizeToParent();
 
+	}
+
+
+	ControlCode.clearJson = clearJson;
+	function clearJson() {
+		this.codeEditor.setValue('{}');
+		this.selectAll();
+	}
+
+	ControlCode.selectAll = selectAll;
+	function selectAll() {
+		this.codeEditor.selectAll();
+		this.codeEditor.focus();
+	}
+	ControlCode.toClipboard = toClipboard;
+	function toClipboard() {
+		navigator.clipboard.writeText(this.codeEditor.getValue());
+		this.codeEditor.focus();
+	}
+
+	ControlCode.formatJson = formatJson;
+	function formatJson() {
+			
+		var tmpJSON = this.codeEditor.getValue();
+		var tmpConverter = {};//<-- Do not remove, used below in eval
+		try {
+			var tmpEval = eval('tmpConverter =' + tmpJSON);
+			this.loadJson(tmpEval);
+		} catch (ex) {
+			try {
+			if (tmpJSON.startsWith('var ')) {
+				tmpJSON = tmpJSON.replace("var ", "tmpConverter.");
+			}
+			var tmpEval = eval(tmpJSON);
+			this.loadJson(tmpEval);
+			} catch (ex) {
+			console.error("formatJson err", ex);
+			alert("Invalid JSON", "Format Error", "e");
+			}
+		}
+		this.codeEditor.clearSelection();
+
+	}
+
+	ControlCode.loadJson = loadJson;
+	function loadJson(theObj) {
+		this.codeEditor.setValue(ThisApp.json(theObj, true));
+		this.codeEditor.clearSelection();
 	}
 
 	//---- Return Control
