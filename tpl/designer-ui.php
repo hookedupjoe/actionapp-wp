@@ -57,15 +57,18 @@ echo '<img class="ui image medium" src="'.ACTIONAPP_WP_IMAGE_PATH.'single-page-h
             
             var tmpHTML = [];
             ThisApp.apiCall(ActionAppCore.ActAppWP.rootPath + '/wp-json/actappdesigner/alldocs?posttype=actappdesign').then(function(theReply){
-                console.log(theReply,theReply.data.length);
+                //console.log(theReply,theReply.data.length);
                 for( var iPos = 0 ; iPos < theReply.data.length ; iPos++){
                     var tmpDoc = theReply.data[iPos];
                     console.log(tmpDoc);
                     var tmpURL = tmpDoc['__url'];
                     var tmpID = tmpDoc['__id'];
                     var tmpTitle = tmpDoc['__doctitle'];
-                    var tmpOut = '<div class="pad5"></div><a class="ui button blue large basic fluid" target="actappdesign_' + tmpID + '" href="' + tmpURL + '">' + tmpTitle + '</a>';
-                    tmpHTML.push(tmpOut);
+                    var tmpIsHidden = tmpDoc['hidden'] == 1;
+                    if( !tmpIsHidden ){
+                        var tmpOut = '<div class="pad5"></div><a class="ui button blue large basic fluid" target="actappdesign_' + tmpID + '" href="' + tmpURL + '">' + tmpTitle + '</a>';
+                        tmpHTML.push(tmpOut);
+                    }
                 }
                 mainControl.loadSpot('body',tmpHTML.join('\n'));
             })
