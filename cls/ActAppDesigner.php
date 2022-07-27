@@ -29,7 +29,7 @@ class ActAppDesigner {
 	}
 
 	public static function getDataVersion(){
-		return 1.10;
+		return 1.12;
 	}
 
 	public static function actapp_block_category( $categories, $post ) {
@@ -199,6 +199,7 @@ class ActAppDesigner {
 		if( $tmpVersion != self::getDataVersion() ){
 			//--- Use new var for assuring other docs to return false if not created
 			update_post_meta( $tmpMainID, 'version', self::getDataVersion() );
+			update_post_meta( $tmpMainID, 'hidden', 1 );
 		}
 
 		$slug = 'dashboard';
@@ -215,6 +216,7 @@ class ActAppDesigner {
         $title = 'Log In Form';
         $content = 'Internal Use';
 		$tmpNewDoc = ActAppCommon::assure_doc($slug, $post_type, $title, $content);
+		update_post_meta( $tmpNewDoc, 'hidden', 1 );
 
 		return $tmpMainID;
 	}
