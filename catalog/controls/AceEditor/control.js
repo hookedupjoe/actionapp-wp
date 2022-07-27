@@ -103,28 +103,36 @@ License: MIT
 		this.codeEditor.focus();
 	}
 
-	ControlCode.formatJson = formatJson;
-	function formatJson() {
-			
-		var tmpJSON = this.codeEditor.getValue();
+	ControlCode.getJsonAsObject = getJsonAsObject;
+	function getJsonAsObject(theOptionalJson) {
+		var tmpJSON = theOptionalJson || this.codeEditor.getValue();
+		var tmpRet = false;
 		var tmpConverter = {};//<-- Do not remove, used below in eval
 		try {
-			var tmpEval = eval('tmpConverter =' + tmpJSON);
-			this.loadJson(tmpEval);
+			return eval('tmpConverter =' + tmpJSON);
 		} catch (ex) {
 			try {
 			if (tmpJSON.startsWith('var ')) {
 				tmpJSON = tmpJSON.replace("var ", "tmpConverter.");
 			}
-			var tmpEval = eval(tmpJSON);
-			this.loadJson(tmpEval);
+			return eval(tmpJSON);
 			} catch (ex) {
-			console.error("formatJson err", ex);
-			alert("Invalid JSON", "Format Error", "e");
+				return false;
 			}
 		}
-		this.codeEditor.clearSelection();
+		return tmpRet;
+	}
 
+	ControlCode.formatJson = formatJson;
+	function formatJson() {
+		var tmpObj = this.getJsonAsObject();
+		if( tmpObj !== false){
+			this.loadJson(tmpObj);
+		} else {
+			console.error("formatJson error in json");
+			alert("Invalid JSON", "Format Error", "e")
+		}
+		this.codeEditor.clearSelection();
 	}
 
 	ControlCode.loadJson = loadJson;
