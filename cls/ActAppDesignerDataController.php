@@ -1677,6 +1677,7 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 		if( !empty($thePostType) ){
 			$tmpPostType = $thePostType;
 		}
+
 		
 		//--- Start with blank query
 		$tmpQuery = array();
@@ -1713,7 +1714,7 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 				$query->the_post();
 				$tmpID = get_the_ID();
 				$tmpMeta = get_post_meta($tmpID);
-
+				$tmpDocPostType = get_post_type();
 
 				if( $theFields == '(none)' ){
 					$tmpJson = array();
@@ -1721,6 +1722,8 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 					$tmpDocType = $tmpMeta['__doctype'];
 					if( is_array($tmpDocType) && count($tmpDocType) == 1){
 						$tmpJson['__doctype'] = $tmpDocType[0];
+					} else {
+						$tmpJson['__doctype'] = $tmpDocPostType;
 					}
 					
 				} else {
@@ -1744,7 +1747,7 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 				
 				$tmpJson['id'] = $tmpID;
 				$tmpJson['__id'] = $tmpID;
-				$tmpJson['__posttype'] = get_post_type();
+				$tmpJson['__posttype'] = $tmpDocPostType;
 				$tmpJson['__url'] = get_post_permalink();
 				$tmpJson['__doctitle'] = get_the_title();				
 				$tmpJson['__postdate'] = get_the_date();
