@@ -94,7 +94,7 @@
                   "value": "dataview"
               },
               {
-                  "name": "__title",
+                  "name": "__doctitle",
                   "ctl": "hidden"
               },
               {

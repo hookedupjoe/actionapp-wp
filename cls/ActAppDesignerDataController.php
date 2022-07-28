@@ -867,7 +867,7 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 			$tmpDocID = (ActAppDesigner::getSUID() . '_' . uniqid('' . random_int(1000, 9999)));
 			$body->__uid = $tmpDocID;
 			$body->__doctype = $doctype;
-			$body->__title = $doctitle;
+			$body->__doctitle = $doctitle;
 		}
 		
 		$jsonDoc = json_encode($body);
@@ -1020,9 +1020,13 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 			}
 			$body->__uid = $tmpDocID;
 			$body->__doctype = $doctype;
-			$body->__doctitle = $doctitle;
+			//$body->__doctitle = $doctitle;
 		}
-		
+		unset($body->__doctitle);
+		unset($body->__url);
+		unset($body->__id);
+		unset($body->__postdate);
+
 		$jsonDoc = json_encode($body);
 		
 		$author_id = get_current_user_id();
@@ -1738,10 +1742,9 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 				}
 				
 				$tmpJson['id'] = $tmpID;
-				$tmpJson['__id'] = $tmpID;
 				$tmpJson['__posttype'] = $tmpDocPostType;
-				$tmpJson['__url'] = get_post_permalink();
 				$tmpJson['__doctitle'] = get_the_title();				
+				$tmpJson['__url'] = get_post_permalink();
 				$tmpJson['__postdate'] = get_the_date();
 
 				array_push($tmpRet,$tmpJson);

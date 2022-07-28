@@ -183,7 +183,7 @@
       theData.id = tmpRow._row.data.id;
       theData.__id = tmpRow._row.data.id;
       theData.__doctype = tmpRow._row.data.__doctype;
-      theData.__title = tmpRow._row.data.__title;
+      theData.__doctitle = tmpRow._row.data.__doctitle;
 
       console.log('updated data', theData);
 

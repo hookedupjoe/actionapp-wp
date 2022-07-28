@@ -215,7 +215,7 @@ License: MIT
 				"ctl": "hidden"
 			},
 			{
-				"name": "__title",
+				"name": "__doctitle",
 				"ctl": "hidden"
 			},
 			{
