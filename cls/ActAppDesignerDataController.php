@@ -981,22 +981,14 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 		}
 
 		$doctype = $body->__doctype;
-		if( !$doctype ){
-			$doctype = $_GET['doctype'];
-		}
-
-		
 		$doctitle = $body->__doctitle;
-		if( !$doctitle ){
-			$doctitle = $_GET['doctitle'];
-		}
 
 		$tmpDocID = '';
 		$tmpPostID = false;
 		if (!empty($body->__uid) && empty($body->id)){
 			$tmpExistingID = ActAppCommon::post_exists_by_uid($tmpSlug);
 			if($tmpExistingID){
-				
+				//ToDo: Delete from trash instead?
 				$tmpExistingStatus = get_post_status($tmpExistingID);
 				$tmpPost = get_post( $tmpExistingID );
 				if( 'trash' == $tmpExistingStatus ){
@@ -1028,7 +1020,7 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 			}
 			$body->__uid = $tmpDocID;
 			$body->__doctype = $doctype;
-			$body->__title = $doctitle;
+			$body->__doctitle = $doctitle;
 		}
 		
 		$jsonDoc = json_encode($body);
@@ -1085,9 +1077,9 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 			'newpost' => $newpost,
 			'result' => $tmpResultCode,
 			//'body' => $body,
-			'storeid' => ActAppDesigner::getSUID(),
-			'data_version' => ActAppDesigner::getPluginSetupVersion(),
-			'base_url' => ActAppCommon::getRootPath(),
+			//'storeid' => ActAppDesigner::getSUID(),
+			//'data_version' => ActAppDesigner::getPluginSetupVersion(),
+			//'base_url' => ActAppCommon::getRootPath(),
 		);
 
 		if( $theIsRequest ){
