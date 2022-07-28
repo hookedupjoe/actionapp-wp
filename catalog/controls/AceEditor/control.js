@@ -52,7 +52,7 @@ License: MIT
 			this.codeEditor.resize(true);
 			this.codeEditorEl.show();
 		}
-	}
+	}	
 	ControlCode.setValue = setValue;
 	function setValue(theValue) {
 		this.codeEditor.setValue(theValue);
@@ -62,15 +62,23 @@ License: MIT
 	function getValue(theValue) {
 		return this.codeEditor.getValue(theValue);
 	}
-	
-	
+	ControlCode.setup = setup;
+	function setup(theDetails) {
+		if( !theDetails ){
+			return;
+		}
+		var tmpDetails = theDetails || {};
+		if( tmpDetails.editorSetupCallback ){
+			tmpDetails.editorSetupCallback(this.codeEditor,this);
+		}
+	}
 	ControlCode._onInit = _onInit;
 	function _onInit() {
 		this.codeEditorEl = this.getSpot$('code-editor')
 
 		this.codeEditor = ace.edit(this.codeEditorEl.get(0));
 		//this.codeEditor.setTheme("ace/theme/tomorrow_night_bright");
-		this.codeEditor.setFontSize(16);
+		this.codeEditor.setFontSize(14);
 		this.codeEditor.session.setMode("ace/mode/json");
 		this.codeEditor.session.setTabSize(2);
 
@@ -79,7 +87,7 @@ License: MIT
 		if( this.parentControl ){
 			this.subscribeEvent(this.parentControl, 'resized', this.resizeToParent.bind(this) );
 		} else if( this.context && this.context.page && this.context.page.controller ){
-			this.subscribeEvent(this.parent, 'resized', this.resizeToParent.bind(this) );
+			this.subscribeEvent(this.context.page.controller, 'resized', this.resizeToParent.bind(this) );
 		}
 		this.resizeToParent();
 
