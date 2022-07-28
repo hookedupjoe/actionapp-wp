@@ -63,6 +63,7 @@ class ActAppCommon {
 		wp_enqueue_script( 'app-module', $tmplibloc . 'lib/actionapp/app-module.js', array(), $my_js_ver );
 		wp_enqueue_script( 'tabulator', $tmplibloc . 'lib/tabulator/js/tabulator.min.js', array(), $my_js_ver );
 		wp_enqueue_script( 'tabulator_xlsx', $tmplibloc . 'lib/tabulator/addons/xlsx.full.min.js', array(), $my_js_ver );
+		wp_enqueue_script( 'tabulator_moment', $tmplibloc . 'lib/tabulator/addons/moment.2.24.js', array(), $my_js_ver );
 
 		
 		$tmpConfig = array(

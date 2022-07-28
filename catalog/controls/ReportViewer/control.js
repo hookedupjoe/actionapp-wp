@@ -326,7 +326,7 @@
     var tmpCheckBoxIcon = {
       formatter: this.selectIcon,
       headerSort: false,
-      hozAlign: "left",
+      hozAlign: "center",
       frozen: true
     };
     this.reportCols.unshift(tmpCheckBoxIcon);

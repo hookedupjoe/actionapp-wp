@@ -185,7 +185,7 @@
       theData.__doctype = tmpRow._row.data.__doctype;
       theData.__doctitle = tmpRow._row.data.__doctitle;
 
-      console.log('updated data', theData);
+      //console.log('updated data', theData);
 
       self.parts.mainform.submitForm().then(function () {
         console.log('updated', arguments);

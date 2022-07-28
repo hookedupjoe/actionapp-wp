@@ -169,7 +169,9 @@
       },
         {
           "title": "Date",
-          "field": "__postdate"
+          "field": "__postdate",
+          sorter:"date", 
+          sorterParams:{format:"MM/DD/YYYY"}
         },
         {
           "title": "Post ID",
@@ -188,7 +190,7 @@
         tableConfig: {
           groupBy:'__doctype',
           initialSort: [ {
-            column: "name",
+            column: "__doctitle",
             dir: "asc"
           }]
         },

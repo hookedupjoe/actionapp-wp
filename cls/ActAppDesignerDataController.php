@@ -1745,7 +1745,8 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 				$tmpJson['__posttype'] = $tmpDocPostType;
 				$tmpJson['__doctitle'] = get_the_title();				
 				$tmpJson['__url'] = get_post_permalink();
-				$tmpJson['__postdate'] = get_the_date();
+
+				$tmpJson['__postdate'] = get_the_date('m/d/Y'); //get_the_date('n/j/Y');
 
 				array_push($tmpRet,$tmpJson);
 			}
