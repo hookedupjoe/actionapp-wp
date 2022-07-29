@@ -74,15 +74,21 @@ License: MIT
 	}
 	ControlCode._onInit = _onInit;
 	function _onInit() {
-		this.codeEditorEl = this.getSpot$('code-editor')
+		var tmpThis = this;
 
+		this.codeEditorEl = this.getSpot$('code-editor')
 		this.codeEditor = ace.edit(this.codeEditorEl.get(0));
-		//this.codeEditor.setTheme("ace/theme/tomorrow_night_bright");
+
 		this.codeEditor.setFontSize(14);
 		this.codeEditor.session.setMode("ace/mode/json");
 		this.codeEditor.session.setTabSize(2);
 
 		this.codeEditor.setValue(ThisApp.json({}));
+			this.codeEditor.setOptions({
+				enableBasicAutocompletion: true,
+				enableSnippets: true,
+				enableLiveAutocompletion: false
+			});
 		
 		if( this.parentControl ){
 			this.subscribeEvent(this.parentControl, 'resized', this.resizeToParent.bind(this) );
@@ -90,6 +96,11 @@ License: MIT
 			this.subscribeEvent(this.context.page.controller, 'resized', this.resizeToParent.bind(this) );
 		}
 		this.resizeToParent();
+		ace.config.loadModule('ace/ext/beautify', function (theResults) {
+			tmpThis.beautify = theResults;
+		
+		});
+
 
 	}
 
