@@ -75,6 +75,12 @@ var thisPageSpecs = {
     ThisPage._onInit = function () {
         //~_onInit//~
 
+        var tmpSnippetManager = ace.require("ace/snippets").snippetManager;
+        tmpSnippetManager.register( tmpSnippetManager.parseSnippetFile("snippet _log\n\tconsole.log( \'$1\', $2);\n"), "javascript");
+        tmpSnippetManager.register( tmpSnippetManager.parseSnippetFile("snippet _fnandreply\n\tfunction(theReply){console.log(theReply)}\n"), "javascript");
+        tmpSnippetManager.register( tmpSnippetManager.parseSnippetFile("snippet _fnandargs\n\tfunction(){console.log(arguments)}\n"), "javascript");
+        tmpSnippetManager.register( tmpSnippetManager.parseSnippetFile("snippet _apiandreply\n\tThisApp.apiCall('$1').then(function(theReply){console.log(theReply)})\n"), "javascript");
+console.log("added some demo snippets")
       
         //~_onInit~//~
     }
