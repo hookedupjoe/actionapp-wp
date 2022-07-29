@@ -175,7 +175,7 @@
         },
         {
           "title": "Post ID",
-          "field": "__id"
+          "field": "id"
         },
         {
           "title": "Doc Type",
