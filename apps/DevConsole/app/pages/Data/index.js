@@ -147,7 +147,6 @@ var thisPageSpecs = {
         tmpHTML.push('</div>');
         tmpHTML.push('</div>');
         tmpHTML.push('</div>');
-        //tmpHTML.push('<div class="ui segment raised"><div itemname="importexport" itemtitle="Import / Export" pageaction="selectListItem" class="ui button fluid basic blue">Import / Export</div></div>');
         tmpHTML = tmpHTML.join('\n');
         ThisApp.addTemplate('DevConsole:SelectionList', tmpHTML);
 
@@ -171,7 +170,7 @@ var thisPageSpecs = {
             },
             {
                 name:'importexport',
-                catalog: 'design',
+                catalog: '_designer',
                 controlname: 'ImportExport',
                 title: 'Import / Export'
             }
