@@ -38,7 +38,7 @@
   
     ControlCode.setup = setup;
     function setup(theDetails) {
-      console.log("Setup Details", theDetails);
+      //console.log("Setup Details", theDetails);
     }
   
     ControlCode.setupButtonPanel = function() {
@@ -100,7 +100,7 @@
       var tmpSpot = this.parts.controls.getTabSpot('json');
       tmpInstance.loadToElement(tmpSpot);
       this.parts[tmpName] = tmpInstance;
-      console.log('tmpName',tmpInstance);
+      //console.log('tmpName',tmpInstance);
   
     };
   

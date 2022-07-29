@@ -9,7 +9,4 @@ $tmpRootPath = ActAppCommon::getRootPath();
 echo ('Plugin Data Version: ' . $tmpVersion . '<br />  SUID: ' . $tmpSUID  );
 echo ('<br/>Site Root: ' . $tmpRootPath );
 
-//$tmpSUID = ActAppDesigner::showUsers();
-
-
 ?>
