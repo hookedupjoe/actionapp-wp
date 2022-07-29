@@ -72,6 +72,21 @@ var thisPageSpecs = {
         //~_onPreInit~//~
     }
 
+    ThisPage.refreshDataViewSource = function(){
+        var tmpDataViewsURL = ActionAppCore.ActAppWP.rootPath + '/wp-json/actappdesigner/alldocs?fields=(export)&doctype=&dataview=dataviews';
+        ThisApp.apiCall(tmpDataViewsURL).then(function(theReply){
+            if( theReply && theReply.data && theReply.data.length ){
+                var tmpSources = [];
+                for( var iPos in theReply.data ){
+                    var tmpDoc = theReply.data[iPos];
+                    tmpSources.push(tmpDoc.title + '|' + tmpDoc.name);
+                }
+                ActionAppCore.addSources({ActAppDataViews: tmpSources});
+            };
+            ThisApp.publish('Data:ActAppDataViewsUpdated')
+        });
+    }
+
     ThisPage._onInit = function () {
         //~_onInit//~
 
@@ -80,8 +95,9 @@ var thisPageSpecs = {
         tmpSnippetManager.register( tmpSnippetManager.parseSnippetFile("snippet _fnandreply\n\tfunction(theReply){console.log(theReply)}\n"), "javascript");
         tmpSnippetManager.register( tmpSnippetManager.parseSnippetFile("snippet _fnandargs\n\tfunction(){console.log(arguments)}\n"), "javascript");
         tmpSnippetManager.register( tmpSnippetManager.parseSnippetFile("snippet _apiandreply\n\tThisApp.apiCall('$1').then(function(theReply){console.log(theReply)})\n"), "javascript");
-console.log("added some demo snippets")
-      
+        //console.log("Added some demo snippets. ToDo: Snippet Management");
+
+        this.refreshDataViewSource();
         //~_onInit~//~
     }
 
