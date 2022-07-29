@@ -76,6 +76,7 @@
 
   <!-- OPTIONAL - Dev-Libraries -->
   <script src="<?php echo ACTIONAPP_WP_CORE_LIB_URL ?>/lib/ace/ace.js"></script>
+  <script src="<?php echo ACTIONAPP_WP_CORE_LIB_URL ?>/lib/ace/addons/actapp-ace-plugin.js"></script>
   <script src="<?php echo ACTIONAPP_WP_CORE_LIB_URL ?>/lib/ace/ext-language_tools.js"></script>
   <script src="<?php echo ACTIONAPP_WP_CORE_LIB_URL ?>/lib/ace/ext-beautify.js"></script>
 
