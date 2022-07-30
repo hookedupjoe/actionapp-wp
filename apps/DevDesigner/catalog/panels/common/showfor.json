@@ -109,6 +109,7 @@
 			"req": true,
 			"items": [
 				{
+					"ctl": "field",
 					"placeholder": "First Name",
 					"name": "first",
 					"onValidate": {
@@ -118,6 +119,7 @@
 					"req": true
 				},
 				{
+					"ctl": "field",
 					"placeholder": "Last Name",
 					"name": "last",
 					"onValidate": {

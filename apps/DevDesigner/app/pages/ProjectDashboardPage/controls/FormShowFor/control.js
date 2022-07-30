@@ -115,6 +115,7 @@ License: MIT
                 "req": true,
                 "items": [
                     {
+                        "ctl": "field",
                         "placeholder": "First Name",
                         "name": "first",
                         "onValidate": {
@@ -124,6 +125,7 @@ License: MIT
                         "req": true
                     },
                     {
+                        "ctl": "field",
                         "placeholder": "Last Name",
                         "name": "last",
                         "onValidate": {
