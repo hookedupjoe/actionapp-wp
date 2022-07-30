@@ -15,7 +15,7 @@
  * This header and all notices must be kept intact.
  *
  * @author Joseph Francis
- * @package actappblocks
+ * @package actappwp
  * @since actappblocks 1.0.1
  */
 
@@ -103,6 +103,9 @@ class ActAppDesigner {
 		return $template;
 	}
 	
+	public static function getAppOnlyFooter(){
+		echo '<script src="'.self::baseURL().'/core/lib/actionapp/app-only-init.js?ver=1.0.9" id="app-only-init-js"></script>';
+	}
 
 	public static function getRootPost(){
 		$tmpMainID = self::getRootPostID();

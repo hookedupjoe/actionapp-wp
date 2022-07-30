@@ -15,7 +15,7 @@
  * This header and all notices must be kept intact.
  *
  * @author Joseph Francis
- * @package actappblocks
+ * @package actappwp
  * @since actappblocks 1.0.1
  */
 
