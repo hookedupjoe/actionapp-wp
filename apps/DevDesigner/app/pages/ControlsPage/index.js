@@ -9,7 +9,7 @@ License: MIT
 
     var thisPageSpecs = {
         pageName: "ControlsPage",
-        pageTitle: "Samples",
+        pageTitle: "Sandbox",
         navOptions: {
             topLink: true,
             sideLink: true
