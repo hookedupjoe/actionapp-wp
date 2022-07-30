@@ -1725,6 +1725,8 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 				} else {
 					if( $theFields == null || $theFields == '(all)' || $theFields == '(export)'){
 						$tmpJson = $tmpMeta;
+						
+						
 					} else {
 						$tmpFieldList = explode(',',$tmpFields);
 						$tmpJson = array();
@@ -1740,7 +1742,9 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 						}
 					}
 				}
-				
+				if($theFields == '(export)'){
+					unset($tmpJson['_edit_lock']);
+				}
 				$tmpJson['id'] = $tmpID;
 				$tmpJson['__posttype'] = $tmpDocPostType;
 				$tmpJson['__doctitle'] = get_the_title();				
