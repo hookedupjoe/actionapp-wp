@@ -1,21 +1,28 @@
 <?php
 /**
- * The template for displaying all pages
+ * The template for displaying element pages
  *
- * This is the template that displays all pages by default.
- * Please note that this is the WordPress construct of pages
- * and that other 'pages' on your WordPress site may use a
- * different template.
+ * Created by developers and used in application and as site pages.
  *
- * @link https://developer.wordpress.org/themes/basics/template-hierarchy/
- *
- * @package SemActionStandardPage
+ * @package actionappwp
  */
 ?>
 
 <?php
-get_header();
-//wp_head();
+
+//--- If both are true and there is not framed control, it will look funny on resize
+//--- For content sites not in a frame, set $includeFrame = false.
+//--- For sites with a framed contro, set $includeFrame = true if $includeSite is true also.
+$includeSite = true;
+$includeFrame = true;
+
+if( $includeSite ){
+	get_header();
+} else {
+	wp_head();
+}
+
+//
 // $tmpLoc = ActAppCommon::getCurrentLocation();
 // $tmpRoot = ActAppCommon::getRootPath();
 // //echo '$menu: '.$menu;
@@ -32,8 +39,13 @@ get_header();
 // $tmpObj = json_decode($tmpJson);
 // var_dump($tmpObj);
 ?>
-<div appuse="website-frame-border" ctlcomp="layout"  class="ui-layout-pane" style="height:400px;padding:0;margin:0;">
-<div class="ui-layout-center" >
+
+<?php
+if( $includeFrame ){
+	echo '<div appuse="website-frame-border" ctlcomp="layout"  class="ui-layout-pane" style="height:100%;padding:0;margin:0;"><div class="ui-layout-center" >';
+}
+?>
+
 		<?php
 		while ( have_posts() ) :
 			the_post();
@@ -47,8 +59,15 @@ get_header();
 		?>
 		
 		 <?php // End Content ?>
+
 		 
-</div> 
+<?php
+if( $includeFrame ){
+	echo '</div> ';
+}
+?>
+
+
 	</div>
 
 <script>
@@ -68,11 +87,15 @@ function waitForApp(callback, maxTimes = false) {
 function whenReady(){
 	ThisApp.subscribe('resize', function(){
 		var tmpFrame = ThisApp.getByAttr$({appuse:"website-frame-border"});
-		var tmpH = window.innerHeight - $('#primary').offset().top - 10;
-		if( tmpFrame.height() != tmpH ){
-			tmpFrame.height(tmpH);
-			$(window).trigger('resize');
-		};
+		var tmpWPHeader = $('#primary');
+		if( tmpWPHeader && tmpWPHeader.length ){
+			var tmpH = window.innerHeight - tmpWPHeader.offset().top - 40;
+			if( tmpFrame.height() != tmpH ){
+				tmpFrame.height(tmpH);
+			};
+		}
+		$(window).trigger('resize');
+		ThisApp.publish('resized');
 	});
 }
 
@@ -80,5 +103,15 @@ waitForApp(whenReady,100);
 
 	</script>
 <?php // End Row ?>
-<?php get_footer(); ?>
+<?php 
+
+if( $includeSite ){
+	get_footer(); 
+} else {
+	ActAppDesigner::getAppOnlyFooter();
+}
+
+
+
+?>
 
