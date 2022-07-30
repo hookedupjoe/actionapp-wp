@@ -184,7 +184,7 @@
         {
           "ctl": "button",
           "text": "Refresh List",
-          "icon": "recycle",
+          "icon": "sync",
           "labeled": true,
           basic: true,
           "right": true,
