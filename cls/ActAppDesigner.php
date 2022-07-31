@@ -649,6 +649,66 @@ class ActAppDesigner {
 
 	}
 
+	//--- Return the current post as a "document" array
+	public static function get_post_as_doc($theOptionalID = null, $theFields = null){
+
+		//-- If no id is passed, it is assumed we are working with the loaded global post
+		if( $theOptionalID != null){
+			the_post($theOptionalID);
+		}
+		$tmpID = get_the_ID();
+		$tmpMeta = get_post_meta($tmpID);
+		$tmpDocPostType = get_post_type();
+
+		if( $theFields == '(none)' ){
+			$tmpJson = array();
+			
+			$tmpDocType = $tmpMeta['__doctype'];
+			if( is_array($tmpDocType) && count($tmpDocType) == 1){
+				$tmpJson['__doctype'] = $tmpDocType[0];
+			} else {
+				$tmpJson['__doctype'] = $tmpDocPostType;
+			}
+			
+		} else {
+			if( $theFields == null || $theFields == '(all)' || $theFields == '(export)'){
+				$tmpJson = $tmpMeta;
+				
+				
+			} else {
+				$tmpFieldList = explode(',',$tmpFields);
+				$tmpJson = array();
+				foreach ($tmpFieldList as $iFieldName) {
+					$tmpJson[$iFieldName] = array();
+					array_push($tmpJson[$iFieldName], $tmpMeta[$iFieldName]);
+				}
+			}
+			foreach($tmpJson as $iField => $iVal) {
+				if( count($iVal) == 1){
+					$tmpVal = $iVal[0];
+					$tmpJson[$iField] = maybe_unserialize($tmpVal);
+				}
+			}
+		}
+		if($theFields == '(export)'){
+			unset($tmpJson['_edit_lock']);
+		}
+		$tmpJson['id'] = $tmpID;
+		$tmpJson['__posttype'] = $tmpDocPostType;
+		$tmpJson['__doctitle'] = get_the_title();				
+		$tmpJson['__url'] = get_post_permalink();
+		//---> Use this for no leading zeros: get_the_date('n/j/Y');
+		$tmpJson['__postdate'] = get_the_date('m/d/Y'); 
+		return $tmpJson;
+	}
+
+	public static function load_doc_post(){
+		while ( have_posts() ) :
+			the_post();
+			break;
+		endwhile;
+	}
+
 	public static function get_code_bubble_start(){
 		return '(function (ActionAppCore, $) {';
 	}

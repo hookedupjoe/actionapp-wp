@@ -8,14 +8,20 @@
  */
 ?>
 
+<?php ActAppDesigner::load_doc_post(); ?>
 
 <?php
-
+$tmpDoc = ActAppDesigner::get_post_as_doc();
+$tmpDetails = $tmpDoc['details'];
+if( is_string($tmpDetails) ){
+	$tmpDetails = (json_decode($tmpDetails));
+}
 //--- If both are true and there is not framed control, it will look funny on resize
 //--- For content sites not in a frame, set $includeFrame = false.
 //--- For sites with a framed contro, set $includeFrame = true if $includeSite is true also.
-$includeSite = false;
-$includeFrame = false;
+$includeSite = true;
+$includeFrame = true;
+
 // Summary:  ANY-F for unframed; ANY-T for framed 
 // Note: If there is a control with a frame, use a frame always
 
@@ -50,15 +56,7 @@ if( $includeFrame ){
 ?>
 
 		<?php
-		while ( have_posts() ) :
-			the_post();
 			get_template_part( 'template-parts/content', 'page' );
-			// // If comments are open or we have at least one comment, load up the comment template.
-			// if ( comments_open() || get_comments_number() ) :
-			// 	comments_template();
-			// endif;
-
-		endwhile; // End of the loop.
 		?>
 		
 		 <?php // End Content ?>
@@ -75,6 +73,8 @@ if( $includeFrame ){
 
 	<script>		
 		<?php echo ActAppDesigner::get_code_bubble_start(); ?>
+
+
 		<?php echo ActAppDesigner::get_app_loader_script(); ?>	
 		function onThisAppLoaded(){
 			ThisApp.subscribe("resize", function(){
@@ -91,6 +91,8 @@ if( $includeFrame ){
 			});
 		}
 		window.ActAppLoader.ready(onThisAppLoaded);
+
+
 		<?php echo ActAppDesigner::get_code_bubble_end(); ?>
 	</script>
 
