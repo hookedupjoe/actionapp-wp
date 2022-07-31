@@ -15,8 +15,8 @@
  * This header and all notices must be kept intact.
  *
  * @author Joseph Francis
- * @package actappwp
- * @since actappblocks 1.0.1
+ * @package actionappwp
+ * @since actionappwp 1.0.0
  */
 
 class ActAppDesigner {

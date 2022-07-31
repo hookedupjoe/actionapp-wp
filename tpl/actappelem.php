@@ -1,11 +1,24 @@
 <?php
 /**
- * The template for displaying element pages
+ * Action App Designer - Template - Elements 
+ * 
+ * Copyright (c) 2021-2022 Joseph Francis / hookedup, inc. 
  *
- * Created by developers and used in application and as site pages.
+ * This code is released under the GNU General Public License.
+ * See COPYRIGHT.txt and LICENSE.txt.
  *
+ * This code is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * This header and all notices must be kept intact.
+ *
+ * @author Joseph Francis
  * @package actionappwp
+ * @since actionappwp 1.0.0
  */
+
 ?>
 
 <?php ActAppDesigner::load_doc_post(); ?>

@@ -16,7 +16,7 @@
  *
  * @author Joseph Francis
  * @package actionappwp
- * @since actapp 1.0.24
+ * @since actionappwp 1.0.0
  */
 ( function ( wp, ActionAppCore ) {
     

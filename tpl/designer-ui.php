@@ -1,6 +1,22 @@
 <?php
 /**
- * Debug entrypoint
+ * Action App Designer - Template - Designer UI for WordPress Admin Page
+ * 
+ * Copyright (c) 2021-2022 Joseph Francis / hookedup, inc. 
+ *
+ * This code is released under the GNU General Public License.
+ * See COPYRIGHT.txt and LICENSE.txt.
+ *
+ * This code is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * This header and all notices must be kept intact.
+ *
+ * @author Joseph Francis
+ * @package actionappwp
+ * @since actionappwp 1.0.0
  */
 
 echo '<img class="ui image medium" src="'.ACTIONAPP_WP_IMAGE_PATH.'single-page-header.png" />';

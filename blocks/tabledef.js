@@ -14,8 +14,8 @@
  * This header and all notices must be kept intact.
  *
  * @author Joseph Francis
- * @package actappwp
- * @since actappbdesigner 1.0.2
+ * @package actionappwp
+ * @since actionappwp 1.0.0
  */
 ( function ( wp, ActionAppCore ) {
     
