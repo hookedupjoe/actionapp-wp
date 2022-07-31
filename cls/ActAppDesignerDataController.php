@@ -11,10 +11,13 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 		return self::$instance;
 	}
 
+
 	public function registerRoutes() {
 	  $namespace = 'actappdesigner';
 
-	  
+//=========== DEVELOPER / DEBUG APIs ===============
+
+//--- Debug Route, plugin developer use only
 	  $path = 'debug';
 	  $routeInfo = array(
 		'methods'             => 'GET',
@@ -22,24 +25,6 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 		'permission_callback' => array( $this, 'get_permissions_check' )
 	  );
 	  register_rest_route( $namespace, '/' . $path, [$routeInfo]);     
-
-
-	  $path = 'get-catalog-res.json';
-	  $routeInfo = array(
-		'methods'             => 'GET',
-		'callback'            => array( $this, 'get_catalog_res' ),
-		'permission_callback' => array( $this, 'get_permissions_check' )
-	  );
-	  register_rest_route( $namespace, '/' . $path, [$routeInfo]);     
-
-	  $path = 'get-catalog-form.json';
-	  $routeInfo = array(
-		'methods'             => 'GET',
-		'callback'            => array( $this, 'get_catalog_form' ),
-		'permission_callback' => array( $this, 'get_edit_permissions_check' )
-	  );
-	  register_rest_route( $namespace, '/' . $path, [$routeInfo]);     
-
 	  
 	  //--- To get demo data
 	  $path = 'json_from_csv';
@@ -50,6 +35,28 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 	  );
 	  register_rest_route( $namespace, '/' . $path, [$routeInfo]);     
 
+//=========== ADMIN MANAGEMENT APIs ===============
+	  //--- Admin / Developer access to user data for user mgmt
+	  $path = 'users';
+	  $routeInfo = array(
+		'methods'             => 'GET',
+		'callback'            => array( $this, 'get_users' ),
+		'permission_callback' => array( $this, 'get_users_permissions_check' )
+	  );
+	  register_rest_route( $namespace, '/' . $path, [$routeInfo]);     
+
+	  $path = 'saveuser';
+	  $routeInfo = array(
+		'methods'             => 'POST',
+		'callback'            => array( $this, 'save_user' ),
+		'permission_callback' => array( $this, 'get_users_permissions_check' )
+	  );
+	  register_rest_route( $namespace, '/' . $path, [$routeInfo]);     
+
+
+	  
+
+//=========== DOCUMENT MANAGEMENT APIs ===============
 
 	  //--- Developer/Admin user level access to data
 	  $path = 'alldocs';
@@ -72,15 +79,6 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 	  register_rest_route( $namespace, '/' . $path, [$routeInfo]);     
 
 
-	  //--- Admin / Developer access to user data for user mgmt
-	  $path = 'users';
-	  $routeInfo = array(
-		'methods'             => 'GET',
-		'callback'            => array( $this, 'get_users' ),
-		'permission_callback' => array( $this, 'get_users_permissions_check' )
-	  );
-	  register_rest_route( $namespace, '/' . $path, [$routeInfo]);     
-
 	  $path = 'import-docs';
 	  $routeInfo = array(
 		'methods'             => 'POST',
@@ -88,15 +86,6 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 		'permission_callback' => array( $this, 'get_users_permissions_check' )
 	  );
 	  register_rest_route( $namespace, '/' . $path, [$routeInfo]);     
-
-	  $path = 'saveuser';
-	  $routeInfo = array(
-		'methods'             => 'POST',
-		'callback'            => array( $this, 'save_user' ),
-		'permission_callback' => array( $this, 'get_users_permissions_check' )
-	  );
-	  register_rest_route( $namespace, '/' . $path, [$routeInfo]);     
-
 
 	  //--- Application user level access to save data
 	  $path = 'savedoc';
@@ -134,6 +123,9 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 	  );
 	  register_rest_route( $namespace, '/' . $path, [$routeInfo]);     
 
+
+//=========== DESIGNER RESOURCE APIs ===============
+
 	  $path = 'create-catalog';
 	  $routeInfo = array(
 		'methods'             => 'POST',
@@ -168,6 +160,28 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 	  register_rest_route( $namespace, '/' . $path, [$routeInfo]);     
 	  
 
+	  
+	  //--- Object APIs return objects used on the client side in designer.
+	  
+	  // Object API: Catalog Resource
+	  $path = 'get-catalog-res.json';
+	  $routeInfo = array(
+		'methods'             => 'GET',
+		'callback'            => array( $this, 'get_catalog_res' ),
+		'permission_callback' => array( $this, 'get_permissions_check' )
+	  );
+	  register_rest_route( $namespace, '/' . $path, [$routeInfo]);     
+
+	  // Object API: Catalog Form
+	  $path = 'get-catalog-form.json';
+	  $routeInfo = array(
+		'methods'             => 'GET',
+		'callback'            => array( $this, 'get_catalog_form' ),
+		'permission_callback' => array( $this, 'get_edit_permissions_check' )
+	  );
+	  register_rest_route( $namespace, '/' . $path, [$routeInfo]);     
+
+	  // Object API: Full Resources Outline
 	  $path = 'get-ws-outline.json';
 	  $routeInfo = array(
 		'methods'             => 'GET',
@@ -176,11 +190,10 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 	  );
 	  register_rest_route( $namespace, '/' . $path, [$routeInfo]);     
 
-	  
-
 	}
 
 	
+//=========== PERMISSION ===============
 
 	public function get_permissions_check($request) {
 		return true;
@@ -197,8 +210,6 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 		}
 		return false;
 	}
-	
-
 	public function get_design_permissions_check($request) {
 		if( current_user_can('actappdesign')){
 			return true;
@@ -206,6 +217,8 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 		return false;
 	}
 
+
+//=========== DEV NOTES ===============
 
 //--- A Sample Form Post of form data
 // public function formpost($request) {
@@ -225,12 +238,19 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 // }	
 
 
+
+
+
+//==========================================
+//=========== IMPLEMENTATION ===============
+//===========      AREA      ===============
+//==========================================
+
 	public function get_debug($request) {
 		$tmpDebug = 'we are here';
 		$tmpRet = array('debug'=>$tmpDebug);	
 		return new WP_REST_Response($tmpRet, 200);
 	}
-	
 
 	public function get_page_code($request) {
 		$tmpRoot = ACTIONAPP_WP_DIR . '/apps/DevDesigner/app/catalog/designer/panels';
@@ -246,8 +266,6 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 		echo $tmpRet;
 		exit();
 	}
-
-
 
 	public function save_catalog_res($request) {
 		$json = $request->get_body();
@@ -441,8 +459,6 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 		exit();
 	}
 
-	
-
 	public function create_catalog($request) {
 		$json = $request->get_body();
 		$body = json_decode($json);
@@ -473,8 +489,6 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 		echo $tmpRet;
 		exit();
 	}
-
-	
 	
 	public function restore_docs($request) {
 		$json = $request->get_body();
@@ -591,7 +605,6 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 		wp_reset_postdata();
 		return $tmpRet[0];
 	}
-	
 	
 	public function import_docs($request) {
 		if( !current_user_can('actappdesign') ){
@@ -1355,7 +1368,6 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 		}
 		return $tmpRet;
 	}
-
 
 	public function get_ws_outline($request) {
 		$tmpMsg = 'Version: ' . ActAppDesigner::getDataVersion();
