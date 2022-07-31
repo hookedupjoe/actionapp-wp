@@ -649,6 +649,47 @@ class ActAppDesigner {
 
 	}
 
+	public static function get_code_bubble_start(){
+		return '(function (ActionAppCore, $) {';
+	}
+	public static function get_code_bubble_end(){
+		return '})(ActionAppCore, $);';
+	}
+	
+
+	public static function get_app_loader_script(){
+		//--- For cases where ActionAppCore may not be loaded yet, 
+		//...   wait for ThisApp to load.
+		//--- To Use: 
+		/*
+			function onThisAppLoaded(){
+				//--- Use ThisApp
+			}
+			window.ActAppLoader.ready(onThisAppLoaded);
+		*/
+		return '
+		window.ActAppLoader = {
+			ready: function(callback) {
+				var tmpMaxTimes = 100;
+				var tmpThis = this;				
+				if (typeof(ThisApp) == "object") {
+					try{
+						callback();
+					} catch(ex){
+						//--- Still return even if error
+					}
+					return;
+				} else {
+					tmpMaxTimes--;
+					setTimeout(function () {
+						tmpThis.ready(callback);
+					}, 100);
+				}
+			}
+		}
+		';
+	}
+
 
 
 }

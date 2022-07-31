@@ -8,13 +8,16 @@
  */
 ?>
 
+
 <?php
 
 //--- If both are true and there is not framed control, it will look funny on resize
 //--- For content sites not in a frame, set $includeFrame = false.
 //--- For sites with a framed contro, set $includeFrame = true if $includeSite is true also.
-$includeSite = true;
-$includeFrame = true;
+$includeSite = false;
+$includeFrame = false;
+// Summary:  ANY-F for unframed; ANY-T for framed 
+// Note: If there is a control with a frame, use a frame always
 
 if( $includeSite ){
 	get_header();
@@ -70,39 +73,27 @@ if( $includeFrame ){
 
 	</div>
 
-<script>
-function waitForApp(callback, maxTimes = false) {
-	if (typeof(ThisApp) == 'object') {
-	callback();
-	} else {
-		if (maxTimes === false || maxTimes > 0) {
-			(maxTimes != false) && maxTimes-- ;
-			setTimeout(function () {
-				waitForApp(callback, maxTimes);
-			}, 100);
+	<script>		
+		<?php echo ActAppDesigner::get_code_bubble_start(); ?>
+		<?php echo ActAppDesigner::get_app_loader_script(); ?>	
+		function onThisAppLoaded(){
+			ThisApp.subscribe("resize", function(){
+				var tmpFrame = ThisApp.getByAttr$({appuse:"website-frame-border"});
+				var tmpWPHeader = $("#primary");
+				if( tmpWPHeader && tmpWPHeader.length ){
+					var tmpH = window.innerHeight - tmpWPHeader.offset().top - 40;
+					if( tmpFrame.height() != tmpH ){
+						tmpFrame.height(tmpH);
+					};
+				}
+				$(window).trigger("resize");
+				ThisApp.publish("resized");
+			});
 		}
-	}
-};	
-
-function whenReady(){
-	ThisApp.subscribe('resize', function(){
-		var tmpFrame = ThisApp.getByAttr$({appuse:"website-frame-border"});
-		var tmpWPHeader = $('#primary');
-		if( tmpWPHeader && tmpWPHeader.length ){
-			var tmpH = window.innerHeight - tmpWPHeader.offset().top - 40;
-			if( tmpFrame.height() != tmpH ){
-				tmpFrame.height(tmpH);
-			};
-		}
-		$(window).trigger('resize');
-		ThisApp.publish('resized');
-	});
-}
-
-waitForApp(whenReady,100);
-
+		window.ActAppLoader.ready(onThisAppLoaded);
+		<?php echo ActAppDesigner::get_code_bubble_end(); ?>
 	</script>
-<?php // End Row ?>
+
 <?php 
 
 if( $includeSite ){
