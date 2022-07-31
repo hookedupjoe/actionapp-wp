@@ -15,38 +15,6 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 	  $namespace = 'actappdesigner';
 
 	  
-	  $path = 'datapost';
-	  $routeInfo = array(
-		'methods'             => 'POST',
-		'callback'            => array( $this, 'datapost' ),
-		'permission_callback' => array( $this, 'get_edit_permissions_check' )
-	  );
-	  register_rest_route( $namespace, '/' . $path, [$routeInfo]);     
-
-	  $path = 'formpost';
-	  $routeInfo = array(
-		'methods'             => 'POST',
-		'callback'            => array( $this, 'formpost' ),
-		'permission_callback' => array( $this, 'get_edit_permissions_check' )
-	  );
-	  register_rest_route( $namespace, '/' . $path, [$routeInfo]);     
-
-	  $path = 'jsonpost';
-	  $routeInfo = array(
-		'methods'             => 'POST',
-		'callback'            => array( $this, 'jsonpost' ),
-		'permission_callback' => array( $this, 'get_edit_permissions_check' )
-	  );
-	  register_rest_route( $namespace, '/' . $path, [$routeInfo]);     
-
-	  $path = 'config';
-	  $routeInfo = array(
-		'methods'             => 'GET',
-		'callback'            => array( $this, 'get_config' ),
-		'permission_callback' => array( $this, 'get_permissions_check' )
-	  );
-	  register_rest_route( $namespace, '/' . $path, [$routeInfo]);     
-
 	  $path = 'debug';
 	  $routeInfo = array(
 		'methods'             => 'GET',
@@ -73,6 +41,7 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 	  register_rest_route( $namespace, '/' . $path, [$routeInfo]);     
 
 	  
+	  //--- To get demo data
 	  $path = 'json_from_csv';
 	  $routeInfo = array(
 		'methods'             => 'GET',
@@ -81,23 +50,19 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 	  );
 	  register_rest_route( $namespace, '/' . $path, [$routeInfo]);     
 
-	  $path = 'more';
+
+	  //--- Developer/Admin user level access to data
+	  $path = 'alldocs';
 	  $routeInfo = array(
 		'methods'             => 'GET',
-		'callback'            => array( $this, 'get_more' ),
-		'permission_callback' => array( $this, 'get_edit_permissions_check' )
+		'callback'            => array( $this, 'get_all_docs' ),
+		'permission_callback' => array( $this, 'get_design_permissions_check' )
 	  );
 	  register_rest_route( $namespace, '/' . $path, [$routeInfo]);     
 
-	  
-	  $path = 'people';
-	  $routeInfo = array(
-		'methods'             => 'GET',
-		'callback'            => array( $this, 'get_people' ),
-		'permission_callback' => array( $this, 'get_edit_permissions_check' )
-	  );
-	  register_rest_route( $namespace, '/' . $path, [$routeInfo]);     
 
+	  //--- Application user level access to data
+	  //-   Any other selection params passed are ignored
 	  $path = 'dataview';
 	  $routeInfo = array(
 		'methods'             => 'GET',
@@ -107,6 +72,7 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 	  register_rest_route( $namespace, '/' . $path, [$routeInfo]);     
 
 
+	  //--- Admin / Developer access to user data for user mgmt
 	  $path = 'users';
 	  $routeInfo = array(
 		'methods'             => 'GET',
@@ -115,8 +81,6 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 	  );
 	  register_rest_route( $namespace, '/' . $path, [$routeInfo]);     
 
-
-	  
 	  $path = 'import-docs';
 	  $routeInfo = array(
 		'methods'             => 'POST',
@@ -133,6 +97,8 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 	  );
 	  register_rest_route( $namespace, '/' . $path, [$routeInfo]);     
 
+
+	  //--- Application user level access to save data
 	  $path = 'savedoc';
 	  $routeInfo = array(
 		'methods'             => 'POST',
@@ -141,15 +107,8 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 	  );
 	  register_rest_route( $namespace, '/' . $path, [$routeInfo]);     
 
-	  $path = 'alldocs';
-	  $routeInfo = array(
-		'methods'             => 'GET',
-		'callback'            => array( $this, 'get_all_docs' ),
-		'permission_callback' => array( $this, 'get_design_permissions_check' )
-	  );
-	  register_rest_route( $namespace, '/' . $path, [$routeInfo]);     
 
-
+	  //--- Designer user level access to save data
 	  $path = 'savedesign';
 	  $routeInfo = array(
 		'methods'             => 'POST',
@@ -217,33 +176,6 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 	  );
 	  register_rest_route( $namespace, '/' . $path, [$routeInfo]);     
 
-	//   $path = 'get-ws-setup.json';
-	//   $routeInfo = array(
-	// 	'methods'             => 'GET',
-	// 	'callback'            => array( $this, 'get_ws_setup' ),
-	// 	'permission_callback' => array( $this, 'get_edit_permissions_check' )
-	//   );
-	//   register_rest_route( $namespace, '/' . $path, [$routeInfo]);     
-
-	  
-
-	  $path = 'page';
-	  $routeInfo = array(
-		'methods'             => 'GET',
-		'callback'            => array( $this, 'get_page' ),
-		'permission_callback' => array( $this, 'get_edit_permissions_check' )
-	  );
-	  register_rest_route( $namespace, '/' . $path, [$routeInfo]);     
-
-
-	  $path = 'pagecode';
-	  $routeInfo = array(
-		'methods'             => 'GET',
-		'callback'            => array( $this, 'get_page_code' ),
-		'permission_callback' => array( $this, 'get_edit_permissions_check' )
-	  );
-	  register_rest_route( $namespace, '/' . $path, [$routeInfo]);     
-
 	  
 
 	}
@@ -275,119 +207,29 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 	}
 
 
-	//--- *** EDUCATIONAL USE ONLY: DO NOT USE THE fieldVal FUNCTION IN PRODUCTION
-	public static function fieldVal($theName,$theContainer,$theIsArray = ''){
-		if( is_string($theName) ){
-			if( $theIsArray === true || is_array($theContainer) ){
-				return $theContainer[$theName];
-			}
-			return $theContainer->{$theName};
-		}
-		if( is_array($theName) ){
-			$tmpRet = [];
-			foreach ($theName as $iFieldName) {
-				$tmpRet[$iFieldName] = self::fieldVal($iFieldName,$theContainer,$theIsArray);
-			}
-			return $tmpRet;
-		}
-		return false;
-	}
-	//--- *** EDUCATIONAL USE ONLY: DO NOT USE THE datapost FUNCTION IN PRODUCTION
-	//--- Example of an endpoint that takes form submit or json data that is one level deep
-	public function datapost($request) {
-		//---> Return an error using this technique
-		// if( !current_user_can('pingback') ){
-		// 	return new WP_Error('actapp_data_error', 'Not autorized', array('status' => 403));
-		// }
+//--- A Sample Form Post of form data
+// public function formpost($request) {
+// 	//---> If using formSubmit = true then get field values like this
+// 	$body = $request->get_body_params();
+// 	$tmpActionName = $body['action'];
 
+// 	$tmpRet = wp_json_encode(array(
+// 		'request' => 'formpost',
+// 		'action' => $tmpActionName,
+// 		'body' => $body,
+// 	));
 
-		$parameters = $request->get_params();
-		//---> Check for a form submit (formSubmit = true)
-		$body = $request->get_body_params();
-		if( $body == null || count($body) == 0){
-			//---> No form passed, use the body as json
-			$json = $request->get_body();
-			$body = json_decode($json);	
-		}
-		//--> Determine if this is an array field and pass optional param
-		//..... if the third param is not set, it checks the type in the fieldVal function
-		//..... so for performance reasons, we check it once if we need more than one field in a loop
-		$tmpIsArray = is_array($body);
-		$tmpActionName = self::fieldVal('action',$body,$tmpIsArray);
-		$tmpFieldVals = self::fieldVal(['action','more','test'],$body,$tmpIsArray);
-		//or just $tmpActionName = self::fieldVal('action',$body);
+// 	header('Content-Type: application/json');
+// 	echo $tmpRet;
+// 	exit();
+// }	
 
-		//--- Make return as array and encode it
-		$tmpRet = wp_json_encode(array(
-			'request' => 'datapost',
-			'vals' => $tmpFieldVals,
-			'params' => $parameters,
-			'action' => $tmpActionName,
-			'body' => $body,
-		));
-
-		//--- Standard JSON reply
-		header('Content-Type: application/json');
-		echo $tmpRet;
-		exit();
-
-	}
-
-//**** This is the preferred method for sending data to a service
-	//--- A JSON Post can convert to any data type based on JSON passed
-	public function jsonpost($request) {
-		//---> If using formSubmit = false or no formSubmit used,
-		// .... then get field values like this
-		$json = $request->get_body();
-		$body = json_decode($json);
-		$tmpActionName = $body->action; //or $body->{'action'};
-
-		//--- Make return as array and encode it
-		$tmpRet = wp_json_encode(array(
-			'request' => 'jsonpost',
-			'action' => $tmpActionName,
-			'body' => $body,
-		));
-
-		//--- Standard JSON reply
-		header('Content-Type: application/json');
-		echo $tmpRet;
-		exit();
-
-	}
-
-	//--- A Form Post of json data ends up being all strings
-	public function formpost($request) {
-		//---> If using formSubmit = true then get field values like this
-		$body = $request->get_body_params();
-		$tmpActionName = $body['action'];
-
-		//--- Make return as array and encode it
-		$tmpRet = wp_json_encode(array(
-			'request' => 'formpost',
-			'action' => $tmpActionName,
-			'body' => $body,
-		));
-
-		header('Content-Type: application/json');
-		echo $tmpRet;
-		exit();
-	}	
-
-
-	public function get_config($request) {
-		$tmpRet = array('for'=>'designer');
-		return new WP_REST_Response($tmpRet, 200);
-	}
 
 	public function get_debug($request) {
-		$tmpSlug = '316062cae38715a25_462662df4d05d5930';
-		$tmpExistingID = ActAppCommon::post_exists_by_uid($tmpSlug);
-		$tmpStatus = get_post_status($tmpExistingID);
-		$tmpRet = array('debug'=>'true','existing'=> $tmpExistingID,'status'=>$tmpStatus);	
+		$tmpDebug = 'we are here';
+		$tmpRet = array('debug'=>$tmpDebug);	
 		return new WP_REST_Response($tmpRet, 200);
 	}
-	
 	
 
 	public function get_page_code($request) {
@@ -1122,65 +964,20 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 		return $tmpRet;
 	}
 
-
 	public function get_data_view($request) {
-		$tmpName = $_GET['name'];
-		//--- Get data view doc
-		$tmpDoc = self::getDataViewDoc($tmpName);
-
-		$posttype = $tmpDoc['sourceposttype'];
-		$doctype = $tmpDoc['sourcedoctype'];
-		$capabilities = $tmpDoc['capabilities'];
-		//ToDo: $capabilities check here
-
-		$tmpQuery = array(
-			array(
-				'key'     => '__doctype',
-				'value'   => $doctype,
-				'compare' => '=',
-			),
-		);
-
-		$args = array(
-			'post_type' => $posttype,
-			'posts_per_page' => -1,
-			'meta_query' => $tmpQuery
-		);
-		$query = new WP_Query( $args );
-
-		$tmpRet = '{"q":' . json_encode($tmpQuery) .',"data":[';
-		$tmpAdded = false;
-		if ( $query->have_posts() ) {
-			while ( $query->have_posts() ) {
-				$query->the_post();
-				$tmpID = get_the_ID();
-
-				$tmpJson = get_post_meta($tmpID);
-				
-				foreach($tmpJson as $iField => $iVal) {
-					if( count($iVal) == 1){
-						$tmpVal = $iVal[0];
-						$tmpJson[$iField] = maybe_unserialize($tmpVal);
-					}
-				}
-				$tmpJson = json_encode($tmpJson);
-				if( $tmpAdded ){
-					$tmpRet .= ',';			
-				} else {
-					$tmpAdded = true;
-				}
-				$tmpRet .= $tmpJson;			
-			}
-		}
-		/* Restore original Post Data */
-		wp_reset_postdata();
-
-
-		$tmpRet .= ']}';
-		header('Content-Type: application/json');
-
-		echo $tmpRet;
 		
+		$tmpName = $_GET['dataview'];
+		
+		if( !empty($tmpName)){
+			//--- Pass in a dataview name, this makes it ignore all other selection pararms
+			//--- This call only requires application level access
+			//--- The get_all_docs will use the capabilities from the dataview doc to ...
+			//      ... restrict access based on the dataview passed
+			return self::get_all_docs($request);
+		}
+		$tmpRet = '{"data":[], "error": "no dataview name provided: '.$tmpName.'"}';
+		header('Content-Type: application/json');
+		echo $tmpRet;
 		exit();
 	}
 
@@ -1328,7 +1125,6 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 	}
 	
 	public function get_catalog_form($request) {
-		$tmpPath = "todo";
 		$tmpCatName = $_GET['catname'];
 		$tmpDesignDoc = self::get_design_doc($tmpCatName,'design-catalog');
 		$tmpTitle = ''.$tmpDesignDoc["title"];
@@ -1390,133 +1186,6 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 		exit();
 	}
 
-	// public static function get_mock_data($thePos) {
-	// 	$file="C:\\aa\\mock-data.csv";
-	// 	$csv= file_get_contents($file);
-	// 	$array = array_map("str_getcsv", explode("\n", $csv));
-	// 	$tmpDocCount = count($array);
-
-	// 	$pos = $thePos;
-	// 	$tmpStart = 1;
-	// 	$tmpEnd = $tmpDocCount;
-		
-	// 	if( $pos != ''){
-	// 		$tmpStart = intval($pos);
-	// 		$tmpEnd = $tmpStart + 1;
-	// 	}
-	// 	$tmpFieldNames = $array[0];
-	// 	$tmpFNCount = count($tmpFieldNames);
-	// 	$tmpData = [];
-	// 	for ($iPos = $tmpStart; $iPos < $tmpEnd; $iPos++) {
-	// 		$tmpDoc = $array[$iPos];
-	// 		$tmpDocEntry = [];
-	// 		if(count($tmpDoc) == $tmpFNCount){
-	// 			for ($iFieldPos = 0; $iFieldPos < $tmpFNCount; $iFieldPos++) {
-	// 				$tmpFN = $tmpFieldNames[$iFieldPos];
-	// 				$tmpDocEntry[$tmpFN] = $tmpDoc[$iFieldPos];
-	// 			}
-	// 			array_push($tmpData, $tmpDocEntry);
-	// 		}
-	// 	}
-	// 	$tmpRet = array('data' => $tmpData);
-	// 	return $tmpRet;
-	// }
-
-
-	public function get_more($request) {
-		$tmpRet = wp_json_encode(array(
-			'storeid' => ActAppDesigner::getSUID(),
-			'data_version' => ActAppDesigner::getPluginSetupVersion(),
-			'base_url' => ActAppCommon::getRootPath(),
-		));
-		header('Content-Type: application/json');
-		echo $tmpRet;
-		exit();
-	}
-
-	// public function get_dataview($request, $theIsRequest = true) {
-
-	// 	$tmpName = $_GET['name'];
-	// 	$qs = $_GET['qs'];
-	// 	if( $theIsRequest ){
-
-	// 	} else {
-
-	// 	}
-
-	// 	//--- Get design doc for data view
-	// 	$tmpDesignDoc = self::get_design_doc($tmpName,'dataview');
-
-	// 	//-- populate this from the details
-	// 	$tmpDocType = $tmpDesignDoc["doctype"]; 
-	// 	$tmpPostType = $tmpDesignDoc["posttype"];
-
-	// 	//--- Start with blank query
-	// 	$tmpQuery = array();
-
-	// 	//--- If getting a doc type then add to the query
-	// 	if( $tmpDocType != ''){
-	// 		array_push($tmpQuery, array(
-	// 			'key'     => '__doctype',
-	// 			'value'   => $tmpDocType,
-	// 			'compare' => '=',
-	// 			)
-	// 		);
-	// 	}
-
-	// 	//--- Get and use query string values from the setup doc
-	// 	if( $qs != '' ){
-	// 		array_push($tmpQuery,array(
-	// 			'key'     => 'topic',
-	// 			'value'   => '"'.$qs.'"',
-	// 			'compare' => 'Like',
-	// 		));
-	// 	}
-
-	// 	$args = array(
-	// 		'post_type' => $tmpPostType,
-	// 		'posts_per_page' => -1,
-	// 		'meta_query' => $tmpQuery
-	// 	);
-	// 	$query = new WP_Query( $args );
-	// 	//$tmpQuery["design"] = $tmpDesignDoc;
-	// 	$tmpRet = '{"q":' . json_encode($tmpQuery);
-	// 	$tmpRet .= ',"design":' . json_encode($tmpDesignDoc);
-	// 	$tmpRet .= ',"data":[';
-	// 	$tmpAdded = false;
-	// 	if ( $query->have_posts() ) {
-	// 		while ( $query->have_posts() ) {
-	// 			$query->the_post();
-	// 			$tmpID = get_the_ID();
-	// 			$tmpJson = get_post_meta($tmpID);
-				
-	// 			foreach($tmpJson as $iField => $iVal) {
-	// 				if( count($iVal) == 1){
-	// 					$tmpVal = $iVal[0];
-	// 					$tmpJson[$iField] = maybe_unserialize($tmpVal);
-	// 				}
-	// 			}
-	// 			$tmpJson = json_encode($tmpJson);
-	// 			if( $tmpAdded ){
-	// 				$tmpRet .= ',';			
-	// 			} else {
-	// 				$tmpAdded = true;
-	// 			}
-	// 			$tmpRet .= $tmpJson;			
-	// 		}
-	// 	}
-	// 	/* Restore original Post Data */
-	// 	wp_reset_postdata();
-
-		
-	// 	$tmpRet .= ']}';
-	// 	header('Content-Type: application/json');
-	// 	echo $tmpRet;
-		
-	// 	exit();
-	// }
-	
-
 	public function get_users($request) {
 		$blogusers = get_users( array( 'role__in' => array( 'administrator', 'author', 'editor', 'contributor', 'subscriber' ) ) );
 		$tmpData = [];
@@ -1571,67 +1240,6 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 		echo json_encode($tmpRet);
 		exit();
 	}
-
-	public function get_people($request) {
-
-		$qs = $_GET['qs'];
-		$tmpQuery = array(
-			array(
-				'key'     => '__doctype',
-				'value'   => 'person',
-				'compare' => '=',
-			),
-		);
-		if( $qs != ''){
-			array_push($tmpQuery,array(
-				'key'     => 'topic',
-				'value'   => '"'.$qs.'"',
-				'compare' => 'Like',
-			));
-		}
-
-		$args = array(
-			'post_type' => 'actappdoc',
-			'posts_per_page' => -1,
-			'meta_query' => $tmpQuery
-		);
-		$query = new WP_Query( $args );
-
-		$tmpRet = '{"q":' . json_encode($tmpQuery) .',"data":[';
-		$tmpAdded = false;
-		if ( $query->have_posts() ) {
-			while ( $query->have_posts() ) {
-				$query->the_post();
-				$tmpID = get_the_ID();
-
-				$tmpJson = get_post_meta($tmpID);
-				
-				foreach($tmpJson as $iField => $iVal) {
-					if( count($iVal) == 1){
-						$tmpVal = $iVal[0];
-						$tmpJson[$iField] = maybe_unserialize($tmpVal);
-					}
-				}
-				$tmpJson = json_encode($tmpJson);
-				if( $tmpAdded ){
-					$tmpRet .= ',';			
-				} else {
-					$tmpAdded = true;
-				}
-				$tmpRet .= $tmpJson;			
-			}
-		}
-		/* Restore original Post Data */
-		wp_reset_postdata();
-
-		
-		$tmpRet .= ']}';
-		header('Content-Type: application/json');
-		echo $tmpRet;
-		
-		exit();
-	}
-	
 
 	public function getCatalogs(){
 		//-- populate this from the details
@@ -1823,9 +1431,7 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 							"icon": "archive",
 							"color": "black",
 							"group": "workspace-outline",
-							"content": [
-' . $tmpCatalogs . '								
-							]
+							"content": [' . $tmpCatalogs . ']
 						}
 					]
 				}

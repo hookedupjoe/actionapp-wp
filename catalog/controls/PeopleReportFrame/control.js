@@ -104,7 +104,7 @@
     ControlCode._onInit = function() {
       var tmpBaseURL = ActionAppCore.ActAppWP.rootPath;
       var tmpViewer = this.getViewControl();
-      tmpViewer.setReportURL(tmpBaseURL + '/wp-json/actappdesigner/alldocs?fields=(all)&doctype=&dataview=people');
+      tmpViewer.setReportURL(tmpBaseURL + '/wp-json/actappdesigner/dataview?dataview=people');
       tmpViewer.subscribe('selectionChange', refreshSelection.bind(this));
       tmpViewer.subscribe('tableBuilt', onTableBuilt.bind(this));
   
