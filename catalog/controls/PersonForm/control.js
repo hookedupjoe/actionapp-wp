@@ -204,7 +204,7 @@ License: MIT
 				"label": "Comments",
 				"placeholder": "Enter any comments related to this person",
 				"ctl": "textarea",
-				"rows": 2
+				"rows": 5
 			},
 			{
 				"name": "id",
@@ -212,7 +212,8 @@ License: MIT
 			},
 			{
 				"name": "__doctype",
-				"ctl": "hidden"
+				"ctl": "hidden",
+				"value": "person"
 			},
 			{
 				"name": "__doctitle",
@@ -227,6 +228,7 @@ License: MIT
 				"raised": true,
 				"clearing": true,
 				"name":'submit-bar',
+				"hidden": false,
 				"content":[
 					{
 						"ctl": "button",
@@ -281,15 +283,19 @@ License: MIT
 	}
 	
 	function submitForm() {
+	  //ToDo: Move this to server side in doctype definition?
+		var tmpDocTitle = this.getFieldValue('firstname') + ' ' + this.getFieldValue('lastname');
+		this.setFieldValue('__doctitle', tmpDocTitle);
+		console.log('submitForm')
+
 		var tmpData = this.getData();
-		var tmpDocTitle = tmpData.firstname + ' ' + tmpData.lastname;
 		
 		var tmpBaseURL = ActionAppCore.ActAppWP.rootPath;
 		//console.log('tmpBaseURL',tmpBaseURL)
 		var tmpPostOptions = {
 			formSubmit: false,
 			data: tmpData,
-			url: tmpBaseURL + '/wp-json/actappdesigner/savedoc?open&doctype=person&doctitle=' + tmpDocTitle
+			url: tmpBaseURL + '/wp-json/actappdesigner/savedoc?open'
 		}
 		return ThisApp.apiCall(tmpPostOptions);
 	}
