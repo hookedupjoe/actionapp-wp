@@ -521,20 +521,7 @@ class ActAppDesigner {
 		foreach ($tmpCustomMetaFields as $iFN) {
 			register_post_meta( '', $iFN, $tmpMetaDetails);
 		}
-		// $tmpFieldName = 'details';
-		// register_post_meta( 'actappdesigndoc', $tmpFieldName, $tmpMetaDetails);
-		// register_post_meta( 'actappelem', $tmpFieldName, $tmpMetaDetails);
-		// register_post_meta( 'post', $tmpFieldName, $tmpMetaDetails);
-		// register_post_meta( 'page', $tmpFieldName, $tmpMetaDetails);
-
-		// $tmpFieldName = '__doctype';
-		// register_post_meta( 'actappdesigndoc', $tmpFieldName, $tmpMetaDetails);
-		// register_post_meta( 'actappelem', $tmpFieldName, $tmpMetaDetails);
-
-		// $tmpFieldName = 'content';
-		// register_post_meta( 'actappdesigndoc', $tmpFieldName, $tmpMetaDetails);
-		// register_post_meta( 'actappelem', $tmpFieldName, $tmpMetaDetails);
-
+		
 	}
 	
 	public static function baseDir() {
