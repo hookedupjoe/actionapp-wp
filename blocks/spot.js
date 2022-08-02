@@ -40,7 +40,7 @@
 
     var controlDetails = {};
     var controlDetailsLoaded = false;
-    var controlDirty = false;
+    //---> To Write To Post Doc: var controlDirty = false;
     //BlockEditor.addBooleanAtts(info.atts, []);
     BlockEditor.addStringAtts(info.atts, ['spotname', 'spotsourcetype', 'spotsourcename', 'spotsourcecatalog', 'spotsourcepartname']);
 
@@ -119,10 +119,10 @@
                     ActAppBlocksController.loadFromMarkup();
                 });
             }
-            controlDirty = true;
-            if( controlDetailsLoaded === false){
-                controlDetailsLoaded = wp.data.select('core/editor').getEditedPostAttribute('meta').details || ''
-            }
+            //---> To Write To Post Doc: controlDirty = true;
+            //---> To Write To Post Doc: if( controlDetailsLoaded === false){
+            //---> To Write To Post Doc:     controlDetailsLoaded = wp.data.select('core/editor').getEditedPostAttribute('meta').details || ''
+            //---> To Write To Post Doc: }
             
             //controlDetails['working'] = true;
             var tmpPropAtts = props.attributes;
@@ -170,19 +170,18 @@
         },
 
         save: function (props) {
-//console.log('controlDirty',controlDirty);
-            
             var tmpDetails = JSON.stringify(controlDetails);
             
-            //console.log('controlDetailsLoaded',controlDetailsLoaded);
-            //console.log('tmpDetails',tmpDetails);
+            //---> To Write To Post Doc: console.log('controlDetailsLoaded',controlDetailsLoaded);
+            //---> To Write To Post Doc: console.log('tmpDetails',tmpDetails);
 
-            if( controlDirty && (controlDetailsLoaded != tmpDetails)){
-                //console.log('Saving tmpDetails',tmpDetails);
-                wp.data.dispatch('core/editor').editPost({meta: {__doctype:"manual",details:tmpDetails}});
-                //console.log('SAVED tmpDetails',tmpDetails);
-                controlDirty = false;
-            }
+            //---> To Write To Post Doc: 
+            // if( controlDirty && (controlDetailsLoaded != tmpDetails)){
+            //     //console.log('Saving tmpDetails',tmpDetails);
+            //     wp.data.dispatch('core/editor').editPost({meta: {__doctype:"manual",details:tmpDetails}});
+            //     //console.log('SAVED tmpDetails',tmpDetails);
+            //     controlDirty = false;
+            // }
             
             return getDisplayValue(props, false);
         },
