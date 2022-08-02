@@ -186,12 +186,11 @@ class ActAppWidgetManager {
 		); 
 	}
 
-
-
 }
 
 //--- Demo of a widget that uses server side rendering
-//require_once ACTIONAPP_WP_BLOCKS_DIR . '/blocks/ActAppDynamicCard/Object.php';
+//--- *** This is a Designer Widget, Setup in ActAppDesigner
+//require_once ACTIONAPP_WP_BLOCKS_DIR . '/blocks/ActAppDynamicDemo/Object.php';
 
 add_action( 'init', array( 'ActAppWidgetManager', 'init' ) );
 
