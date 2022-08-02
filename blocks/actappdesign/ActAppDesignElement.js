@@ -30,7 +30,7 @@
         name: 'actappelemdesigncontrol',
         title: 'Design Element',
         example: {
-            attributes: { color: 'blue' }
+            attributes: { color: 'violet' }
         },
         category: 'actappdesign',
         atts: {}
@@ -124,7 +124,7 @@
 
             }
             var tmpStandardProperties = [
-                BlockEditor.getStandardProperty(props, 'color', 'Segment Color', 'color'),
+                BlockEditor.getStandardProperty(props, 'color', 'Designer Color', 'color'),
                 BlockEditor.getStandardProperty(props, 'size', 'Size', 'size'),
                 BlockEditor.getStandardProperty(props, 'basic', 'No Border', 'checkbox'),
                 BlockEditor.getStandardProperty(props, 'attached', 'Attached', 'attached'),
@@ -138,7 +138,7 @@
             ];
 
             var tmpSidebarPanels = [
-                BlockEditor.getSidebarPanel('Segment Options', tmpStandardProperties),
+                BlockEditor.getSidebarPanel('Designer Options', tmpStandardProperties),
                 BlockEditor.getSidebarPanel('Formatting Options', tmpFormatProperties)
             ];
 
@@ -149,13 +149,13 @@
             var tmpBtnBar = '';
             if (props.isSelected) {
                 var tmpBarContent = [];
-                //tmpBarContent.push(el('div',{className:'ui fluid label blue mar5'},'UI Segment')),
-                tmpBarContent.push(el('div', { className: 'ui compact button blue basic ', action: 'beAddElement', elementname: 'header' }, 'Header'));
-                tmpBarContent.push(el('div', { className: 'ui compact button blue basic ', action: 'beAddElement', elementname: 'corecolumns' }, 'Columns'));
-                tmpBarContent.push(el('div', { className: 'ui compact button blue basic ', action: 'beAddElement', elementname: 'message' }, 'Message'));
-                tmpBarContent.push(el('div', { className: 'ui compact button blue basic ', action: 'beAddElement', elementname: 'image' }, 'Image'));
-                tmpBarContent.push(el('div', { className: 'ui compact button blue basic ', action: 'beAddElement', elementname: 'cards' }, 'Cards'));
-                tmpBtnBar = el('div', {}, [el('div', { className: 'ui fluid label blue mar5' }, 'UI Segment'), el('div', { className: 'ui segment raised slim' }, tmpBarContent, el('div', { className: 'endfloat' }))]);
+                //tmpBarContent.push(el('div',{className:'ui fluid label violet mar5'},'UI Designer')),
+                tmpBarContent.push(el('div', { className: 'ui compact button violet basic ', action: 'beAddElement', elementname: 'header' }, 'Header'));
+                tmpBarContent.push(el('div', { className: 'ui compact button violet basic ', action: 'beAddElement', elementname: 'corecolumns' }, 'Columns'));
+                tmpBarContent.push(el('div', { className: 'ui compact button violet basic ', action: 'beAddElement', elementname: 'message' }, 'Message'));
+                tmpBarContent.push(el('div', { className: 'ui compact button violet basic ', action: 'beAddElement', elementname: 'image' }, 'Image'));
+                tmpBarContent.push(el('div', { className: 'ui compact button violet basic ', action: 'beAddElement', elementname: 'cards' }, 'Cards'));
+                tmpBtnBar = el('div', {}, [el('div', { className: 'ui fluid label violet mar5' }, 'UI Designer'), el('div', { className: 'ui segment raised slim' }, tmpBarContent, el('div', { className: 'endfloat' }))]);
             }
 
             return el(
