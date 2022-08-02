@@ -689,10 +689,10 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 		$tmpPostType = $theDoc->__posttype;
 		$tmpPostTitle = $theDoc->__doctitle;
 		
-		$tmpIsDesign = ($tmpPostType == 'actappdesigndoc');
-		if( !$tmpIsDesign && ($tmpPostType !== 'actappdoc')){
-			return false;
-		}
+		// $tmpIsDesign = ($tmpPostType == 'actappdesigndoc');
+		// if( !$tmpIsDesign && ($tmpPostType !== 'actappdoc')){
+		// 	return false;
+		// }
 		
 		$tmpExistingID = ActAppCommon::post_exists_by_uid($tmpSlug);
 		$tmpExistingStatus = 'na';
@@ -716,7 +716,7 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 		unset($theDoc->__postdate);
 		unset($theDoc->__posttype);
 		
-		$tmpResults = self::save_doc(wp_json_encode($theDoc),$tmpIsDesign,false);
+		$tmpResults = self::save_doc(wp_json_encode($theDoc),$tmpPostType,false,);
 		//--- Return new post id or slug?
 		return $tmpResults;
 	}
@@ -831,9 +831,18 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 		return self::save_doc($request,true);
 	}	
 	
-	public function save_doc($request, $theIsDesign = false, $theIsRequest = true) {
+	//--- $thePostType: True = designerdoc, False or Null = appdoc, String Value = posttype
+	public function save_doc($request, $thePostType, $theIsRequest = true) {
 		$tmpPostType = 'actappdoc';
-		if( $theIsDesign === true){
+
+		$tmpIsAltPostType = is_string($thePostType);
+
+		if( $tmpIsAltPostType ){
+			$tmpPostType = $thePostType;
+			if( !current_user_can('actappdesign') ){
+				return new WP_Error('actapp_data_error', 'Not autorized for ' . get_current_user_id(), array('status' => 403));
+			}
+		} else if( $thePostType === true){
 			$tmpPostType = 'actappdesigndoc';
 			if( !current_user_can('actappdesign') ){
 				return new WP_Error('actapp_data_error', 'Not autorized for ' . get_current_user_id(), array('status' => 403));
@@ -856,6 +865,9 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 
 		$doctype = $body->__doctype;
 		$doctitle = $body->__doctitle;
+
+		$tmpContent = $body->__postcontent;
+		$tmpExcerpt = $body->__postexcerpt;
 
 		$tmpDocID = '';
 		$tmpPostID = false;
@@ -921,8 +933,16 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 		if( $tmpPostID ){
 			$newpost['id'] = $tmpPostID;
 		}
-
+		if( $tmpContent ){
+			$newpost['post_content'] = $tmpContent;
+		}
+		if($tmpExcerpt){
+			$newpost['post_excerpt'] = $tmpExcerpt;
+		}
 		
+		unset($body->__postcontent);
+		unset($body->__postexcerpt);
+
 		$tmpResultCode = '';
 		if( !$tmpPostID ){
 			$tmpResultCode = 'new doc';
@@ -1124,6 +1144,10 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 
 			$posttype = $tmpDoc['sourceposttype'];
 			$doctype = $tmpDoc['sourcedoctype'];
+			$posttypeother = $tmpDoc['sourceposttypeother'];
+			if( 'other' == $posttype && $posttypeother != null ){
+				$posttype = $posttypeother;
+			}
 			//$capabilities = $tmpDoc['capabilities'];
 			
 			// $doctype = 'person';
@@ -1349,9 +1373,21 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 			while ( $query->have_posts() ) {
 				$query->the_post();
 				$tmpJson = ActAppDesigner::get_post_as_doc();
+				if( '(export)' == $theFields ){
+					$tmpContent = get_the_content();
+					if( $tmpContent != null ){
+						$tmpJson['__postcontent'] = $tmpContent;
+					}
+					$tmpExcerpt = get_the_excerpt();
+					if( $tmpExcerpt != null ){
+						$tmpJson['__postexcerpt'] = $tmpExcerpt;
+					}
+				}
+		
 				array_push($tmpRet,$tmpJson);
 			}
 		}
+
 		/* Restore original Post Data */
 		wp_reset_postdata();
 
