@@ -47,10 +47,13 @@ class ActAppDynamicDemo {
 		if( $block_attributes['debug'] ){
 			return $tmpJSON; //return 'debug ' . $block_attributes['debug'];
 		}
-
+		
 		if( $block_attributes['message'] ){
+			//<div class="ui button blue fluid" action="runClickMe">Click Me</div>
 			return '<div class="ui message blue large">' . $block_attributes['message'] . "</div>";
 		}
+		
+
 		return 'unknown params';
 	}
 
