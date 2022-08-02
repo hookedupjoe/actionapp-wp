@@ -54,7 +54,7 @@ class ActAppDesigner {
 		}
 		wp_enqueue_script(
 			$theName, 
-			ACTIONAPP_WP_URL . '/blocks/' . $tmpFN . '.js',
+			ACTIONAPP_WP_URL . '/blocks/actappdesign/' . $tmpFN . '.js',
 			$tmpDepDefaults,
 			true
 		);
@@ -256,7 +256,6 @@ class ActAppDesigner {
 	
 	public static function actapp_init_blocks($theHook) {
 		
-	
 		wp_register_style( 'act-app-designer_css',   ACTIONAPP_WP_URL . '/css/designer.css', false,  $my_css_ver );
 		//--- Load the action app core components and ActionAppCore.common.blocks add on
 		wp_enqueue_script(
@@ -265,9 +264,9 @@ class ActAppDesigner {
 			array('wp-blocks','wp-editor','wp-element'),
 			true
 		);
-		if ( get_post_type( get_the_ID() ) == 'actappdesign' ) {
+		if ( get_post_type( get_the_ID() ) == 'actappelem' ) {
 			//--- Load standardly created widgets;
-			$tmpWidgetList = array('any','tabledef','field');
+			$tmpWidgetList = array('ActAppDesignElement');
 			foreach ($tmpWidgetList as $aName) {
 				self::loadStandardBlock($aName);
 			}
@@ -756,7 +755,7 @@ class ActAppDesigner {
 }
 
 //--- Demo of a widget that uses server side rendering
-require_once ACTIONAPP_WP_BLOCKS_DIR . '/blocks/ActAppDynamicDemo/Object.php';
+require_once ACTIONAPP_WP_BLOCKS_DIR . '/blocks/actappdesign/ActAppDynamicDemo/Object.php';
 
 //--- Create stub documents when plugin initialized
 register_activation_hook( __FILE__, array( 'ActAppDesigner', 'activation_hook' ) );

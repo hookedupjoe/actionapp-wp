@@ -85,15 +85,6 @@ class ActAppDynamicDemo {
 	 
 	}
 	
-
-	
-	public static function baseDir() {
-		return ACTIONAPP_WP_WIDGETS_DYNAMIC_CARD_DIR;
-	}
-	public static function baseURL() {
-		return ACTIONAPP_WP_WIDGETS_DYNAMIC_CARD_URL;
-	}
-	
 }
 
 

@@ -95,7 +95,6 @@
                     console.log('tmpContext and tmpParams', tmpSpot, tmpContext, tmpParams);    
                 }
             }
-            window.tmpLastProps = props;
             ThisApp.common.loadedBlocks = ThisApp.common.loadedBlocks || {};
             ThisApp.common.loadedBlocks[props.clientId] = {props:props,
                 blocks:blocks, 
