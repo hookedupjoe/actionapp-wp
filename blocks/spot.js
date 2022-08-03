@@ -170,7 +170,7 @@
         },
 
         save: function (props) {
-            var tmpDetails = JSON.stringify(controlDetails);
+            //---> To Write To Post Doc: var tmpDetails = JSON.stringify(controlDetails);
             
             //---> To Write To Post Doc: console.log('controlDetailsLoaded',controlDetailsLoaded);
             //---> To Write To Post Doc: console.log('tmpDetails',tmpDetails);
