@@ -92,7 +92,7 @@
         if( theIsEditMode ){
             tmpContent.push( newEl('div','content', el( wp.blockEditor.InnerBlocks,{renderAppender:wp.blockEditor.InnerBlocks.DefaultBlockAppender} )) );
         } else {
-            tmpContent.push( tmpContent.push( newEl('div','content', el( wp.blockEditor.InnerBlocks.Content ))));
+            tmpContent.push( newEl('div','content', el( wp.blockEditor.InnerBlocks.Content )));
         }
 
         var tmpExtraContent = [];

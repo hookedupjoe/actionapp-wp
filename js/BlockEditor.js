@@ -441,7 +441,6 @@
             }
             var tmpItemToAdd = 'card';
             var tmpToAddElement = BlockEditor.getCommonBlock(tmpItemToAdd);
-            console.log('tmpThis.clientId',tmpThis.clientId);
             wp.data.dispatch('core/editor').insertBlocks(tmpToAddElement,tmpPos,tmpThis.clientId) 
         }
 
@@ -457,7 +456,6 @@
         }
 
         ThisApp.actions.beAddElement = function(theParams, theTarget){
-            console.log( 'beAddElement');
             var tmpParams = ThisApp.getActionParams(theParams, theTarget, ['elementname']);
             var tmpThis = wp.data.select( 'core/block-editor' ).getSelectedBlock();
             var tmpPos = 0;
@@ -470,7 +468,6 @@
                 return;
             }
             var tmpToAddElement = BlockEditor.getCommonBlock(tmpItemToAdd);
-            console.log( 'tmpToAddElement', tmpToAddElement);
             wp.data.dispatch('core/editor').insertBlocks(tmpToAddElement,tmpPos,tmpThis.clientId) 
         }
         
