@@ -754,8 +754,8 @@ class ActAppDesigner {
 
 }
 
-//--- Demo of a widget that uses server side rendering
-require_once ACTIONAPP_WP_BLOCKS_DIR . '/blocks/actappdesign/ActAppDynamicDemo/Object.php';
+//--- Just a demo, consider use case for server side dynamic ***
+//require_once ACTIONAPP_WP_BLOCKS_DIR . '/blocks/actappdesign/ActAppDynamicDemo/Object.php';
 
 //--- Create stub documents when plugin initialized
 register_activation_hook( __FILE__, array( 'ActAppDesigner', 'activation_hook' ) );
