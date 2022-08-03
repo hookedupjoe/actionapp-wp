@@ -102,7 +102,7 @@
                     }
                 }
             }
-            tmpEls.push(el(wp.blockEditor.InnerBlocks, {renderAppender:wp.blockEditor.InnerBlocks.ButtonBlockAppender}));
+            tmpEls.push(el(wp.blockEditor.InnerBlocks, {renderAppender:false}));
         } else {
             tmpEls.push(el(wp.blockEditor.InnerBlocks.Content));
         }
@@ -155,6 +155,7 @@
                 tmpBarContent.push(el('div', { className: 'ui compact button blue basic ', action: 'beAddElement', elementname: 'message' }, 'Message'));
                 tmpBarContent.push(el('div', { className: 'ui compact button blue basic ', action: 'beAddElement', elementname: 'image' }, 'Image'));
                 tmpBarContent.push(el('div', { className: 'ui compact button blue basic ', action: 'beAddElement', elementname: 'cards' }, 'Cards'));
+                tmpBarContent.push(el('span', {className:'toright'}, el(wp.blockEditor.InnerBlocks.ButtonBlockAppender, {className: 'actappappender'})));
                 tmpBtnBar = el('div', {}, [el('div', { className: 'ui fluid label blue mar5' }, 'UI Segment'), el('div', { className: 'ui segment raised slim' }, tmpBarContent, el('div', { className: 'endfloat' }))]);
             }
 

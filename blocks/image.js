@@ -68,7 +68,37 @@
                 tmpEl = el('div',{className:'ui segment basic pad0'},el('div',{className:'ui message fluid yellow'},tmpSide),tmpEl);
             }
             if( !(tmpAtts.mediaURL) ){
-                tmpEl = el('div',{className:'ui message compact small orange'},'Select image on sidebar');
+//                tmpEl = el('div',{className:'ui message compact small orange'},'Select image on sidebar');
+
+var onSelectImage = function( media ) {
+    tmpToSet = {};
+    tmpToSet[attNamesDef['mediaURL']] = media.url;
+    tmpToSet[attNamesDef['mediaID']] = media.id;
+    return theProps.setAttributes(tmpToSet);
+    
+};
+
+tmpEl = el( wp.editor.MediaUpload, {
+    onSelect: onSelectImage,
+    type: 'image',
+    value: '',
+    render: function( obj ) {
+        
+        if( !theProps.attributes.mediaID ){
+            return el('div',{className:'pad2'},
+                el('div', {className:'ui button blue basic', onClick: obj.open}, 'Select Image')
+            )
+        } else {
+            return el('div',{className:'pad2'},
+            el('div', {className:'ui button blue basic', onClick: obj.open}, 'Replace'),
+            el('div', {className:'ui button blue basic', onClick: function(){}}, 'Remove'),                                            
+                el('div',{className:'pad2'}),
+                el('img',{className:'ui image rounded fluid', src:tmpAtts.mediaURL})
+            )
+        }
+    }
+} )  
+
             }
             tmpContent.push(tmpEl)
         } else {
@@ -89,6 +119,8 @@
     function getClass(theProps, theIsEditMode){
         return BlockEditor.getStandardClass( 'ui image', tmpClassSpecs, theProps, theIsEditMode);
     }
+
+    var attNamesDef = {mediaID:'mediaID',mediaURL:'mediaURL'};
     wp.blocks.registerBlockType( info.category + '/' + info.name, {
         title: info.title,
         icon: iconEl,
@@ -103,7 +135,7 @@
             //     tmpAtts.avatar = false;
             // }
             var tmpStandardProperties = [
-                BlockEditor.getStandardProperty(props,{mediaID:'mediaID',mediaURL:'mediaURL'}, 'Image', 'image' ),
+                BlockEditor.getStandardProperty(props,attNamesDef, 'Image', 'image' ),
                 (tmpAtts.avatar || tmpAtts.rounded) ? '' : BlockEditor.getStandardProperty(props,'circular', 'Circular', 'checkbox' ),
                 (tmpAtts.avatar || tmpAtts.circular) ? '' : BlockEditor.getStandardProperty(props,'rounded', 'Rounded', 'checkbox' ),
                 BlockEditor.getStandardProperty(props,'bordered', 'Bordered', 'checkbox' ),

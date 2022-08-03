@@ -71,7 +71,7 @@
         tmpHdr,     
         el('div',{className:'edit-cards' + props.attributes.color + ' ' + props.attributes.columns},
         [
-            el(wp.blockEditor.InnerBlocks,{allowedBlocks: ['actappui/card'], renderAppender:wp.blockEditor.InnerBlocks.ButtonBlockAppender}),
+            el(wp.blockEditor.InnerBlocks,{allowedBlocks: ['actappui/card'], renderAppender:false}),
         ]
         )
         

@@ -27,3 +27,8 @@ i.arrow:after {
     min-height:40px;
 }
 
+.toright .block-editor-button-block-appender.components-button.components-button {
+    padding: 4px;
+    background-color: #2185d0;
+    color: white;
+}

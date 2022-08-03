@@ -90,11 +90,10 @@
         tmpContent.push( newEl('div','content',tmpMainContent) );
         
         if( theIsEditMode ){
-            tmpContent.push( el( wp.blockEditor.InnerBlocks,{renderAppender:false} ));
+            tmpContent.push( newEl('div','content', el( wp.blockEditor.InnerBlocks,{renderAppender:wp.blockEditor.InnerBlocks.DefaultBlockAppender} )) );
         } else {
-            tmpContent.push( el( wp.blockEditor.InnerBlocks.Content ));
+            tmpContent.push( tmpContent.push( newEl('div','content', el( wp.blockEditor.InnerBlocks.Content ))));
         }
-        
 
         var tmpExtraContent = [];
         var tmpBtnBar = '';
@@ -102,8 +101,9 @@
             var tmpBarContent = [];
             var tmpAddBtn = el('div',{className:'ui compact button blue basic ',action:'beAddElement', elementname: 'cardsection'}, 'Add Section');
             tmpBarContent.push(tmpAddBtn);
-            var tmpAddBottomBtn = el('div',{className:'ui compact button blue basic ',action:'beAddElement', elementname:'button'}, 'Add Bottom Button');
-            tmpBarContent.push(tmpAddBottomBtn);
+            tmpBarContent.push(el('span', {className:'toright'}, el(wp.blockEditor.InnerBlocks.ButtonBlockAppender, {className: 'actappappender'})));
+            
+
             tmpBtnBar = el('div',{},[el('div',{className:'ui fluid center aligned label blue'},'Card Control'),el('div',{className:'ui segment raised slim'},tmpBarContent,el('div',{className:'endfloat'}))]);
         }
         
