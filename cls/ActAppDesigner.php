@@ -72,6 +72,12 @@ class ActAppDesigner {
 		$pagename = $post->post_name;
 		$current_user = wp_get_current_user();
 
+		$tmpIsDeveloperView = $_GET['devonlyview'];
+		if( $tmpIsDeveloperView == 'fields' && current_user_can('actappdesign') ){
+			$template = ACTIONAPP_WP_DIR . '/tpl/actappdesigndoc.php';
+			return $template;
+		}
+		
 		$post_types = array( 'actappdesign' );
 		if ( is_singular( $post_types ) && $pagename != '' && file_exists( ACTIONAPP_WP_DIR . '/tpl/designer-'.$pagename.'.php' ) ){
 			$template = ACTIONAPP_WP_DIR . '/tpl/designer-'.$pagename.'.php';
@@ -88,7 +94,7 @@ class ActAppDesigner {
 			return $template;
 		}
 
-		$post_types = array( 'actappdesigndoc' );
+		$post_types = array( 'actappdesigndoc');
 		if ( is_singular( $post_types ) && file_exists( ACTIONAPP_WP_DIR . '/tpl/actappdesigndoc.php' ) ){
 			$template = ACTIONAPP_WP_DIR . '/tpl/actappdesigndoc.php';
 			return $template;
@@ -650,7 +656,7 @@ class ActAppDesigner {
 	}
 
 	//--- Return the current post as a "document" array
-	public static function get_post_as_doc($theOptionalID = null, $theFields = null){
+	public static function get_post_as_doc($theOptionalID = null, $theFields = null, $theIncludePostFields = null){
 
 		//-- If no id is passed, it is assumed we are working with the loaded global post
 		if( $theOptionalID != null){
@@ -693,9 +699,16 @@ class ActAppDesigner {
 		if($theFields == '(export)'){
 			unset($tmpJson['_edit_lock']);
 		}
+		if( $theIncludePostFields == true){
+			$tmpPostFields = array('post_author','post_date','post_date_gmt','post_content','post_title','post_excerpt','post_status','comment_status','ping_status','post_password','post_name','to_ping','pinged','post_modified','post_modified_gmt','post_content_filtered','post_parent','guid','menu_order','post_type','post_mime_type','comment_count');
+			foreach ($tmpPostFields as $iFieldName) {
+				$tmpExportFN = '___'.$iFieldName;
+				$tmpJson[$tmpExportFN] = get_post_field($iFieldName);
+			}
+		}
 		$tmpJson['id'] = $tmpID;
 		$tmpJson['__posttype'] = $tmpDocPostType;
-		$tmpJson['__doctitle'] = get_the_title();				
+		$tmpJson['__doctitle'] = get_the_title();
 		$tmpJson['__url'] = get_post_permalink();
 		//---> Use this for no leading zeros: get_the_date('n/j/Y');
 		$tmpJson['__postdate'] = get_the_date('m/d/Y'); 

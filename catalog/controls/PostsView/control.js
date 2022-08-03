@@ -32,6 +32,19 @@
                   "action": "openURL"
   
                 }
+              },{
+                "ctl": "button",
+                "toLeft": true,
+                "color": "blue",
+                "icon": "eye",
+                compact: true,
+                "name": "btn-page-tb-open-details",
+                "label": "Post Details",
+                "onClick": {
+                  "run": "action",
+                  "action": "openDetails"
+  
+                }
               },
               {
                 "ctl": "button",
@@ -199,7 +212,12 @@
     };
   
     
-    ControlCode.openURL = function() {
+    
+    ControlCode.openDetails = function() {
+      return this.openURL(true)
+    };
+
+    ControlCode.openURL = function(theShowDetails) {
       var tmpViewer = this.getViewControl();
       var tmpData = tmpViewer.mainTable.getSelectedData();
       if( !(tmpData && tmpData.length == 1) ){
@@ -211,6 +229,15 @@
       if( !tmpURL ){
         alert('No URL found');
         return;
+      }
+      if( theShowDetails === true ){
+        var tmpToAdd = 'devonlyview=fields';
+        if( tmpURL.indexOf('?') == -1){
+          tmpToAdd = '?' + tmpToAdd;
+        } else {
+          tmpToAdd = '&' + tmpToAdd;
+        }
+        tmpURL += tmpToAdd;
       }
       window.open(tmpURL,'_blank');
     };
@@ -303,6 +330,9 @@
       var tmpNotOneDisabled = (tmpViewer.counts.selected !== 1);
       this.setItemDisabled('btn-page-tb-open',
         tmpNotOneDisabled);
+        this.setItemDisabled('btn-page-tb-open-details',
+        tmpNotOneDisabled);
+        
     }
   
     var ThisControl = {
