@@ -576,48 +576,48 @@ class ActAppDesigner {
 	}
 	
 	
-	public static function showUsers(){
+	// public static function showUsers(){
 		
-		echo '<hr/><div class="ui header blue">Users</div>';
-		$blogusers = get_users( array( 'role__in' => array( 'administrator', 'author', 'editor' ) ) );
-		// Array of WP_User objects.
-		foreach ( $blogusers as $user ) {
-			$tmpID = $user->ID;
-			//$tmpUser = new WP_User( $tmpID ); 
-			//if( $tmpID == 3){
+	// 	echo '<hr/><div class="ui header blue">Users</div>';
+	// 	$blogusers = get_users( array( 'role__in' => array( 'administrator', 'author', 'editor' ) ) );
+	// 	// Array of WP_User objects.
+	// 	foreach ( $blogusers as $user ) {
+	// 		$tmpID = $user->ID;
+	// 		//$tmpUser = new WP_User( $tmpID ); 
+	// 		//if( $tmpID == 3){
 
-				if( $user->has_cap('actappapps')){
-					echo "<hr/>Application Access";
-				} else {
-					echo "<hr/>No Application Access";
-					// if( $tmpID == 5){
-					// 	echo " (assigning)";
-					// 	$user->add_cap('actappapps');
-					// }
-				}
-				if( $user->has_cap('actappdesign')){
-					echo "<hr/>Design";
-				} else {
-					echo "<hr/>No Design";
-					// if( $tmpID == 1){
-					// 	echo " (assigning)";
-					// 	$user->add_cap('actappdesign');
-					// }
-				}
+	// 			if( $user->has_cap('actappapps')){
+	// 				echo "<hr/>Application Access";
+	// 			} else {
+	// 				echo "<hr/>No Application Access";
+	// 				// if( $tmpID == 5){
+	// 				// 	echo " (assigning)";
+	// 				// 	$user->add_cap('actappapps');
+	// 				// }
+	// 			}
+	// 			if( $user->has_cap('actappdesign')){
+	// 				echo "<hr/>Design";
+	// 			} else {
+	// 				echo "<hr/>No Design";
+	// 				// if( $tmpID == 1){
+	// 				// 	echo " (assigning)";
+	// 				// 	$user->add_cap('actappdesign');
+	// 				// }
+	// 			}
 				
 
-			//}
-			echo '<div>';
-			echo '<span>' . esc_html( $user->display_name ) . ':' . $tmpID . '</span>';
-			echo '</div>';
+	// 		//}
+	// 		echo '<div>';
+	// 		echo '<span>' . esc_html( $user->display_name ) . ':' . $tmpID . '</span>';
+	// 		echo '</div>';
 
-			echo '<div>';
-			var_dump( $user);
-			echo '</div>';
+	// 		echo '<div>';
+	// 		var_dump( $user);
+	// 		echo '</div>';
 
-		}
+	// 	}
 		
-	}
+	// }
 	public static function registerMenus(){
 		// if( !current_user_can('editor')){
 		// 	remove_menu_page( 'index.php' );

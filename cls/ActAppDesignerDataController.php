@@ -1247,7 +1247,7 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 		$tmpData = [];
 		foreach ( $blogusers as $user ) {
 			$tmpID = $user->ID;
-			if( $tmpID != 0){
+			if( $tmpID != 1){
 				//$tmpAdminOptions = [];
 				foreach ( $user->roles as $iRole ) {
 					$tmpRole = $iRole;
@@ -1267,11 +1267,11 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 				}
 
 				foreach ( $user->caps as $iCapName => $iCapVal ) {
-					//if( $iCapName != $tmpRole){
+					if( $iCapName != $tmpRole){
 						if( $iCapVal === true){
 							array_push($tmpCaps,$iCapName);
 						}
-					//}
+					}
 				}
 
 				$tmpNew = [
