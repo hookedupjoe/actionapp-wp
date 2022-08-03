@@ -509,13 +509,13 @@ class ActAppDesigner {
 
 		//--- Common meta items to expose to design time block editors, potentially used in any post type.
 		//-> __doctype - Name of the related doctype for this post
-		//-> __doctitle - Text title for this design element (post title)
 		//-> __design_app - Name of the related application
 		//-> __design_props - JSON string for post properties (field / value pairs of related data)
 		//-> __design_source - The source text for this design element to be used when viewed.  Couild be JSON or HTML.
 		//-> __design_setup - JSON string that is the setup object passed into a setup function of the main object if it exists
 		
-		$tmpCustomMetaFields = ['__design_props','__design_app','__design_setup','__design_source','__doctype','__doctitle'];
+		//$tmpCustomMetaFields = ['__design_props','__design_app','__design_setup','__design_source','__doctype','__doctitle'];
+		$tmpCustomMetaFields = ['__design_props','__design_app','__design_setup','__design_source','__doctype'];
 		//--- Register all used meta fields designed for block update use
 		foreach ($tmpCustomMetaFields as $iFN) {
 			register_post_meta( '', $iFN, $tmpMetaDetails);
