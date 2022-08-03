@@ -42,7 +42,7 @@
         string: ['color']
     }
     function getClass(theProps, theIsEditMode){
-        return BlockEditor.getStandardClass( 'ui cards', tmpClassSpecs, theProps, theIsEditMode);
+        return BlockEditor.getStandardClass( 'ui cards pad0 mar0', tmpClassSpecs, theProps, theIsEditMode);
     }
 	function getDisplayValue(theProps,theIsEditMode){
         var props = theProps;
@@ -71,7 +71,7 @@
         tmpHdr,     
         el('div',{className:'edit-cards' + props.attributes.color + ' ' + props.attributes.columns},
         [
-            el(wp.blockEditor.InnerBlocks,{renderAppender:false}),
+            el(wp.blockEditor.InnerBlocks,{allowedBlocks: ['actappui/card'], renderAppender:wp.blockEditor.InnerBlocks.ButtonBlockAppender}),
         ]
         )
         
@@ -121,13 +121,11 @@
             var tmpProps = {};
             
             if( props.attributes.columns == '' ){
-                tmpProps["auto-adapt"] = "cards";
+               tmpProps["auto-adapt"] = "cards";
             } else {
                 tmpProps["columns"] = props.attributes.columns;
             }
-
-
-            var tmpClasses = 'ui cards';
+            console.log('save');
             var tmpClasses = getClass(props, true);
             if( props.attributes.columns != ''){
                 tmpClasses += ' stackable ' + props.attributes.columns;

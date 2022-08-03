@@ -102,7 +102,7 @@
                     }
                 }
             }
-            tmpEls.push(el(wp.blockEditor.InnerBlocks));
+            tmpEls.push(el(wp.blockEditor.InnerBlocks, {renderAppender:wp.blockEditor.InnerBlocks.ButtonBlockAppender}));
         } else {
             tmpEls.push(el(wp.blockEditor.InnerBlocks.Content));
         }
