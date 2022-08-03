@@ -388,7 +388,7 @@
             //--- Special Property Editors Used
             if( theControlType == 'dropdown' && theSelectionList ){ 
                 tmpContents.push(BlockEditor[tmpFunc](tmpAtts[theAttName],tmpOnChange,theSelectionList));
-                tmpContents.push(BlockEditor.getOptionSep());
+                //tmpContents.push(BlockEditor.getOptionSep());
 
             } else if( theControlType == 'checkbox' ){
                 var tmpOnChangeFunc = function (theValue){
@@ -451,10 +451,10 @@
             } else {
                 //--- Call the dynamic function to get the type for this property
                 tmpContents.push(BlockEditor[tmpFunc](tmpAtts[theAttName],tmpOnChange));
-                tmpContents.push(BlockEditor.getOptionSep());
+                //tmpContents.push(BlockEditor.getOptionSep());
             }
             
-            return el('div',{},tmpContents);
+            return el('div',{className:'pad3'},tmpContents);
         }
 
     }
