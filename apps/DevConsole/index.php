@@ -14,22 +14,11 @@
   <meta name="msapplication-tap-highlight" content="no">
   <meta name="viewport"
     content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
-    <?php 
-    wp_head(); ?>
+    <?php wp_head(); ?>
     
     <base href="<?php echo ACTIONAPP_WP_URL . '/apps/DevConsole/' ?>" >
 
-
-
   <link rel="stylesheet" href="<?php echo ACTIONAPP_WP_CORE_LIB_URL ?>/built-lib/support-libs.css">
-
-  <!-- OPTIONAL - Data-tables -->
-  <!-- <link rel="stylesheet" href="/lib/datatables/datatables.min.css"> -->
-  <!-- <link rel="stylesheet" href="/lib/datatables/responsive.custom.css"> -->
-  <!-- <link rel="stylesheet" href="/lib/jsTree/themes/default/style.min.css" /> -->
-
-
-
 
 
   <!-- Local app css -->
