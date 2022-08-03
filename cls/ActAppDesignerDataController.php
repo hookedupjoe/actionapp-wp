@@ -779,11 +779,6 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 			if( is_array($body->capabilities) ){
 				foreach ($body->capabilities as $iCap) {
 					$newWPUser->add_cap($iCap);
-					if( $iCap == 'actappdesign'){
-						//--- Designers need to be able to edit HTML
-						$newWPUser->add_cap('unfiltered_html');
-					}
-					
 				}	
 			}
 		} else {
@@ -807,10 +802,6 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 			if( is_array($body->capabilities) ){
 				foreach ($body->capabilities as $iCap) {
 					$newWPUser->add_cap($iCap);
-					if( $iCap == 'actappdesign'){
-						//--- Designers need to be able to edit HTML
-						$newWPUser->add_cap('unfiltered_html');
-					}
 				}	
 			}
 		}
