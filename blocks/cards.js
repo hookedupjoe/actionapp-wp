@@ -125,7 +125,6 @@
             } else {
                 tmpProps["columns"] = props.attributes.columns;
             }
-            console.log('save');
             var tmpClasses = getClass(props, true);
             if( props.attributes.columns != ''){
                 tmpClasses += ' stackable ' + props.attributes.columns;
