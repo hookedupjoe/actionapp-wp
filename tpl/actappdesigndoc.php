@@ -23,8 +23,13 @@
 ?>
 
 <head>
-  <?php wp_head(); ?>
+<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+  <?php
+  //ToDo: Create common plain page header output
+  
+  wp_head(); ?>
 </head>
+
 
 <?php
 
