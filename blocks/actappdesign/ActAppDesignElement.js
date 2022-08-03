@@ -37,12 +37,12 @@
     };
     const iconEl = BlockEditor.getControlIcon(info.name);
 
-    BlockEditor.addBooleanAtts(info.atts, ['raised', 'stacked', 'vertical', 'clearing', 'hasdropindicator']);
-    BlockEditor.addStringAtts(info.atts, ['color', 'size', 'attached', 'alignment', 'basic']);
+    BlockEditor.addBooleanAtts(info.atts, ['hasdropindicator','devonly']);
+    BlockEditor.addStringAtts(info.atts, ['designtype']);
 
     var tmpClassSpecs = {
-        boolean: ['raised', 'stacked', 'vertical', 'basic', 'clearing'],
-        string: ['color', 'size', 'attached', 'alignment']
+        boolean: [],
+        string: []
     }
     function getClass(theProps, theIsEditMode) {
         return BlockEditor.getStandardClass('ui segment', tmpClassSpecs, theProps, theIsEditMode);
@@ -75,29 +75,17 @@
 
         if (theIsEditMode) {
             var tmpMe = wp.data.select('core/block-editor').getBlock(props.clientId);
-            //--- If doing a preview, there is no active block in the editor
             if (tmpMe) {
                 var tmpChildren = tmpMe.innerBlocks;
                 if (!(tmpChildren && tmpChildren.length)) {
-                    //--- This assures the drag and drop feature allows a drop in a new unselected segment
-                    var tmpToAddElement = BlockEditor.getCommonBlock('dropindicator');
-                    tmpPropAtts.hasdropindicator = true;
-                    be.insertBlocks(tmpToAddElement, 0, props.clientId);
+                    //--- What to do when no children
                 } else {
-                    //Find and remove drop indicator
-                    if (tmpPropAtts.hasdropindicator && tmpChildren.length > 1) {
+                    //Loop children to do
+                    if (tmpChildren.length > 1) {
                         var tmpPos = -1;
                         for (var iPos = 0; iPos < tmpChildren.length; iPos++) {
                             var tmpChild = tmpChildren[iPos];
-                            if (tmpChild.name == 'actappdesign/dropindicator') {
-                                tmpPos = iPos;
-                                break;
-                            }
-                        }
-                        if (tmpPos > -1) {
-                            tmpMe.innerBlocks.splice(tmpPos, 1);
-                            tmpPropAtts.hasdropindicator = false;
-                            ActAppBlockEditor.refreshBlockEditor();
+                            //You have a child: (i.e. tmpChild.name); 
                         }
                     }
                 }
@@ -118,28 +106,16 @@
         example: info.example,
         attributes: info.atts,
         edit: function (props) {
+            //--- To Do: Make standard drop down control
+            var tmpDesignTypes = ['Default|','Form|form','View|view','Panel|panel','Control|control','HTML|html','Template|template'];
 
-            var tmpPropAtts = props.attributes;
-            if (tmpPropAtts.spotname) {
-
-            }
             var tmpStandardProperties = [
-                BlockEditor.getStandardProperty(props, 'color', 'Designer Color', 'color'),
-                BlockEditor.getStandardProperty(props, 'size', 'Size', 'size'),
-                BlockEditor.getStandardProperty(props, 'basic', 'No Border', 'checkbox'),
-                BlockEditor.getStandardProperty(props, 'attached', 'Attached', 'attached'),
-                BlockEditor.getStandardProperty(props, 'raised', 'Raised', 'checkbox'),
-                BlockEditor.getStandardProperty(props, 'stacked', 'Stacked', 'checkbox'),
-                BlockEditor.getStandardProperty(props, 'vertical', 'Vertical', 'checkbox'),
-                BlockEditor.getStandardProperty(props, 'clearing', 'Contain Floaters', 'checkbox')
-            ];
-            var tmpFormatProperties = [
-                BlockEditor.getStandardProperty(props, 'alignment', 'Alignment', 'alignment')
+                BlockEditor.getStandardProperty(props, 'designtype', 'Developer Access Only?', 'dropdown', false, tmpDesignTypes),
+                BlockEditor.getStandardProperty(props, 'devonly', 'Developer Access Only?', 'checkbox'),
             ];
 
             var tmpSidebarPanels = [
-                BlockEditor.getSidebarPanel('Designer Options', tmpStandardProperties),
-                BlockEditor.getSidebarPanel('Formatting Options', tmpFormatProperties)
+                BlockEditor.getSidebarPanel('Designer Options', tmpStandardProperties)
             ];
 
             var tmpSidebarControls = BlockEditor.getSidebarControls(tmpSidebarPanels);
@@ -153,8 +129,6 @@
                 tmpBarContent.push(el('div', { className: 'ui compact button violet basic ', action: 'beAddElement', elementname: 'header' }, 'Header'));
                 tmpBarContent.push(el('div', { className: 'ui compact button violet basic ', action: 'beAddElement', elementname: 'corecolumns' }, 'Columns'));
                 tmpBarContent.push(el('div', { className: 'ui compact button violet basic ', action: 'beAddElement', elementname: 'message' }, 'Message'));
-                tmpBarContent.push(el('div', { className: 'ui compact button violet basic ', action: 'beAddElement', elementname: 'image' }, 'Image'));
-                tmpBarContent.push(el('div', { className: 'ui compact button violet basic ', action: 'beAddElement', elementname: 'cards' }, 'Cards'));
                 tmpBtnBar = el('div', {}, [el('div', { className: 'ui fluid label violet mar5' }, 'UI Designer'), el('div', { className: 'ui segment raised slim' }, tmpBarContent, el('div', { className: 'endfloat' }))]);
             }
 
