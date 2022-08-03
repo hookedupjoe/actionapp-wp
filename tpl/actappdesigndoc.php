@@ -26,7 +26,7 @@
 <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
   <?php
   //ToDo: Create common plain page header output
-  
+
   wp_head(); ?>
 </head>
 
@@ -109,17 +109,23 @@ echo('</table>');
 echo ('</div>'); //end of segment wrapper
 echo ('</div>'); //End of column 1
 echo('<div class="column">');
-echo ('<div class="ui segment pad7 mar5">');
+echo ('<div class="ui segment form pad7 mar5">');
 echo('<div class="ui header large black">Meta Fields</div>');
 echo('<table class="ui table">');
 echo('<tr><th>Field</th><th>Value</th></tr>');
 foreach ($tmpDoc as $iFieldName => $iVal) {
   
   if( !str_starts_with($iFieldName, '___') ){
+    
     echo('<tr>');
     $tmpPFVal = $iVal;
     $tmpPFLab = ''.$iFieldName.'';
-    echo('<td><b>'.$tmpPFLab.'</b></td><td>'.$tmpPFVal.'</td>');
+    if( '__design_props' == $iFieldName ){
+      $tmpPFVal = html_entity_decode((''.$tmpPFVal));
+      echo('<td><b>'.$tmpPFLab.'</b></td><td><textarea class="ui textarea" style="width:100%;height:150px;">'.$tmpPFVal.'</textarea></td>');
+    } else {
+      echo('<td><b>'.$tmpPFLab.'</b></td><td>'.$tmpPFVal.'</td>');
+    }
     //echo('<td><div class="ui header small">' . $tmpPFLab . '</div></td>');
     //echo('<td><div class="ui bolder">' . $tmpPFVal . '</div></td>');
     echo('</tr>');
