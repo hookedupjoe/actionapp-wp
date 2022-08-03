@@ -61,7 +61,6 @@
         var tmpPropAtts = theProps.attributes;
 
         if (typeof(tmpPropAtts.devonly) == 'boolean') {
-            console.log( 'tmpPropAtts.devonly', tmpPropAtts.devonly);
             controlDetails['devonly'] = tmpPropAtts.devonly;
         }
         if (tmpPropAtts.designtype) {
@@ -87,21 +86,29 @@
 
         if (theIsEditMode) {
             var tmpMe = wp.data.select('core/block-editor').getBlock(props.clientId);
+            
             if (tmpMe) {
                 var tmpChildren = tmpMe.innerBlocks;
                 if (!(tmpChildren && tmpChildren.length)) {
                     //--- What to do when no children
+                    
                 } else {
-                    //Loop children to do
-                    if (tmpChildren.length > 1) {
-                        var tmpPos = -1;
-                        for (var iPos = 0; iPos < tmpChildren.length; iPos++) {
-                            var tmpChild = tmpChildren[iPos];
-                            //You have a child: (i.e. tmpChild.name); 
+                    //Loop children rescursive, move to function to recall
+                   if (tmpChildren.length > 0) {
+                        var tmpContent = [];
+                        for (var iPosChildPos in tmpChildren) {
+                            var tmpChild = tmpChildren[iPosChildPos];
+                            var tmpObjSpecs = ThisApp.clone(tmpChild.attributes);
+                            tmpContent.push(tmpObjSpecs);
                         }
+                        controlDetails.content = tmpContent;
+                        
+
                     }
                 }
+                controlDetails.ctl = 'segment';
             }
+      
             tmpEls.push(el(wp.blockEditor.InnerBlocks));
         } else {
             tmpEls.push(el(wp.blockEditor.InnerBlocks.Content));
@@ -121,9 +128,9 @@
 
             controlDirty = true;
             if( controlDetailsLoaded === false){
-                controlDetailsLoaded = wp.data.select('core/editor').getEditedPostAttribute('meta').__design_props || '{}'
+                controlDetailsLoaded = '' + (wp.data.select('core/editor').getEditedPostAttribute('meta').__design_props || '{}');
+                controlDetailsLoaded = controlDetailsLoaded.unescapeHTML();
                 controlDetails = JSON.parse(controlDetailsLoaded);
-                console.log('loaded controlDetailsLoaded',controlDetailsLoaded)
             }
             
   
@@ -166,22 +173,12 @@
         save: function (props) {
             var tmpDetails = JSON.stringify(controlDetails);
             
-            console.log('controlDetailsLoaded',controlDetailsLoaded);
-            console.log('tmpDetails',tmpDetails);
-            console.log( 'controlDetails', controlDetails);
-            console.log( 'controlDirty', controlDirty);
 
-            //__design_props
-            var tmpDesignProps = {
-
-            }
-            
             if( controlDirty && (controlDetailsLoaded != tmpDetails)){
-                //console.log('Saving tmpDetails',tmpDetails);
-                //wp.data.dispatch('core/editor').editPost({meta: {__doctype:"manual",details:tmpDetails}});
-                wp.data.dispatch('core/editor').editPost({meta: {__doctype:"manual",__design_props:tmpDetails}});
+                var tmpMeta = {__doctype:controlDetails['designtype'],__design_props:tmpDetails};
+                console.log( 'tmpMeta', tmpMeta);
+                wp.data.dispatch('core/editor').editPost({meta: tmpMeta});
                 
-                //console.log('SAVED tmpDetails',tmpDetails);
                 controlDirty = false;
             }
             return getDisplayValue(props, false);

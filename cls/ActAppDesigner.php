@@ -308,6 +308,7 @@ class ActAppDesigner {
 	    $role = get_role( 'administrator' );
   		$role->add_cap( 'actappapps' );
   		$role->add_cap( 'actappdesign' );
+		$role->add_cap( 'unfiltered_html' );
 	}
 
 	public static function init() {

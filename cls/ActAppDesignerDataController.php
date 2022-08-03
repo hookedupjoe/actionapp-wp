@@ -779,6 +779,11 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 			if( is_array($body->capabilities) ){
 				foreach ($body->capabilities as $iCap) {
 					$newWPUser->add_cap($iCap);
+					if( $iCap == 'actappdesign'){
+						//--- Designers need to be able to edit HTML
+						$newWPUser->add_cap('unfiltered_html');
+					}
+					
 				}	
 			}
 		} else {
@@ -802,6 +807,10 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 			if( is_array($body->capabilities) ){
 				foreach ($body->capabilities as $iCap) {
 					$newWPUser->add_cap($iCap);
+					if( $iCap == 'actappdesign'){
+						//--- Designers need to be able to edit HTML
+						$newWPUser->add_cap('unfiltered_html');
+					}
 				}	
 			}
 		}
@@ -1247,7 +1256,7 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 		$tmpData = [];
 		foreach ( $blogusers as $user ) {
 			$tmpID = $user->ID;
-			if( $tmpID != 1){
+			if( $tmpID != 0){
 				//$tmpAdminOptions = [];
 				foreach ( $user->roles as $iRole ) {
 					$tmpRole = $iRole;
@@ -1267,11 +1276,11 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 				}
 
 				foreach ( $user->caps as $iCapName => $iCapVal ) {
-					if( $iCapName != $tmpRole){
+					//if( $iCapName != $tmpRole){
 						if( $iCapVal === true){
 							array_push($tmpCaps,$iCapName);
 						}
-					}
+					//}
 				}
 
 				$tmpNew = [

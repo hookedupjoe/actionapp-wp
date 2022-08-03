@@ -34,15 +34,20 @@
         atts: {}
     };
     const iconEl = BlockEditor.getControlIcon(info.name);
-    BlockEditor.addStringAtts(info.atts,['text','color','size', 'subtext', 'attached', 'alignment']);
+    BlockEditor.addStringAtts(info.atts,['name','ctl','text','color','size', 'subtext', 'attached', 'alignment']);
     BlockEditor.addBooleanAtts(info.atts,['dividing','block','inverted']);
     var tmpClassSpecs = {
         boolean: ['dividing','block','inverted'],
         string: ['color','size', 'attached', 'alignment']
     }
     
+    // function getObjectDoc(theProps){
+    //     return theProps.attributes;
+    // }
+
     function getContent(theProps, theIsEditMode){
         var tmpAtts = theProps.attributes;
+        tmpAtts.ctl = 'header';
         var tmpContent = [];
         if( tmpAtts.subtext != '' ){
             tmpContent.push( BlockEditor.el('div','sub header',tmpAtts.subtext) );
@@ -79,7 +84,9 @@
                 BlockEditor.getStandardProperty(props,'block', 'Show as block', 'checkbox' ),
                 BlockEditor.getStandardProperty(props,'attached', 'Attached', 'attached' ),
                 BlockEditor.getStandardProperty(props,'alignment', 'Alignment', 'alignment' ),
+                BlockEditor.getStandardProperty(props,'name', 'Unique Name')
             ];
+
             var tmpSidebarPanels = [
                 BlockEditor.getSidebarPanel('Header Options', tmpStandardProperties)
             ];
