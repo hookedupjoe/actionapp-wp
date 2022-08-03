@@ -37,6 +37,10 @@
     };
     const iconEl = BlockEditor.getControlIcon(info.name);
 
+    var controlDetails = {};
+    var controlDetailsLoaded = false;
+    var controlDirty = false;
+
     BlockEditor.addBooleanAtts(info.atts, ['hasdropindicator','devonly']);
     BlockEditor.addStringAtts(info.atts, ['designtype']);
 
@@ -55,6 +59,14 @@
         }
         var tmpAtts = { className: tmpClass };
         var tmpPropAtts = theProps.attributes;
+
+        if (typeof(tmpPropAtts.devonly) == 'boolean') {
+            console.log( 'tmpPropAtts.devonly', tmpPropAtts.devonly);
+            controlDetails['devonly'] = tmpPropAtts.devonly;
+        }
+        if (tmpPropAtts.designtype) {
+            controlDetails['designtype'] = tmpPropAtts.designtype;
+        }
 
         var tmpEls = [];
         // if (tmpPropAtts.spotname && tmpPropAtts.spotname != '') {
@@ -106,11 +118,19 @@
         example: info.example,
         attributes: info.atts,
         edit: function (props) {
-            //--- To Do: Make standard drop down control
+
+            controlDirty = true;
+            if( controlDetailsLoaded === false){
+                controlDetailsLoaded = wp.data.select('core/editor').getEditedPostAttribute('meta').__design_props || '{}'
+                controlDetails = JSON.parse(controlDetailsLoaded);
+                console.log('loaded controlDetailsLoaded',controlDetailsLoaded)
+            }
+            
+  
             var tmpDesignTypes = ['Default|','Form|form','View|view','Panel|panel','Control|control','HTML|html','Template|template'];
 
             var tmpStandardProperties = [
-                BlockEditor.getStandardProperty(props, 'designtype', 'Developer Access Only?', 'dropdown', false, tmpDesignTypes),
+                BlockEditor.getStandardProperty(props, 'designtype', 'Design Type', 'dropdown', false, tmpDesignTypes),
                 BlockEditor.getStandardProperty(props, 'devonly', 'Developer Access Only?', 'checkbox'),
             ];
 
@@ -144,6 +164,26 @@
         },
 
         save: function (props) {
+            var tmpDetails = JSON.stringify(controlDetails);
+            
+            console.log('controlDetailsLoaded',controlDetailsLoaded);
+            console.log('tmpDetails',tmpDetails);
+            console.log( 'controlDetails', controlDetails);
+            console.log( 'controlDirty', controlDirty);
+
+            //__design_props
+            var tmpDesignProps = {
+
+            }
+            
+            if( controlDirty && (controlDetailsLoaded != tmpDetails)){
+                //console.log('Saving tmpDetails',tmpDetails);
+                //wp.data.dispatch('core/editor').editPost({meta: {__doctype:"manual",details:tmpDetails}});
+                wp.data.dispatch('core/editor').editPost({meta: {__doctype:"manual",__design_props:tmpDetails}});
+                
+                //console.log('SAVED tmpDetails',tmpDetails);
+                controlDirty = false;
+            }
             return getDisplayValue(props, false);
         },
     });
