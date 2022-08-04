@@ -6922,7 +6922,14 @@ License: MIT
     meInstance.wrapControl = function (theName, theOptions) {
         var tmpOptions = theOptions || {};
         var tmpAddOverlay = false;
-        tmpAddOverlay =  (tmpOptions.mask === true);
+        var tmpStylesDef = tmpOptions.maskstyles;
+        //--- If not turned off and an object is not supplied, set default styling
+        if( tmpStylesDef !== false ){
+            if(typeof(tmpStylesDef) !== 'object'){
+                tmpStylesDef = {'background-color':'grey','color': 'black', 'opacity':.05};
+            }
+        }
+        tmpAddOverlay = (tmpOptions.mask !== false);
         var tmpAll = this.getOutterEls(theName);
         var tmpUpdated = 0;
         var tmpWrapper = tmpOptions.wrapper || 'designmode';
@@ -6941,6 +6948,9 @@ License: MIT
         if( tmpWrapperEl ){
             if(tmpAddOverlay){
                 tmpWrapperEl.overlayMask();
+                if(tmpStylesDef){
+                    tmpWrapperEl.data('maskel').css(tmpStylesDef)
+                }
                 tmpWrapperEl.data('mask',true);
             }
         }
