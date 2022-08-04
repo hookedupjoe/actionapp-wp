@@ -167,6 +167,53 @@ window.ActionAppCore = window.ActionAppCore || ActionAppCore;
     ActionAppCore.createModule("extension");
 })(ActionAppCore, $);
 
+//--- jQuery Customize
+(function (ActionAppCore, $) {
+
+    $.fn.overlayMask = function (action) {
+        var mask = this.find('.actapp-overlay-mask');
+        var maskContent = this.find('.actapp-overlay-content');;
+
+      if (!mask.length) {
+        //ToDo: Store this and change on undo?
+        // var tmpCurrPos = this.css('position');
+        // console.log( 'tmpCurrPos', tmpCurrPos);
+        this.css({position: 'relative'});
+        mask = $('<div class="actapp-overlay-mask"></div>');
+        mask = mask.css({
+            position: 'absolute',width: '100%',height: '100%',
+            top: '0px',left: '0px',zIndex: 99
+          }).appendTo(this);
+        this.data('maskel',mask);
+
+        maskContent = $('<div class="actapp-overlay-content"></div>');
+        maskContent = maskContent.css({
+            position: 'absolute',width: '100%',height: '100%',
+            top: '0px',left: '0px',zIndex: 100
+          }).appendTo(this);
+        this.data('maskcontent',maskContent);
+
+      }
+  
+      // Act based on params
+  
+      if (!action || action === 'show') {
+        mask.show();
+        maskContent.show();
+      } else if (action === 'hide') {
+        mask.hide();
+        maskContent.hide();
+      } else if (action === 'remove') {
+        mask.remove();
+        maskContent.remove();
+      }
+  
+      return this;
+    };
+
+})(ActionAppCore, $);
+
+
 //--- PolyFill
 (function (ActionAppCore, $) {
 
@@ -6845,13 +6892,107 @@ License: MIT
         }
         return false;
     }
-    meInstance.getAny = function (theName) {
+
+    meInstance.getOutterEls = function (theName) {
         var tmpAll = []
         if (this.hasField(theName)) {
-            tmpAll.push(this.getField(theName))
+            var tmpEl = this.getFieldEl(theName);
+            if( tmpEl ){
+                var tmpWrapEl = $(tmpEl).closest('[fieldwrap]');
+                if( tmpWrapEl ){
+                    tmpEl = tmpWrapEl;
+                }
+                tmpAll.push(tmpEl)
+            }
         }
         if (this.hasItem(theName)) {
-            tmpAll.push(this.getItem(theName))
+            tmpAll.push(this.getItemEl(theName))
+        }
+        return tmpAll;
+    }
+
+    meInstance.getOutterEl = function (theName) {
+        var tmpAll = this.getOutterEls(theName);
+        if( tmpAll && tmpAll.length == 1){
+            return $(tmpAll[0]);
+        }
+        return true;
+    }
+
+    meInstance.wrapControl = function (theName, theOptions) {
+        var tmpOptions = theOptions || {};
+        var tmpAddOverlay = false;
+        tmpAddOverlay =  (tmpOptions.mask === true);
+        var tmpAll = this.getOutterEls(theName);
+        var tmpUpdated = 0;
+        var tmpWrapper = tmpOptions.wrapper || 'designmode';
+        if( (tmpWrapper == 'designmode')){
+            tmpWrapper = '<div class="actapp-design-field"></div>';
+        }
+        $(tmpAll).each(function( theIndex ) {
+            if( !(this.data('actappdesignWrap'))){
+                this.wrap(tmpWrapper).data('actappdesignWrap',true);                
+                tmpUpdated++;
+            }
+        });
+        
+        var tmpWrapperEl = this.getWrapperEl(theName);
+        console.log( 'tmpWrapperEl', tmpWrapperEl);
+        if( tmpWrapperEl ){
+            if(tmpAddOverlay){
+                tmpWrapperEl.overlayMask();
+                tmpWrapperEl.data('mask',true);
+            }
+        }
+
+        var tmpNewEl = this.getWrapperEl(theName);
+        
+        return tmpNewEl;
+
+    }
+    meInstance.unWrapControl = function (theName) {
+        var tmpAll = this.getOutterEls(theName);
+        var tmpUpdated = 0;
+
+        $(tmpAll).each(function( theIndex ) {
+            if( (this.data('actappdesignWrap') === true)){
+                console.log('this',this.data())
+                this.unwrap().data('actappdesignWrap',false);
+                tmpUpdated++;
+            }
+        });
+
+        
+        var tmpWrapperEl = this.getWrapperEl(theName);
+        console.log( 'tmpWrapperEl to remove', tmpWrapperEl);
+        if( tmpWrapperEl ){
+            tmpWrapperEl.overlayMask('remove');
+        }
+
+        
+        
+        return tmpUpdated;
+    }
+
+    meInstance.getWrapperEl = function (theName) {
+        return $(this.getOutterEl(theName).parent());
+    }
+    
+    meInstance.getAnyEls = function (theName) {
+        var tmpAll = []
+        if (this.hasField(theName)) {
+            tmpAll.push(this.getFieldEl(theName))
+        }
+        if (this.hasItem(theName)) {
+            tmpAll.push(this.getItemEl(theName))
+        }
+        return tmpAll;
+    }
+
+    meInstance.getAnyEl = function (theName) {
+        var tmpAll = this.getAnyEls(theName);
+        if( tmpAll && tmpAll.length == 1){
+            return $(tmpAll[0]);
         }
         return tmpAll;
     }

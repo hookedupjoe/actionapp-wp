@@ -471,6 +471,33 @@ License: MIT
 		//--- allow console access for testing
 		window.activeControl = this.activeControl;
 
+		//--- Get request to change design
+		//ToDo: Load in panel and on save publish design change event
+		function tmpOnFieldDesignRequest(theEvent, theControl,theField,theSpecs){
+			//console.log('theSpecs',theField,theSpecs);
+			theSpecs.label = theSpecs.label + ' updated';
+			this.activeControl.publish('designChange',[this,theField,theSpecs])
+		}
+		this.subscribeEvent(this.activeControl,'fieldDesignRequest', tmpOnFieldDesignRequest.bind(this))
+
+		function tmpOnDesignChange(theEvent, theControl,theField,theSpecs){
+			console.log('designChange',theField,theSpecs);
+			var tmpFS = this.activeControl.getFieldSpecs(theField);
+			var tmpJSON = this.activeControl.getConfig();
+			delete tmpJSON.index;
+			tmpJSON = ThisApp.json(tmpJSON);
+			theControl.aceEditor.setValue(tmpJSON);
+			theControl.aceEditor.clearSelection()
+			window.tmpControl = theControl;
+			console.log( 'theControl.aceEditor', theControl.aceEditor);
+			console.log( 'tmpFS', tmpFS);
+			this.refreshControlDisplay();
+			//ToDo: Refresh the UI without the JSON update until Save
+		}
+		this.subscribeEvent(this.activeControl, 'designChange', tmpOnDesignChange.bind(this))
+
+
+
 		//this.loadFieldList()
 	}
 

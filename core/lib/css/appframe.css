@@ -935,3 +935,23 @@ div.ui.message.floating {
   padding-right:7px !important;
   padding-left:4px !important;
 }
+
+.actapp-design-field {
+  border:dashed 3px #b08298 !important;
+  margin:2px !important;
+  padding:2px !important;
+}
+
+.actapp-design-field.isselected {
+  border:dashed 3px #b7236a !important;
+}
+
+.actapp-overlay-mask {
+  position: 'absolute';
+      width: '100%';
+      height: '100%';
+      top: '0px';
+      left: '0px';
+      z-Index: 100;
+}
+
