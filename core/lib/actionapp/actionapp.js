@@ -6842,6 +6842,21 @@ License: MIT
             return false;
         }
     }
+
+    meInstance.getControlSpecs = function (theFN) {
+        try {
+            if( this.hasField(theFN) ){
+                return this.getFieldSpecs(theFN);
+            }
+            if( this.hasItem(theFN) ){
+                return this.getItemSpecs(theFN);
+            }
+        } catch (ex) {
+            return false;
+        }
+        return false;
+    }
+
     meInstance.getFieldSpecs = function (theFN) {
         try {
             return this.getConfig().index.fields[theFN];
@@ -6942,6 +6957,7 @@ License: MIT
         }
     }
 
+    meInstance.defaultDesignAction = 'actappControlSelected';
 
     meInstance.wrapControl = function (theName, theOptions) {
         var tmpOptions = theOptions || {};
@@ -6950,7 +6966,17 @@ License: MIT
         var tmpMaskContent = tmpOptions.maskcontent;
         var tmpStylesDefContent = tmpOptions.maskcontentstyles;
         var tmpStylesDefWrap = tmpOptions.wrapstyles;
-        activeControl.getOutterEl('first').css('padding','15px')
+        var tmpAction = false;
+        if( tmpOptions.action !== false ){
+            if( (tmpOptions.action) ){
+                tmpAction = tmpOptions.action;
+            } else {
+                tmpAction = this.defaultDesignAction;
+            }
+            
+        }
+
+        
         //--- If not turned off and an object is not supplied, set default styling
         if( tmpStylesDef !== false ){
             if(typeof(tmpStylesDef) !== 'object'){
@@ -6987,21 +7013,51 @@ License: MIT
         if( tmpWrapperEl ){
             if(tmpAddOverlay){
                 tmpWrapperEl.overlayMask();
-                this.overlayMaskEl = tmpWrapperEl.data('maskel');
-                this.overlayMaskContent = tmpWrapperEl.data('maskcontent');
+                tmpMaskEl = tmpWrapperEl.data('maskel');
+                tmpMaskContent = tmpWrapperEl.data('maskcontent');
                 
                 if(tmpStylesDef){
-                    this.overlayMaskEl.css(tmpStylesDef)
+                    tmpMaskEl.css(tmpStylesDef)
                 }
                 if( !(tmpMaskContent) ){
                     tmpMaskContent = '&nbsp;';
                 }
                 if(tmpMaskContent){
-                    this.overlayMaskContent.html(tmpMaskContent)
+                    tmpMaskContent.html(tmpMaskContent);
                 }
                 if(tmpStylesDefContent){
-                    this.overlayMaskContent.css(tmpStylesDefContent)
+                    tmpMaskContent.css(tmpStylesDefContent);
                 }
+                
+                if( tmpAction ){
+                    tmpMaskContent.attr('action',tmpAction);
+                }
+
+                tmpMaskContent.data('name',theName);
+                tmpMaskContent.data('specs',this.getControlSpecs(theName));
+                tmpMaskContent.data('control',this);
+
+                
+                // this.overlayMaskEl = tmpWrapperEl.data('maskel');
+                // this.overlayMaskContent = tmpWrapperEl.data('maskcontent');
+                
+                // if(tmpStylesDef){
+                //     this.overlayMaskEl.css(tmpStylesDef)
+                // }
+                // if( !(tmpMaskContent) ){
+                //     tmpMaskContent = '&nbsp;';
+                // }
+                // if(tmpMaskContent){
+                //     this.overlayMaskContent.html(tmpMaskContent);
+                // }
+                // if(tmpStylesDefContent){
+                //     this.overlayMaskContent.css(tmpStylesDefContent);
+                // }
+                
+                // if( tmpAction ){
+                //     this.overlayMaskContent.attr('action',tmpAction);
+                // }
+                
                 
                 tmpWrapperEl.data('mask',true);
             }
@@ -8930,9 +8986,17 @@ License: MIT
                 tmpIsMultiFlag = ' multiple="multiple" ';
             }
 
-            if (tmpIcon || (tmpItems && tmpItems.length > 0)) {
+            var tmpLabelSet = false;
+            //if (tmpIcon || (tmpItems && tmpItems.length > 0)) {
+                tmpLabelSet = true;
                 tmpHTML.push('<div class="ui field">');
-            }
+                if (theObject.label) {
+                    tmpHTML.push('<label>');
+                    tmpHTML.push(theObject.label || '');
+                    tmpHTML.push('</label>');
+                }
+                
+            //}
 
             if( tmpIcon ){
                 tmpClasses += ' input icon';
@@ -8953,10 +9017,12 @@ License: MIT
 
 
             tmpHTML.push('<div controls fieldwrap name="' + theObject.name + '" class="' + tmpClasses + tmpSizeName + tmpReq + ' ui ' + tmpFieldOrInput + '" ' + tmpStyle + '>');
-            if (theObject.label) {
-                tmpHTML.push('<label>');
-                tmpHTML.push(theObject.label || '');
-                tmpHTML.push('</label>');
+            if(!tmpLabelSet){
+                if (theObject.label) {
+                    tmpHTML.push('<label>');
+                    tmpHTML.push(theObject.label || '');
+                    tmpHTML.push('</label>');
+                }
             }
             var tmpPH = '';
             if ((!tmpDispOnly) && theObject.placeholder !== false) {
@@ -8973,9 +9039,9 @@ License: MIT
             tmpHTML.push(getNoteMarkup(theObject));
             tmpHTML.push(getContentHTML(theControlName, tmpItems, theControlObj));
             tmpHTML.push('</div>');
-            if (tmpIcon || (tmpItems && tmpItems.length > 0)) {
+            //if (tmpIcon || (tmpItems && tmpItems.length > 0)) {
                 tmpHTML.push('</div>');
-            }
+            //}
 
             tmpHTML = tmpHTML.join('');
             return tmpHTML;
