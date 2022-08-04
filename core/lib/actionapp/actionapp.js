@@ -6932,6 +6932,16 @@ License: MIT
         }
     }
 
+    meInstance.setDesignMode = function (theIsOn, theOptions) {
+        var tmpIndex = this.getIndex();
+        for( var iName in tmpIndex.items){
+            this.setControlDesignMode(iName,theIsOn, theOptions)
+        }
+        for( var iName in tmpIndex.fields){
+            this.setControlDesignMode(iName,theIsOn, theOptions)
+        }
+    }
+
 
     meInstance.wrapControl = function (theName, theOptions) {
         var tmpOptions = theOptions || {};
