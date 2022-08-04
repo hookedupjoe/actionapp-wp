@@ -177,7 +177,6 @@ window.ActionAppCore = window.ActionAppCore || ActionAppCore;
       if (!mask.length) {
         //ToDo: Store this and change on undo?
         // var tmpCurrPos = this.css('position');
-        // console.log( 'tmpCurrPos', tmpCurrPos);
         this.css({position: 'relative'});
         mask = $('<div class="actapp-overlay-mask"></div>');
         mask = mask.css({
@@ -6923,6 +6922,7 @@ License: MIT
         var tmpOptions = theOptions || {};
         var tmpAddOverlay = false;
         var tmpStylesDef = tmpOptions.maskstyles;
+        var tmpMaskContent = tmpOptions.maskcontent;
         //--- If not turned off and an object is not supplied, set default styling
         if( tmpStylesDef !== false ){
             if(typeof(tmpStylesDef) !== 'object'){
@@ -6944,12 +6944,14 @@ License: MIT
         });
         
         var tmpWrapperEl = this.getWrapperEl(theName);
-        console.log( 'tmpWrapperEl', tmpWrapperEl);
         if( tmpWrapperEl ){
             if(tmpAddOverlay){
                 tmpWrapperEl.overlayMask();
                 if(tmpStylesDef){
                     tmpWrapperEl.data('maskel').css(tmpStylesDef)
+                }
+                if(tmpMaskContent){
+                    tmpWrapperEl.data('maskcontent').html(tmpMaskContent)
                 }
                 tmpWrapperEl.data('mask',true);
             }
@@ -6966,7 +6968,6 @@ License: MIT
 
         $(tmpAll).each(function( theIndex ) {
             if( (this.data('actappdesignWrap') === true)){
-                console.log('this',this.data())
                 this.unwrap().data('actappdesignWrap',false);
                 tmpUpdated++;
             }
@@ -6974,7 +6975,6 @@ License: MIT
 
         
         var tmpWrapperEl = this.getWrapperEl(theName);
-        console.log( 'tmpWrapperEl to remove', tmpWrapperEl);
         if( tmpWrapperEl ){
             tmpWrapperEl.overlayMask('remove');
         }
