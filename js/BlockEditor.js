@@ -508,8 +508,17 @@
             wp.data.dispatch( 'core/edit-post' ).openGeneralSidebar( 'edit-post/block' );
             var tmpWarnings = $('.block-editor-warning__action > .components-button.is-primary');
             //--- Open the sidebar editor automatically due to that being where our settings live
+
+            
             if( tmpWarnings.length > 0){
-                ThisApp.confirm('Some stuff changed, refresh automatically?','Refresh Page?').then(function(theIsYes){
+                var tmpPromptToCleanupDesign = false; //ToDo: Profilize it
+                var tmpPromise = true;
+                if( tmpPromptToCleanupDesign ){
+                    tmpPromise = ThisApp.confirm('Some stuff changed, refresh automatically?','Refresh Page?');
+                }
+
+    
+                $.when(tmpPromise).then(function(theIsYes){
                     if( theIsYes ){
                         tmpWarnings.click();
                     }
@@ -601,7 +610,18 @@
                 attr: {
                     color: 'blue'
                 }
-            }
+            },
+            "field": {
+                type: 'actappdesign/field', 
+                name: "Field",
+                attr: {}
+            },
+            "fieldlist": {
+                type: 'actappdesign/fieldlist', 
+                name: "Field List",
+                attr: {}
+            },
+
         },
         getBlock: function(theName){
             var tmpItem = this.lookup[theName];
