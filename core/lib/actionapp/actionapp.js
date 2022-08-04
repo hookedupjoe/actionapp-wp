@@ -167,16 +167,13 @@ window.ActionAppCore = window.ActionAppCore || ActionAppCore;
     ActionAppCore.createModule("extension");
 })(ActionAppCore, $);
 
-//--- jQuery Customize
+//--- jQuery utility additions --- --- --- --- --- --- --- --- --- --- --- --- 
 (function (ActionAppCore, $) {
 
-    $.fn.overlayMask = function (action) {
-        var mask = this.find('.actapp-overlay-mask');
-        var maskContent = this.find('.actapp-overlay-content');;
-
-      if (!mask.length) {
-        //ToDo: Store this and change on undo?
-        // var tmpCurrPos = this.css('position');
+    $.fn.overlayMask = function (action, theRootEl) {
+        var mask = this.data('maskel');
+        var maskContent = this.data('maskcontent');
+      if (!mask) {
         this.css({position: 'relative'});
         mask = $('<div class="actapp-overlay-mask"></div>');
         mask = mask.css({
@@ -191,10 +188,7 @@ window.ActionAppCore = window.ActionAppCore || ActionAppCore;
             top: '0px',left: '0px',zIndex: 100
           }).appendTo(this);
         this.data('maskcontent',maskContent);
-
       }
-  
-      // Act based on params
   
       if (!action || action === 'show') {
         mask.show();
@@ -6918,23 +6912,59 @@ License: MIT
         return true;
     }
 
+    meInstance.setControlDesignStyles = function (theName, theStyles) {
+        //--- Set the overlay css
+    }
+    meInstance.setControlDesignContent = function (theName, theStyles) {
+        //--- Set the overlay content html
+    }
+
+    meInstance.setControlDesignMode = function (theName, theIsOn, theOptions) {
+        if( !(theName) || 'string' != typeof(theName) ){
+            console.error("no name provided");
+            return;
+        }
+        var tmpIsOn = (theIsOn !== false);
+        if( tmpIsOn ){
+            this.wrapControl(theName, theOptions);
+        } else {
+            this.unWrapControl(theName, theOptions);
+        }
+    }
+
+
     meInstance.wrapControl = function (theName, theOptions) {
         var tmpOptions = theOptions || {};
         var tmpAddOverlay = false;
         var tmpStylesDef = tmpOptions.maskstyles;
         var tmpMaskContent = tmpOptions.maskcontent;
+        var tmpStylesDefContent = tmpOptions.maskcontentstyles;
+        var tmpStylesDefWrap = tmpOptions.wrapstyles;
+        activeControl.getOutterEl('first').css('padding','15px')
         //--- If not turned off and an object is not supplied, set default styling
         if( tmpStylesDef !== false ){
             if(typeof(tmpStylesDef) !== 'object'){
                 tmpStylesDef = {'background-color':'grey','color': 'black', 'opacity':.05};
             }
         }
+
+        if( tmpStylesDefContent !== false ){
+            if(typeof(tmpStylesDefContent) !== 'object'){
+                tmpStylesDefContent = {border:'dashed 3px #b08298',margin:'2px',padding:'2px'};
+            }
+        }
+        if( tmpStylesDefWrap !== false ){
+            if(typeof(tmpStylesDefWrap) !== 'object'){
+                tmpStylesDefWrap = {margin:'2px', padding:'7px'};
+            }
+        }
+
         tmpAddOverlay = (tmpOptions.mask !== false);
         var tmpAll = this.getOutterEls(theName);
         var tmpUpdated = 0;
         var tmpWrapper = tmpOptions.wrapper || 'designmode';
         if( (tmpWrapper == 'designmode')){
-            tmpWrapper = '<div class="actapp-design-field"></div>';
+            tmpWrapper = '<div appuse="actapp-design-wrap"></div>';
         }
         $(tmpAll).each(function( theIndex ) {
             if( !(this.data('actappdesignWrap'))){
@@ -6947,17 +6977,29 @@ License: MIT
         if( tmpWrapperEl ){
             if(tmpAddOverlay){
                 tmpWrapperEl.overlayMask();
+                this.overlayMaskEl = tmpWrapperEl.data('maskel');
+                this.overlayMaskContent = tmpWrapperEl.data('maskcontent');
+                
                 if(tmpStylesDef){
-                    tmpWrapperEl.data('maskel').css(tmpStylesDef)
+                    this.overlayMaskEl.css(tmpStylesDef)
+                }
+                if( !(tmpMaskContent) ){
+                    tmpMaskContent = '&nbsp;';
                 }
                 if(tmpMaskContent){
-                    tmpWrapperEl.data('maskcontent').html(tmpMaskContent)
+                    this.overlayMaskContent.html(tmpMaskContent)
                 }
+                if(tmpStylesDefContent){
+                    this.overlayMaskContent.css(tmpStylesDefContent)
+                }
+                
                 tmpWrapperEl.data('mask',true);
             }
         }
-
         var tmpNewEl = this.getWrapperEl(theName);
+        if( tmpStylesDefWrap ){
+            tmpNewEl.css(tmpStylesDefWrap);
+        }
         
         return tmpNewEl;
 
@@ -6965,22 +7007,16 @@ License: MIT
     meInstance.unWrapControl = function (theName) {
         var tmpAll = this.getOutterEls(theName);
         var tmpUpdated = 0;
-
+        var tmpWrapperEl = this.getWrapperEl(theName);        
+        if( tmpWrapperEl ){
+            tmpWrapperEl.overlayMask('remove');
+        }
         $(tmpAll).each(function( theIndex ) {
             if( (this.data('actappdesignWrap') === true)){
                 this.unwrap().data('actappdesignWrap',false);
                 tmpUpdated++;
             }
         });
-
-        
-        var tmpWrapperEl = this.getWrapperEl(theName);
-        if( tmpWrapperEl ){
-            tmpWrapperEl.overlayMask('remove');
-        }
-
-        
-        
         return tmpUpdated;
     }
 
@@ -6988,7 +7024,7 @@ License: MIT
         return $(this.getOutterEl(theName).parent());
     }
     
-    meInstance.getAnyEls = function (theName) {
+    meInstance.getControlEls = function (theName) {
         var tmpAll = []
         if (this.hasField(theName)) {
             tmpAll.push(this.getFieldEl(theName))
@@ -6999,8 +7035,9 @@ License: MIT
         return tmpAll;
     }
 
-    meInstance.getAnyEl = function (theName) {
-        var tmpAll = this.getAnyEls(theName);
+    //--- Returns only one el if exists, else array (should be one per, validate that)
+    meInstance.getControlEl = function (theName) {
+        var tmpAll = this.getControlEls(theName);
         if( tmpAll && tmpAll.length == 1){
             return $(tmpAll[0]);
         }

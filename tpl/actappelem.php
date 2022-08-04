@@ -90,6 +90,11 @@ if( $includeFrame ){
 
 		<?php echo ActAppDesigner::get_app_loader_script(); ?>	
 		function onThisAppLoaded(){
+
+			ThisApp.delay(1000).then(function(){
+				window.activeControl = ActAppBlocksController.parts.main || ActAppBlocksController.parts.form;
+			});
+			
 			ThisApp.subscribe("resize", function(){
 				var tmpFrame = ThisApp.getByAttr$({appuse:"website-frame-border"});
 				var tmpWPHeader = $("#primary");
@@ -99,11 +104,14 @@ if( $includeFrame ){
 						tmpFrame.height(tmpH);
 					};
 				}
+				
 				$(window).trigger("resize");
 				ThisApp.publish("resized");
 			});
 		}
 		window.ActAppLoader.ready(onThisAppLoaded);
+
+		
 
 
 		<?php echo ActAppDesigner::get_code_bubble_end(); ?>
