@@ -170,7 +170,7 @@ window.ActionAppCore = window.ActionAppCore || ActionAppCore;
 //--- jQuery utility additions --- --- --- --- --- --- --- --- --- --- --- --- 
 (function (ActionAppCore, $) {
 
-    $.fn.overlayMask = function (action, theRootEl) {
+    $.fn.overlayMask = function (action) {
         var mask = this.data('maskel');
         var maskContent = this.data('maskcontent');
       if (!mask) {
@@ -6935,6 +6935,7 @@ License: MIT
     }
 
     meInstance.setControlDesignMode = function (theName, theIsOn, theOptions) {
+        console.log( 'setControlDesignMode theOptions', theOptions);
         if( !(theName) || 'string' != typeof(theName) ){
             console.error("no name provided");
             return;
@@ -6949,6 +6950,7 @@ License: MIT
 
     meInstance.setDesignMode = function (theIsOn, theOptions) {
         var tmpIndex = this.getIndex();
+        console.log( 'setDesignMode theOptions', theOptions);
         for( var iName in tmpIndex.items){
             this.setControlDesignMode(iName,theIsOn, theOptions)
         }
@@ -6957,25 +6959,20 @@ License: MIT
         }
     }
 
-    meInstance.defaultDesignAction = 'actappControlSelected';
+    //meInstance.defaultDesignAction = 'actappControlSelected';
 
     meInstance.wrapControl = function (theName, theOptions) {
         var tmpOptions = theOptions || {};
+        console.log( 'wrapControl tmpOptions', tmpOptions);
         var tmpAddOverlay = false;
         var tmpStylesDef = tmpOptions.maskstyles;
         var tmpMaskContent = tmpOptions.maskcontent;
         var tmpStylesDefContent = tmpOptions.maskcontentstyles;
         var tmpStylesDefWrap = tmpOptions.wrapstyles;
         var tmpAction = false;
-        if( tmpOptions.action !== false ){
-            if( (tmpOptions.action) ){
-                tmpAction = tmpOptions.action;
-            } else {
-                tmpAction = this.defaultDesignAction;
-            }
-            
+        if( (tmpOptions.action) ){
+            tmpAction = tmpOptions.action;
         }
-
         
         //--- If not turned off and an object is not supplied, set default styling
         if( tmpStylesDef !== false ){
@@ -6991,16 +6988,16 @@ License: MIT
         }
         if( tmpStylesDefWrap !== false ){
             if(typeof(tmpStylesDefWrap) !== 'object'){
-                tmpStylesDefWrap = {margin:'2px', padding:'7px'};
+                tmpStylesDefWrap = {margin:'2px', padding:'7px',border:'dashed 2px black'};
             }
         }
 
-        tmpAddOverlay = (tmpOptions.mask !== false);
+        tmpAddOverlay = false;
         var tmpAll = this.getOutterEls(theName);
         var tmpUpdated = 0;
         var tmpWrapper = tmpOptions.wrapper || 'designmode';
         if( (tmpWrapper == 'designmode')){
-            tmpWrapper = '<div appuse="actapp-design-wrap"></div>';
+            tmpWrapper = '<div class="ui field" appuse="actapp-design-wrap"></div>';
         }
         $(tmpAll).each(function( theIndex ) {
             if( !(this.data('actappdesignWrap'))){
@@ -7008,34 +7005,39 @@ License: MIT
                 tmpUpdated++;
             }
         });
+
+        if( tmpOptions.overlay === true || tmpOptions.mask === true ){
+            tmpAddOverlay = true;
+        }
+        console.log( 'tmpOptions.overlay', tmpOptions.overlay);
         
         var tmpWrapperEl = this.getWrapperEl(theName);
         if( tmpWrapperEl ){
             if(tmpAddOverlay){
                 tmpWrapperEl.overlayMask();
                 tmpMaskEl = tmpWrapperEl.data('maskel');
-                tmpMaskContent = tmpWrapperEl.data('maskcontent');
+                tmpMaskContentEl = tmpWrapperEl.data('maskcontent');
                 
                 if(tmpStylesDef){
                     tmpMaskEl.css(tmpStylesDef)
                 }
-                if( !(tmpMaskContent) ){
-                    tmpMaskContent = '&nbsp;';
-                }
+                // if( !(tmpMaskContent) ){
+                //     tmpMaskContent = '&nbsp;';
+                // }
                 if(tmpMaskContent){
-                    tmpMaskContent.html(tmpMaskContent);
+                    tmpMaskContentEl.html(tmpMaskContent);
                 }
                 if(tmpStylesDefContent){
-                    tmpMaskContent.css(tmpStylesDefContent);
+                    tmpMaskContentEl.css(tmpStylesDefContent);
                 }
                 
                 if( tmpAction ){
                     tmpMaskContent.attr('action',tmpAction);
                 }
 
-                tmpMaskContent.data('name',theName);
-                tmpMaskContent.data('specs',this.getControlSpecs(theName));
-                tmpMaskContent.data('control',this);
+                tmpMaskContentEl.data('name',theName);
+                tmpMaskContentEl.data('specs',this.getControlSpecs(theName));
+                tmpMaskContentEl.data('control',this);
 
                 
                 // this.overlayMaskEl = tmpWrapperEl.data('maskel');
@@ -7066,7 +7068,10 @@ License: MIT
         if( tmpStylesDefWrap ){
             tmpNewEl.css(tmpStylesDefWrap);
         }
-        
+        tmpNewEl.prepend('<div name="' + theName + '" appuse="actapp-design-wrap-titlebar" class="ui message black mar2 pad5">Name: <b>' + theName + '</b></div>')
+
+        tmpNewEl.append('<div style="clear:both;padding:4px;"></div>')
+
         return tmpNewEl;
 
     }
@@ -8986,20 +8991,10 @@ License: MIT
                 tmpIsMultiFlag = ' multiple="multiple" ';
             }
 
-            var tmpLabelSet = false;
-            //if (tmpIcon || (tmpItems && tmpItems.length > 0)) {
-                tmpLabelSet = true;
-                tmpHTML.push('<div class="ui field">');
-                if (theObject.label) {
-                    tmpHTML.push('<label>');
-                    tmpHTML.push(theObject.label || '');
-                    tmpHTML.push('</label>');
-                }
-                
-            //}
-
+            
+            var tmpInnerClasses = ''
             if( tmpIcon ){
-                tmpClasses += ' input icon';
+                tmpInnerClasses += ' input icon';
             }
 
             var tmpAttrs = '';
@@ -9017,12 +9012,13 @@ License: MIT
 
 
             tmpHTML.push('<div controls fieldwrap name="' + theObject.name + '" class="' + tmpClasses + tmpSizeName + tmpReq + ' ui ' + tmpFieldOrInput + '" ' + tmpStyle + '>');
-            if(!tmpLabelSet){
-                if (theObject.label) {
-                    tmpHTML.push('<label>');
-                    tmpHTML.push(theObject.label || '');
-                    tmpHTML.push('</label>');
-                }
+            if (theObject.label) {
+                tmpHTML.push('<label>');
+                tmpHTML.push(theObject.label || '');
+                tmpHTML.push('</label>');
+            }
+            if (tmpIcon || (tmpItems && tmpItems.length > 0)) {
+                tmpHTML.push('<div class="ui ' + tmpInnerClasses + ' field">');
             }
             var tmpPH = '';
             if ((!tmpDispOnly) && theObject.placeholder !== false) {
@@ -9039,9 +9035,9 @@ License: MIT
             tmpHTML.push(getNoteMarkup(theObject));
             tmpHTML.push(getContentHTML(theControlName, tmpItems, theControlObj));
             tmpHTML.push('</div>');
-            //if (tmpIcon || (tmpItems && tmpItems.length > 0)) {
+            if (tmpIcon || (tmpItems && tmpItems.length > 0)) {
                 tmpHTML.push('</div>');
-            //}
+            }
 
             tmpHTML = tmpHTML.join('');
             return tmpHTML;
