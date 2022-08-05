@@ -6212,6 +6212,14 @@ License: MIT
         return this.parentEl
     }
 
+    meInstance.showAll = function(){
+        for( var iName in this.getIndex().items ){
+            this.setItemDisplay(iName, true);
+        }
+        for( var iName in this.getIndex().fields ){
+            this.setFieldDisplay(iName, true);
+        }
+    }
     meInstance.setItemDisabled = function (theEntryName, theIsDisabled) {
         var tmpEl = this.getItemEl(theEntryName) || this.getFieldEl(theEntryName);
         var tmpHasClass = tmpEl.hasClass('disabled');
@@ -6949,12 +6957,22 @@ License: MIT
 
     meInstance.setDesignMode = function (theIsOn, theOptions) {
         var tmpIndex = this.getIndex();
+        this.designModeFlag = theIsOn;
         for( var iName in tmpIndex.items){
             this.setControlDesignMode(iName,theIsOn, theOptions)
         }
         for( var iName in tmpIndex.fields){
             this.setControlDesignMode(iName,theIsOn, theOptions)
         }
+        if( theIsOn ){
+            //=== Show all fields for editing
+            //= *onChange events disabled in design mode
+            this.showAll();
+        } else {
+            //=== Refresh onChange Events
+            this.refreshControl()
+        }
+        
     }
 
     //meInstance.defaultDesignAction = 'actappControlSelected';
@@ -7066,7 +7084,7 @@ License: MIT
         }
         tmpNewEl.prepend('<div name="' + theName + '" appuse="actapp-design-wrap-titlebar" class="ui message black mar2 pad5">Name: <b>' + theName + '</b></div>')
 
-        tmpNewEl.append('<div style="clear:both;padding:4px;"></div>')
+        tmpNewEl.append('<div appuse="actapp-design-wrap-part" style="clear:both;padding:4px;"></div>')
 
         return tmpNewEl;
 
@@ -7084,6 +7102,11 @@ License: MIT
                 tmpUpdated++;
             }
         });
+        //--- ToDo: Reduce scope
+        //--- Note: When left, good start for drop points for insertion
+        ThisApp.getByAttr$({appuse:"actapp-design-wrap-titlebar"}).remove();
+        ThisApp.getByAttr$({appuse:"actapp-design-wrap-part"}).remove();
+        
         return tmpUpdated;
     }
 
@@ -7111,9 +7134,14 @@ License: MIT
         return tmpAll;
     }
 
-
+    meInstance.inDesignMode = function(){
+        return (this.designModeFlag === true);
+    }
     meInstance.refreshForField = function (theFN) {
-
+        if( this.inDesignMode() ){
+            return;
+        }
+        
         var tmpFN = theFN;
         var tmpSpecs = this.getFieldSpecs(tmpFN);
         if (tmpSpecs) {
