@@ -6930,6 +6930,9 @@ License: MIT
         //-- ToDo: Just update styling (add/remove classes?)
         this.setDesignMode(false);
         this.setDesignMode(true);
+
+        //---ToDo: DO this another way
+        this.getByAttr$({controls:'',fieldwrap:''}).removeClass('hidden');
     }
 
     meInstance.moveModeStart = function(){
@@ -6938,12 +6941,20 @@ License: MIT
         var tmpOverlayHTML = '<div appuse="actapp-design-wrap-target" class="ui message green right aligned" style="height:100%;margin:auto;background-color:transparent;border-width:2px;"><div class="ui header right aligned green medium" style="height:auto;"><div class="ui button icon green" ><i class="icon  target"</div></div></div>';
         var tmpEl = activeControl.getEl();
         var tmpAppWraps = ThisApp.getByAttr$({appuse:"actapp-design-wrap"},tmpEl);
-        
+
+        //---ToDo: DO this another way
+        this.getByAttr$({controls:'',fieldwrap:''}).addClass('hidden');
         function tmpDropIt(theIndex){
             var tmpWrap = $(this);
-            tmpWrap.overlayMask().css({margin:'15px'})
-            var tmpME = tmpWrap.data('maskel');
-            var tmpMC = tmpWrap.data('maskcontent');
+            var tmpName = tmpWrap.attr('name');
+            console.log( 'tmpName', tmpName);
+            //var tmpTitle = tmpWrap.find('[appuse="actapp-design-wrap-titlebar"],[name="' + tmpName + '"]')
+            var tmpTitle = ThisApp.getByAttr$({appuse:"actapp-design-wrap-titlebar",name:tmpName},tmpWrap);
+            console.log( 'tmpTitle', tmpTitle);
+            var tmpToOverlay = $(tmpTitle);
+            tmpToOverlay.overlayMask().css({margin:'2px'})
+            var tmpME = tmpToOverlay.data('maskel');
+            var tmpMC = tmpToOverlay.data('maskcontent');
             tmpME.css(tmpOverlayStyles);
             tmpMC.html(tmpOverlayHTML)
             tmpMC.css('margin','-10px','-10px');
@@ -7057,10 +7068,14 @@ License: MIT
         var tmpAll = this.getOutterEls(theName);
         var tmpUpdated = 0;
         var tmpWrapper = tmpOptions.wrapper || 'designmode';
-        if( (tmpWrapper == 'designmode')){
-            tmpWrapper = '<div class="ui field" appuse="actapp-design-wrap"></div>';
-        }
+        
         $(tmpAll).each(function( theIndex ) {
+            var thisEl = $(this);
+            var tmpName = thisEl.attr('name');
+
+            if( (tmpWrapper == 'designmode')){
+                tmpWrapper = '<div class="ui field" name="' + tmpName+ '" appuse="actapp-design-wrap"></div>';
+            }
             if( !(this.data('actappdesignWrap'))){
                 this.wrap(tmpWrapper).data('actappdesignWrap',true);                
                 tmpUpdated++;
