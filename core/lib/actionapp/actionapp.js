@@ -170,6 +170,9 @@ window.ActionAppCore = window.ActionAppCore || ActionAppCore;
 //--- jQuery utility additions --- --- --- --- --- --- --- --- --- --- --- --- 
 (function (ActionAppCore, $) {
 
+    //--- Creates two overlays, 
+    // - one to cover the content to protect and make semitransparent
+    // - the other over that to hold conent that should not be semi-transparent
     $.fn.overlayMask = function (action) {
         var mask = this.data('maskel');
         var maskContent = this.data('maskcontent');
