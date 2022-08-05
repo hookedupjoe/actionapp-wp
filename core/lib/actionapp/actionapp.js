@@ -191,7 +191,6 @@ window.ActionAppCore = window.ActionAppCore || ActionAppCore;
           }).appendTo(this);
         this.data('maskel',tmpNewMask);
         mask = tmpNewMask;
-        //console.log('added to',this)
 
         var tmpNewMaskContent = $('<div class="actapp-overlay-content"></div>');
         tmpNewMaskContent = tmpNewMaskContent.css({
@@ -6921,11 +6920,6 @@ License: MIT
         return false;
     }
 
-    // ThisApp.moveHereRequest = function(theP,theTarget){
-    //     console.log('t',theTarget);
-            
-    // }
-
     meInstance.moveModeEnd = function(){
         //-- ToDo: Just update styling (add/remove classes?)
         this.setDesignMode(false);
@@ -6939,27 +6933,28 @@ License: MIT
         //ToDo: Use classes to add/remove instead?
         var tmpOverlayStyles = {'background-color':'black','color': 'white', 'opacity':.1};
         var tmpOverlayHTML = '<div appuse="actapp-design-wrap-target" class="ui message green right aligned" style="height:100%;margin:auto;background-color:transparent;border-width:2px;"><div class="ui header right aligned green medium" style="height:auto;"><div class="ui button icon green" ><i class="icon  target"</div></div></div>';
-        var tmpEl = activeControl.getEl();
+        var tmpEl = this.getEl();
         var tmpAppWraps = ThisApp.getByAttr$({appuse:"actapp-design-wrap"},tmpEl);
 
         //---ToDo: DO this another way
         this.getByAttr$({controls:'',fieldwrap:''}).addClass('hidden');
+
         function tmpDropIt(theIndex){
             var tmpWrap = $(this);
             var tmpName = tmpWrap.attr('name');
-            console.log( 'tmpName', tmpName);
-            //var tmpTitle = tmpWrap.find('[appuse="actapp-design-wrap-titlebar"],[name="' + tmpName + '"]')
-            var tmpTitle = ThisApp.getByAttr$({appuse:"actapp-design-wrap-titlebar",name:tmpName},tmpWrap);
-            console.log( 'tmpTitle', tmpTitle);
-            var tmpToOverlay = $(tmpTitle);
-            tmpToOverlay.overlayMask().css({margin:'2px'})
-            var tmpME = tmpToOverlay.data('maskel');
-            var tmpMC = tmpToOverlay.data('maskcontent');
-            tmpME.css(tmpOverlayStyles);
-            tmpMC.html(tmpOverlayHTML)
-            tmpMC.css('margin','-10px','-10px');
-            tmpMC.css('height','calc(100% + 20px)');
-            tmpMC.css('width','calc(100% + 20px)');
+            if( ''+tmpName !== 'undefined' ){
+                //var tmpTitle = tmpWrap.find('[appuse="actapp-design-wrap-titlebar"],[name="' + tmpName + '"]')
+                var tmpTitle = ThisApp.getByAttr$({appuse:"actapp-design-wrap-titlebar",name:tmpName},tmpWrap);
+                var tmpToOverlay = $(tmpTitle);
+                var tmpOverlayRet = tmpToOverlay.overlayMask().css({margin:'2px'})
+                var tmpME = tmpToOverlay.data('maskel');
+                var tmpMC = tmpToOverlay.data('maskcontent');
+                tmpME.css(tmpOverlayStyles);
+                tmpMC.html(tmpOverlayHTML)
+                tmpMC.css('margin','-10px','-10px');
+                tmpMC.css('height','calc(100% + 20px)');
+                tmpMC.css('width','calc(100% + 20px)');
+            }
         }
         
         tmpAppWraps.css({margin:'15px'})
