@@ -6946,7 +6946,7 @@ License: MIT
                 //var tmpTitle = tmpWrap.find('[appuse="actapp-design-wrap-titlebar"],[name="' + tmpName + '"]')
                 var tmpTitle = ThisApp.getByAttr$({appuse:"actapp-design-wrap-titlebar",name:tmpName},tmpWrap);
                 var tmpToOverlay = $(tmpTitle);
-                var tmpOverlayRet = tmpToOverlay.overlayMask().css({margin:'2px'})
+                tmpToOverlay.overlayMask().css({margin:'2px'})
                 var tmpME = tmpToOverlay.data('maskel');
                 var tmpMC = tmpToOverlay.data('maskcontent');
                 tmpME.css(tmpOverlayStyles);
@@ -6954,6 +6954,8 @@ License: MIT
                 tmpMC.css('margin','-10px','-10px');
                 tmpMC.css('height','calc(100% + 20px)');
                 tmpMC.css('width','calc(100% + 20px)');
+            } else {
+                console.error("Developer: Could not wrap element, make sure field wrap has name attribute.",tmpEl)
             }
         }
         
@@ -9558,7 +9560,7 @@ License: MIT
 
 
         tmpHTML = [];
-        tmpHTML.push('<div controls="" fieldwrap="" class="fields grouped" ' + tmpStyle + '>')
+        tmpHTML.push('<div controls="" fieldwrap="" name="' + tmpObject.name + '" class="fields grouped" ' + tmpStyle + '>')
 
         if (tmpDispOnly) {
             tmpReq = '';
