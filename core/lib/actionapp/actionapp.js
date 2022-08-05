@@ -7082,9 +7082,10 @@ License: MIT
         if( tmpStylesDefWrap ){
             tmpNewEl.css(tmpStylesDefWrap);
         }
-        tmpNewEl.prepend('<div name="' + theName + '" appuse="actapp-design-wrap-titlebar" class="ui message black mar2 pad5">Name: <b>' + theName + '</b></div>')
 
         tmpNewEl.append('<div appuse="actapp-design-wrap-part" style="clear:both;padding:4px;"></div>')
+        tmpNewEl.prepend('<div name="' + theName + '" appuse="actapp-design-wrap-titlebar" class="ui message black mar2 pad5">Name: <b>' + theName + '</b></div>')
+
 
         return tmpNewEl;
 
@@ -7102,7 +7103,7 @@ License: MIT
                 tmpUpdated++;
             }
         });
-        //--- ToDo: Reduce scope
+        //--- ToDo: Reduce scope and refactor
         //--- Note: When left, good start for drop points for insertion
         ThisApp.getByAttr$({appuse:"actapp-design-wrap-titlebar"}).remove();
         ThisApp.getByAttr$({appuse:"actapp-design-wrap-part"}).remove();
@@ -7197,19 +7198,17 @@ License: MIT
         }
 
     }
-    meInstance.onControlResize = onControlResize;
-    function onControlResize(theEvent) {
-        var tmpEl = this.getEl();
-        var tmpWidth = tmpEl.width();
-        if (tmpWidth < 450) {
-            tmpEl.addClass('mobile');
-        } else {
-            tmpEl.removeClass('mobile');
-        }
-    }
-    // function inRect(theRect, theX, theY) {
-    //     return theRect.x <= theX && theX <= theRect.x + theRect.width &&
-    //     theRect.y <= theY && theY <= theRect.y + theRect.height;
+
+    //ToDo: Does this ever run?
+    // meInstance.onControlResize = onControlResize;
+    // function onControlResize(theEvent) {
+    //     var tmpEl = this.getEl();
+    //     var tmpWidth = tmpEl.width();
+    //     if (tmpWidth < 450) {
+    //         tmpEl.addClass('mobile');
+    //     } else {
+    //         tmpEl.removeClass('mobile');
+    //     }
     // }
 
 
