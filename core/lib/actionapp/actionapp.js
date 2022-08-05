@@ -6912,6 +6912,29 @@ License: MIT
         return false;
     }
 
+    meInstance.startDragMode = function(){
+        //ToDo: Use classes to add/remove instead?
+        var tmpOverlayStyles = {'background-color':'black','color': 'white', 'opacity':.1};
+        var tmpOverlayHTML = '<div appuse="actapp-design-wrap-target" class="ui message green right aligned" style="height:100%;margin:auto;background-color:transparent;border-width:2px;"><div class="ui header right aligned green medium" style="height:auto;"><div class="ui button icon green" ><i class="icon  target"</div></div></div>';
+        var tmpEl = activeControl.getEl();
+        var tmpAppWraps = ThisApp.getByAttr$({appuse:"actapp-design-wrap"},tmpEl)
+        function tmpDropIt(theIndex){
+            var tmpWrap = $(this);
+            console.log('tmpWrap',tmpWrap);
+            tmpWrap.overlayMask().css({margin:'15px'})
+            var tmpME = tmpWrap.data('maskel');
+            var tmpMC = tmpWrap.data('maskcontent');
+            tmpME.css(tmpOverlayStyles);
+            tmpMC.html(tmpOverlayHTML)
+            tmpMC.css('margin','-10px','-10px');
+            tmpMC.css('height','calc(100% + 20px)');
+            tmpMC.css('width','calc(100% + 20px)');
+        }
+        
+        tmpAppWraps.overlayMask().css({margin:'15px'})
+        tmpAppWraps.each(tmpDropIt);
+    }
+
     meInstance.getOutterEls = function (theName) {
         var tmpAll = []
         if (this.hasField(theName)) {
@@ -7096,6 +7119,7 @@ License: MIT
     meInstance.unWrapControl = function (theName) {
         var tmpAll = this.getOutterEls(theName);
         var tmpUpdated = 0;
+        var tmpEl = this.getEl();
         var tmpWrapperEl = this.getWrapperEl(theName);        
         if( tmpWrapperEl ){
             tmpWrapperEl.overlayMask('remove');
@@ -7108,8 +7132,10 @@ License: MIT
         });
         //--- ToDo: Reduce scope and refactor
         //--- Note: When left, good start for drop points for insertion
-        ThisApp.getByAttr$({appuse:"actapp-design-wrap-titlebar"}).remove();
-        ThisApp.getByAttr$({appuse:"actapp-design-wrap-part"}).remove();
+        ThisApp.getByAttr$({appuse:"actapp-design-wrap-titlebar"},tmpEl).remove();
+        ThisApp.getByAttr$({appuse:"actapp-design-wrap-part"},tmpEl).remove();
+        ThisApp.getByAttr$({appuse:"actapp-design-wrap-target"},tmpEl).remove();
+        
         
         return tmpUpdated;
     }
