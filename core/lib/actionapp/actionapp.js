@@ -174,23 +174,32 @@ window.ActionAppCore = window.ActionAppCore || ActionAppCore;
     // - one to cover the content to protect and make semitransparent
     // - the other over that to hold conent that should not be semi-transparent
     $.fn.overlayMask = function (action) {
+        if(this && this.length){
+            if( this.length > 1 ){
+                console.error( 'Do not cll overlay mask on more than one element at a time', this.length);
+                return;
+            }
+        }
         var mask = this.data('maskel');
         var maskContent = this.data('maskcontent');
       if (!mask) {
         this.css({position: 'relative'});
-        mask = $('<div class="actapp-overlay-mask"></div>');
-        mask = mask.css({
+        var tmpNewMask = $('<div class="actapp-overlay-mask"></div>');
+        tmpNewMask = tmpNewMask.css({
             position: 'absolute',width: '100%',height: '100%',
             top: '0px',left: '0px',zIndex: 99
           }).appendTo(this);
-        this.data('maskel',mask);
+        this.data('maskel',tmpNewMask);
+        mask = tmpNewMask;
+        //console.log('added to',this)
 
-        maskContent = $('<div class="actapp-overlay-content"></div>');
-        maskContent = maskContent.css({
+        var tmpNewMaskContent = $('<div class="actapp-overlay-content"></div>');
+        tmpNewMaskContent = tmpNewMaskContent.css({
             position: 'absolute',width: '100%',height: '100%',
             top: '0px',left: '0px',zIndex: 100
           }).appendTo(this);
-        this.data('maskcontent',maskContent);
+        this.data('maskcontent',tmpNewMaskContent);
+        maskContent = tmpNewMaskContent;
       }
   
       if (!action || action === 'show') {
@@ -6912,15 +6921,26 @@ License: MIT
         return false;
     }
 
-    meInstance.startDragMode = function(){
+    // ThisApp.moveHereRequest = function(theP,theTarget){
+    //     console.log('t',theTarget);
+            
+    // }
+
+    meInstance.moveModeEnd = function(){
+        //-- ToDo: Just update styling (add/remove classes?)
+        this.setDesignMode(false);
+        this.setDesignMode(true);
+    }
+
+    meInstance.moveModeStart = function(){
         //ToDo: Use classes to add/remove instead?
         var tmpOverlayStyles = {'background-color':'black','color': 'white', 'opacity':.1};
         var tmpOverlayHTML = '<div appuse="actapp-design-wrap-target" class="ui message green right aligned" style="height:100%;margin:auto;background-color:transparent;border-width:2px;"><div class="ui header right aligned green medium" style="height:auto;"><div class="ui button icon green" ><i class="icon  target"</div></div></div>';
         var tmpEl = activeControl.getEl();
-        var tmpAppWraps = ThisApp.getByAttr$({appuse:"actapp-design-wrap"},tmpEl)
+        var tmpAppWraps = ThisApp.getByAttr$({appuse:"actapp-design-wrap"},tmpEl);
+        
         function tmpDropIt(theIndex){
             var tmpWrap = $(this);
-            console.log('tmpWrap',tmpWrap);
             tmpWrap.overlayMask().css({margin:'15px'})
             var tmpME = tmpWrap.data('maskel');
             var tmpMC = tmpWrap.data('maskcontent');
@@ -6931,7 +6951,7 @@ License: MIT
             tmpMC.css('width','calc(100% + 20px)');
         }
         
-        tmpAppWraps.overlayMask().css({margin:'15px'})
+        tmpAppWraps.css({margin:'15px'})
         tmpAppWraps.each(tmpDropIt);
     }
 
@@ -7053,6 +7073,10 @@ License: MIT
         
         var tmpWrapperEl = this.getWrapperEl(theName);
         if( tmpWrapperEl ){
+            tmpWrapperEl.data('name',theName);
+            tmpWrapperEl.data('specs',this.getControlSpecs(theName));
+            tmpWrapperEl.data('control',this);
+
             if(tmpAddOverlay){
                 tmpWrapperEl.overlayMask();
                 tmpMaskEl = tmpWrapperEl.data('maskel');
@@ -7075,9 +7099,6 @@ License: MIT
                     tmpMaskContent.attr('action',tmpAction);
                 }
 
-                tmpMaskContentEl.data('name',theName);
-                tmpMaskContentEl.data('specs',this.getControlSpecs(theName));
-                tmpMaskContentEl.data('control',this);
 
                 
                 // this.overlayMaskEl = tmpWrapperEl.data('maskel');
