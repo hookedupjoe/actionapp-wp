@@ -118,6 +118,18 @@ License: MIT
 									"run": "action",
 									"action": "refreshControlDisplay"
 								}
+							},
+							{
+								"ctl": "button",
+								"color": "violet",
+								toRight: true,
+								hidden: true,
+								"name": "btn-design-mode",
+								"label": "Design Mode",
+								"onClick": {
+									"run": "action",
+									"action": "toggleDesignMode"
+								}
 							}
 						],
 						center: [
@@ -199,6 +211,11 @@ License: MIT
 
 		var tmpSource = tmpOptions.source || 'ws';
 
+		var tmpHasPanel = ( tmpResType == 'Control' || tmpResType == 'Panel');
+		
+		this.setItemDisplay("btn-design-mode",tmpHasPanel);
+
+		
 
 		var tmpShowName = tmpResName.replace('.html', '')
 			.replace('.json', '')
@@ -469,7 +486,7 @@ License: MIT
 		this.activeControl.loadToElement(this.spot$('preview-area'))
 
 		//--- allow console access for testing
-		window.activeControl = this.activeControl;
+		//window.activeControl = this.activeControl;
 
 		//--- Get request to change design
 		//ToDo: Load in panel and on save publish design change event
@@ -503,7 +520,7 @@ License: MIT
 
 	ControlCode.showControlDetails = showControlDetails;
 	function showControlDetails() {
-		var tmpDetails = activeControl.getControlDetails()
+		var tmpDetails = this.activeControl.getControlDetails()
 		this.aceEditor.setValue(ThisApp.json(tmpDetails.data));
 		this.aceEditor.clearSelection();
 	};
@@ -549,8 +566,8 @@ License: MIT
 		if (!tmpFN) {
 			return alert("Select a field");
 		}
-		var tmpIsVis = activeControl.getFieldDisplay(tmpFN);
-		activeControl.setFieldDisplay(tmpFN, !tmpIsVis)
+		var tmpIsVis = this.activeControl.getFieldDisplay(tmpFN);
+		this.activeControl.setFieldDisplay(tmpFN, !tmpIsVis)
 	};
 
 	ControlCode.fieldSetValue = fieldSetValue;
@@ -559,11 +576,11 @@ License: MIT
 		this.fieldSelect.focus();
 		if (!tmpFN) { return alert("Select a field to set first") }
 
-		var tmpDefault = activeControl.getFieldValue(tmpFN);
+		var tmpDefault = this.activeControl.getFieldValue(tmpFN);
 
 		ThisApp.input("Enter a new value", "New Value", "Set field value", tmpDefault).then(function (theValue) {
 			if (!(theValue)) { return };
-			activeControl.setFieldValue(tmpFN, theValue);
+			this.activeControl.setFieldValue(tmpFN, theValue);
 
 		})
 
@@ -573,7 +590,7 @@ License: MIT
 	function fieldShowSpecs() {
 		var tmpFN = getSelectedField() || '';
 		if (!tmpFN) { return alert("Select a Field") }
-		var tmpSpecs = activeControl.getFieldSpecs(tmpFN);
+		var tmpSpecs = this.activeControl.getFieldSpecs(tmpFN);
 		var tmpCtlName = tmpSpecs.ctl || 'field';
 
 		var tmpCtl = ThisApp.controls.webControls.get(tmpCtlName);
@@ -592,7 +609,7 @@ License: MIT
 	function fieldGoto() {
 		var tmpFN = getSelectedField() || '';
 		if (!tmpFN) { return alert("Select a Field") }
-		activeControl.gotoField(tmpFN);
+		this.activeControl.gotoField(tmpFN);
 	};
 
 	function setSelectedField(theFieldName) {
@@ -605,7 +622,7 @@ License: MIT
 
 	ControlCode.loadFieldList = loadFieldList;
 	function loadFieldList() {
-		var tmpConfig = activeControl.getConfig();
+		var tmpConfig = this.activeControl.getConfig();
 		if (!tmpConfig && tmpConfig.index && tmpConfig.index.fields) {
 			return alert("No tmpField found in form config index")
 		}
@@ -630,7 +647,7 @@ License: MIT
 		if (!tmpFN) {
 			return alert("No field name")
 		}
-		var tmpConfig = activeControl.getConfig();
+		var tmpConfig = this.activeControl.getConfig();
 		if (!tmpConfig && tmpConfig.index && tmpConfig.index.fields) {
 			return alert("No tmpField found in form config index")
 		}
@@ -646,7 +663,7 @@ License: MIT
 
 	ControlCode.validateActiveControl = validateActiveControl;
 	function validateActiveControl() {
-		var tmpValidation = activeControl.validate();
+		var tmpValidation = this.activeControl.validate();
 		if (!tmpValidation.isValid) {
 			//Message shows automatically
 			//alert("Not valid, see form for deatils", "Did not pass validation", "i");
@@ -656,6 +673,32 @@ License: MIT
 	};
 
 
+	
+	ControlCode.toggleDesignMode = toggleDesignMode;
+
+	function toggleDesignMode() {
+		if( this.__inDesignMode !== true){
+			this.__inDesignMode = true;
+			this.activeControl.setDesignMode(false);
+			this.activeControl.setDesignMode(true);
+			//this.activeControl.moveModeStart();
+			var tmpAppWraps = ThisApp.getByAttr$({appuse:"actapp-design-wrap"})
+	//ToDo: Another way
+			tmpAppWraps.attr('action','moveHereRequest');
+			ThisApp.moveHereRequest = function(theP,theTarget){
+				var tmpWrap = $(theTarget);
+				window.tmpWrap = tmpWrap;
+				var tmpSelData = tmpWrap.data();
+				console.log('tmpSelData',tmpSelData);
+			}
+			
+		} else {
+			this.__inDesignMode = false;
+			this.activeControl.moveModeEnd();
+			this.activeControl.setDesignMode(false);
+			this.activeControl.refreshControl();
+		}
+	};
 
 	ControlCode.refreshControlDisplay = refreshControlDisplay;
 	function refreshControlDisplay() {
