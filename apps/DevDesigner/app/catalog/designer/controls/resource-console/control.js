@@ -122,7 +122,7 @@ License: MIT
 							{
 								"ctl": "button",
 								"color": "violet",
-								toRight: true,
+								toLeft: true,
 								hidden: true,
 								"name": "btn-design-mode",
 								"label": "Design Mode",
@@ -137,6 +137,14 @@ License: MIT
 								ctl: "control",
 								"controlname": "app/catalog/designer/controls/AceEditor",
 								name: "editor",
+								hidden: false,
+								text: ""
+							},
+							{
+								ctl: "control",
+								name: "props",
+								controlname: "TabsContainer",
+								source: "_designer",
 								text: ""
 							}
 
@@ -178,6 +186,7 @@ License: MIT
 	function _onInit() {
 		//this.parts.resources.subscribe('selectMe', onResSelect.bind(this))
 		var tmpThis = this;
+		window.tmpResPanel = this;
 		ThisApp.subscribe('saveRequested', function () {
 			if (!tmpThis.isActive()) { return }
 			var tmpIsDirty = tmpThis.refreshButtonStatus();
@@ -213,6 +222,11 @@ License: MIT
 
 		var tmpHasPanel = ( tmpResType == 'Control' || tmpResType == 'Panel');
 		
+		this.parts.props.addTab({item:'home',text: '', icon: 'icon home blue', content:''});
+        this.parts.props.loadTabSpot('home','Initial Page, Welcome');
+        this.parts.props.gotoTab('home');
+
+
 		this.setItemDisplay("btn-design-mode",tmpHasPanel);
 
 		
@@ -673,17 +687,21 @@ License: MIT
 	};
 
 
-	
-	ControlCode.toggleDesignMode = toggleDesignMode;
+	ControlCode.setEditorPanel = setEditorPanel;
+	function setEditorPanel(theIsCodeEditor){
+		this.setItemDisplay('editor',theIsCodeEditor)			
+		this.setItemDisplay('props',!theIsCodeEditor);
+	}
 
+	ControlCode.toggleDesignMode = toggleDesignMode;
 	function toggleDesignMode() {
 		if( this.__inDesignMode !== true){
 			this.__inDesignMode = true;
 			this.activeControl.setDesignMode(false);
 			this.activeControl.setDesignMode(true);
-			//this.activeControl.moveModeStart();
 			var tmpAppWraps = ThisApp.getByAttr$({appuse:"actapp-design-wrap"})
-	//ToDo: Another way
+
+//ToDo: Another way
 			tmpAppWraps.attr('action','moveHereRequest');
 			ThisApp.moveHereRequest = function(theP,theTarget){
 				var tmpWrap = $(theTarget);
@@ -691,13 +709,18 @@ License: MIT
 				var tmpSelData = tmpWrap.data();
 				console.log('tmpSelData',tmpSelData);
 			}
-			
+			this.setEditorPanel(false);
 		} else {
 			this.__inDesignMode = false;
 			this.activeControl.moveModeEnd();
 			this.activeControl.setDesignMode(false);
 			this.activeControl.refreshControl();
+			this.setItemDisplay('props',false);
+			this.setItemDisplay('editor',true)			
+			this.setEditorPanel(true);
 		}
+		this.refreshLayouts();
+		this.refreshLayouts();
 	};
 
 	ControlCode.refreshControlDisplay = refreshControlDisplay;
