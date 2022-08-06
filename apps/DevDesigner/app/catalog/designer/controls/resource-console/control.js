@@ -728,6 +728,8 @@ License: MIT
 
 		var tmpResType = this.details.restype;
 
+		this.codeParts = {};
+		this.codePartsOrder = [];
 
 		if (tmpResType == 'HTML' || tmpResType == 'html') {
 			var tmpContent = this.aceEditor.getValue();
@@ -739,15 +741,61 @@ License: MIT
 			this.loadSpot('preview-area', this.previewObject || {},tmpTplName);
 		} else if (tmpResType == 'Panel') {
 			var tmpObject = this.aceEditor.getValue();
+			this.specsJSON = tmpObject;
+
 			tmpObject = ThisApp.json(tmpObject);
 			this.activeControlSpec = ThisApp.controls.newControl(tmpObject, { parent: this });
 			this.activeControlSpec.parent = this;
 			this.showControl();
 		} else if (tmpResType == 'Control') {
 			var tmpCode = this.aceEditor.getValue();
+			var tmpParts1 = tmpCode.split('var ControlCode = {};');
+			var tmpParts2 = tmpParts1[0].split('var ControlSpecs = {');
+			var tmpParts3 = tmpParts1[1].split('var ThisControl = {');
+
+			var tmpStart = tmpParts2[0];
+			var tmpSpecsPrefix = '  var ControlSpecs = {';
+			var tmpSpecsText = tmpParts2[1];
+			var tmpCodePrefix = '  var ControlCode = {};';
+			var tmpCodeText = tmpParts3[0];
+			var tmpEndPrefix = '  var ThisControl = {';
+			var tmpEnd = tmpParts3[1];
+
+			var tmpSpecsJSON = '{' + tmpSpecsText;
+
+			// var tmpCheckCode = tmpStart + 
+			// tmpSpecsPrefix + 
+			// tmpSpecsText + 
+			// tmpCodePrefix + 
+			// tmpCodeText + 
+			// tmpEndPrefix +
+			// tmpEnd;
+
+			this.specsJSON = tmpSpecsJSON;
+
+			this.codeParts['Start'] = tmpStart;
+			this.codeParts['SpecsPrefix'] = tmpSpecsPrefix;
+			this.codeParts['SpecsText'] = tmpSpecsText;
+			this.codeParts['CodePrefix'] = tmpCodePrefix;
+			this.codeParts['CodeText'] = tmpCodeText;
+			this.codeParts['EndPrefix'] = tmpEndPrefix;
+			this.codeParts['End'] = tmpEnd;
+
+			this.codePartsOrder = [
+				'Start',
+				'SpecsPrefix',
+				'SpecsText',
+				'CodePrefix',
+				'CodeText',
+				'EndPrefix',
+				'End'
+			];
+
+			//--- To Validate-> this.activeControlSpec = eval(tmpCheckCode);
 			this.activeControlSpec = eval(tmpCode);
 			this.activeControlSpec = ThisApp.controls.newControl(this.activeControlSpec.specs, this.activeControlSpec.options || {})
 			this.activeControlSpec.parent = this;
+
 			this.showControl()
 		} else {
 			console.error("Unknown resource type " + tmpResType)
