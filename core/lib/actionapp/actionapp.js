@@ -6836,6 +6836,7 @@ License: MIT
         var tmpList = this.getConfig().index.fieldsList;
         for (var iPos = 0; iPos < tmpList.length; iPos++) {
             var tmpFN = tmpList[iPos];
+            //--- ToDo: Set to default field value from specs or value based on data type of know by control
             this.setFieldValue(tmpFN, '');
 
         }
@@ -7872,9 +7873,17 @@ License: MIT
         return tmpHTML;
     }
 
+    var ctlCounter = 0;
+    function getNextCounter(){
+        ctlCounter++;
+        return ctlCounter;
+    }
+    me.getNextCounter = getNextCounter;
 
+    
     //--- Internal use - creates index of all fields and items with a name;
     me._loadContentIndex = function (theItems, theOptionalIndex, theOptionalOutline) {
+
         var tmpIndex = theOptionalIndex || {
             fieldsList: [],
             itemsList: [],
@@ -7884,6 +7893,7 @@ License: MIT
             required: {},
             outline: []
         }
+        tmpIndex.errors = tmpIndex.errors || [];
         var tmpOL = theOptionalOutline || tmpIndex.outline;
         var tmpItems = theItems || [];
         if (!(tmpItems && tmpItems.length)) {
@@ -7891,6 +7901,17 @@ License: MIT
         }
         for (var iPos = 0; iPos < tmpItems.length; iPos++) {
             var tmpItem = tmpItems[iPos];
+            if( !(tmpItem.name) ){
+                var tmpItemName = 'untitled-' + getNextCounter();
+                tmpItem.tagname = tmpItemName;
+                //tmpItem.name = tmpItemName;
+                tmpIndex.errors.push({errnum:1, text: 'All fields and items require a unique name for control.',tagname:'' + tmpItem.tagname, specs:tmpItem});
+            }
+            if( !(tmpItem.ctl) ){
+                tmpItem.ctl = 'field';
+                tmpItem.tagname = tmpItem.name || tmpItem.tagname;
+                tmpIndex.errors.push({errnum:2, text: 'All fields and items require a web control name (ctl).',tabname:'' + tmpItem.tagname});
+            }
             var tmpCtl = tmpItem.ctl || 'field';
             var tmpThisObj = {
                 ctl: tmpCtl,
@@ -7900,6 +7921,8 @@ License: MIT
             var tmpControl = me.getWebControl(tmpCtl)
             var tmpType = me.getControlType(tmpCtl)
             tmpType = tmpType + 's';
+            
+
             if (tmpItem.name) {
                 var tmpName = tmpItem.name;
                 if (tmpCtl == 'control' || tmpCtl == 'panel') {
@@ -7935,6 +7958,7 @@ License: MIT
                 if (tmpIndex[tmpType][tmpName]) {
                     tmpIndex[tmpType][tmpName] = [tmpIndex[tmpType][tmpName]];
                     console.warn("Control content has the same name more than once for " + tmpName);
+                    tmpIndex.errors.push({text: 'All fields and items require a control name (ctl).',name:'' + tmpItem.name});
                     tmpIndex[tmpType][tmpName].push(tmpToAdd);
                 } else {
                     tmpIndex[tmpType][tmpName] = tmpToAdd;
