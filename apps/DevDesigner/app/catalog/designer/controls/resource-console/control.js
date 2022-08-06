@@ -745,63 +745,104 @@ License: MIT
 
 			tmpObject = ThisApp.json(tmpObject);
 			this.activeControlSpec = ThisApp.controls.newControl(tmpObject, { parent: this });
+			//console.log( 'this.activeControlSpec', this.activeControlSpec);
+			//window.tmpactiveControlSpec = this.activeControlSpec;
+			var tmpCCfg = this.activeControlSpec.controlConfig;
+
+			var tmpNewJSON = {
+				options: tmpCCfg.options || {},
+				content: tmpCCfg.content || []
+			}
+			tmpNewJSON = JSON.stringify(tmpNewJSON,null,2);
+			//tmpNewJSON = tmpNewJSON.slice(0, -1) + '\n}';
+
+			this.aceEditor.setValue(tmpNewJSON);
 			this.activeControlSpec.parent = this;
 			this.showControl();
 		} else if (tmpResType == 'Control') {
 			var tmpCode = this.aceEditor.getValue();
-			var tmpParts1 = tmpCode.split('var ControlCode = {};');
-			var tmpParts2 = tmpParts1[0].split('var ControlSpecs = {');
-			var tmpParts3 = tmpParts1[1].split('var ThisControl = {');
-
-			var tmpStart = tmpParts2[0];
-			var tmpSpecsPrefix = '  var ControlSpecs = {';
-			var tmpSpecsText = tmpParts2[1];
-			var tmpCodePrefix = '  var ControlCode = {};';
-			var tmpCodeText = tmpParts3[0];
-			var tmpEndPrefix = '  var ThisControl = {';
-			var tmpEnd = tmpParts3[1];
-
-			var tmpSpecsJSON = '{' + tmpSpecsText;
-
-			// var tmpCheckCode = tmpStart + 
-			// tmpSpecsPrefix + 
-			// tmpSpecsText + 
-			// tmpCodePrefix + 
-			// tmpCodeText + 
-			// tmpEndPrefix +
-			// tmpEnd;
-
-			this.specsJSON = tmpSpecsJSON;
-
-			this.codeParts['Start'] = tmpStart;
-			this.codeParts['SpecsPrefix'] = tmpSpecsPrefix;
-			this.codeParts['SpecsText'] = tmpSpecsText;
-			this.codeParts['CodePrefix'] = tmpCodePrefix;
-			this.codeParts['CodeText'] = tmpCodeText;
-			this.codeParts['EndPrefix'] = tmpEndPrefix;
-			this.codeParts['End'] = tmpEnd;
-
-			this.codePartsOrder = [
-				'Start',
-				'SpecsPrefix',
-				'SpecsText',
-				'CodePrefix',
-				'CodeText',
-				'EndPrefix',
-				'End'
-			];
-
+			this.parseLoadedCode();
 			//--- To Validate-> this.activeControlSpec = eval(tmpCheckCode);
 			this.activeControlSpec = eval(tmpCode);
 			this.activeControlSpec = ThisApp.controls.newControl(this.activeControlSpec.specs, this.activeControlSpec.options || {})
 			this.activeControlSpec.parent = this;
 
+			var tmpCCfg = this.activeControlSpec.controlConfig;
+			var tmpNewJSON = {
+				options: tmpCCfg.options || {},
+				content: tmpCCfg.content || []
+			}
+
+			this.setSpecsTextPart(tmpNewJSON);
+			var tmpNewCode = this.getFromParsed();
+			this.aceEditor.setValue(tmpNewCode);
 			this.showControl()
 		} else {
 			console.error("Unknown resource type " + tmpResType)
 		}
 	};
 
+	ControlCode.getFromParsed = getFromParsed;
+	function getFromParsed(){
+		var tmpHTML = []
+		for( var iPos in this.codePartsOrder ){
+			var tmpName = this.codePartsOrder[iPos];
+			tmpHTML.push(this.codeParts[tmpName]);
+		}
+		return tmpHTML.join('\n');
+	}
+
+	ControlCode.setSpecsTextPart = setSpecsTextPart;
+	function setSpecsTextPart(theJson){
+		var tmpJson = theJson;
+		if( typeof(tmpJson) == 'object'){
+			tmpJson = JSON.stringify(tmpJson,null,2);
+		}
+		//remove the { .. part of code block before it
+		tmpJson = tmpJson.substring(1);
+		this.codeParts['SpecsText'] = tmpJson
+	}
+
+	ControlCode.parseLoadedCode = parseLoadedCode;
+	function parseLoadedCode(){
+		var tmpCode = this.aceEditor.getValue();
+		var tmpParts1 = tmpCode.split('var ControlCode = {};');
+		var tmpParts2 = tmpParts1[0].split('var ControlSpecs = {');
+		var tmpParts3 = tmpParts1[1].split('var ThisControl = {');
+
+		var tmpStart = tmpParts2[0];
+		var tmpSpecsPrefix = '  var ControlSpecs = {';
+		var tmpSpecsText = tmpParts2[1];
+		var tmpCodePrefix = '  var ControlCode = {};';
+		var tmpCodeText = tmpParts3[0];
+		var tmpEndPrefix = '  var ThisControl = {';
+		var tmpEnd = tmpParts3[1];
+
+		//var tmpSpecsJSON = '{' + tmpSpecsText;
+
+		//this.specsJSON = tmpSpecsJSON;
+
+		this.codeParts['Start'] = tmpStart;
+		this.codeParts['SpecsPrefix'] = tmpSpecsPrefix;
+		this.codeParts['SpecsText'] = tmpSpecsText;
+		this.codeParts['CodePrefix'] = tmpCodePrefix;
+		this.codeParts['CodeText'] = tmpCodeText;
+		this.codeParts['EndPrefix'] = tmpEndPrefix;
+		this.codeParts['End'] = tmpEnd;
+
+		this.codePartsOrder = [
+			'Start',
+			'SpecsPrefix',
+			'SpecsText',
+			'CodePrefix',
+			'CodeText',
+			'EndPrefix',
+			'End'
+		];
+
+		return {parts: this.codeParts, order:this.codePartsOrder}
+
+	}
 	
 	ControlCode.setPreviewObject = setPreviewObject;
 	function setPreviewObject() {
