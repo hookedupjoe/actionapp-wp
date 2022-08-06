@@ -490,9 +490,8 @@ License: MIT
 
 		if (this.activeControl) {
 			this.activeControl.destroy();
-			delete (this.activeControl)
+			delete (this.activeControl);
 		}
-		//-- ToDo: If active control, destroy it
 		this.activeControl = this.activeControlSpec.create(this.activeControlName);
 		var tmpCheckPath = '';
 		ThisApp.loadWebResouces(this.activeControl, tmpCheckPath, tmpCheckPath);
