@@ -376,7 +376,9 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 				}
 			
 				var ControlCode = {};
-			
+				//--- Do not edit or place code above this area (only JSON ControlSpecs Edit)
+				//--- ActAppDesigner ---: No Edit
+							
 				ControlCode.setup = setup;
 				function setup(){
 					console.log("Ran setup")
@@ -387,6 +389,8 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 					//console.log("Ran _onInit")
 				}
 			
+				//--- ActAppDesigner ---: No Edit
+				//--- Do not edit or place code below this area
 				var ThisControl = {specs: ControlSpecs, options: { proto: ControlCode, parent: ThisApp }};
 				return ThisControl;
 			})(ActionAppCore, $);';

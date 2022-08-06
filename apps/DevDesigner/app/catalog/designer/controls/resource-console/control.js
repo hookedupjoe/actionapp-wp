@@ -716,6 +716,29 @@ License: MIT
 		this.refreshLayouts();
 	};
 
+	ControlCode.getConfigObjectFromCode = getConfigObjectFromCode;
+	function getConfigObjectFromCode(){
+		var tmpResType = this.details.restype;
+		var tmpControlSpec = false;
+		var tmpCode = this.aceEditor.getValue();
+		if (tmpResType == 'Panel') {
+			tmpCode = ThisApp.json(tmpCode);
+			tmpControlSpec = ThisApp.controls.newControl(tmpCode, { parent: this });
+		} else if (tmpResType == 'Control') {
+			var tmpFullSpec = eval(tmpCode);
+			tmpControlSpec = ThisApp.controls.newControl(tmpFullSpec.specs, tmpFullSpec.options || {})
+		}
+		if(tmpControlSpec){
+			var tmpCCfg = tmpControlSpec.controlConfig;
+			var tmpNewJSON = {
+				options: tmpCCfg.options || {},
+				content: tmpCCfg.content || []
+			}
+			return tmpNewJSON
+		}
+		return false;
+	}
+
 	ControlCode.refreshControlDisplay = refreshControlDisplay;
 	function refreshControlDisplay() {
 
@@ -754,34 +777,85 @@ License: MIT
 			this.showControl();
 		} else if (tmpResType == 'Control') {
 			var tmpCode = this.aceEditor.getValue();
-			this.parseLoadedCode();
+			//this.parseLoadedCode();
 			//--- To Validate-> this.activeControlSpec = eval(tmpCheckCode);
 			this.activeControlSpec = eval(tmpCode);
 			this.activeControlSpec = ThisApp.controls.newControl(this.activeControlSpec.specs, this.activeControlSpec.options || {})
 			this.activeControlSpec.parent = this;
 
-			var tmpCCfg = this.activeControlSpec.controlConfig;
-			var tmpNewJSON = {
-				options: tmpCCfg.options || {},
-				content: tmpCCfg.content || []
-			}
+			// var tmpCCfg = this.activeControlSpec.controlConfig;
+			// var tmpNewJSON = {
+			// 	options: tmpCCfg.options || {},
+			// 	content: tmpCCfg.content || []
+			// }
 
-			this.setSpecsTextPart(tmpNewJSON);
-			var tmpNewCode = this.getFromParsed();
-			this.aceEditor.setValue(tmpNewCode);
+			//this.setSpecsTextPart(tmpNewJSON);
+			//var tmpNewCode = this.getFromParsed();
+			//this.aceEditor.setValue(tmpNewCode);
+			this.aceEditor.setValue(tmpCode);
 			this.showControl()
 		} else {
 			console.error("Unknown resource type " + tmpResType)
 		}
 	};
 
+	ControlCode.CodeWrapConfig = {
+		"Start": "(function (ActionAppCore, $) {\r\n\r\n",
+		"AfterConfig": "\r\n\t\t\t\t//--- Do not edit or place code above this area (only JSON ControlSpecs Edit)\r\n//--- ActAppDesigner ---: No Edit\r\n\t\t\t\t",
+		"EndFile": "\r\n//--- ActAppDesigner ---: No Edit\r\n\t\t\t\t//--- Do not edit or place code below this area\r\n\t\t\t\tvar ThisControl = {specs: ControlSpecs, options: { proto: ControlCode, parent: ThisApp }};\r\n\t\t\t\treturn ThisControl;\r\n\t\t\t})(ActionAppCore, $);"
+	}
+	
+		
+	ControlCode.getCodeText = getCodeText;
+	function getCodeText(){
+		var tmpResType = this.details.restype;
+		var tmpCodeText = '';
+		//var tmpCode = this.aceEditor.getValue();
+		if (tmpResType == 'Control') {
+			var tmpLoadedCode  = this.parseLoadedCode();
+			if( tmpLoadedCode && tmpLoadedCode.parts && tmpLoadedCode.parts.CodeText ){
+				tmpCodeText = tmpLoadedCode.parts.CodeText;
+			}
+			//var tmpFullSpec = eval(tmpCode);
+			//tmpControlSpec = ThisApp.controls.newControl(tmpFullSpec.specs, tmpFullSpec.options || {})
+
+		}
+		return tmpCodeText;
+	}
+
+	ControlCode.getControlSpecsVar = getControlSpecsVar;
+	function getControlSpecsVar(theJson){
+		var tmpJson = theJson;
+		if( typeof(tmpJson) == 'object'){
+			tmpJson = JSON.stringify(tmpJson,null,2);
+		}
+		var tmpResType = this.details.restype;
+		if (tmpResType == 'Control') {
+			return '\tvar ControlSpecs = ' + tmpJson;
+		}
+		return tmpJson;;
+	}
 	ControlCode.getFromParsed = getFromParsed;
 	function getFromParsed(){
-		var tmpHTML = []
-		for( var iPos in this.codePartsOrder ){
-			var tmpName = this.codePartsOrder[iPos];
-			tmpHTML.push(this.codeParts[tmpName]);
+		var tmpResType = this.details.restype;
+		var tmpHTML = [];
+		var tmpCWC = this.CodeWrapConfig;
+		if( tmpResType == 'Control'){
+			tmpHTML.push(tmpCWC.Start);
 		}
+
+		tmpHTML.push(this.getControlSpecsVar(this.getConfigObjectFromCode()));
+
+		if( tmpResType == 'Control'){
+			tmpHTML.push(tmpCWC.AfterConfig);
+			tmpHTML.push(this.getCodeText());
+			tmpHTML.push(tmpCWC.EndFile);
+		}
+
+		// for( var iPos in this.codePartsOrder ){
+		// 	var tmpName = this.codePartsOrder[iPos];
+		// 	tmpHTML.push(this.codeParts[tmpName]);
+		// }
 		return tmpHTML.join('');
 	}
 
@@ -799,41 +873,120 @@ License: MIT
 	ControlCode.parseLoadedCode = parseLoadedCode;
 	function parseLoadedCode(){
 		var tmpCode = this.aceEditor.getValue();
-		var tmpParts1 = tmpCode.split('var ControlCode = {};');
-		var tmpParts2 = tmpParts1[0].split('var ControlSpecs = {');
-		var tmpParts3 = tmpParts1[1].split('var ThisControl = {');
+		var tmpRet = false;
+		var tmpPos = tmpCode.indexOf(OBJECT_SPLIT_DELIM);
+		console.log('OBJECT_SPLIT_DELIM',OBJECT_SPLIT_DELIM)
+		var tmpPos = tmpCode.indexOf(OBJECT_SPLIT_DELIM);
+		if( tmpPos > -1 ){
+			console.log('Parse Markup')
+			tmpRet = this.parseLoadedCodeMarkedUp();
+		}
+		if(tmpRet){
+			return tmpRet;
+		}
+		console.log('Parse Quick')
+		var tmpRet = this.parseLoadedCodeQuick();
+		if(tmpRet){
+			return tmpRet;
+		}
+		alert("Could not parse the code, see details on how to structure manually edited code for designer use.", "Format Not Valide", "e");
+		return false;
+	}
 
-		var tmpStart = tmpParts2[0];
-		var tmpSpecsPrefix = 'var ControlSpecs = {';
-		var tmpSpecsText = tmpParts2[1];
-		var tmpCodePrefix = '\n  var ControlCode = {};';
-		var tmpCodeText = tmpParts3[0];
-		var tmpEndPrefix = 'var ThisControl = {';
-		var tmpEnd = tmpParts3[1];
+	function parseLoadedCodeLineByLine(){
+		try {
+			var tmpCode = this.aceEditor.getValue();
+			var tmpCtr = 0;
+			var tmpPos = tmpCode.indexOf('\n');
+			console.log('tmpPos',tmpPos);
+			var tmpStart = 0;
+			while (tmpPos > 0){
+				if( ++tmpCtr > 1000 ){
+					console.error('loopy');
+					return;
+				};
+				var tmpLine = tmpCode.substring(tmpStart, tmpPos);
+				console.log(tmpLine);
+				var tmpCheck = tmpCode.substring(tmpStart, tmpPos);
+				tmpStart = tmpPos+1;
+				tmpPos = tmpCode.indexOf('\n', tmpStart);
+			}
+			//ToDo: Complete
+			return true;
+		} catch (ex) {
+			return false;
+		}
+	}
+	
+	var OBJECT_SPLIT_DELIM = '//--- ActAppDesigner ---: No Edit';
+	ControlCode.parseLoadedCodeMarkedUp = parseLoadedCodeMarkedUp;
+	function parseLoadedCodeMarkedUp(){
+		var tmpCode = this.aceEditor.getValue();
+		var tmpParts1 = tmpCode.split(OBJECT_SPLIT_DELIM);
+		if( tmpParts1.length == 3){
+			this.codeParts = {}
+			this.codeParts['Start'] = tmpParts1[0];
+			this.codeParts['CodePrefix'] = OBJECT_SPLIT_DELIM;
+			this.codeParts['CodeText'] = tmpParts1[1];
+			this.codeParts['EndPrefix'] = OBJECT_SPLIT_DELIM;
+			this.codeParts['End'] = tmpParts1[2];
+	
+			this.codePartsOrder = [
+				'Start',
+				'CodePrefix',
+				'CodeText',
+				'EndPrefix',
+				'End'
+			];
+	
+			return {parts: this.codeParts, order:this.codePartsOrder}
+		}
 
-		//var tmpSpecsJSON = '{' + tmpSpecsText;
+	}
 
-		//this.specsJSON = tmpSpecsJSON;
-		this.codeParts['Start'] = tmpStart;
-		this.codeParts['SpecsPrefix'] = tmpSpecsPrefix;
-		this.codeParts['SpecsText'] = tmpSpecsText;
-		this.codeParts['CodePrefix'] = tmpCodePrefix;
-		this.codeParts['CodeText'] = tmpCodeText;
-		this.codeParts['EndPrefix'] = tmpEndPrefix;
-		this.codeParts['End'] = tmpEnd;
-
-		this.codePartsOrder = [
-			'Start',
-			'SpecsPrefix',
-			'SpecsText',
-			'CodePrefix',
-			'CodeText',
-			'EndPrefix',
-			'End'
-		];
-
-		return {parts: this.codeParts, order:this.codePartsOrder}
-
+	ControlCode.parseLoadedCodeQuick = parseLoadedCodeQuick;
+	function parseLoadedCodeQuick(){
+		try {
+			var tmpCode = this.aceEditor.getValue();
+			var tmpParts1 = tmpCode.split('var ControlCode = {};');
+			var tmpParts2 = tmpParts1[0].split('var ControlSpecs = {');
+			var tmpParts3 = tmpParts1[1].split('var ThisControl = {');
+	
+			var tmpStart = tmpParts2[0];
+			var tmpSpecsPrefix = 'var ControlSpecs = {';
+			var tmpSpecsText = tmpParts2[1];
+			var tmpCodePrefix = '\n  var ControlCode = {};';
+			var tmpCodeText = tmpParts3[0];
+			var tmpEndPrefix = 'var ThisControl = {';
+			var tmpEnd = tmpParts3[1];
+	
+			//var tmpSpecsJSON = '{' + tmpSpecsText;
+	
+			//this.specsJSON = tmpSpecsJSON;
+			this.codeParts = {}
+			this.codeParts['Start'] = tmpStart;
+			this.codeParts['SpecsPrefix'] = tmpSpecsPrefix;
+			this.codeParts['SpecsText'] = tmpSpecsText;
+			this.codeParts['CodePrefix'] = tmpCodePrefix;
+			this.codeParts['CodeText'] = tmpCodeText;
+			this.codeParts['EndPrefix'] = tmpEndPrefix;
+			this.codeParts['End'] = tmpEnd;
+	
+			this.codePartsOrder = [
+				'Start',
+				'SpecsPrefix',
+				'SpecsText',
+				'CodePrefix',
+				'CodeText',
+				'EndPrefix',
+				'End'
+			];
+	
+			return {parts: this.codeParts, order:this.codePartsOrder}
+	
+		} catch (ex) {
+			return false;
+		}
 	}
 	
 	ControlCode.setPreviewObject = setPreviewObject;
