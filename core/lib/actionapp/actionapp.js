@@ -7903,13 +7903,14 @@ License: MIT
             var tmpItem = tmpItems[iPos];
             if( !(tmpItem.name) ){
                 var tmpItemName = 'untitled-' + getNextCounter();
-                tmpItem.tagname = tmpItemName;
-                //tmpItem.name = tmpItemName;
+                //tmpItem.tagname = tmpItemName;
+                //--- Autoset missing name
+                tmpItem.name = tmpItemName;
                 tmpIndex.errors.push({errnum:1, text: 'All fields and items require a unique name for control.',tagname:'' + tmpItem.tagname, specs:tmpItem});
             }
             if( !(tmpItem.ctl) ){
                 tmpItem.ctl = 'field';
-                tmpItem.tagname = tmpItem.name || tmpItem.tagname;
+                //tmpItem.tagname = tmpItem.name || tmpItem.tagname;
                 tmpIndex.errors.push({errnum:2, text: 'All fields and items require a web control name (ctl).',tabname:'' + tmpItem.tagname});
             }
             var tmpCtl = tmpItem.ctl || 'field';
