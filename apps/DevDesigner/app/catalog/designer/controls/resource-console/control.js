@@ -504,23 +504,18 @@ License: MIT
 		//--- Get request to change design
 		//ToDo: Load in panel and on save publish design change event
 		function tmpOnFieldDesignRequest(theEvent, theControl,theField,theSpecs){
-			//console.log('theSpecs',theField,theSpecs);
 			theSpecs.label = theSpecs.label + ' updated';
 			this.activeControl.publish('designChange',[this,theField,theSpecs])
 		}
 		this.subscribeEvent(this.activeControl,'fieldDesignRequest', tmpOnFieldDesignRequest.bind(this))
 
 		function tmpOnDesignChange(theEvent, theControl,theField,theSpecs){
-			console.log('designChange',theField,theSpecs);
 			var tmpFS = this.activeControl.getFieldSpecs(theField);
 			var tmpJSON = this.activeControl.getConfig();
 			delete tmpJSON.index;
 			tmpJSON = ThisApp.json(tmpJSON);
 			theControl.aceEditor.setValue(tmpJSON);
 			theControl.aceEditor.clearSelection()
-			window.tmpControl = theControl;
-			console.log( 'theControl.aceEditor', theControl.aceEditor);
-			console.log( 'tmpFS', tmpFS);
 			this.refreshControlDisplay();
 			//ToDo: Refresh the UI without the JSON update until Save
 		}
@@ -706,7 +701,6 @@ License: MIT
 				var tmpWrap = $(theTarget);
 				window.tmpWrap = tmpWrap;
 				var tmpSelData = tmpWrap.data();
-				console.log('tmpSelData',tmpSelData);
 			}
 			this.setEditorPanel(false);
 		} else {
@@ -745,7 +739,6 @@ License: MIT
 
 			tmpObject = ThisApp.json(tmpObject);
 			this.activeControlSpec = ThisApp.controls.newControl(tmpObject, { parent: this });
-			//console.log( 'this.activeControlSpec', this.activeControlSpec);
 			//window.tmpactiveControlSpec = this.activeControlSpec;
 			var tmpCCfg = this.activeControlSpec.controlConfig;
 
@@ -789,7 +782,7 @@ License: MIT
 			var tmpName = this.codePartsOrder[iPos];
 			tmpHTML.push(this.codeParts[tmpName]);
 		}
-		return tmpHTML.join('\n');
+		return tmpHTML.join('');
 	}
 
 	ControlCode.setSpecsTextPart = setSpecsTextPart;
@@ -811,17 +804,16 @@ License: MIT
 		var tmpParts3 = tmpParts1[1].split('var ThisControl = {');
 
 		var tmpStart = tmpParts2[0];
-		var tmpSpecsPrefix = '  var ControlSpecs = {';
+		var tmpSpecsPrefix = 'var ControlSpecs = {';
 		var tmpSpecsText = tmpParts2[1];
-		var tmpCodePrefix = '  var ControlCode = {};';
+		var tmpCodePrefix = '\n  var ControlCode = {};';
 		var tmpCodeText = tmpParts3[0];
-		var tmpEndPrefix = '  var ThisControl = {';
+		var tmpEndPrefix = 'var ThisControl = {';
 		var tmpEnd = tmpParts3[1];
 
 		//var tmpSpecsJSON = '{' + tmpSpecsText;
 
 		//this.specsJSON = tmpSpecsJSON;
-
 		this.codeParts['Start'] = tmpStart;
 		this.codeParts['SpecsPrefix'] = tmpSpecsPrefix;
 		this.codeParts['SpecsText'] = tmpSpecsText;
