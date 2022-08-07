@@ -260,8 +260,38 @@ License: MIT
 
 		this.endpointURL = tmpBaseURL + '/wp-json/actappdesigner/get-catalog-res.json?catname=' + tmpCatName + '&resname=' + tmpResName + '&restype=' + tmpResType;
 		this.refreshFromSource();
+		
+		
+		//ThisApp.actions.onDesignClick = onDesignClick.bind(this);
+	}
+	ControlCode.onDesignClick = onDesignClick;
+
+	function onDesignClick(theParams, theTarget) {
+		var dfd = jQuery.Deferred();
+		var tmpParams = ThisApp.getActionParams(theParams, theTarget, ['name']);
+		var tmpName = tmpParams.name;
+		var tmpSpecs = this.activeControl.getControlSpecs(tmpName)
+		if(!tmpSpecs){
+			console.log(tmpParams,"Selected item not found, refresh",this.activeControl);
+			return;
+		}
+		//			var tmpEl = $(theTarget);
+		if( tmpSpecs.color ){
+			tmpSpecs.color = 'green';
+			this.refreshDesignMode();
+		}
+		console.log('tmpSpecs',tmpSpecs);
+		
+		console.log(tmpSpecs);
 	}
 
+
+	ControlCode.refreshDesignMode = function(){
+		this.activeControl.setDesignMode(false);
+		this.activeControl.refreshUI()
+		this.activeControl.setDesignMode(true,{myaction:'onDesignClick'});
+	}
+	
 	function uniqueGroups(theUniqueness) {
 		var tmpIndex = this.getIndex();
 		if (tmpIndex && tmpIndex.items) {
@@ -692,20 +722,21 @@ License: MIT
 		if( this.__inDesignMode !== true){
 			this.__inDesignMode = true;
 			this.activeControl.setDesignMode(false);
-			this.activeControl.setDesignMode(true);
-			var tmpAppWraps = ThisApp.getByAttr$({appuse:"actapp-design-wrap"})
+			this.activeControl.setDesignMode(true,{myaction:'onDesignClick'});
+//			var tmpAppWraps = ThisApp.getByAttr$({appuse:"actapp-design-wrap"})
 
 //ToDo: Another way
-			tmpAppWraps.attr('action','moveHereRequest');
-			ThisApp.moveHereRequest = function(theP,theTarget){
-				var tmpWrap = $(theTarget);
-				window.tmpWrap = tmpWrap;
-				var tmpSelData = tmpWrap.data();
-			}
+			// tmpAppWraps.attr('action','moveHereRequest');
+			// ThisApp.moveHereRequest = function(theP,theTarget){
+			// 	var tmpWrap = $(theTarget);
+			// 	window.tmpWrap = tmpWrap;
+			// 	var tmpSelData = tmpWrap.data();
+			// }
 			this.setEditorPanel(false);
 		} else {
 			this.__inDesignMode = false;
 			this.activeControl.moveModeEnd();
+			this.loadEditorFromDesigner()
 			this.activeControl.setDesignMode(false);
 			this.activeControl.refreshControl();
 			this.setItemDisplay('props',false);
@@ -714,6 +745,28 @@ License: MIT
 		}
 		this.refreshLayouts();
 		this.refreshLayouts();
+		this.aceEditor.clearSelection();
+		//ToDo: Only if changed
+		
+
+	};
+
+	
+	ControlCode.getConfigObjectFromDesigner = getConfigObjectFromDesigner;
+	function getConfigObjectFromDesigner(){
+		var tmpResType = this.details.restype;
+		var tmpControlSpec = false;
+		var tmpCode = this.aceEditor.getValue();
+		tmpControlSpec = this.activeControl;
+		if(tmpControlSpec){
+			var tmpCCfg = tmpControlSpec.controlConfig;
+			var tmpNewJSON = {
+				options: tmpCCfg.options || {},
+				content: tmpCCfg.content || []
+			}
+			return tmpNewJSON
+		}
+		return false;
 	};
 
 	ControlCode.getConfigObjectFromCode = getConfigObjectFromCode;
@@ -835,6 +888,14 @@ License: MIT
 		}
 		return tmpJson;;
 	}
+
+	ControlCode.loadEditorFromSpecs = function(){
+		this.aceEditor.setValue(this.getFromParsed());
+	}
+	ControlCode.loadEditorFromDesigner = function(){
+		this.aceEditor.setValue(this.getFromDesigner());
+	}
+
 	ControlCode.getFromParsed = getFromParsed;
 	function getFromParsed(){
 		var tmpResType = this.details.restype;
@@ -859,6 +920,29 @@ License: MIT
 		return tmpHTML.join('');
 	}
 
+	ControlCode.getFromDesigner = getFromDesigner;
+	function getFromDesigner(){
+		var tmpResType = this.details.restype;
+		var tmpHTML = [];
+		var tmpCWC = this.CodeWrapConfig;
+		if( tmpResType == 'Control'){
+			tmpHTML.push(tmpCWC.Start);
+		}
+
+		tmpHTML.push(this.getControlSpecsVar(this.getConfigObjectFromDesigner()));
+
+		if( tmpResType == 'Control'){
+			tmpHTML.push(tmpCWC.AfterConfig);
+			tmpHTML.push(this.getCodeText());
+			tmpHTML.push(tmpCWC.EndFile);
+		}
+
+		// for( var iPos in this.codePartsOrder ){
+		// 	var tmpName = this.codePartsOrder[iPos];
+		// 	tmpHTML.push(this.codeParts[tmpName]);
+		// }
+		return tmpHTML.join('');
+	}
 	ControlCode.setSpecsTextPart = setSpecsTextPart;
 	function setSpecsTextPart(theJson){
 		var tmpJson = theJson;
@@ -875,7 +959,6 @@ License: MIT
 		var tmpCode = this.aceEditor.getValue();
 		var tmpRet = false;
 		var tmpPos = tmpCode.indexOf(OBJECT_SPLIT_DELIM);
-		console.log('OBJECT_SPLIT_DELIM',OBJECT_SPLIT_DELIM)
 		var tmpPos = tmpCode.indexOf(OBJECT_SPLIT_DELIM);
 		if( tmpPos > -1 ){
 			console.log('Parse Markup')
@@ -891,31 +974,6 @@ License: MIT
 		}
 		alert("Could not parse the code, see details on how to structure manually edited code for designer use.", "Format Not Valide", "e");
 		return false;
-	}
-
-	function parseLoadedCodeLineByLine(){
-		try {
-			var tmpCode = this.aceEditor.getValue();
-			var tmpCtr = 0;
-			var tmpPos = tmpCode.indexOf('\n');
-			console.log('tmpPos',tmpPos);
-			var tmpStart = 0;
-			while (tmpPos > 0){
-				if( ++tmpCtr > 1000 ){
-					console.error('loopy');
-					return;
-				};
-				var tmpLine = tmpCode.substring(tmpStart, tmpPos);
-				console.log(tmpLine);
-				var tmpCheck = tmpCode.substring(tmpStart, tmpPos);
-				tmpStart = tmpPos+1;
-				tmpPos = tmpCode.indexOf('\n', tmpStart);
-			}
-			//ToDo: Complete
-			return true;
-		} catch (ex) {
-			return false;
-		}
 	}
 	
 	var OBJECT_SPLIT_DELIM = '//--- ActAppDesigner ---: No Edit';

@@ -7040,10 +7040,18 @@ License: MIT
         var tmpStylesDefContent = tmpOptions.maskcontentstyles;
         var tmpStylesDefWrap = tmpOptions.wrapstyles;
         var tmpAction = false;
-        if( (tmpOptions.action) ){
+        var tmpActionAdd = '';
+
+        if( (tmpOptions.myaction) ){
+            tmpAction = tmpOptions.myaction;
+            tmpActionAdd = ' myaction="' + tmpAction + '" ';
+            console.log('set myaction',tmpAction);
+        } else if( (tmpOptions.action) ){
             tmpAction = tmpOptions.action;
+            tmpActionAdd = ' action="' + tmpAction + '" ';
+            console.log('set action',tmpAction);
         }
-        
+
         //--- If not turned off and an object is not supplied, set default styling
         if( tmpStylesDef !== false ){
             if(typeof(tmpStylesDef) !== 'object'){
@@ -7072,7 +7080,7 @@ License: MIT
             var tmpName = thisEl.attr('name');
 
             if( (tmpWrapper == 'designmode')){
-                tmpWrapper = '<div class="ui field" name="' + tmpName+ '" appuse="actapp-design-wrap"></div>';
+                tmpWrapper = '<div ' + tmpActionAdd + ' class="ui field" name="' + tmpName + '" appuse="actapp-design-wrap"></div>';
             }
             if( !(this.data('actappdesignWrap'))){
                 this.wrap(tmpWrapper).data('actappdesignWrap',true);                
@@ -7107,10 +7115,7 @@ License: MIT
                 if(tmpStylesDefContent){
                     tmpMaskContentEl.css(tmpStylesDefContent);
                 }
-                
-                if( tmpAction ){
-                    tmpMaskContent.attr('action',tmpAction);
-                }
+                console.log('tmpAction',tmpAction)
 
 
                 
