@@ -120,7 +120,7 @@ foreach ($tmpDoc as $iFieldName => $iVal) {
     echo('<tr>');
     $tmpPFVal = $iVal;
     $tmpPFLab = ''.$iFieldName.'';
-    if( '__design_props' == $iFieldName ){
+    if( '__design_props' == $iFieldName || 'source' == $iFieldName ){
       $tmpPFVal = html_entity_decode((''.$tmpPFVal));
       echo('<td><b>'.$tmpPFLab.'</b></td><td><textarea class="ui textarea" style="width:100%;height:150px;">'.$tmpPFVal.'</textarea></td>');
     } else {
