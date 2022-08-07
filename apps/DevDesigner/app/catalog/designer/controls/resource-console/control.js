@@ -715,9 +715,12 @@ License: MIT
 
 	ControlCode.toggleDesignMode = toggleDesignMode;
 	function toggleDesignMode() {
-		var tmpParsed = this.parseLoadedCode();
-		if( !(tmpParsed) ){
-			return;
+		var tmpResType = this.details.restype;
+		if( tmpResType == 'Control'){
+			var tmpParsed = this.parseLoadedCode();
+			if( !(tmpParsed) ){
+				return;
+			}
 		}
 
 		if( this.__inDesignMode !== true){
