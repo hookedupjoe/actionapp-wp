@@ -116,6 +116,7 @@ License: MIT
 								"label": "Refresh Preview",
 								"onClick": {
 									"run": "action",
+									"source":"control",
 									"action": "refreshControlDisplay"
 								}
 							},
@@ -186,7 +187,7 @@ License: MIT
 	function _onInit() {
 		//this.parts.resources.subscribe('selectMe', onResSelect.bind(this))
 		var tmpThis = this;
-		window.tmpResPanel = this;
+		//window.tmpResPanel = this;
 		ThisApp.subscribe('saveRequested', function () {
 			if (!tmpThis.isActive()) { return }
 			var tmpIsDirty = tmpThis.refreshButtonStatus();
@@ -267,9 +268,13 @@ License: MIT
 	ControlCode.onDesignClick = onDesignClick;
 
 	function onDesignClick(theParams, theTarget) {
-		var dfd = jQuery.Deferred();
 		var tmpParams = ThisApp.getActionParams(theParams, theTarget, ['name']);
 		var tmpName = tmpParams.name;
+		if( !(this.activeControl) ){
+			console.error('no this.activeControl found on',this);
+			tmpLastError = this;
+			return;
+		}
 		var tmpSpecs = this.activeControl.getControlSpecs(tmpName)
 		if(!tmpSpecs){
 			console.log(tmpParams,"Selected item not found, refresh",this.activeControl);
@@ -280,9 +285,9 @@ License: MIT
 			tmpSpecs.color = 'green';
 			this.refreshDesignMode();
 		}
-		console.log('tmpSpecs',tmpSpecs);
+		//console.log('tmpSpecs',tmpSpecs);
 		
-		console.log(tmpSpecs);
+		
 	}
 
 
@@ -448,12 +453,13 @@ License: MIT
 
 	}
 	function showCode(theParams) {
-		var tmpParams = theParams || 'content';
-		if (typeof (tmpParams) == 'string') {
-			tmpParams = { name: tmpParams }
-		}
-		var tmpName = tmpParams.name || tmpParams.codename || defaultCodeName;
-		this.aceEditor.setSession(this.loaded.sessions[tmpName])
+		// console.log('showCode',theParams)
+		// var tmpParams = theParams || 'content';
+		// if (typeof (tmpParams) == 'string') {
+		// 	tmpParams = { name: tmpParams }
+		// }
+		// var tmpName = tmpParams.name || tmpParams.codename || defaultCodeName;
+		this.aceEditor.setSession(this.loaded.sessions['content'])
 	}
 
 	function refreshFromSource() {
@@ -517,12 +523,15 @@ License: MIT
 
 	ControlCode.showControl = showControl;
 	function showControl(theControlSpec) {
-
+		console.log('showControl',this);
 		if (this.activeControl) {
 			this.activeControl.destroy();
+			console.log("destroyed old active");
 			delete (this.activeControl);
 		}
 		this.activeControl = this.activeControlSpec.create(this.activeControlName);
+		console.log('showControl created active',this.activeControl);
+
 		var tmpCheckPath = '';
 		ThisApp.loadWebResouces(this.activeControl, tmpCheckPath, tmpCheckPath);
 
@@ -719,6 +728,12 @@ License: MIT
 
 	ControlCode.toggleDesignMode = toggleDesignMode;
 	function toggleDesignMode() {
+		var tmpParsed = this.parseLoadedCode();
+		if( !(tmpParsed) ){
+			console.log("Could not parse")
+			return;
+		}
+
 		if( this.__inDesignMode !== true){
 			this.__inDesignMode = true;
 			this.activeControl.setDesignMode(false);
@@ -794,13 +809,10 @@ License: MIT
 
 	ControlCode.refreshControlDisplay = refreshControlDisplay;
 	function refreshControlDisplay() {
-
-
 		var tmpResType = this.details.restype;
-
 		this.codeParts = {};
 		this.codePartsOrder = [];
-
+console.log('*** refreshc',this);
 		if (tmpResType == 'HTML' || tmpResType == 'html') {
 			var tmpContent = this.aceEditor.getValue();
 			this.loadSpot('preview-area', tmpContent);
@@ -835,16 +847,6 @@ License: MIT
 			this.activeControlSpec = eval(tmpCode);
 			this.activeControlSpec = ThisApp.controls.newControl(this.activeControlSpec.specs, this.activeControlSpec.options || {})
 			this.activeControlSpec.parent = this;
-
-			// var tmpCCfg = this.activeControlSpec.controlConfig;
-			// var tmpNewJSON = {
-			// 	options: tmpCCfg.options || {},
-			// 	content: tmpCCfg.content || []
-			// }
-
-			//this.setSpecsTextPart(tmpNewJSON);
-			//var tmpNewCode = this.getFromParsed();
-			//this.aceEditor.setValue(tmpNewCode);
 			this.aceEditor.setValue(tmpCode);
 			this.showControl()
 		} else {
@@ -854,7 +856,7 @@ License: MIT
 
 	ControlCode.CodeWrapConfig = {
 		"Start": "(function (ActionAppCore, $) {\r\n\r\n",
-		"AfterConfig": "\r\n\t\t\t\t//--- Do not edit or place code above this area (only JSON ControlSpecs Edit)\r\n//--- ActAppDesigner ---: No Edit\r\n\t\t\t\t",
+		"AfterConfig": "\r\n\t\t\t\tvar ControlCode = {};\r\n\t\t\t\t//--- Do not edit or place code above this area (only JSON ControlSpecs Edit)\r\n//--- ActAppDesigner ---: No Edit\r\n\t\t\t\t",
 		"EndFile": "\r\n//--- ActAppDesigner ---: No Edit\r\n\t\t\t\t//--- Do not edit or place code below this area\r\n\t\t\t\tvar ThisControl = {specs: ControlSpecs, options: { proto: ControlCode, parent: ThisApp }};\r\n\t\t\t\treturn ThisControl;\r\n\t\t\t})(ActionAppCore, $);"
 	}
 	
@@ -894,6 +896,10 @@ License: MIT
 	}
 	ControlCode.loadEditorFromDesigner = function(){
 		this.aceEditor.setValue(this.getFromDesigner());
+		//this.aceEditor.setValue('var test1 = 1;')
+		// this.getFromDesigner();
+		// console.log('this.aceEditor',this.aceEditor);
+		// window.tmpAce = this.aceEditor;
 	}
 
 	ControlCode.getFromParsed = getFromParsed;
@@ -906,7 +912,6 @@ License: MIT
 		}
 
 		tmpHTML.push(this.getControlSpecsVar(this.getConfigObjectFromCode()));
-
 		if( tmpResType == 'Control'){
 			tmpHTML.push(tmpCWC.AfterConfig);
 			tmpHTML.push(this.getCodeText());
@@ -961,13 +966,11 @@ License: MIT
 		var tmpPos = tmpCode.indexOf(OBJECT_SPLIT_DELIM);
 		var tmpPos = tmpCode.indexOf(OBJECT_SPLIT_DELIM);
 		if( tmpPos > -1 ){
-			console.log('Parse Markup')
 			tmpRet = this.parseLoadedCodeMarkedUp();
 		}
 		if(tmpRet){
 			return tmpRet;
 		}
-		console.log('Parse Quick')
 		var tmpRet = this.parseLoadedCodeQuick();
 		if(tmpRet){
 			return tmpRet;
