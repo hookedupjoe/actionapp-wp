@@ -326,6 +326,9 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 		}
 		$tmpDoc = $tmpDocs[0];
 		$tmpDoc['source'] = $content;
+		//ToDo: Universally do this as needed (i.e. any JSON object store);
+		//--- Update source JSON to escape " in content for saving as quoted string
+		$tmpDoc['source'] = str_replace('\"','\\\"',$tmpDoc['source']);
 		
 		//--- Encode when passing array so decode works like $request
 		$tmpResults = self::save_doc(wp_json_encode($tmpDoc),true,false);
