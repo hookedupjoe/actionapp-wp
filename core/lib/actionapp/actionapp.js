@@ -8991,171 +8991,6 @@ License: MIT
     };
 
     //----   COMMON FIELD CONTROLS =================================
-
-    me.ControlField_REMOVEME = {
-        setFieldNote: commonSetFieldNote, setFieldMessage: commonSetFieldMessage,
-        getHTML: function (theControlName, theObject, theControlObj) {
-            var tmpObject = theObject || {};
-            var tmpHTML = [];
-            //---> ToDo: Add value and default value to other fields *****
-            var tmpAutoIcon = '';
-            var tmpAppComp = '';
-            var tmpIsDate = false;
-            
-
-            if( theControlName == 'date'){
-                tmpAutoIcon = 'calendar';
-            } else if( theControlName == 'time'){
-                tmpAutoIcon = 'clock';
-            } else if( theControlName == 'datetime'){
-                tmpAutoIcon = 'calendar outline';
-            }
-            if( tmpAutoIcon ){
-                tmpIsDate = true;
-                tmpAppComp = 'date';
-            }
-            
-            
-            var tmpValue = tmpObject.default || '';
-
-            //ToDo: Only do this to tmpObject.default ??
-            if( tmpValue === undefined || tmpValue === 'undefined'){
-                tmpValue = '';
-            }
-            tmpValue = tmpObject.value || tmpValue;
-
-            var tmpIcon = tmpObject.icon || tmpAutoIcon || '';
-
-            var tmpSizeName = '';
-            if (tmpObject.size && tmpObject.size > 0 && tmpObject.size < 17) {
-                tmpSizeName = getNumName(tmpObject.size)
-                tmpSizeName = ' ' + tmpSizeName + ' wide ';
-            }
-            var tmpReq = '';
-            if (tmpObject.req === true) {
-                tmpReq = ' required ';
-            }
-            var tmpItems = tmpObject.items || tmpObject.content || [];
-            if (tmpValue) {
-                tmpValue = ' value="' + tmpValue + '" ';
-            }
-            var tmpFieldOrInput = 'field';
-            if (theObject.input === true) {
-                tmpFieldOrInput = 'input';
-            }
-            //--- All input fields with content (buttons) are input style
-            if (tmpItems && tmpItems.length > 0) {
-                tmpFieldOrInput = 'input';
-            }
-            var tmpInputClasses = tmpObject.inputClasses || '';
-            tmpInputClasses += getValueIfTrue(theObject, ['fit']);
-            if( tmpIsDate ){
-                tmpInputClasses += ' showborder';
-            }
-            
-            if (tmpInputClasses) {
-                tmpInputClasses = ' class="' + tmpInputClasses + '" '
-            }
-            var tmpClasses = ''
-            tmpClasses += getValueIfTrue(theObject, ['compact', 'fluid']);
-            tmpClasses += getValueIfThere(theObject, ['color', 'size']);
-
-            var tmpHidden = '';
-            if (tmpObject.hidden === true || theControlName == 'hidden') {
-                tmpHidden = ' display:none; ';
-            }
-            var tmpStyle = tmpObject.style || tmpObject.styles || tmpObject.css || '';
-            if (tmpHidden) {
-                tmpStyle += tmpHidden;
-            }
-            if (tmpStyle) {
-                tmpStyle = ' style="' + tmpStyle + '" '
-            }
-
-            // theControlObj.readonly = true;
-            var tmpDispOnly = (tmpObject.readonly === true);
-            var tmpSpecs = theControlObj.getConfig();
-            if (tmpSpecs && tmpSpecs.options && tmpSpecs.options.readonly === true) {
-                tmpDispOnly = true;
-            }
-            if (theControlObj.readonly === true) {
-                tmpDispOnly = true;
-            }
-            var tmpReadOnly = '';
-            var tmpFieldType = 'text';
-            if (tmpDispOnly) {
-                tmpReq = '';
-                tmpReadOnly = ' readonly ';
-            }
-            if (theControlName == 'hidden') {
-                tmpFieldType = 'hidden';
-                tmpStyle = "";
-            } else if (theControlName == 'number') {
-                tmpFieldType = 'number';
-            } else if (theControlName == 'color') {
-                tmpFieldType = 'color';
-            }
-
-            var tmpIsMultiFlag = '';
-            if (tmpObject.multiple === true) {
-                tmpIsMultiFlag = ' multiple="multiple" ';
-            }
-
-            
-            var tmpInnerClasses = ''
-            if( tmpIcon ){
-                tmpInnerClasses += ' input icon';
-            }
-
-            var tmpAttrs = '';
-            if( tmpObject.attrs && typeof(tmpObject.attrs) == 'string' ){
-                tmpAttrs = tmpAttrs;
-            }
-            if( tmpAppComp ){
-                tmpAttrs += ' appcomp="' + tmpAppComp + '"';
-                if( tmpIsDate ){
-                    tmpAttrs += ' dateformat="' + theControlName + '"';
-                    
-                }
-            }
-
-
-
-            tmpHTML.push('<div controls fieldwrap name="' + theObject.name + '" class="' + tmpClasses + tmpSizeName + tmpReq + ' ui ' + tmpFieldOrInput + '" ' + tmpStyle + '>');
-            if (theObject.label) {
-                tmpHTML.push('<label>');
-                tmpHTML.push(theObject.label || '');
-                tmpHTML.push('</label>');
-            }
-            if (tmpIcon || (tmpItems && tmpItems.length > 0)) {
-                tmpHTML.push('<div class="ui ' + tmpInnerClasses + ' field">');
-            }
-            var tmpPH = '';
-            if ((!tmpDispOnly) && theObject.placeholder !== false) {
-                if (typeof (theObject.placeholder) == 'string') {
-                    tmpPH = theObject.placeholder;
-                }
-                tmpPH = ' placeholder="' + tmpPH + ' ';
-            }
-            tmpHTML.push('<input ' + tmpAttrs + tmpReadOnly + tmpInputClasses + ' type="' + tmpFieldType + '" controls field ' + tmpValue + ' name="' + theObject.name + '" ' + tmpIsMultiFlag + tmpPH + '">')
-            tmpHTML.push('</input>')
-            if( tmpIcon ){
-                tmpHTML.push('<i class="' + tmpIcon + ' icon"></i>');
-            }
-            tmpHTML.push(getNoteMarkup(theObject));
-            tmpHTML.push(getContentHTML(theControlName, tmpItems, theControlObj));
-            tmpHTML.push('</div>');
-            if (tmpIcon || (tmpItems && tmpItems.length > 0)) {
-                tmpHTML.push('</div>');
-            }
-
-            tmpHTML = tmpHTML.join('');
-            return tmpHTML;
-        },
-        isField: true
-    }
-
-
     me.ControlField = {
         setFieldNote: commonSetFieldNote, setFieldMessage: commonSetFieldMessage,
         getHTML: function (theControlName, theObject, theControlObj) {
@@ -9166,17 +9001,29 @@ License: MIT
             var tmpAppComp = '';
             var tmpIsDate = false;
             
+            var tmpDateType = '';
 
             if( theControlName == 'date'){
-                tmpAutoIcon = 'calendar';
+                tmpDateType = 'date';
+
             } else if( theControlName == 'time'){
-                tmpAutoIcon = 'clock';
+                tmpDateType = 'time';
+
             } else if( theControlName == 'datetime'){
+                tmpDateType = 'datetime-local';
+
+            } else if( theControlName == 'datectl'){
+                tmpAutoIcon = 'calendar';
+            } else if( theControlName == 'timectl'){
+                tmpAutoIcon = 'clock';
+            } else if( theControlName == 'datetimectl'){
                 tmpAutoIcon = 'calendar outline';
             }
             if( tmpAutoIcon ){
                 tmpIsDate = true;
                 tmpAppComp = 'date';
+            } else if( tmpDateType ){
+                tmpIsDate = true;
             }
             
             
@@ -9304,6 +9151,9 @@ License: MIT
                     tmpPH = theObject.placeholder;
                 }
                 tmpPH = ' placeholder="' + tmpPH + ' ';
+            }
+            if( tmpIsDate && tmpDateType ){
+                tmpFieldType = tmpDateType;
             }
             tmpHTML.push('<input ' + tmpAttrs + tmpReadOnly + tmpInputClasses + ' type="' + tmpFieldType + '" controls field ' + tmpValue + ' name="' + theObject.name + '" ' + tmpIsMultiFlag + tmpPH + '">')
             tmpHTML.push('</input>')
