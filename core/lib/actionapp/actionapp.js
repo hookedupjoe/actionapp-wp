@@ -9002,22 +9002,25 @@ License: MIT
             var tmpIsDate = false;
             
             var tmpDateType = '';
+            var tmpDateTypeCtl = '';
 
             if( theControlName == 'date'){
                 tmpDateType = 'date';
 
             } else if( theControlName == 'time'){
-                tmpDateType = 'time';
+                tmpDateType = 'datetime-local';
 
             } else if( theControlName == 'datetime'){
                 tmpDateType = 'datetime-local';
-
             } else if( theControlName == 'datectl'){
                 tmpAutoIcon = 'calendar';
+                tmpDateFormat = 'date';
             } else if( theControlName == 'timectl'){
                 tmpAutoIcon = 'clock';
+                tmpDateFormat = 'time';
             } else if( theControlName == 'datetimectl'){
                 tmpAutoIcon = 'calendar outline';
+                tmpDateFormat = 'datetime';
             }
             if( tmpAutoIcon ){
                 tmpIsDate = true;
@@ -9128,7 +9131,7 @@ License: MIT
             if( tmpAppComp ){
                 tmpAttrs += ' appcomp="' + tmpAppComp + '"';
                 if( tmpIsDate ){
-                    tmpAttrs += ' dateformat="' + theControlName + '"';
+                    tmpAttrs += ' dateformat="' + tmpDateFormat + '"';
                     
                 }
             }
@@ -10073,9 +10076,14 @@ License: MIT
     me.webControls.add('field', me.ControlField);
     me.webControls.add('hidden', me.ControlField);
     me.webControls.add('number', me.ControlField);
+
     me.webControls.add('date', me.ControlField);
     me.webControls.add('datetime', me.ControlField);
     me.webControls.add('time', me.ControlField);
+    me.webControls.add('datectl', me.ControlField);
+    me.webControls.add('datetimectl', me.ControlField);
+    me.webControls.add('timectl', me.ControlField);
+    
     me.webControls.add('color', me.ControlField);
 
     me.webControls.add('dropdown', me.ControlDropDown);
