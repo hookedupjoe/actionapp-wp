@@ -277,7 +277,7 @@ License: MIT
 		}
 		var tmpSpecs = this.activeControl.getControlSpecs(tmpName)
 		if(!tmpSpecs){
-			console.log(tmpParams,"Selected item not found, refresh",this.activeControl);
+			console.error(tmpParams,"Selected item not found, refresh",this.activeControl);
 			return;
 		}
 		//			var tmpEl = $(theTarget);
@@ -285,8 +285,6 @@ License: MIT
 			tmpSpecs.color = 'green';
 			this.refreshDesignMode();
 		}
-		//console.log('tmpSpecs',tmpSpecs);
-		
 		
 	}
 
@@ -453,12 +451,6 @@ License: MIT
 
 	}
 	function showCode(theParams) {
-		// console.log('showCode',theParams)
-		// var tmpParams = theParams || 'content';
-		// if (typeof (tmpParams) == 'string') {
-		// 	tmpParams = { name: tmpParams }
-		// }
-		// var tmpName = tmpParams.name || tmpParams.codename || defaultCodeName;
 		this.aceEditor.setSession(this.loaded.sessions['content'])
 	}
 
@@ -523,22 +515,17 @@ License: MIT
 
 	ControlCode.showControl = showControl;
 	function showControl(theControlSpec) {
-		console.log('showControl',this);
 		if (this.activeControl) {
 			this.activeControl.destroy();
-			console.log("destroyed old active");
 			delete (this.activeControl);
 		}
 		this.activeControl = this.activeControlSpec.create(this.activeControlName);
-		console.log('showControl created active',this.activeControl);
-
 		var tmpCheckPath = '';
 		ThisApp.loadWebResouces(this.activeControl, tmpCheckPath, tmpCheckPath);
-
 		this.activeControl.loadToElement(this.spot$('preview-area'))
 
-		//--- allow console access for testing
-		//window.activeControl = this.activeControl;
+		//--- Uncomment to allow console access for testing
+		//--> window.activeControl = this.activeControl;
 
 		//--- Get request to change design
 		//ToDo: Load in panel and on save publish design change event
@@ -730,7 +717,6 @@ License: MIT
 	function toggleDesignMode() {
 		var tmpParsed = this.parseLoadedCode();
 		if( !(tmpParsed) ){
-			console.log("Could not parse")
 			return;
 		}
 
@@ -812,7 +798,6 @@ License: MIT
 		var tmpResType = this.details.restype;
 		this.codeParts = {};
 		this.codePartsOrder = [];
-console.log('*** refreshc',this);
 		if (tmpResType == 'HTML' || tmpResType == 'html') {
 			var tmpContent = this.aceEditor.getValue();
 			this.loadSpot('preview-area', tmpContent);
@@ -896,10 +881,6 @@ console.log('*** refreshc',this);
 	}
 	ControlCode.loadEditorFromDesigner = function(){
 		this.aceEditor.setValue(this.getFromDesigner());
-		//this.aceEditor.setValue('var test1 = 1;')
-		// this.getFromDesigner();
-		// console.log('this.aceEditor',this.aceEditor);
-		// window.tmpAce = this.aceEditor;
 	}
 
 	ControlCode.getFromParsed = getFromParsed;

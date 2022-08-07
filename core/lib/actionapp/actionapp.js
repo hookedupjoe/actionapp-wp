@@ -7045,11 +7045,9 @@ License: MIT
         if( (tmpOptions.myaction) ){
             tmpAction = tmpOptions.myaction;
             tmpActionAdd = ' myaction="' + tmpAction + '" ';
-            console.log('set myaction',tmpAction);
         } else if( (tmpOptions.action) ){
             tmpAction = tmpOptions.action;
             tmpActionAdd = ' action="' + tmpAction + '" ';
-            console.log('set action',tmpAction);
         }
 
         //--- If not turned off and an object is not supplied, set default styling
@@ -7115,9 +7113,6 @@ License: MIT
                 if(tmpStylesDefContent){
                     tmpMaskContentEl.css(tmpStylesDefContent);
                 }
-                console.log('tmpAction',tmpAction)
-
-
                 
                 // this.overlayMaskEl = tmpWrapperEl.data('maskel');
                 // this.overlayMaskContent = tmpWrapperEl.data('maskcontent');
