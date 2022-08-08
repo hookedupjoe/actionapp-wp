@@ -743,6 +743,10 @@ position: inherit !important;
   display: none !important;
 }
 
+.hidden-des {
+  display: none !important;
+}
+
 .hidden.menu {
   display: none;
 }

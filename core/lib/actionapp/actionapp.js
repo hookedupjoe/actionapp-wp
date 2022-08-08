@@ -7072,10 +7072,16 @@ License: MIT
         var tmpAll = this.getOutterEls(theName);
         var tmpUpdated = 0;
         var tmpWrapper = tmpOptions.wrapper || 'designmode';
-        
+        var tmpThisControl = this;
+
         $(tmpAll).each(function( theIndex ) {
             var thisEl = $(this);
             var tmpName = thisEl.attr('name');
+            var tmpThisSpec = tmpThisControl.getControlSpecs(tmpName);
+            
+
+            var tmpControlDisp = tmpThisSpec.ctl;
+            
             var tmpFieldHolder = '<div name="' + tmpName + '" appuse="actapp-design-body-wrap"></div>';
             
             if( (tmpWrapper == 'designmode')){
@@ -7088,7 +7094,7 @@ License: MIT
 
                 this.closest('[appuse="actapp-design-wrap"]')
                     .prepend('<div appuse="actapp-design-details"></div>')
-                    .prepend('<div name="' + theName + '" appuse="actapp-design-wrap-titlebar" class="ui message black mar2 pad5">Name: <b>' + theName + '</b></div>')
+                    .prepend('<div name="' + theName + '" appuse="actapp-design-wrap-titlebar" class="ui message black mar2 pad5"><div class="ui blue label right pointing">' + tmpControlDisp + '</div><b>' + theName + '</b></div>')
 
                 tmpUpdated++;
             }
@@ -8586,7 +8592,7 @@ License: MIT
                 tmpAction = ' myaction="' + tmpObject.myaction.trim() + '" ';
             }
 
-            tmpHTML.push('<button type="button" ' + tmpAction + getItemAttrString(theObject) + ' class="ui button ' + tmpClasses + ' " ' + tmpStyle + '>')
+            tmpHTML.push('<button desuse="disable" type="button" ' + tmpAction + getItemAttrString(theObject) + ' class="ui button ' + tmpClasses + ' " ' + tmpStyle + '>')
 
             if (tmpObject.icon && !(tmpObject.right)) {
                 tmpHTML.push('<i class="' + tmpObject.icon + ' icon"></i> ');
@@ -8958,7 +8964,7 @@ License: MIT
             if( tmpItem.templatename ){
                 tmpMyAttr += ' templatename="' + tmpItem.templatename + '"'
             }
-            tmpHTML.push('<div ' + getItemAttrString(theObject) + ' class="' + tmpClasses + '" style="' + tmpStyles + '" ' + tmpMyAttr + '></div>')
+            tmpHTML.push('<div desuse="hide" ' + getItemAttrString(theObject) + ' class="' + tmpClasses + '" style="' + tmpStyles + '" ' + tmpMyAttr + '></div>')
             tmpHTML = tmpHTML.join('');
             return tmpHTML;
 
@@ -8978,7 +8984,7 @@ License: MIT
             if (theControlName == 'pagespot') {
                 tmpSpotAttr = 'pagespot'
             }
-            tmpHTML.push('<div ' + getItemAttrString(theObject) + ' class="' + tmpClasses + '" style="' + tmpStyles + '" ' + tmpSpotAttr + '="' + tmpName + '">')
+            tmpHTML.push('<div desuse="hide" ' + getItemAttrString(theObject) + ' class="' + tmpClasses + '" style="' + tmpStyles + '" ' + tmpSpotAttr + '="' + tmpName + '">')
 
             tmpHTML.push(tmpObject.text || tmpObject.html || '')
 
@@ -9161,6 +9167,7 @@ License: MIT
             }
 
 
+            tmpAttrs += ' desuse="disable" ';
 
             tmpHTML.push('<div controls fieldwrap name="' + theObject.name + '" class="' + tmpClasses + tmpSizeName + tmpReq + ' ui ' + tmpFieldOrInput + '" ' + tmpStyle + '>');
             if (theObject.label) {

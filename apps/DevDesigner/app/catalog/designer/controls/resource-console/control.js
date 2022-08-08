@@ -734,22 +734,30 @@ License: MIT
 			this.setEditorPanel(false);
 
 //ToDo: Another way
-			// tmpAll = ThisApp.getByAttr$({appuse:"actapp-design-wrap"}, this.activeControl.getEl());
-			// var tmpFields = ThisApp.getByAttr$({controls:'','field':''},tmpAll);
-			// var tmpItems = ThisApp.getByAttr$({controls:'','item':''},tmpAll);
-			// tmpFields.addClass('hidden');
-			// tmpItems.addClass('hidden');
+			tmpAll = ThisApp.getByAttr$({appuse:"actapp-design-wrap"}, this.activeControl.getEl());
+			var tmpFields = ThisApp.getByAttr$({desuse:'hide'},tmpAll);
+			var tmpItems = ThisApp.getByAttr$({desuse:'hide'},tmpAll);
+			tmpFields.addClass('hidden-des');
+			tmpItems.addClass('hidden-des');
+			var tmpFields = ThisApp.getByAttr$({desuse:'disable'},tmpAll);
+			var tmpItems = ThisApp.getByAttr$({desuse:'disable'},tmpAll);
+			tmpFields.attr('disabled','');
+			tmpItems.attr('disabled','');
 			// window.tmpFields = tmpFields;
 			// window.tmpItems = tmpItems;
 
 		} else {
 			this.__inDesignMode = false;
 //ToDo: Another way
-// tmpAll = ThisApp.getByAttr$({appuse:"actapp-design-wrap"}, this.activeControl.getEl());
-// var tmpFields = ThisApp.getByAttr$({controls:'','field':''},tmpAll);
-// var tmpItems = ThisApp.getByAttr$({controls:'','item':''},tmpAll);
-// tmpFields.removeClass('hidden');
-// tmpItems.removeClass('hidden');
+tmpAll = ThisApp.getByAttr$({appuse:"actapp-design-wrap"}, this.activeControl.getEl());
+var tmpFields = ThisApp.getByAttr$({desuse:'hide'},tmpAll);
+var tmpItems = ThisApp.getByAttr$({desuse:'hide'},tmpAll);
+tmpFields.removeClass('hidden-des');
+tmpItems.removeClass('hidden-des');
+var tmpFields = ThisApp.getByAttr$({desuse:'disable'},tmpAll);
+var tmpItems = ThisApp.getByAttr$({desuse:'disable'},tmpAll);
+tmpFields.removeAttr('disabled');
+tmpItems.removeAttr('disabled');
 
 			this.activeControl.moveModeEnd();
 			this.loadEditorFromDesigner()
