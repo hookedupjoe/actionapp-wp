@@ -6990,11 +6990,62 @@ License: MIT
         return true;
     }
 
-    meInstance.setControlDesignStyles = function (theName, theStyles) {
-        //--- Set the overlay css
+    meInstance.setControlSelected = function (theName, theIsOn, theOptions) {
+        if( !(theName) || 'string' != typeof(theName) ){
+            console.error("no name provided");
+            return;
+        }
+        var tmpDesEl = this.getDesignerEl(theName);
+        var tmpIsSel = tmpDesEl.data('selected');
+        console.log( 'tmpIsSel', tmpIsSel);
+        if( typeof(theIsOn) !== 'boolean'){
+            if( tmpIsSel == undefined ){
+                theIsOn = true;
+            } else {
+                theIsOn = !tmpIsSel;
+            }
+        }
+        tmpDesEl.data('selected',theIsOn);
+
+        var tmpIsOn = (theIsOn !== false);
+        if( tmpIsOn ){
+            //--- Show Selected UI Changes
+            tmpDesEl.css('border','dotted 4px orange');
+        } else {
+            //--- Show Deselected UI Changes
+            tmpDesEl.css('border','none');
+        }
     }
-    meInstance.setControlDesignContent = function (theName, theStyles) {
-        //--- Set the overlay content html
+
+    meInstance.refreshDesignerUI = function (theName, theIsOn, theOptions) {
+
+    }
+
+    meInstance.setControlMoveMode = function (theName, theIsOn, theOptions) {
+        if( !(theName) || 'string' != typeof(theName) ){
+            console.error("no name provided");
+            return;
+        }
+        var tmpDesEl = this.getDesignerEl(theName);
+        var tmpIsSel = tmpDesEl.data('movemode');
+        console.log( 'tmpIsSel', tmpIsSel);
+        if( typeof(theIsOn) !== 'boolean'){
+            if( tmpIsSel == undefined ){
+                theIsOn = true;
+            } else {
+                theIsOn = !tmpIsSel;
+            }
+        }
+        tmpDesEl.data('movemode',theIsOn);
+
+        var tmpIsOn = (theIsOn !== false);
+        if( tmpIsOn ){
+            //--- Show Selected UI Changes
+            tmpDesEl.css('margin','10px');
+        } else {
+            //--- Show Deselected UI Changes
+            tmpDesEl.css('margin','0px');
+        }
     }
 
     meInstance.setControlDesignMode = function (theName, theIsOn, theOptions) {
@@ -7004,15 +7055,17 @@ License: MIT
         }
         var tmpIsOn = (theIsOn !== false);
         if( tmpIsOn ){
+            this._designSelected = false;
             this.wrapControl(theName, theOptions);
         } else {
+            delete this._designSelected;
             this.unWrapControl(theName, theOptions);
         }
     }
 
     meInstance.setDesignMode = function (theIsOn, theOptions) {
         var tmpIndex = this.getIndex();
-        this.designModeFlag = theIsOn;
+        this._designModeFlag = theIsOn;
         for( var iName in tmpIndex.items){
             this.setControlDesignMode(iName,theIsOn, theOptions)
         }
@@ -7023,6 +7076,8 @@ License: MIT
             //=== Show all fields for editing
             //= *onChange events disabled in design mode
             this.showAll();
+            //--- clearSelections
+
         } else {
             //=== Refresh onChange Events
             this.refreshControl()
@@ -7190,6 +7245,13 @@ License: MIT
         
         return tmpUpdated;
     }
+    
+    meInstance.getDesignerEl = function (theName) {
+        var tmpEl = $(this.getOutterEl(theName).parent());
+        var tmpDesWrap = tmpEl.closest('[appuse=actapp-design-wrap]')
+        tmpDesWrap.data('wrapel',tmpEl);
+        return $(tmpDesWrap);
+    }
 
     meInstance.getWrapperEl = function (theName) {
         return $(this.getOutterEl(theName).parent());
@@ -7216,7 +7278,7 @@ License: MIT
     }
 
     meInstance.inDesignMode = function(){
-        return (this.designModeFlag === true);
+        return (this._designModeFlag === true);
     }
     meInstance.refreshForField = function (theFN) {
         if( this.inDesignMode() ){
