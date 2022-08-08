@@ -131,6 +131,19 @@ License: MIT
 									"run": "action",
 									"action": "toggleDesignMode"
 								}
+							},
+							{
+								"ctl": "button",
+								"color": "violet",
+								"basic": true,
+								toLeft: true,
+								hidden: true,
+								"name": "btn-design-update-prop",
+								"label": "Update Property",
+								"onClick": {
+									"run": "action",
+									"action": "updateDesignProperty"
+								}
 							}
 						],
 						center: [
@@ -207,9 +220,77 @@ License: MIT
 	function preLoad(theDetails) {
 
 	}
+
+	var loadedTabs = {};
+	ControlCode.addTabControl = addTabControl;
+	function addTabControl(theName, theOptions){
+		var tmpOptions = theOptions | {};
+        var tmpTabKey = 'tab-' + theName;
+        
+        if( loadedTabs[tmpTabKey] ){
+			this.parts.props.gotoTab(tmpTabKey);
+        } else {
+            //var tmpCloseMe = '<i style="margin-right:-5px;margin-left:10px;" tab="' + tmpTabKey + '" pageaction="closeTab" class="icon close grey inverted"></i>';
+
+            var tmpSetupDetails = selectionListIndex[theName] || tmpOptions;
+			
+			var tmpTabTitle = tmpSetupDetails.tabTitle || theName;
+			
+			//console.log('tmpSetupDetails',tmpSetupDetails)
+            var tmpControlName = tmpSetupDetails.controlname || '';
+            var tmpControlSource = tmpSetupDetails.catalog || '_designer';
+			if( !(tmpControlName) ){
+				console.error('no controlname');
+				return;
+			}
+
+			var tmpProps = this.parts.props;
+			var tmpThis = this;
+            ThisApp.getResourceFromSource('control',tmpControlName,tmpControlSource,tmpControlName).then(function(theLoadedControl){
+                var tmpNewTabControl = theLoadedControl.create(tmpTabKey);
+                //var tmpNewTabControl = ThisPage.getControl('PostsView').create(tmpTabKey);
+                tmpProps.addTab({item:tmpTabKey,text: tmpTabTitle, icon: 'table', content:''})
+                var tmpNewSpot = tmpProps.getTabSpot(tmpTabKey);
+                tmpNewTabControl.loadToElement(tmpNewSpot).then(function () {
+                    loadedTabs[tmpTabKey] = tmpNewTabControl;
+					tmpThis.parts[theName] = tmpNewTabControl;
+                    //--- Go to the newly added card (to show it and hide others)
+                    if( tmpNewTabControl.setup ){
+                        tmpNewTabControl.setup(tmpSetupDetails);
+                    }
+                    ThisApp.delay(1).then(function(){
+                        tmpProps.gotoTab(tmpTabKey);
+                    })
+                    
+                });
+            })
+            
+
+        }
+        
+
+    }
+
+    var selectionListIndex = {};
+
 	//---- Initial Setup of the control
 	function setup(theDetails) {
 
+		var tmpPostItems = {data:[
+			{
+				name:'properties',
+				catalog: '_designer',
+				realcontrolname: 'FieldPropertyEditor',
+				controlname: 'AceEditor',
+				tabTitle: 'Properties'
+			}
+		]}
+		//--- Load to index
+		for( var iPos in tmpPostItems.data ){
+			var tmpDetails = tmpPostItems.data[iPos];
+			selectionListIndex[tmpDetails.name] = tmpDetails;
+		}
+	
 
 		var tmpPageName = theDetails.pagename || '';
 		var tmpCatName = theDetails.catname || '';
@@ -224,13 +305,13 @@ License: MIT
 		var tmpHasPanel = ( tmpResType == 'Control' || tmpResType == 'Panel');
 		
 		this.parts.props.addTab({item:'home',text: '', icon: 'icon home blue', content:''});
+		this.addTabControl('properties');
         this.parts.props.loadTabSpot('home','Initial Page, Welcome');
         this.parts.props.gotoTab('home');
 
 
 		this.setItemDisplay("btn-design-mode",tmpHasPanel);
-
-		
+		this.setItemDisplay("btn-design-update-prop",tmpHasPanel);
 
 		var tmpShowName = tmpResName.replace('.html', '')
 			.replace('.json', '')
@@ -286,7 +367,10 @@ License: MIT
 		// 	this.refreshDesignMode();
 		// }
 		console.log('tmpSpecs',tmpSpecs);
-		
+		window.tmpSpecs = tmpSpecs;
+		this.parts['properties'].setValue(JSON.stringify(tmpSpecs,null,2));
+		this.editSpecs = tmpSpecs; //by reference
+
 	}
 
 
@@ -714,6 +798,17 @@ License: MIT
 		this.setItemDisplay('props',!theIsCodeEditor);
 	}
 
+	
+	ControlCode.updateDesignProperty = updateDesignProperty;
+	function updateDesignProperty() {
+		var tmpNewSpecs = this.parts.properties.getValue();
+		tmpNewSpecs = JSON.parse(tmpNewSpecs);
+
+		//ToDo: This different
+		$.extend(this.editSpecs, tmpNewSpecs);		
+		this.refreshDesignMode();
+	}
+	
 	ControlCode.toggleDesignMode = toggleDesignMode;
 	function toggleDesignMode() {
 		var tmpResType = this.details.restype;
