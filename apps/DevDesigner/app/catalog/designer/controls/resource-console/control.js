@@ -225,7 +225,7 @@ License: MIT
 	ControlCode.addTabControl = addTabControl;
 	function addTabControl(theName, theOptions){
 		var tmpOptions = theOptions | {};
-        var tmpTabKey = 'tab-' + theName;
+        var tmpTabKey = theName; //'tab-' + 
         
         if( loadedTabs[tmpTabKey] ){
 			this.parts.props.gotoTab(tmpTabKey);
@@ -275,9 +275,9 @@ License: MIT
 
 	//---- Initial Setup of the control
 	function setup(theDetails) {
-
+		var tmpProps = this.parts.props;
 		//--- Turn on once designer is ready for use
-		this.designModeOpen = false;
+		this.designModeOpen = true;
 
 		var tmpPostItems = {data:[
 			{
@@ -286,6 +286,12 @@ License: MIT
 				realcontrolname: 'FieldPropertyEditor',
 				controlname: 'AceEditor',
 				tabTitle: 'Properties'
+			},
+			{
+				name:'organizer',
+				catalog: '_designer',
+				controlname: 'OrganizerControls',
+				tabTitle: 'Organizer'
 			}
 		]}
 		//--- Load to index
@@ -307,11 +313,18 @@ License: MIT
 
 		var tmpHasPanel = ( tmpResType == 'Control' || tmpResType == 'Panel');
 		
-		this.parts.props.addTab({item:'home',text: '', icon: 'icon home blue', content:''});
-		this.addTabControl('properties');
-        this.parts.props.loadTabSpot('home','Initial Page, Welcome');
-        this.parts.props.gotoTab('home');
+		tmpProps.addTab({item:'home',text: '', icon: 'icon home blue', content:''});
+        tmpProps.loadTabSpot('home','Initial Page, Welcome');
+		this.setupOrganizerPanel();
 
+		this.addTabControl('properties');
+		//this.addTabControl('organizer');
+		ThisApp.delay(500).then(function(){
+			tmpProps.gotoTab('organizer');
+		});
+        
+
+		
 
 		if( this.designModeOpen ){
 			this.setItemDisplay("btn-design-mode",tmpHasPanel);
@@ -373,8 +386,22 @@ License: MIT
 		// }
 		console.log('tmpSpecs',tmpSpecs);
 		window.tmpSpecs = tmpSpecs;
-		this.parts['properties'].setValue(JSON.stringify(tmpSpecs,null,2));
-		this.editSpecs = tmpSpecs; //by reference
+		tmpWrapperEl = ThisApp.getByAttr$({appuse:"actapp-design-wrap",name:tmpSpecs.name}, this.activeControl.getEl());
+
+		if( this.selectModeActive ){
+			console.log('selectModeActive',tmpName);
+			if( tmpSpecs._designSel === true){
+				tmpSpecs._designSel = false;
+				tmpWrapperEl.css('border','none');
+			} else {
+				tmpSpecs._designSel = true;
+				tmpWrapperEl.css('border','dotted 4px red');
+			}
+			//xxx
+		} else {
+			this.parts['properties'].setValue(JSON.stringify(tmpSpecs,null,2));
+			this.editSpecs = tmpSpecs; //by reference
+		}
 
 	}
 
@@ -1188,6 +1215,62 @@ tmpItems.removeAttr('disabled');
 
 	};
 
+
+	ControlCode.setupOrganizerPanel = function() {
+		var tmpTabPanel = this.parts.props;
+
+		var tmpPanelSpec = {
+		  "options": {
+			"padding": true
+		  },
+		  "content": [{
+			"ctl": "button",
+			"color": "green",
+			"icon": "search",
+			"classes": "field",
+			"name": "btn-select-mode",
+			"text": "Select Mode",
+			"myaction": "selectModeSelected"
+		},
+		{
+			"ctl": "button",
+			"icon": "arrows alternate",
+			"text": "Move Mode",
+			"color": "violet",
+			"classes": "field",
+			"name": "btn-move-mode",
+			"myaction": "moveModeSelected"
+		}]
+		};
+	
+		var tmpControl = this.newControl || ThisApp.controls.newControl(tmpPanelSpec, {
+		  parent: this
+		});
+		var tmpName = 'organizer';
+		var tmpInstance = tmpControl.create(tmpName);
+		tmpTabPanel.addTab({item:'organizer',text: '', icon: 'icon arrows alternate blue', content:''});
+		var tmpSpot = tmpTabPanel.getTabSpot('organizer');
+		tmpInstance.loadToElement(tmpSpot);
+		this.parts[tmpName] = tmpInstance;
+    };
+	
+	ControlCode.moveModeSelected = function(){
+		if( this.moveModeActive === false){
+			this.activeControl.moveModeStart();
+		} else {
+			this.activeControl.moveModeEnd();
+		}
+		this.moveModeActive = !this.moveModeActive;
+	}
+
+	ControlCode.selectModeSelected = function(){
+		if( this.selectModeActive === false){
+			//--- Take action to turn selection on in UI
+		} else {
+			//--- Take action to turn selection off in UI
+		}
+		this.selectModeActive = !this.selectModeActive;
+	}
 
 	ControlCode.closeMe = function () {
 		this.context.page.controller.closeResourceConsole(this.details);
