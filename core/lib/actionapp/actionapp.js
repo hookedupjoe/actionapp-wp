@@ -8751,7 +8751,14 @@ License: MIT
 
 
     me.SemanticElement = {
+        getHTMLForDesign: function (theControlName, theObject, theControlObj, theIsUI){
+            return "DEIGN"
+        },
         getHTML: function (theControlName, theObject, theControlObj, theIsUI) {
+            //--> Concept of having the control send alternate output for designer
+            // if( theControlObj.__inDesignMode ){
+            //     return this.getHTMLForDesign(theControlName, theObject, theControlObj, theIsUI)
+            // }
             var tmpObject = theObject || {};
             var tmpHTML = [];
             var tmpHidden = '';

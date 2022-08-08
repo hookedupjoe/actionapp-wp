@@ -187,7 +187,7 @@ License: MIT
 	function _onInit() {
 		//this.parts.resources.subscribe('selectMe', onResSelect.bind(this))
 		var tmpThis = this;
-		//window.tmpResPanel = this;
+		window.tmpResPanel = this;
 		ThisApp.subscribe('saveRequested', function () {
 			if (!tmpThis.isActive()) { return }
 			var tmpIsDirty = tmpThis.refreshButtonStatus();
@@ -281,10 +281,11 @@ License: MIT
 			return;
 		}
 		//			var tmpEl = $(theTarget);
-		if( tmpSpecs.color ){
-			tmpSpecs.color = 'green';
-			this.refreshDesignMode();
-		}
+		// if( tmpSpecs.color ){
+		// 	tmpSpecs.color = 'green';
+		// 	this.refreshDesignMode();
+		// }
+		console.log('tmpSpecs',tmpSpecs);
 		
 	}
 
@@ -722,23 +723,34 @@ License: MIT
 				return;
 			}
 		}
+		var tmpInDesign = ( this.__inDesignMode === true);
 
-		if( this.__inDesignMode !== true){
+
+
+		if( !tmpInDesign ){
 			this.__inDesignMode = true;
 			this.activeControl.setDesignMode(false);
 			this.activeControl.setDesignMode(true,{myaction:'onDesignClick'});
-//			var tmpAppWraps = ThisApp.getByAttr$({appuse:"actapp-design-wrap"})
+			this.setEditorPanel(false);
 
 //ToDo: Another way
-			// tmpAppWraps.attr('action','moveHereRequest');
-			// ThisApp.moveHereRequest = function(theP,theTarget){
-			// 	var tmpWrap = $(theTarget);
-			// 	window.tmpWrap = tmpWrap;
-			// 	var tmpSelData = tmpWrap.data();
-			// }
-			this.setEditorPanel(false);
+			// tmpAll = ThisApp.getByAttr$({appuse:"actapp-design-wrap"}, this.activeControl.getEl());
+			// var tmpFields = ThisApp.getByAttr$({controls:'','field':''},tmpAll);
+			// var tmpItems = ThisApp.getByAttr$({controls:'','item':''},tmpAll);
+			// tmpFields.addClass('hidden');
+			// tmpItems.addClass('hidden');
+			// window.tmpFields = tmpFields;
+			// window.tmpItems = tmpItems;
+
 		} else {
 			this.__inDesignMode = false;
+//ToDo: Another way
+// tmpAll = ThisApp.getByAttr$({appuse:"actapp-design-wrap"}, this.activeControl.getEl());
+// var tmpFields = ThisApp.getByAttr$({controls:'','field':''},tmpAll);
+// var tmpItems = ThisApp.getByAttr$({controls:'','item':''},tmpAll);
+// tmpFields.removeClass('hidden');
+// tmpItems.removeClass('hidden');
+
 			this.activeControl.moveModeEnd();
 			this.loadEditorFromDesigner()
 			this.activeControl.setDesignMode(false);
