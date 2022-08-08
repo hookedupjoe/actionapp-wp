@@ -7834,6 +7834,8 @@ License: MIT
             if (tmpCtl == 'tabs') {
                 var tmpTabs = [];
                 var tmpTabName = tmpItem.name || 'tabs';
+                tmpTabCtlName = tmpTabName;
+                
                 tmpTabName = theControlName + "-" + tmpTabName;
                 var tmpTabsHTML = [];
                 var tmpColor = 'blue';
@@ -7869,8 +7871,9 @@ License: MIT
                 }
                 tmpTabsHTML.push('</div>');
                 tmpTabs = tmpTabs.join('');
+                
                 if (tmpTabs) {
-                    tmpTabs = '<div controls tabs class="pad0 ui top attached tabular menu ' + tmpSlim + '" style="">' + tmpTabs + '</div>';
+                    tmpTabs = '<div name="' + tmpTabCtlName + '" item="' + tmpTabCtlName + '" controls tabs class="pad0 ui top attached tabular menu ' + tmpSlim + '" style="">' + tmpTabs + '</div>';
                     if (tmpUseLayout) {
                         tmpTabs = '<div ctlcomp="layout"><div class="ui-layout-north">' + tmpTabs + '</div>';
                     }
