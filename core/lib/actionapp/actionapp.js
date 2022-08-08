@@ -9035,14 +9035,11 @@ License: MIT
             var tmpIsDate = false;
             
             var tmpDateType = '';
-            var tmpDateTypeCtl = '';
 
             if( theControlName == 'date'){
                 tmpDateType = 'date';
-
             } else if( theControlName == 'time'){
-                tmpDateType = 'datetime-local';
-
+                tmpDateType = 'time';
             } else if( theControlName == 'datetime'){
                 tmpDateType = 'datetime-local';
             } else if( theControlName == 'datectl'){
