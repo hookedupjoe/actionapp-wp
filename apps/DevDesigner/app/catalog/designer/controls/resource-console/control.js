@@ -276,6 +276,9 @@ License: MIT
 	//---- Initial Setup of the control
 	function setup(theDetails) {
 
+		//--- Turn on once designer is ready for use
+		this.designModeOpen = false;
+
 		var tmpPostItems = {data:[
 			{
 				name:'properties',
@@ -310,8 +313,10 @@ License: MIT
         this.parts.props.gotoTab('home');
 
 
-		this.setItemDisplay("btn-design-mode",tmpHasPanel);
-		this.setItemDisplay("btn-design-update-prop",tmpHasPanel);
+		if( this.designModeOpen ){
+			this.setItemDisplay("btn-design-mode",tmpHasPanel);
+			this.setItemDisplay("btn-design-update-prop",tmpHasPanel);
+		}
 
 		var tmpShowName = tmpResName.replace('.html', '')
 			.replace('.json', '')
