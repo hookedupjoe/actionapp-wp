@@ -7076,15 +7076,24 @@ License: MIT
         $(tmpAll).each(function( theIndex ) {
             var thisEl = $(this);
             var tmpName = thisEl.attr('name');
-
+            var tmpFieldHolder = '<div name="' + tmpName + '" appuse="actapp-design-body-wrap"></div>';
+            
             if( (tmpWrapper == 'designmode')){
                 tmpWrapper = '<div ' + tmpActionAdd + ' class="ui field" name="' + tmpName + '" appuse="actapp-design-wrap"></div>';
             }
             if( !(this.data('actappdesignWrap'))){
-                this.wrap(tmpWrapper).data('actappdesignWrap',true);                
+                this.wrap(tmpWrapper)
+                    .wrap(tmpFieldHolder)
+                    .data('actappdesignWrap',true);                
+
+                this.closest('[appuse="actapp-design-wrap"]')
+                    .prepend('<div appuse="actapp-design-details"></div>')
+                    .prepend('<div name="' + theName + '" appuse="actapp-design-wrap-titlebar" class="ui message black mar2 pad5">Name: <b>' + theName + '</b></div>')
+
                 tmpUpdated++;
             }
         });
+        
 
         if( tmpOptions.overlay === true || tmpOptions.mask === true ){
             tmpAddOverlay = true;
@@ -7144,7 +7153,7 @@ License: MIT
         }
 
         tmpNewEl.append('<div appuse="actapp-design-wrap-part" style="clear:both;padding:4px;"></div>')
-        tmpNewEl.prepend('<div name="' + theName + '" appuse="actapp-design-wrap-titlebar" class="ui message black mar2 pad5">Name: <b>' + theName + '</b></div>')
+        //tmpNewEl.prepend('<div name="' + theName + '" appuse="actapp-design-wrap-titlebar" class="ui message black mar2 pad5">Name: <b>' + theName + '</b></div>');
 
 
         return tmpNewEl;
@@ -7160,7 +7169,9 @@ License: MIT
         }
         $(tmpAll).each(function( theIndex ) {
             if( (this.data('actappdesignWrap') === true)){
-                this.unwrap().data('actappdesignWrap',false);
+                this.unwrap()
+                .unwrap()
+                .data('actappdesignWrap',false);
                 tmpUpdated++;
             }
         });
@@ -8751,6 +8762,12 @@ License: MIT
 
 
     me.SemanticElement = {
+        //--- Concept of returning details to use in the designer
+        //  --- for stuff that can't be gleaned from the specs
+        // ----** Maybe add to the specs instead to save a call?
+        getDesignerDetails: function (theControlName, theObject, theControlObj, theIsUI){
+            return {}
+        },
         getHTMLForDesign: function (theControlName, theObject, theControlObj, theIsUI){
             return "DEIGN"
         },
