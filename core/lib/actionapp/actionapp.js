@@ -9607,7 +9607,7 @@ License: MIT
                 if (tmpObject.rows) {
                     tmpRows = 'rows=' + tmpObject.rows + ' ';
                 }
-                tmpHTML.push('<textarea ' + tmpRows + 'controls field name="' + tmpObject.name + '" ' + tmpPH + '" ></textarea>')
+                tmpHTML.push('<textarea desuse="disable" ' + tmpRows + 'controls field name="' + tmpObject.name + '" ' + tmpPH + '" ></textarea>')
 
                 tmpHTML.push(getNoteMarkup(theObject));
 
