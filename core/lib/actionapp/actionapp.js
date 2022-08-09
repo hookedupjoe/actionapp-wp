@@ -8340,15 +8340,15 @@ License: MIT
     // //----   COMMON ITEM CONTROLS - INFORMATION =================================
     //    **** No longer using this method for self docs
 
-    // me.catalogInfo = new Index();
-    // me.catalogInfo.add('color', {
-    //     name: "color",
-    //     label: "Semantic Color List",
-    //     type: "string",
-    //     ctl: "dropdown",
-    //     list: ["red", "orange", "yellow", "olive", "green", "teal", "blue", "violet", "purple", "pink", "brown", "black"],
-    //     note: "No other options are valid for colors"
-    // })
+    me.catalogInfo = new Index();
+    me.catalogInfo.add('color', {
+        name: "color",
+        label: "Select Color",
+        datatype: "string",
+        ctl: "dropdown",
+        list: {source: 'sys_colors'},
+        note: "No other options are valid for colors"
+    })
     // me.catalogInfo.add('hidden', {
     //     name: "hidden",
     //     label: "Hidden",

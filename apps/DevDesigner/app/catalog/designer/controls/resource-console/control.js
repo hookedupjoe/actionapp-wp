@@ -328,19 +328,17 @@ License: MIT
 		tmpProps.addTab({item:'home',text: '', icon: 'icon home blue', content:''});
         tmpProps.loadTabSpot('home','Initial Page, Welcome');
 		this.setupOrganizerPanel();
+		this.setupPropsPanel();
 
-		this.addTabControl('properties');
+		//this.addTabControl('properties');
 		//this.addTabControl('organizer');
-		ThisApp.delay(500).then(function(){
-			tmpProps.gotoTab('organizer');
-		});
         
 
 		
-		this.designModeOpen = false;
 		if( this.designModeOpen ){
 			this.setItemDisplay("btn-design-mode",tmpHasPanel);
 			this.setItemDisplay("btn-design-update-prop",tmpHasPanel);
+			this.setItemDisplay("btn-insert-mode",tmpHasPanel);
 		}
 
 		var tmpShowName = tmpResName.replace('.html', '')
@@ -396,19 +394,19 @@ License: MIT
 		// 	tmpSpecs.color = 'green';
 		// 	this.refreshDesignMode();
 		// }
-		console.log('tmpSpecs',tmpSpecs);
-		window.tmpSpecs = tmpSpecs;
-		tmpWrapperEl = ThisApp.getByAttr$({appuse:"actapp-design-wrap",name:tmpSpecs.name}, this.activeControl.getEl());
+//		tmpWrapperEl = ThisApp.getByAttr$({appuse:"actapp-design-wrap",name:tmpSpecs.name}, this.activeControl.getEl());
 
 		if( tmpResPanel._insertMode === true){
 			
-			return;
+			//return;
 		}
-		if( this.selectModeActive ){
-			tmpResPanel.activeControl.setControlSelected(tmpName)
+		if( !this.muliSelectModeActive === true ){
+			tmpResPanel.activeControl.controlSelection(false);
 		}
-		this.parts['properties'].setValue(JSON.stringify(tmpSpecs,null,2));
+		tmpResPanel.activeControl.setControlSelected(tmpName);
+		//this.parts['properties'].setValue(JSON.stringify(tmpSpecs,null,2));
 		this.editSpecs = tmpSpecs; //by reference
+		console.log( 'this.editSpecs', this.editSpecs);
 
 	}
 
@@ -1235,7 +1233,33 @@ tmpItems.removeAttr('disabled');
 
 	};
 
+	ControlCode.setupPropsPanel = function() {
+		var tmpTabPanel = this.parts.props;
 
+		var tmpPanelSpec = {
+		  "options": {
+			"padding": true
+		  },
+		  "content": [
+		{
+			"ctl": "control",
+			"catalog": "_designer",
+			"controlname": "PropertyEditor",
+			"name": "propeditor"
+		}]
+		};
+	
+		var tmpControl = this.newControl || ThisApp.controls.newControl(tmpPanelSpec, {
+		  parent: this
+		});
+		var tmpName = 'propeditor';
+		var tmpInstance = tmpControl.create(tmpName);
+		tmpTabPanel.addTab({item:tmpName,text: '', icon: 'icon table blue', content:''});
+		var tmpSpot = tmpTabPanel.getTabSpot(tmpName);
+		tmpInstance.loadToElement(tmpSpot);
+		this.parts[tmpName] = tmpInstance;
+    };
+	
 	ControlCode.setupOrganizerPanel = function() {
 		var tmpTabPanel = this.parts.props;
 
