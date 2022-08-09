@@ -272,7 +272,7 @@ class ActAppDesigner {
 		);
 		if ( get_post_type( get_the_ID() ) == 'actappelem' ) {
 			//--- Load standardly created widgets;
-			$tmpWidgetList = array('controlspot', 'ActAppDesignElement','fieldlist','field','');
+			$tmpWidgetList = array('controlspot', 'ActAppDesignElement','fieldlist','field');
 			foreach ($tmpWidgetList as $aName) {
 				self::loadStandardBlock($aName);
 			}
