@@ -135,6 +135,18 @@ License: MIT
 							{
 								"ctl": "button",
 								"color": "violet",
+								toLeft: true,
+								hidden: false,
+								"name": "btn-insert-mode",
+								"label": "Insert Mode",
+								"onClick": {
+									"run": "action",
+									"action": "toggleInsertMode"
+								}
+							},
+							{
+								"ctl": "button",
+								"color": "violet",
 								"basic": true,
 								toLeft: true,
 								hidden: true,
@@ -388,20 +400,15 @@ License: MIT
 		window.tmpSpecs = tmpSpecs;
 		tmpWrapperEl = ThisApp.getByAttr$({appuse:"actapp-design-wrap",name:tmpSpecs.name}, this.activeControl.getEl());
 
-		if( this.selectModeActive ){
-			console.log('selectModeActive',tmpName);
-			if( tmpSpecs._designSel === true){
-				tmpSpecs._designSel = false;
-				tmpWrapperEl.css('border','none');
-			} else {
-				tmpSpecs._designSel = true;
-				tmpWrapperEl.css('border','dotted 4px red');
-			}
-			//xxx
-		} else {
-			this.parts['properties'].setValue(JSON.stringify(tmpSpecs,null,2));
-			this.editSpecs = tmpSpecs; //by reference
+		if( tmpResPanel._insertMode === true){
+			
+			return;
 		}
+		if( this.selectModeActive ){
+			tmpResPanel.activeControl.setControlSelected(tmpName)
+		}
+		this.parts['properties'].setValue(JSON.stringify(tmpSpecs,null,2));
+		this.editSpecs = tmpSpecs; //by reference
 
 	}
 
@@ -841,6 +848,19 @@ License: MIT
 		this.refreshDesignMode();
 	}
 	
+	ControlCode.toggleInsertMode = toggleInsertMode;
+	function toggleInsertMode(theX,theTarget) {
+		var tmpEl = $(theTarget);
+
+		if( this._insertMode === true ){
+			this._insertMode = false;
+			tmpEl.css('border','');
+		} else {
+			this._insertMode = true;
+			tmpEl.css('border','solid 2px red');
+		}
+	}
+
 	ControlCode.toggleDesignMode = toggleDesignMode;
 	function toggleDesignMode() {
 		var tmpResType = this.details.restype;
