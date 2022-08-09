@@ -7044,7 +7044,6 @@ License: MIT
         }
         var tmpDesEl = this.getDesignerEl(theName);
         var tmpIsSel = tmpDesEl.data('movemode');
-        console.log( 'tmpIsSel', tmpIsSel);
         if( typeof(theIsOn) !== 'boolean'){
             if( tmpIsSel == undefined ){
                 theIsOn = true;
@@ -7940,8 +7939,9 @@ License: MIT
                 var tmpTabs = [];
                 var tmpTabName = tmpItem.name || 'tabs';
                 tmpTabCtlName = tmpTabName;
-                
-                tmpTabName = theControlName + "-" + tmpTabName;
+                if( theControlName ){
+                    tmpTabName = theControlName + "-" + tmpTabName;
+                }
                 var tmpTabsHTML = [];
                 var tmpColor = 'blue';
                 if (tmpItem.color) {
@@ -7978,7 +7978,7 @@ License: MIT
                 tmpTabs = tmpTabs.join('');
                 
                 if (tmpTabs) {
-                    tmpTabs = '<div name="' + tmpTabCtlName + '" item="' + tmpTabCtlName + '" controls tabs class="pad0 ui top attached tabular menu ' + tmpSlim + '" style="">' + tmpTabs + '</div>';
+                    tmpTabs = '<div name="' + tmpTabName + '" item="' + tmpTabCtlName + '" controls tabs class="pad0 ui top attached tabular menu ' + tmpSlim + '" style="">' + tmpTabs + '</div>';
                     if (tmpUseLayout) {
                         tmpTabs = '<div ctlcomp="layout"><div class="ui-layout-north">' + tmpTabs + '</div>';
                     }
