@@ -407,6 +407,8 @@ License: MIT
 		//this.parts['properties'].setValue(JSON.stringify(tmpSpecs,null,2));
 		this.editSpecs = tmpSpecs; //by reference
 		console.log( 'this.editSpecs', this.editSpecs);
+		var tmpProps = this.parts.propeditor.parts.propeditor;
+		tmpProps.loadData(tmpSpecs);
 
 	}
 

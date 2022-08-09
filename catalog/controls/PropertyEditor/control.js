@@ -19,7 +19,10 @@
             {
                 "name": "ctl",
                 "label": "Web Control",
-                "ctl": "field",
+                "ctl": "dropdown",
+                "list": {
+                    "source": "sys_controls"
+                },
                 "req": true
             },
             {
@@ -88,6 +91,13 @@
             {
                 "name": "clearing",
                 "label": "Clearing",
+                "ctl": "radiolist",
+                "row": true,
+                "list": "Default|,Yes|yes,No|no"
+            },
+            {
+                "name": "multi",
+                "label": "Allow Multiple Values",
                 "ctl": "radiolist",
                 "row": true,
                 "list": "Default|,Yes|yes,No|no"
