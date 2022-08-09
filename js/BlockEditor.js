@@ -351,7 +351,7 @@
         }
         BlockEditor.getSidebarControls = function(theSidebarPanels){
             return el(
-                wp.editor.InspectorControls,
+                wp.blockEditor.InspectorControls,
                 null,
                 theSidebarPanels
             );            
