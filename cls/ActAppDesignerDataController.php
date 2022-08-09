@@ -44,6 +44,14 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 		'permission_callback' => array( $this, 'get_permissions_check' )
 	  );
 	  register_rest_route( $namespace, '/' . $path, [$routeInfo]);     
+
+	  $path = 'devinfo';
+	  $routeInfo = array(
+		'methods'             => 'POST',
+		'callback'            => array( $this, 'get_debug' ),
+		'permission_callback' => array( $this, 'get_permissions_check' )
+	  );
+	  register_rest_route( $namespace, '/' . $path, [$routeInfo]);     
 	  
 	  //--- To get demo data
 	  $path = 'json_from_csv';
@@ -110,11 +118,10 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 	  $path = 'savedoc';
 	  $routeInfo = array(
 		'methods'             => 'POST',
-		'callback'            => array( $this, 'save_doc' ),
+		'callback'            => array( $this, 'save_document' ),
 		'permission_callback' => array( $this, 'get_edit_permissions_check' )
 	  );
 	  register_rest_route( $namespace, '/' . $path, [$routeInfo]);     
-
 
 	  //--- Designer user level access to save data
 	  $path = 'savedesign';
@@ -834,6 +841,11 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 		exit();
 	}
 
+	
+	public function save_document($request) {
+		return self::save_doc($request,false);
+	}	
+
 	public function save_design($request) {
 		return self::save_doc($request,true);
 	}	
@@ -841,6 +853,22 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 	//--- $thePostType: True = designerdoc, False or Null = appdoc, String Value = posttype
 	public function save_doc($request, $thePostType, $theIsRequest = true) {
 		$tmpPostType = 'actappdoc';
+		
+		$tmpDoDebug = false;
+		$tmpDebugOut = 'started';
+
+		if($tmpDoDebug){
+			//--- Make return as array and encode it
+			$tmpDebugRet = wp_json_encode(array(
+				'action' => 'saveuser',
+				'debug' => $tmpDebugOut
+			));
+
+			header('Content-Type: application/json');
+			echo $tmpDebugRet;
+			exit();
+			return;
+		}
 
 		$tmpIsAltPostType = is_string($thePostType);
 
