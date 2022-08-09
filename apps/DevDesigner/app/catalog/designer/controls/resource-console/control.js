@@ -136,7 +136,7 @@ License: MIT
 								"ctl": "button",
 								"color": "violet",
 								toLeft: true,
-								hidden: false,
+								hidden: true,
 								"name": "btn-insert-mode",
 								"label": "Insert Mode",
 								"onClick": {
@@ -337,7 +337,7 @@ License: MIT
         
 
 		
-
+		this.designModeOpen = false;
 		if( this.designModeOpen ){
 			this.setItemDisplay("btn-design-mode",tmpHasPanel);
 			this.setItemDisplay("btn-design-update-prop",tmpHasPanel);
