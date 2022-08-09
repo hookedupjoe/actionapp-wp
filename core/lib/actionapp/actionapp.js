@@ -174,9 +174,12 @@ window.ActionAppCore = window.ActionAppCore || ActionAppCore;
     // - one to cover the content to protect and make semitransparent
     // - the other over that to hold conent that should not be semi-transparent
     $.fn.overlayMask = function (action) {
+        if( this.selector == ""){
+            return;
+        }
         if(this && this.length){
             if( this.length > 1 ){
-                console.error( 'Do not cll overlay mask on more than one element at a time', this.length);
+                console.error( 'Do not call overlay mask on more than one element at a time', this);
                 return;
             }
         }
@@ -259,8 +262,6 @@ window.ActionAppCore = window.ActionAppCore || ActionAppCore;
             });
         };
     }
-    
-    
 
 })(ActionAppCore, $);
 
@@ -6990,6 +6991,22 @@ License: MIT
         return true;
     }
 
+    meInstance.controlSelection = function (theOptions) {
+        var tmpIndex = this.getIndex();
+        var tmpOnOff = false;
+        if( typeof(theOptions) == 'boolean'){
+            tmpOnOff = theOptions;
+        }
+        for( var iPos in tmpIndex.fieldsList ){
+            var tmpName = tmpIndex.fieldsList[iPos]
+            this.setControlSelected(tmpName,tmpOnOff);
+        }
+        for( var iPos in tmpIndex.itemsList ){
+            var tmpName = tmpIndex.itemsList[iPos];
+            this.setControlSelected(tmpName,tmpOnOff);
+        }
+    }
+    
     meInstance.setControlSelected = function (theName, theIsOn, theOptions) {
         if( !(theName) || 'string' != typeof(theName) ){
             console.error("no name provided");
@@ -6997,7 +7014,6 @@ License: MIT
         }
         var tmpDesEl = this.getDesignerEl(theName);
         var tmpIsSel = tmpDesEl.data('selected');
-        console.log( 'tmpIsSel', tmpIsSel);
         if( typeof(theIsOn) !== 'boolean'){
             if( tmpIsSel == undefined ){
                 theIsOn = true;
@@ -7086,7 +7102,34 @@ License: MIT
     }
 
     //meInstance.defaultDesignAction = 'actappControlSelected';
+    meInstance.getControlConfigLocation = function(theName, theStartParent){
+        var tmpName = theName;
+        var tmpParent = theStartParent || this.getConfig()
+        var tmpParentArray = tmpParent.content || tmpParent.items || tmpParent.tabs;
+        var tmpRet = {};
+        for( var iPos in tmpParentArray ){
+            var tmpEntry = tmpParentArray[iPos];
+            if( tmpEntry && tmpEntry.name && tmpEntry.name == tmpName ){
+                return {
+                    pos: iPos,
+                    array: tmpParentArray,
+                    parent: tmpParent
+                }
+                
+            }
+            var tmpSubParent = tmpEntry.content || tmpEntry.items || tmpEntry.tabs;
+            if( tmpSubParent ){
+                tmpRet = this.getControlConfigLocation(theName, tmpEntry);
+                if (tmpRet){
+                    return tmpRet;
+                }
+            }
+        }
+        
 
+    }
+
+    
     meInstance.wrapControl = function (theName, theOptions) {
         var tmpOptions = theOptions || {};
         var tmpAddOverlay = false;
@@ -7149,7 +7192,7 @@ License: MIT
 
                 this.closest('[appuse="actapp-design-wrap"]')
                     .prepend('<div appuse="actapp-design-details"></div>')
-                    .prepend('<div name="' + theName + '" appuse="actapp-design-wrap-titlebar" class="ui message black mar2 pad5"><div class="ui blue label right pointing">' + tmpControlDisp + '</div><b>' + theName + '</b></div>')
+                    .prepend('<div name="' + theName + '" appuse="actapp-design-wrap-titlebar" class="ui message black mar2 pad5 fluid" style="border:ridge 3px white;"><div class="ui black basic circular horizontal label">' + tmpControlDisp + '</div><b>' + theName + '</b></div>')
 
                 tmpUpdated++;
             }
