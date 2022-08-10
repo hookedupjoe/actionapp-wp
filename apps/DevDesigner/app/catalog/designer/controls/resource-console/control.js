@@ -338,7 +338,7 @@ License: MIT
 		if( this.designModeOpen ){
 			this.setItemDisplay("btn-design-mode",tmpHasPanel);
 			this.setItemDisplay("btn-design-update-prop",tmpHasPanel);
-			this.setItemDisplay("btn-insert-mode",tmpHasPanel);
+			//this.setItemDisplay("btn-insert-mode",tmpHasPanel);
 		}
 
 		var tmpShowName = tmpResName.replace('.html', '')
@@ -396,14 +396,16 @@ License: MIT
 		// }
 //		tmpWrapperEl = ThisApp.getByAttr$({appuse:"actapp-design-wrap",name:tmpSpecs.name}, this.activeControl.getEl());
 
-		if( tmpResPanel._insertMode === true){
+		if( this._insertMode === true){
 			
 			//return;
 		}
 		if( !this.muliSelectModeActive === true ){
-			tmpResPanel.activeControl.controlSelection(false);
+			this.activeControl.controlSelection(false);
 		}
-		tmpResPanel.activeControl.setControlSelected(tmpName);
+		this.activeControl.setControlSelected(tmpName);
+		this.lastControlSelected = tmpName;
+		
 		//this.parts['properties'].setValue(JSON.stringify(tmpSpecs,null,2));
 		this.editSpecs = tmpSpecs; //by reference
 		console.log( 'this.editSpecs', this.editSpecs);
@@ -417,6 +419,9 @@ License: MIT
 		this.activeControl.setDesignMode(false);
 		this.activeControl.refreshUI()
 		this.activeControl.setDesignMode(true,{myaction:'onDesignClick'});
+		if(this.lastControlSelected){
+			this.activeControl.setControlSelected(this.lastControlSelected);
+		}
 	}
 	
 	function uniqueGroups(theUniqueness) {
@@ -840,10 +845,7 @@ License: MIT
 	
 	ControlCode.updateDesignProperty = updateDesignProperty;
 	function updateDesignProperty() {
-		var tmpNewSpecs = this.parts.properties.getValue();
-		tmpNewSpecs = JSON.parse(tmpNewSpecs);
-
-		//ToDo: This different
+		var tmpNewSpecs = this.parts.propeditor.parts.propeditor.getData();
 		$.extend(this.editSpecs, tmpNewSpecs);		
 		this.refreshDesignMode();
 	}
