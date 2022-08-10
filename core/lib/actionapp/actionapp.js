@@ -9453,15 +9453,20 @@ License: MIT
         },
         setFieldValue: function (theFieldEl, theValue, theFieldSpecs) {
             var tmpCtlEl = theFieldEl.closest('[ctlcomp]');
-            if (theFieldSpecs.multi === true) {
-                var tmpValues = theValue || '';
-                if (isStr(tmpValues)) {
-                    tmpValues = tmpValues.split(",")
-                }
-                tmpCtlEl.dropdown('set exactly', tmpValues);
+            if( theValue === ''){
+                tmpCtlEl.dropdown('clear');
             } else {
-                tmpCtlEl.dropdown('set selected', theValue);
+                if (theFieldSpecs.multi === true) {
+                    var tmpValues = theValue || '';
+                    if (isStr(tmpValues)) {
+                        tmpValues = tmpValues.split(",")
+                    }
+                    tmpCtlEl.dropdown('set exactly', tmpValues);
+                } else {
+                    tmpCtlEl.dropdown('set selected', theValue);
+                }
             }
+            
         },
         isField: true
     }
