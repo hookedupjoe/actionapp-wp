@@ -7426,7 +7426,8 @@ License: MIT
     meInstance.inDesignMode = function(){
         return (this._designModeFlag === true);
     }
-    meInstance.refreshForField = function (theFN) {
+
+    meInstance.refreshForField = function(theFN){
         if( this.inDesignMode() ){
             return;
         }
@@ -7474,8 +7475,8 @@ License: MIT
         this.publish('field-change', [this, tmpFN, this.getFieldValue(tmpFN)])
     }
 
-    meInstance.refreshControl = function () {
 
+    meInstance.refreshControl = function () {
         var tmpIndex = this.getIndex();
         if (tmpIndex && tmpIndex.fieldsList && tmpIndex.fieldsList.length) {
             for (var iPos = 0; iPos < tmpIndex.fieldsList.length; iPos++) {
