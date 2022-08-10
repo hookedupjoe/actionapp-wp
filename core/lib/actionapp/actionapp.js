@@ -8876,6 +8876,7 @@ License: MIT
 
 
     me.SemanticElement = {
+        proplist: ['name','ctl','classes','styles','hidden','text','clearing'],
         //--- Concept of returning details to use in the designer
         //  --- for stuff that can't be gleaned from the specs
         // ----** Maybe add to the specs instead to save a call?
@@ -9130,6 +9131,7 @@ License: MIT
 
     //----   COMMON FIELD CONTROLS =================================
     me.ControlField = {
+        proplist: ['name','ctl','label','req','classes','styles','hidden','note','placeholder'],
         setFieldNote: commonSetFieldNote, setFieldMessage: commonSetFieldMessage,
         getHTML: function (theControlName, theObject, theControlObj) {
             var tmpObject = theObject || {};
@@ -9322,6 +9324,7 @@ License: MIT
 
 
     me.ControlDropDown = {
+        proplist: ['name','ctl','label','req','classes','styles','hidden','note','placeholder','list','multi'],
         setFieldNote: commonSetFieldNote, setFieldMessage: commonSetFieldMessage,
         getHTML: function (theControlName, theObject, theControlObj) {
 
@@ -9475,6 +9478,7 @@ License: MIT
 
 
     me.ControlCheckboxList = {
+        proplist: ['name','ctl','label','req','classes','styles','hidden','note','placeholder','list','row'],
         getHTML: getHTMLforCheckboxList,
         setFieldValue: function (theFieldEl, theValue, theFieldSpecs, theIsReadOnly) {
             var tmpValues = theValue || '';
@@ -9524,6 +9528,7 @@ License: MIT
 
 
     me.ControlRadioList = {
+        proplist: ['name','ctl','label','req','classes','styles','hidden','note','placeholder','list','row'],
         getHTML: getHTMLforCheckboxList,
         setFieldValue: function (theFieldEl, theValue, theFieldSpecs, theIsReadOnly) {
             if (theIsReadOnly) {
