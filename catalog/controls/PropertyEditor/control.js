@@ -28,6 +28,11 @@
         "req": true
       },
       {
+        "name": "label",
+        "label": "Label",
+        "ctl": "field"
+      },
+      {
         "name": "req",
         "label": "Required",
         "can_set__type": "standard",
@@ -35,8 +40,8 @@
         "list": "|yes"
       },
       {
-        "name": "label",
-        "label": "Label",
+        "name": "list",
+        "label": "List",
         "ctl": "field"
       },
       {
@@ -83,11 +88,6 @@
       {
         "name": "note",
         "label": "Note",
-        "ctl": "field"
-      },
-      {
-        "name": "list",
-        "label": "List",
         "ctl": "field"
       },
       {
@@ -143,15 +143,84 @@
     if (!(tmpScope.isSetup)) {
       //ToDo: check for PropertyEditor_controls?
       ActionAppCore.addSources({
-        PropertyEditor_controls: 'Segment|segment,Header|header,Field|field,Drop Down List|dropdown,Radio List|radiolist,Checkbox List|checkboxlist,TextArea|textarea,Spot|spot,Message|message,Button|button,Div|div,Span|span,UI|ui,Title|title,Divider|divider,Seperator|sep'
+        PropertyEditor_controls: 'Segment|segment,Header|header,Field|field,Drop Down List|dropdown,Radio List|radiolist,Checkbox List|checkboxlist,TextArea|textarea,Message|message,Button|button,Div|div,Span|span,UI|ui,Title|title,Divider|divider,Seperator|sep'
       });
+      this.initScopedInfo();
       tmpScope.isSetup = true;
     }
   }
+  
+  ControlCode.initScopedInfo = function(){
+    var tmpScope = this._controlScope;
+    var tmpWebControls = ActionAppCore.getListSource('PropertyEditor_controls');
+    var tmpCtlIndex = {};
+    for( var iPos in tmpWebControls ){
+      var tmpEntry = tmpWebControls[iPos];
+      var tmpLabel = tmpEntry[0];
+      var tmpName = tmpEntry[1];
+      var tmpInfo = {
+        label: tmpLabel,
+        name: tmpName
+      }
+      tmpCtlIndex[tmpName] = tmpInfo;
+    }
+    tmpScope.ctlIndex = tmpCtlIndex;
+  }
+  
+  ControlCode.initShowIndex = initShowIndex;
+  function initShowIndex() {
+    this.showIndex = {};
+    var tmpExcludeIndex = {name:1,ctl:1};
+    var tmpIndex = this.getIndex();
+    for( var iName in tmpIndex.fields ){
+      if( !(tmpExcludeIndex[iName]) ){
+        this.showIndex[iName] = false;  
+      }
+    }
+  }
 
+  ControlCode.resetShowIndex = resetShowIndex;
+  function resetShowIndex() {
+    for( var iName in this.showIndex ){
+      this.showIndex[iName] = false;
+    }
+  }
+  
+  
+  ControlCode.refreshFromShowIndex = refreshFromShowIndex;
+  function refreshFromShowIndex() {
+    for( var iName in this.showIndex ){
+      if(iName){
+        this.setFieldDisplay(iName,this.showIndex[iName]);
+      }
+    }
+  }
+
+  ControlCode.refreshShowIndex = refreshShowIndex;
+  function refreshShowIndex(theAutoRefresh) {
+    var tmpCtl = this.getFieldValue('ctl');
+    if( !(tmpCtl) ){
+      this.resetShowIndex();
+    } else {
+      var tmpWebCtl = ThisApp.controls.getWebControl(tmpCtl);
+      var tmpPropList = tmpWebCtl.proplist || [];
+  
+      for( var iName in this.showIndex ){
+        var tmpShowFlag = (tmpPropList.indexOf(iName) >= 0);
+        this.showIndex[iName] = tmpShowFlag;
+      }
+    }
+    if( theAutoRefresh !== false){
+      this.refreshFromShowIndex();
+    }
+  }
+  
   ControlCode._onInit = _onInit;
   function _onInit() {
-    console.log('this._controlScope', this._controlScope);
+    //--- ref to control wide info (all instances)
+    this.ctlIndex = this._controlScope.ctlIndex;
+    //--- this instance show flags
+    this.initShowIndex();
   }
 
 
@@ -160,7 +229,8 @@
     if( !(tmpCtl) ){
       return;
     }
-    console.log( 'tmpCtl', tmpCtl);
+    this.refreshShowIndex(true);
+    
 
   }
 
