@@ -8876,7 +8876,10 @@ License: MIT
 
 
     me.SemanticElement = {
-        proplist: ['name','ctl','classes','styles','hidden','text','clearing'],
+        getPropList: function(){ 
+			var tmpPropList = ['name','ctl','classes','styles','hidden','text','color', 'icon', 'size', 'alignment', 'attached', 'clearing','floating', 'dividing', 'block', 'link', 'fluid', 'placeholder', 'raised', 'tall', 'stacked', 'piled', 'vertical', 'loading', 'inverted', 'bottom', 'top', 'attached', 'padded', 'slim', 'compact', 'secondary', 'tertiary', 'circular', 'clearing', 'right', 'left', 'center', 'aligned', 'basic']; 
+			return tmpPropList
+		},
         //--- Concept of returning details to use in the designer
         //  --- for stuff that can't be gleaned from the specs
         // ----** Maybe add to the specs instead to save a call?
@@ -9131,7 +9134,10 @@ License: MIT
 
     //----   COMMON FIELD CONTROLS =================================
     me.ControlField = {
-        proplist: ['name','ctl','label','req','classes','styles','hidden','note','placeholder'],
+        getPropList: function(){ 
+			var tmpPropList = ['name','ctl','label','req','classes','styles','hidden','note','placeholder']; 
+			return tmpPropList
+		},
         setFieldNote: commonSetFieldNote, setFieldMessage: commonSetFieldMessage,
         getHTML: function (theControlName, theObject, theControlObj) {
             var tmpObject = theObject || {};
@@ -9324,7 +9330,10 @@ License: MIT
 
 
     me.ControlDropDown = {
-        proplist: ['name','ctl','label','req','classes','styles','hidden','note','placeholder','list','multi'],
+        getPropList: function(){ 
+			var tmpPropList = ['name','ctl','label','req','classes','styles','hidden','note','placeholder','list','multi']; 
+			return tmpPropList
+		},
         setFieldNote: commonSetFieldNote, setFieldMessage: commonSetFieldMessage,
         getHTML: function (theControlName, theObject, theControlObj) {
 
@@ -9478,7 +9487,10 @@ License: MIT
 
 
     me.ControlCheckboxList = {
-        proplist: ['name','ctl','label','req','classes','styles','hidden','note','placeholder','list','row'],
+        getPropList: function(){ 
+			var tmpPropList = ['name','ctl','label','req','classes','styles','hidden','note','placeholder','list','row']; 
+			return tmpPropList
+		},
         getHTML: getHTMLforCheckboxList,
         setFieldValue: function (theFieldEl, theValue, theFieldSpecs, theIsReadOnly) {
             var tmpValues = theValue || '';
@@ -9528,7 +9540,10 @@ License: MIT
 
 
     me.ControlRadioList = {
-        proplist: ['name','ctl','label','req','classes','styles','hidden','note','placeholder','list','row'],
+        getPropList: function(){ 
+			var tmpPropList = ['name','ctl','label','req','classes','styles','hidden','note','placeholder','list','row']; 
+			return tmpPropList
+		},
         getHTML: getHTMLforCheckboxList,
         setFieldValue: function (theFieldEl, theValue, theFieldSpecs, theIsReadOnly) {
             if (theIsReadOnly) {

@@ -203,8 +203,10 @@
       this.resetShowIndex();
     } else {
       var tmpWebCtl = ThisApp.controls.getWebControl(tmpCtl);
-      var tmpPropList = tmpWebCtl.proplist || [];
-  
+      var tmpPropList = [];
+      if(tmpWebCtl.getPropList){
+        tmpPropList = tmpWebCtl.getPropList();
+      }
       for( var iName in this.showIndex ){
         var tmpShowFlag = (tmpPropList.indexOf(iName) >= 0);
         this.showIndex[iName] = tmpShowFlag;
