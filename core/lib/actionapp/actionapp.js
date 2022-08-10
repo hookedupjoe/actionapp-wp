@@ -7138,7 +7138,8 @@ License: MIT
     }
 
     meInstance.refreshDesignerUI = function (theName, theIsOn, theOptions) {
-
+        //ToDo: Refresh UI selections, etc - based on status 
+        //         for redraw.
     }
 
     meInstance.setControlMoveMode = function (theName, theIsOn, theOptions) {
@@ -8724,6 +8725,11 @@ License: MIT
     }
 
     me.ControlDivider = {
+        getPropList: function(){ 
+			//var tmpPropList = ['name','ctl','classes','styles','hidden','text','color', 'icon', 'size', 'alignment', 'attached', 'clearing','floating', 'dividing', 'block', 'link', 'fluid', 'placeholder', 'raised', 'tall', 'stacked', 'piled', 'vertical', 'loading', 'inverted', 'bottom', 'top', 'attached', 'padded', 'slim', 'compact', 'secondary', 'tertiary', 'circular', 'clearing', 'right', 'left', 'center', 'aligned', 'basic']; 
+            var tmpPropList = ['name','ctl','classes','styles','hidden','text','color', 'size', 'alignment']; 
+			return tmpPropList
+		},
         getHTML: function (theControlName, theObject, theControlObj) {
             var tmpObject = theObject || {};
             var tmpLevel = '';
@@ -8877,7 +8883,8 @@ License: MIT
 
     me.SemanticElement = {
         getPropList: function(){ 
-			var tmpPropList = ['name','ctl','classes','styles','hidden','text','color', 'icon', 'size', 'alignment', 'attached', 'clearing','floating', 'dividing', 'block', 'link', 'fluid', 'placeholder', 'raised', 'tall', 'stacked', 'piled', 'vertical', 'loading', 'inverted', 'bottom', 'top', 'attached', 'padded', 'slim', 'compact', 'secondary', 'tertiary', 'circular', 'clearing', 'right', 'left', 'center', 'aligned', 'basic']; 
+			//var tmpPropList = ['name','ctl','classes','styles','hidden','text','color', 'icon', 'size', 'alignment', 'attached', 'clearing','floating', 'dividing', 'block', 'link', 'fluid', 'placeholder', 'raised', 'tall', 'stacked', 'piled', 'vertical', 'loading', 'inverted', 'bottom', 'top', 'attached', 'padded', 'slim', 'compact', 'secondary', 'tertiary', 'circular', 'clearing', 'right', 'left', 'center', 'aligned', 'basic']; 
+            var tmpPropList = ['name','ctl','classes','styles','hidden','text','color', 'size', 'alignment']; 
 			return tmpPropList
 		},
         //--- Concept of returning details to use in the designer
@@ -9713,6 +9720,10 @@ License: MIT
 
 
     me.ControlTextArea = {
+        getPropList: function(){ 
+			var tmpPropList = ['name','ctl','label','req','classes','styles','hidden','note','placeholder','rows']; 
+			return tmpPropList
+		},
         setFieldNote: commonSetFieldNote, setFieldMessage: commonSetFieldMessage,
         getHTML: function (theControlName, theObject, theControlObj) {
 
