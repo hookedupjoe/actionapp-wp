@@ -31,7 +31,7 @@ var ActionAppCore = {
             sys_grid_sizes: 'Default|,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16',
             sys_sizes: 'Default|,Mini|mini,Tiny|tiny,Small|small,Medium|medium,Large|large,Big|big,Huge|huge,Massive|massive',
             sys_colors: 'Default|,Red|red,Orange|orange,Yellow|yellow,Olive|olive,Green|green,Teal|teal,Blue|blue,Violet|violet,Purple|purple,Pink|pink,Brown|brown,Black|black',
-            sys_controls: 'Segment|segment,Header|header,Field|field,Drop Down List|dropdown,radiolist|Radio List,Checkbox List|checkboxlist,TextArea|textarea,Spot|spot,Message|message,Button|button,Div|div,Span|span,UI|ui,Title|title,Divider|divider,Seperator|sep',
+            sys_controls: 'Segment|segment,Header|header,Field|field,Drop Down List|dropdown,Radio List|radiolist,Checkbox List|checkboxlist,TextArea|textarea,Spot|spot,Message|message,Button|button,Div|div,Span|span,UI|ui,Title|title,Divider|divider,Seperator|sep',
             states: 'Alabama|AL,Alaska|AK,Arizona|AZ,Arkansas|AR,California|CA,Colorado|CO,Connecticut|CT,Delaware|DE,District Of Columbia|DC,Florida|FL,Georgia|GA,Hawaii|HI,Idaho|ID,Illinois|IL,Indiana|IN,Iowa|IA,Kansas|KS,Kentucky|KY,Louisiana|LA,Maine|ME,Maryland|MD,Massachusetts|MA,Michigan|MI,Minnesota|MN,Mississippi|MS,Missouri|MO,Montana|MT,Nebraska|NE,Nevada|NV,New Hampshire|NH,New Jersey|NJ,New Mexico|NM,New York|NY,North Carolina|NC,North Dakota|ND,Ohio|OH,Oklahoma|OK,Oregon|OR,Pennsylvania|PA,Rhode Island|RI,South Carolina|SC,South Dakota|SD,Tennessee|TN,Texas|TX,Utah|UT,Vermont|VT,Virginia|VA,Washington|WA,West Virginia|WV,Wisconsin|WI,Wyoming|WY',
             countries: 'Afghanistan|AF,Åland Islands|AX,Albania|AL,Algeria|DZ,American Samoa|AS,Andorra|AD,Angola|AO,Anguilla|AI,Antarctica|AQ,Antigua and Barbuda|AG,Argentina|AR,Armenia|AM,Aruba|AW,Australia|AU,Austria|AT,Azerbaijan|AZ,Bahamas|BS,Bahrain|BH,Bangladesh|BD,Barbados|BB,Belarus|BY,Belgium|BE,Belize|BZ,Benin|BJ,Bermuda|BM,Bhutan|BT,Bolivia, Plurinational State of|BO,Bonaire, Sint Eustatius and Saba|BQ,Bosnia and Herzegovina|BA,Botswana|BW,Bouvet Island|BV,Brazil|BR,British Indian Ocean Territory|IO,Brunei Darussalam|BN,Bulgaria|BG,Burkina Faso|BF,Burundi|BI,Cambodia|KH,Cameroon|CM,Canada|CA,Cape Verde|CV,Cayman Islands|KY,Central African Republic|CF,Chad|TD,Chile|CL,China|CN,Christmas Island|CX,Cocos (Keeling) Islands|CC,Colombia|CO,Comoros|KM,Congo|CG,Congo, the Democratic Republic of the|CD,Cook Islands|CK,Costa Rica|CR,Côte d\'Ivoire|CI,Croatia|HR,Cuba|CU,Curaçao|CW,Cyprus|CY,Czech Republic|CZ,Denmark|DK,Djibouti|DJ,Dominica|DM,Dominican Republic|DO,Ecuador|EC,Egypt|EG,El Salvador|SV,Equatorial Guinea|GQ,Eritrea|ER,Estonia|EE,Ethiopia|ET,Falkland Islands (Malvinas|FK,Faroe Islands|FO,Fiji|FJ,Finland|FI,France|FR,French Guiana|GF,French Polynesia|PF,French Southern Territories|TF,Gabon|GA,Gambia|GM,Georgia|GE,Germany|DE,Ghana|GH,Gibraltar|GI,Greece|GR,Greenland|GL,Grenada|GD,Guadeloupe|GP,Guam|GU,Guatemala|GT,Guernsey|GG,Guinea|GN,Guinea-Bissau|GW,Guyana|GY,Haiti|HT,Heard Island and McDonald Islands|HM,Holy See (Vatican City State|VA,Honduras|HN,Hong Kong|HK,Hungary|HU,Iceland|IS,India|IN,Indonesia|ID,Iran, Islamic Republic of|IR,Iraq|IQ,Ireland|IE,Isle of Man|IM,Israel|IL,Italy|IT,Jamaica|JM,Japan|JP,Jersey|JE,Jordan|JO,Kazakhstan|KZ,Kenya|KE,Kiribati|KI,Korea, Democratic People\'s Republic of|KP,Korea, Republic of|KR,Kuwait|KW,Kyrgyzstan|KG,Lao People\'s Democratic Republic|LA,Latvia|LV,Lebanon|LB,Lesotho|LS,Liberia|LR,Libya|LY,Liechtenstein|LI,Lithuania|LT,Luxembourg|LU,Macao|MO,Macedonia, the former Yugoslav Republic of|MK,Madagascar|MG,Malawi|MW,Malaysia|MY,Maldives|MV,Mali|ML,Malta|MT,Marshall Islands|MH,Martinique|MQ,Mauritania|MR,Mauritius|MU,Mayotte|YT,Mexico|MX,Micronesia, Federated States of|FM,Moldova, Republic of|MD,Monaco|MC,Mongolia|MN,Montenegro|ME,Montserrat|MS,Morocco|MA,Mozambique|MZ,Myanmar|MM,Namibia|NA,Nauru|NR,Nepal|NP,Netherlands|NL,New Caledonia|NC,New Zealand|NZ,Nicaragua|NI,Niger|NE,Nigeria|NG,Niue|NU,Norfolk Island|NF,Northern Mariana Islands|MP,Norway|NO,Oman|OM,Pakistan|PK,Palau|PW,Palestinian Territory, Occupied|PS,Panama|PA,Papua New Guinea|PG,Paraguay|PY,Peru|PE,Philippines|PH,Pitcairn|PN,Poland|PL,Portugal|PT,Puerto Rico|PR,Qatar|QA,Réunion|RE,Romania|RO,Russian Federation|RU,Rwanda|RW,Saint Barthélemy|BL,Saint Helena, Ascension and Tristan da Cunha|SH,Saint Kitts and Nevis|KN,Saint Lucia|LC,Saint Martin (French part|MF,Saint Pierre and Miquelon|PM,Saint Vincent and the Grenadines|VC,Samoa|WS,San Marino|SM,Sao Tome and Principe|ST,Saudi Arabia|SA,Senegal|SN,Serbia|RS,Seychelles|SC,Sierra Leone|SL,Singapore|SG,Sint Maarten (Dutch part|SX,Slovakia|SK,Slovenia|SI,Solomon Islands|SB,Somalia|SO,South Africa|ZA,South Georgia and the South Sandwich Islands|GS,South Sudan|SS,Spain|ES,Sri Lanka|LK,Sudan|SD,Suriname|SR,Svalbard and Jan Mayen|SJ,Swaziland|SZ,Sweden|SE,Switzerland|CH,Syrian Arab Republic|SY,Taiwan, Province of China|TW,Tajikistan|TJ,Tanzania, United Republic of|TZ,Thailand|TH,Timor-Leste|TL,Togo|TG,Tokelau|TK,Tonga|TO,Trinidad and Tobago|TT,Tunisia|TN,Turkey|TR,Turkmenistan|TM,Turks and Caicos Islands|TC,Tuvalu|TV,Uganda|UG,Ukraine|UA,United Arab Emirates|AE,United Kingdom|GB,United States|US,United States Minor Outlying Islands|UM,Uruguay|UY,Uzbekistan|UZ,Vanuatu|VU,Venezuela, Bolivarian Republic of|VE,Viet Nam|VN,Virgin Islands, British|VG,Virgin Islands, U.S|VI,Wallis and Futuna|WF,Western Sahara|EH,Yemen|YE,Zambia|ZM,Zimbabwe|ZW'
         }
@@ -7348,12 +7348,13 @@ License: MIT
             if (tmpOnChange) {
                 if (isObj(tmpOnChange)) {
                     var tmpActionName = tmpOnChange.run;
+                    console.log('tmpActionName',tmpActionName)
                     var tmpAction = me.actions.get(tmpActionName) || me[tmpActionName];
                     var tmpToBind = false;
                     if( !tmpAction ){
                         var tmpToRun = false;
                         var tmpPCtr = 0;
-                        var tmpParent = this.parentControl;
+                        var tmpParent = this;
                         while ((tmpParent && !isFunc(tmpToRun))) {
                             tmpPCtr++;
                             tmpToRun = tmpParent.actions[tmpActionName] || tmpParent[tmpActionName] ;
@@ -9316,6 +9317,11 @@ License: MIT
             tmpHTML = tmpHTML.join('');
             return tmpHTML;
         },
+        getFieldValue: function (theControlEl, theFieldSpecs) {
+            //ToDo: Check DataType
+            tmpRet = me._getControlData(theControlEl, theFieldSpecs.name);
+            return tmpRet;
+        },
         isField: true
     }
 
@@ -9423,6 +9429,8 @@ License: MIT
             return tmpHTML;
         },
         getFieldValue: function (theControlEl, theFieldSpecs) {
+            //ToDo: Check DataType
+
             //--- Really this can be left out and it will use this by default
             //--   adding this to show how to return values for custom fields that are not based on simple / standard form logic
             if (theControlEl && theFieldSpecs) {
@@ -9474,6 +9482,15 @@ License: MIT
                 theFieldEl.val(theValue);
                 return;
             }
+            console.log( 'theFieldSpecs.ctl', theFieldSpecs.ctl);
+            if( theFieldSpecs.ctl == 'checkbox'){
+                //ToDo: Change to the only list choice
+                if( tmpValues ){
+                    tmpValues = 'yes';
+                } else {
+                    tmpValues = '';
+                }
+            }
             if (isStr(tmpValues)) {
                 tmpValues = tmpValues.split(",")
             }
@@ -9487,6 +9504,21 @@ License: MIT
 
             }
             return true;
+        },
+        getFieldValue: function (theControlEl, theFieldSpecs) {
+            //ToDo: Check DataType
+            tmpRet = me._getControlData(theControlEl, theFieldSpecs.name);
+            if( theFieldSpecs.ctl == 'checkbox'){
+                var tmpCheckVal = tmpRet;
+                if( Array.isArray(tmpCheckVal) ){
+                    tmpCheckVal = tmpCheckVal[0];
+                }
+                if( (tmpCheckVal) ){
+                  return true;  
+                }
+                return false;
+            }
+            return tmpRet;
         },
         isField: true
     }
@@ -9507,6 +9539,26 @@ License: MIT
                 }
             }
             return true;
+        },
+        getFieldValue: function (theControlEl, theFieldSpecs) {
+            //ToDo: Check DataType
+            tmpRet = me._getControlData(theControlEl, theFieldSpecs.name);
+            if( theFieldSpecs.datatype && theFieldSpecs.datatype == 'boolean' ){
+                var tmpChk = (''+tmpRet);
+                if( tmpChk == '' ){
+                    if( typeof(theFieldSpecs.default) == 'boolean'){
+                        tmpChk = theFieldSpecs.default;
+                    }
+                    return false;
+                }
+                if( tmpChk == 'true' || tmpChk == 'True' || tmpChk == 'yes' || tmpChk == 'Yes' || tmpChk == '1'){
+                    return true;
+                }
+                if( tmpChk == 'false' || tmpChk == 'False' || tmpChk == 'no' || tmpChk == 'No' || tmpChk == '0'){
+                    return false;
+                }
+            }
+            return tmpRet;
         },
         isField: true
     }
@@ -10230,6 +10282,7 @@ License: MIT
     me.webControls.add('checkboxlist', me.ControlCheckboxList);
     me.webControls.add('radiolist', me.ControlRadioList);
     me.webControls.add('textarea', me.ControlTextArea);
+    me.webControls.add('checkbox', me.ControlCheckboxList);
 
     me.webControls.add('tabs', me.ControlTabs);
     me.webControls.add('tab', me.ControlTab);
