@@ -127,59 +127,43 @@
 
 
 
+  // ControlCode.setup = setup;
+  // function setup() {
+  //   //--- placeholder
+  // }
 
-  ControlCode.setup = setup;
-  function setup() {
-    console.log("Ran setup")
-  }
-
-  ActionAppCore.controlScope._PropertyEditor = ActionAppCore.controlScope._PropertyEditor || {
-    isSetup: false,
-    ctlList: false,
-    fieldList: false,
-    itemList: false,
-    fieldList: false,
-    privAlwaysVis: {
-      'name': true,
-      'ctl': true
-    },
-    privControlInfo: {
-      _flist: {
-        'field': true, 'checkbox': true, 'checkboxlist': true, 'radiolist': true, 'dropdown': true
-      },
-      'req': {
-        _f: true
-      }
-    }
+  ControlCode._controlScope = {
+    isSetup: false
   }
 
   ControlCode._onPreInit = _onPreInit;
   function _onPreInit() {
     //--- Set source values used by this control only - one time for all instances
-    if (!(ControlCode.scopeInfo)) {
-      console.log('ControlCode.scopeInfo', ControlCode.scopeInfo);
-      ControlCode.scopeInfo = ActionAppCore.controlScope._PropertyEditor;
-      console.log('set ControlCode.scopeInfo', ControlCode.scopeInfo);
+    var tmpScope = ControlCode._controlScope;
+    if (!(tmpScope.isSetup)) {
+      //ToDo: check for PropertyEditor_controls?
       ActionAppCore.addSources({
         PropertyEditor_controls: 'Segment|segment,Header|header,Field|field,Drop Down List|dropdown,Radio List|radiolist,Checkbox List|checkboxlist,TextArea|textarea,Spot|spot,Message|message,Button|button,Div|div,Span|span,UI|ui,Title|title,Divider|divider,Seperator|sep'
       });
-      ControlCode.scopeInfo.isSetup = true;
-
+      tmpScope.isSetup = true;
     }
-
   }
 
   ControlCode._onInit = _onInit;
   function _onInit() {
-    console.log('ControlCode.scopeInfo', ControlCode.scopeInfo);
+    console.log('this._controlScope', this._controlScope);
   }
 
 
   ControlCode.webControlChange = function() {
     var tmpCtl = this.getFieldValue('ctl');
-
+    if( !(tmpCtl) ){
+      return;
+    }
+    console.log( 'tmpCtl', tmpCtl);
 
   }
+
 
 
 
