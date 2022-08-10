@@ -9327,9 +9327,22 @@ License: MIT
             tmpHTML = tmpHTML.join('');
             return tmpHTML;
         },
+        setFieldValue: function (theFieldEl, theValue, theFieldSpecs) {
+			if( typeof(theValue) == 'object') {
+				theValue = JSON.stringify(theValue);
+			}
+			theFieldEl.val(theValue);
+        },
         getFieldValue: function (theControlEl, theFieldSpecs) {
             //ToDo: Check DataType
             tmpRet = me._getControlData(theControlEl, theFieldSpecs.name);
+            if( typeof(tmpRet == 'string')){
+                if( tmpRet.substr(0,1) == '{'){
+                    try {
+                        tmpRet = JSON.parse(tmpRet);
+                    } catch (error) {}
+                }
+            }
             return tmpRet;
         },
         isField: true
