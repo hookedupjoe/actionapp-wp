@@ -6619,6 +6619,26 @@ License: MIT
         return this;
     }
 
+    meInstance.getDefaultValue = function (theFieldName, theOptionalSpecs) {
+        var tmpI = this.getIndex();
+        var tmpFieldSpecs = this.getFieldSpecs(theFieldName);
+        if( tmpFieldSpecs && tmpFieldSpecs.hasOwnProperty('default') ){
+            return tmpFieldSpecs.default;
+        }
+        var tmpDT = tmpFieldSpecs.datatype;
+        if( tmpFieldSpecs.ctl == 'checkbox'){
+            tmpDT = 'boolean';
+        }
+        if( tmpFieldSpecs.ctl == 'number'){
+            tmpDT = 'object';
+        }        
+        if( tmpDT ){
+            if( 'boolean' == tmpDT){return false;}
+            if( 'number' == tmpDT){return 0;}
+            if( 'object' == tmpDT){return {};}
+        }
+        return '';
+    }
 
     meInstance.getFieldValue = function (theFieldName) {
         var tmpRet = '';
@@ -6626,23 +6646,22 @@ License: MIT
 
         if (!(tmpFieldEls)) { return ''; }
 
+        var tmpFieldSpecs = this.getFieldSpecs(theFieldName);
+        if( !(tmpFieldSpecs)){
+            console.warn( 'getFieldValue found no specs, scope issue?', theFieldName);
+            return me._getControlData(this.getEl(), theFieldName);
+        }
         if (this.getFieldDisplay(theFieldName) === false) {
             //--- Do not return values of unavailable fields (hidden via programming)
-            return '';
+            return this.getDefaultValue(theFieldName, tmpFieldSpecs);
         }
 
-        var tmpFieldSpecs = this.getFieldSpecs(theFieldName);
-
-        if (tmpFieldSpecs) {
-            var tmpCtl = tmpFieldSpecs.ctl || 'field';
-            var tmpControl = me.webControls.get(tmpCtl);
-            if (!(tmpControl.getFieldValue)) {
-                tmpRet = me._getControlData(this.getEl(), theFieldName);
-            } else {
-                tmpRet = tmpControl.getFieldValue(this.getEl(), tmpFieldSpecs);
-            }
-        } else {
+        var tmpCtl = tmpFieldSpecs.ctl || 'field';
+        var tmpControl = me.webControls.get(tmpCtl);
+        if (!(tmpControl.getFieldValue)) {
             tmpRet = me._getControlData(this.getEl(), theFieldName);
+        } else {
+            tmpRet = tmpControl.getFieldValue(this.getEl(), tmpFieldSpecs);
         }
         return tmpRet;
     }
@@ -6715,14 +6734,17 @@ License: MIT
 
 
 
-    meInstance.getData = function () {
+    meInstance.getData = function (theOptions) {
         try {
+            var tmpOptions = theOptions || {};
+            var tmpOnlyIfDisp = (tmpOptions.dispOnly === true);
             var tmpData = {};
             var tmpList = this.getConfig().index.fieldsList;
             for (var iPos = 0; iPos < tmpList.length; iPos++) {
                 var tmpFN = tmpList[iPos];
-                tmpData[tmpFN] = this.getFieldValue(tmpFN) || '';
-
+                if (!(tmpOnlyIfDisp && this.getFieldDisplay(tmpFN) === false)) {
+                    tmpData[tmpFN] = this.getFieldValue(tmpFN);
+                }
             }
         } catch (ex) {
             console.error("Error getting data ", ex)
@@ -7468,14 +7490,13 @@ License: MIT
                     }
                     if (isFunc(tmpAction)) {
                         //--- Run it
-                        tmpAction(tmpFN, this.getFieldValue(tmpFN), this, tmpOnChange)
+                        var tmpVal = this.getFieldValue(tmpFN);
+                        tmpAction(tmpFN, tmpVal, this, tmpOnChange)
                     }
                 }
             }
         }
-        this.publish('field-change', [this, tmpFN, this.getFieldValue(tmpFN)])
     }
-
 
     meInstance.refreshControl = function () {
         var tmpIndex = this.getIndex();
