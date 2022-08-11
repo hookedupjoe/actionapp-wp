@@ -845,7 +845,7 @@ License: MIT
 	
 	ControlCode.updateDesignProperty = updateDesignProperty;
 	function updateDesignProperty() {
-		var tmpNewSpecs = this.parts.propeditor.parts.propeditor.getData();
+		var tmpNewSpecs = this.parts.propeditor.parts.propeditor.getData({excludeHidden:true, excludeDefaults: true});
 		$.extend(this.editSpecs, tmpNewSpecs);		
 		this.refreshDesignMode();
 	}

@@ -85,7 +85,6 @@ var ThisPage = new SiteMod.SitePage(thisPageSpecs);
             window.tmpPage = ThisPage;
             loadJson({});
             ThisPage.refreshLayouts();
-            ThisPage.parts.controls.subscribe('field-change', controlFieldChanged);
             
             //~_onFirstLoad~//~
                 ThisPage._onActivate();
@@ -218,25 +217,6 @@ function loadJsonClipboardSelected(theParams, theTarget){
     }
     loadJson(tmpData);
 };
-
-
-function controlFieldChanged(theEvent, theControl, theFieldName, theFieldValue){
-    if( theFieldName == 'json-clipboard'){
-        var tmpEl = theControl.getItemEl('btn-load-selected');
-        theFieldValue = theFieldValue.trim();
-        var tmpHasClass = tmpEl.hasClass('disabled');
-        if( theFieldValue ){
-            if( tmpHasClass ){
-                tmpEl.removeClass('disabled')
-            }
-        } else {
-            if( !tmpHasClass ){
-                tmpEl.addClass('disabled')
-            }
-            
-        }
-    }
-}
 
 actions.clearClipboardList = clearClipboardList;
 function clearClipboardList(){
