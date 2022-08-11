@@ -416,12 +416,15 @@ License: MIT
 
 
 	ControlCode.refreshDesignMode = function(){
-		this.activeControl.setDesignMode(false);
-		this.activeControl.refreshUI()
-		this.activeControl.setDesignMode(true,{myaction:'onDesignClick'});
+		var tmpCtl = this.activeControl;
+		var tmpState = tmpCtl.getState();
+		tmpCtl.setDesignMode(false);
+		tmpCtl.refreshUI()
+		tmpCtl.setDesignMode(true,{myaction:'onDesignClick'});
 		if(this.lastControlSelected){
-			this.activeControl.setControlSelected(this.lastControlSelected);
+			tmpCtl.setControlSelected(this.lastControlSelected);
 		}
+		tmpCtl.setState(tmpState);
 	}
 	
 	function uniqueGroups(theUniqueness) {
@@ -845,7 +848,7 @@ License: MIT
 	
 	ControlCode.updateDesignProperty = updateDesignProperty;
 	function updateDesignProperty() {
-		var tmpNewSpecs = this.parts.propeditor.parts.propeditor.getData({excludeHidden:true, excludeDefaults: true});
+		var tmpNewSpecs = this.parts.propeditor.parts.propeditor.getData({excludeHidden:true});
 		$.extend(this.editSpecs, tmpNewSpecs);		
 		this.refreshDesignMode();
 	}
