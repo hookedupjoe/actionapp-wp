@@ -838,19 +838,39 @@ License: MIT
 		}
 	};
 
-
 	ControlCode.setEditorPanel = setEditorPanel;
 	function setEditorPanel(theIsCodeEditor){
 		this.setItemDisplay('editor',theIsCodeEditor)			
 		this.setItemDisplay('props',!theIsCodeEditor);
 	}
-
 	
 	ControlCode.updateDesignProperty = updateDesignProperty;
 	function updateDesignProperty() {
 		var tmpNewSpecs = this.parts.propeditor.parts.propeditor.getData({excludeHidden:true});
+		var tmpCtl = this.activeControl;
 		$.extend(this.editSpecs, tmpNewSpecs);		
-		this.refreshDesignMode();
+		console.log( 'this.editSpecs', this.editSpecs);
+		var tmpName = this.editSpecs.name;
+		var tmpCtlName = this.editSpecs.ctl;
+		var tmpNewHTML = ThisApp.controls.getHTMLForControl(tmpCtlName, this.editSpecs, tmpCtl);
+		console.log( 'tmpNewHTML', tmpNewHTML);
+		var tmpWE = tmpCtl.getDesignerFieldEl(tmpName);
+		console.log( 'tmpWE', tmpWE);
+		tmpWE.html(tmpNewHTML);
+		var tmpThis = this;
+		tmpThis.designModeProtect(true,tmpWE);
+		ThisApp.delay(100).then(function(){
+			
+		})
+
+		// var tmpEls = tmpCtl.getControlEls(tmpCtlName);
+		// if( tmpEls && tmpEls.length == 1){
+		// 	//$(tmpEls[0]).html(tmpNewHTML);
+		// } else {
+		// 	console.error("can not set more than one at a time", tmpEls)
+		// }
+		
+		//this.refreshDesignMode();
 	}
 	
 	ControlCode.toggleInsertMode = toggleInsertMode;
@@ -866,6 +886,36 @@ License: MIT
 		}
 	}
 
+	//ToDo: Another way
+	ControlCode.designModeProtect = designModeProtect;
+	function designModeProtect(theInDesign, theOptionalEl){
+		var tmpAll = theOptionalEl;
+		if(!(tmpAll)){
+			tmpAll = ThisApp.getByAttr$({appuse:"actapp-design-wrap"}, this.activeControl.getEl());
+		}
+		if( theInDesign ){
+			var tmpFields = ThisApp.getByAttr$({desuse:'hide'},tmpAll);
+			var tmpItems = ThisApp.getByAttr$({desuse:'hide'},tmpAll);
+			tmpFields.addClass('hidden-des');
+			tmpItems.addClass('hidden-des');
+			var tmpFields = ThisApp.getByAttr$({desuse:'disable'},tmpAll);
+			var tmpItems = ThisApp.getByAttr$({desuse:'disable'},tmpAll);
+			tmpFields.attr('disabled','');
+			tmpItems.attr('disabled','');
+	
+		} else {
+			tmpAll = ThisApp.getByAttr$({appuse:"actapp-design-wrap"}, tmpEl);
+			var tmpFields = ThisApp.getByAttr$({desuse:'hide'},tmpAll);
+			var tmpItems = ThisApp.getByAttr$({desuse:'hide'},tmpAll);
+			tmpFields.removeClass('hidden-des');
+			tmpItems.removeClass('hidden-des');
+			var tmpFields = ThisApp.getByAttr$({desuse:'disable'},tmpAll);
+			var tmpItems = ThisApp.getByAttr$({desuse:'disable'},tmpAll);
+			tmpFields.removeAttr('disabled');
+			tmpItems.removeAttr('disabled');			
+		}
+
+	}
 	ControlCode.toggleDesignMode = toggleDesignMode;
 	function toggleDesignMode() {
 		var tmpResType = this.details.restype;
@@ -885,31 +935,14 @@ License: MIT
 			this.activeControl.setDesignMode(true,{myaction:'onDesignClick'});
 			this.setEditorPanel(false);
 
-//ToDo: Another way
-			tmpAll = ThisApp.getByAttr$({appuse:"actapp-design-wrap"}, this.activeControl.getEl());
-			var tmpFields = ThisApp.getByAttr$({desuse:'hide'},tmpAll);
-			var tmpItems = ThisApp.getByAttr$({desuse:'hide'},tmpAll);
-			tmpFields.addClass('hidden-des');
-			tmpItems.addClass('hidden-des');
-			var tmpFields = ThisApp.getByAttr$({desuse:'disable'},tmpAll);
-			var tmpItems = ThisApp.getByAttr$({desuse:'disable'},tmpAll);
-			tmpFields.attr('disabled','');
-			tmpItems.attr('disabled','');
+			
+
 			// window.tmpFields = tmpFields;
 			// window.tmpItems = tmpItems;
 
 		} else {
 			this.__inDesignMode = false;
-//ToDo: Another way
-tmpAll = ThisApp.getByAttr$({appuse:"actapp-design-wrap"}, this.activeControl.getEl());
-var tmpFields = ThisApp.getByAttr$({desuse:'hide'},tmpAll);
-var tmpItems = ThisApp.getByAttr$({desuse:'hide'},tmpAll);
-tmpFields.removeClass('hidden-des');
-tmpItems.removeClass('hidden-des');
-var tmpFields = ThisApp.getByAttr$({desuse:'disable'},tmpAll);
-var tmpItems = ThisApp.getByAttr$({desuse:'disable'},tmpAll);
-tmpFields.removeAttr('disabled');
-tmpItems.removeAttr('disabled');
+
 
 			this.activeControl.moveModeEnd();
 			this.loadEditorFromDesigner()
@@ -919,6 +952,7 @@ tmpItems.removeAttr('disabled');
 			this.setItemDisplay('editor',true)			
 			this.setEditorPanel(true);
 		}
+		this.designModeProtect(this.__inDesignMode);
 		this.refreshLayouts();
 		this.refreshLayouts();
 		this.aceEditor.clearSelection();
