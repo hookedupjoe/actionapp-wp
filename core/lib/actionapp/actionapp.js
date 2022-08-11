@@ -8112,7 +8112,7 @@ License: MIT
                 tmpTabs = tmpTabs.join('');
                 
                 if (tmpTabs) {
-                    tmpTabs = '<div name="' + tmpTabName + '" item="' + tmpTabCtlName + '" controls tabs class="pad0 ui top attached tabular menu ' + tmpSlim + '" style="">' + tmpTabs + '</div>';
+                    tmpTabs = '<div name="' + tmpTabName + '" item="' + tmpTabCtlName + '" controls tabs class="mar0 pad0 ui top attached tabular menu ' + tmpSlim + '" style="">' + tmpTabs + '</div>';
                     if (tmpUseLayout) {
                         tmpTabs = '<div ctlcomp="layout"><div class="ui-layout-north">' + tmpTabs + '</div>';
                     }
