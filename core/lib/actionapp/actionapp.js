@@ -6737,13 +6737,20 @@ License: MIT
     meInstance.getData = function (theOptions) {
         try {
             var tmpOptions = theOptions || {};
-            var tmpOnlyIfDisp = (tmpOptions.dispOnly === true);
+            var tmpNoHidden = (tmpOptions.excludeHidden === true);
+            var tmpNoDefaults = (tmpOptions.excludeDefaults === true);
             var tmpData = {};
             var tmpList = this.getConfig().index.fieldsList;
             for (var iPos = 0; iPos < tmpList.length; iPos++) {
                 var tmpFN = tmpList[iPos];
-                if (!(tmpOnlyIfDisp && this.getFieldDisplay(tmpFN) === false)) {
-                    tmpData[tmpFN] = this.getFieldValue(tmpFN);
+                if (!(tmpNoHidden && this.getFieldDisplay(tmpFN) === false)) {
+                    var tmpFV = this.getFieldValue(tmpFN);;
+                    if( tmpNoDefaults ){
+                        var tmpDefault = this.getDefaultValue(tmpFN);
+                        if( tmpDefault != tmpFV){tmpData[tmpFN] = tmpFV;}
+                    } else {
+                        tmpData[tmpFN] = tmpFV;
+                    }
                 }
             }
         } catch (ex) {
