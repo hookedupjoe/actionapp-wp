@@ -8721,6 +8721,10 @@ License: MIT
     }
 
     me.ControlButton = {
+        getDesignSpecs: function(theControlName, theOptions, theControlObj){ 
+            var tmpPropList = ['name','ctl','classes','styles','hidden','text','color', 'size', 'basic']; 
+			return tmpPropList
+		},
         getHTML: function (theControlName, theObject, theControlObj) {
             var tmpObject = theObject || {};
 
@@ -8741,7 +8745,7 @@ License: MIT
                 tmpStyle = ' style="' + tmpStyle + '" '
             }
 
-            var tmpClasses = ''
+            var tmpClasses = '';
             tmpClasses += getValueIfTrue(theObject, ['basic', 'compact', 'fluid', 'right', 'labeled', 'circular', 'disabled']);
             tmpClasses += getValueIfThere(theObject, ['color', 'size', 'floated']);
             if ((tmpObject.toright || tmpObject.toRight) === true) {
@@ -8791,8 +8795,7 @@ License: MIT
     }
 
     me.ControlDivider = {
-        getPropList: function(){ 
-			//var tmpPropList = ['name','ctl','classes','styles','hidden','text','color', 'icon', 'size', 'alignment', 'attached', 'clearing','floating', 'dividing', 'block', 'link', 'fluid', 'placeholder', 'raised', 'tall', 'stacked', 'piled', 'vertical', 'loading', 'inverted', 'bottom', 'top', 'attached', 'padded', 'slim', 'compact', 'secondary', 'tertiary', 'circular', 'clearing', 'right', 'left', 'center', 'aligned', 'basic']; 
+        getDesignSpecs: function(theControlName, theOptions, theControlObj){ 
             var tmpPropList = ['name','ctl','classes','styles','hidden','text','color', 'size', 'alignment']; 
 			return tmpPropList
 		},
@@ -8948,7 +8951,7 @@ License: MIT
 
 
     me.SemanticElement = {
-        getPropList: function(){ 
+        getDesignSpecs: function(theControlName, theOptions, theControlObj){ 
 			//var tmpPropList = ['name','ctl','classes','styles','hidden','text','color', 'icon', 'size', 'alignment', 'attached', 'clearing','floating', 'dividing', 'block', 'link', 'fluid', 'placeholder', 'raised', 'tall', 'stacked', 'piled', 'vertical', 'loading', 'inverted', 'bottom', 'top', 'attached', 'padded', 'slim', 'compact', 'secondary', 'tertiary', 'circular', 'clearing', 'right', 'left', 'center', 'aligned', 'basic']; 
             var tmpPropList = ['name','ctl','classes','styles','hidden','text','color', 'size', 'alignment']; 
 			return tmpPropList
@@ -9204,7 +9207,10 @@ License: MIT
 
     //----   COMMON FIELD CONTROLS =================================
     me.ControlField = {
-        getPropList: function(){ 
+        getDesignSpecs: function(theControlName, theOptions, theControlObj){ 
+            if( theControlName == 'hidden'){
+                return ['name','ctl','default'];
+            }
 			var tmpPropList = ['name','ctl','label','req','classes','styles','hidden','note','noteColor','placeholder']; 
 			return tmpPropList
 		},
@@ -9413,7 +9419,7 @@ License: MIT
 
 
     me.ControlDropDown = {
-        getPropList: function(){ 
+        getDesignSpecs: function(theControlName, theOptions, theControlObj){ 
 			var tmpPropList = ['name','ctl','label','req','classes','styles','hidden','note','noteColor','placeholder','list','multi']; 
 			return tmpPropList
 		},
@@ -9570,7 +9576,7 @@ License: MIT
 
 
     me.ControlCheckboxList = {
-        getPropList: function(){ 
+        getDesignSpecs: function(theControlName, theOptions, theControlObj){ 
 			var tmpPropList = ['name','ctl','label','req','classes','styles','hidden','note','noteColor','placeholder','list','row']; 
 			return tmpPropList
 		},
@@ -9623,7 +9629,7 @@ License: MIT
 
 
     me.ControlRadioList = {
-        getPropList: function(){ 
+        getDesignSpecs: function(theControlName, theOptions, theControlObj){ 
 			var tmpPropList = ['name','ctl','label','req','classes','styles','hidden','note','noteColor','placeholder','list','row']; 
 			return tmpPropList
 		},
@@ -9796,7 +9802,7 @@ License: MIT
 
 
     me.ControlTextArea = {
-        getPropList: function(){ 
+        getDesignSpecs: function(theControlName, theOptions, theControlObj){ 
 			var tmpPropList = ['name','ctl','label','req','classes','styles','hidden','note','noteColor','placeholder','rows']; 
 			return tmpPropList
 		},
@@ -10422,9 +10428,7 @@ License: MIT
     me.webControls.add('td', me.ControlDOM);
 
     me.webControls.add('dropmenu', me.ControlDropMenu);
-    
     me.webControls.add('layout', me.ControlLayout);
-
 
     //=== Special UI Controls
     // me.webControls.add('uisegment', me.UIControlPanel);
@@ -10507,7 +10511,6 @@ License: MIT
         }
     }
 
-
     function actionShowFor(theFieldName, theFieldValue, theControlObj, theParams) {
         var tmpParams = theParams || {};
         var tmpNames = [];
@@ -10560,13 +10563,10 @@ License: MIT
             if (theControlObj.hasField(aFieldName)) {
                 theControlObj.setFieldDisplay(aFieldName, tmpShowFlag);
             }
-
         }
     }
 
-
     function actionShowOrHideIf(theFieldName, theFieldValue, theControlObj, theParams) {
-
         var tmpValue = theParams.value || 'other';
         var tmpShowFlag = (theFieldValue == tmpValue)
         if (theParams.action == 'hideif') {
