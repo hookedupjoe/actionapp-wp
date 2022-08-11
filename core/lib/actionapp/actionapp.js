@@ -7427,7 +7427,7 @@ License: MIT
             tmpNewEl.css(tmpStylesDefWrap);
         }
 
-        tmpNewEl.append('<div appuse="actapp-design-wrap-part" style="clear:both;padding:4px;"></div>')
+        //tmpNewEl.append('<div appuse="actapp-design-wrap-part" style="clear:both;padding:4px;"></div>')
         //tmpNewEl.prepend('<div name="' + theName + '" appuse="actapp-design-wrap-titlebar" class="ui message black mar2 pad5">Name: <b>' + theName + '</b></div>');
 
 
@@ -7455,22 +7455,22 @@ License: MIT
         ThisApp.getByAttr$({appuse:"actapp-design-wrap-titlebar"},tmpEl).remove();
         ThisApp.getByAttr$({appuse:"actapp-design-wrap-part"},tmpEl).remove();
         ThisApp.getByAttr$({appuse:"actapp-design-wrap-target"},tmpEl).remove();
-        
-        
         return tmpUpdated;
     }
-    
     meInstance.getDesignerEl = function (theName) {
         var tmpEl = $(this.getOutterEl(theName).parent());
         var tmpDesWrap = tmpEl.closest('[appuse=actapp-design-wrap]')
         tmpDesWrap.data('wrapel',tmpEl);
         return $(tmpDesWrap);
     }
-
     meInstance.getWrapperEl = function (theName) {
         return $(this.getOutterEl(theName).parent());
     }
-    
+    meInstance.getDesignerFieldEl = function (theName) {
+        var tmpEl = $(this.getOutterEl(theName).parent());
+        var tmpDesWrap = tmpEl.closest('[appuse=actapp-design-body-wrap]')
+        return $(tmpDesWrap);
+    }
     meInstance.getControlEls = function (theName) {
         var tmpAll = []
         if (this.hasField(theName)) {
@@ -8385,7 +8385,6 @@ License: MIT
 
     me.getHTMLForControl = getHTMLForControl
     function getHTMLForControl(theControlName, theObject, theControlObj) {
-
         var tmpHTML = [];
         tmpHTML.push('')
         if (!(theControlName)) {
