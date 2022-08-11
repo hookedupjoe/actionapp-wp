@@ -9145,17 +9145,14 @@ License: MIT
     //--- Tabs are handled in code at a higher level ***
     me.ControlTabs = {
         getHTML: function (theControlName, theObject, theControlObj) {
-            var tmpHTML = [];
-            return tmpHTML.join('');
+            return '';
         },
         isField: false
     };
 
     me.ControlTab = {
         getHTML: function (theControlName, theObject, theControlObj) {
-            var tmpHTML = [];
-
-            return tmpHTML.join('');;
+            return '';
         },
         isField: false
     };
