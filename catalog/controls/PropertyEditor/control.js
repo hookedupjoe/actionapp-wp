@@ -91,6 +91,15 @@
         "ctl": "field"
       },
       {
+        "name": "noteColor",
+        "label": "Note Color",
+        "ctl": "dropdown",
+        "list": {
+          "source": "sys_colors"
+        }
+      },
+      
+      {
         "name": "multi",
         "label": "Allow Multiple Values",
         "ctl": "checkbox",

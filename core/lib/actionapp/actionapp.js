@@ -9167,7 +9167,7 @@ License: MIT
     //----   COMMON FIELD CONTROLS =================================
     me.ControlField = {
         getPropList: function(){ 
-			var tmpPropList = ['name','ctl','label','req','classes','styles','hidden','note','placeholder']; 
+			var tmpPropList = ['name','ctl','label','req','classes','styles','hidden','note','noteColor','placeholder']; 
 			return tmpPropList
 		},
         setFieldNote: commonSetFieldNote, setFieldMessage: commonSetFieldMessage,
@@ -9376,7 +9376,7 @@ License: MIT
 
     me.ControlDropDown = {
         getPropList: function(){ 
-			var tmpPropList = ['name','ctl','label','req','classes','styles','hidden','note','placeholder','list','multi']; 
+			var tmpPropList = ['name','ctl','label','req','classes','styles','hidden','note','noteColor','placeholder','list','multi']; 
 			return tmpPropList
 		},
         setFieldNote: commonSetFieldNote, setFieldMessage: commonSetFieldMessage,
@@ -9533,7 +9533,7 @@ License: MIT
 
     me.ControlCheckboxList = {
         getPropList: function(){ 
-			var tmpPropList = ['name','ctl','label','req','classes','styles','hidden','note','placeholder','list','row']; 
+			var tmpPropList = ['name','ctl','label','req','classes','styles','hidden','note','noteColor','placeholder','list','row']; 
 			return tmpPropList
 		},
         getHTML: getHTMLforCheckboxList,
@@ -9586,7 +9586,7 @@ License: MIT
 
     me.ControlRadioList = {
         getPropList: function(){ 
-			var tmpPropList = ['name','ctl','label','req','classes','styles','hidden','note','placeholder','list','row']; 
+			var tmpPropList = ['name','ctl','label','req','classes','styles','hidden','note','noteColor','placeholder','list','row']; 
 			return tmpPropList
 		},
         getHTML: getHTMLforCheckboxList,
@@ -9759,7 +9759,7 @@ License: MIT
 
     me.ControlTextArea = {
         getPropList: function(){ 
-			var tmpPropList = ['name','ctl','label','req','classes','styles','hidden','note','placeholder','rows']; 
+			var tmpPropList = ['name','ctl','label','req','classes','styles','hidden','note','noteColor','placeholder','rows']; 
 			return tmpPropList
 		},
         setFieldNote: commonSetFieldNote, setFieldMessage: commonSetFieldMessage,
