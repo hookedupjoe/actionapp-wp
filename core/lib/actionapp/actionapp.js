@@ -6753,6 +6753,7 @@ License: MIT
                 this.gotoTab(tmpEntry);
             }
         }
+        if( this._onSetState ){this._onSetState(theStateObject)};
     }
 
     meInstance.getState = function (theOptions) {
@@ -6766,6 +6767,7 @@ License: MIT
             })
         }
         tmpRet.tabs = tmpTabs;
+        if( this._onGetState ){this._onGetState(tmpRet)};
         return tmpRet;
     }
 
