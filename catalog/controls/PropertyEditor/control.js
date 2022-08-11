@@ -146,7 +146,7 @@
     if (!(tmpScope.isSetup)) {
       //ToDo: check for PropertyEditor_controls?
       ActionAppCore.addSources({
-        PropertyEditor_controls: 'Segment|segment,Header|header,Field|field,Drop Down List|dropdown,Radio List|radiolist,Checkbox List|checkboxlist,TextArea|textarea,Message|message,Button|button,Div|div,Span|span,UI|ui,Title|title,Divider|divider,Seperator|sep'
+        PropertyEditor_controls: 'Segment|segment,Header|header,Field|field,Button|button,Drop Down List|dropdown,Radio List|radiolist,Checkbox List|checkboxlist,TextArea|textarea,Message|message,Button|button,Div|div,Span|span,UI|ui,Title|title,Divider|divider,Seperator|sep'
       });
       this.initScopedInfo();
       tmpScope.isSetup = true;
