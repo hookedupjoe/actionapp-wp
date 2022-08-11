@@ -6732,6 +6732,42 @@ License: MIT
         return true;
     }
 
+    meInstance.gotoTab = function (theAttrObj) {
+        var tmpDetails = theAttrObj;
+        if( typeof(tmpDetails) !== 'object'){
+            return false;
+        }
+        tmpDetails = ThisApp.clone(tmpDetails);
+        tmpDetails.parent = this.getEl();
+        return ThisApp.gotoTab(tmpDetails);
+    }
+
+    meInstance.setState = function (theStateObject) {
+        if( !(theStateObject) ){
+            return;
+        }
+        var tmpTabs = theStateObject.tabs;
+        if( tmpTabs ){
+            for( var iPos in tmpTabs ){
+                var tmpEntry = tmpTabs[iPos];
+                this.gotoTab(tmpEntry);
+            }
+        }
+    }
+
+    meInstance.getState = function (theOptions) {
+        var tmpRet = {};
+        var tmpActiveTabs = $('[appuse="tablinks"][item][group].active', this.getEl());
+        var tmpTabs = [];
+        if( tmpActiveTabs && tmpActiveTabs.length > 0 ){
+            tmpActiveTabs.each(function(){
+                var tmpEl = $(this);
+                tmpTabs.push({item:tmpEl.attr('item'),group:tmpEl.attr('group')})
+            })
+        }
+        tmpRet.tabs = tmpTabs;
+        return tmpRet;
+    }
 
 
     meInstance.getData = function (theOptions) {
