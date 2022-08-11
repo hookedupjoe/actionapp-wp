@@ -939,7 +939,10 @@ License: MIT
 
 			// window.tmpFields = tmpFields;
 			// window.tmpItems = tmpItems;
-
+			this.designModeProtect(this.__inDesignMode);
+			this.refreshLayouts();
+			this.refreshLayouts();
+	
 		} else {
 			this.__inDesignMode = false;
 
@@ -951,12 +954,10 @@ License: MIT
 			this.setItemDisplay('props',false);
 			this.setItemDisplay('editor',true)			
 			this.setEditorPanel(true);
+			this.refreshControlDisplay();
+
 		}
-		this.designModeProtect(this.__inDesignMode);
-		this.refreshLayouts();
-		this.refreshLayouts();
 		this.aceEditor.clearSelection();
-		//ToDo: Only if changed
 		
 
 	};
