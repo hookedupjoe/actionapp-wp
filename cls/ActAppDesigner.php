@@ -512,6 +512,15 @@ class ActAppDesigner {
 			'single'            => true,
 			'type'              => 'string',
 		];
+		$tmpMetaDetailsDev = [
+			'auth_callback' => function() {
+				return current_user_can('actappapps');
+			},
+			'sanitize_callback' => '',
+			'show_in_rest'      => true,
+			'single'            => true,
+			'type'              => 'string',
+		];
 
 		//--- Common meta items to expose to design time block editors, potentially used in any post type.
 		//-> __doctype - Name of the related doctype for this post
@@ -521,11 +530,15 @@ class ActAppDesigner {
 		//-> __design_setup - JSON string that is the setup object passed into a setup function of the main object if it exists
 		
 		//$tmpCustomMetaFields = ['__design_props','__design_app','__design_setup','__design_source','__doctype','__doctitle'];
-		$tmpCustomMetaFields = ['__design_props','__design_app','__design_setup','__design_source','__doctype'];
+		$tmpCustomMetaFields = ['__doctype'];
+		$tmpCustomMetaFieldsDev = ['__design_props','__design_app','__design_setup','__design_source'];
 		//--- Register all used meta fields designed for block update use
 		foreach ($tmpCustomMetaFields as $iFN) {
 			register_post_meta( '', $iFN, $tmpMetaDetails);
 		}
+		foreach ($tmpCustomMetaFieldsDev as $iFN) {
+			register_post_meta( '', $iFN, $tmpMetaDetailsDev);
+		}	
 		
 	}
 	
