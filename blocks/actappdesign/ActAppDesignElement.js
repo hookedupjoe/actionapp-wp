@@ -129,7 +129,6 @@
             controlDirty = true;
             if( controlDetailsLoaded === false){
                 controlDetailsLoaded = '' + (wp.data.select('core/editor').getEditedPostAttribute('meta').__design_props || '{}');
-                controlDetailsLoaded = controlDetailsLoaded.unescapeHTML();
                 controlDetails = JSON.parse(controlDetailsLoaded);
             }
             

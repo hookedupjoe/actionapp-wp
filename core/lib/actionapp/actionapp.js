@@ -315,11 +315,8 @@ window.ActionAppCore = window.ActionAppCore || ActionAppCore;
     };
 
 })(ActionAppCore, $);
-
-
 //--- PolyFill
 (function (ActionAppCore, $) {
-
     if (typeof String.prototype.endsWith !== 'function') {
         String.prototype.endsWith = function (suffix) {
             return this.indexOf(suffix, this.length - suffix.length) !== -1;
@@ -330,47 +327,14 @@ window.ActionAppCore = window.ActionAppCore || ActionAppCore;
             return this.indexOf(suffix) === 0;
         };
     }
-
-    
-    if( !String.prototype.escapeHTML ){
-        String.prototype.escapeHTML = function() {
-            var tagsToReplace = {
-                '&': '&amp;',
-                '<': '&lt;',
-                '>': '&gt;'
-            };
-            return this.replace(/[&<>]/g, function(tag) {
-                return tagsToReplace[tag] || tag;
-            });
-        };
-    }
-    
-    
-    if( !String.prototype.unescapeHTML ){
-        String.prototype.unescapeHTML = function() {
-            var tagsToReplace = {
-                '&amp;': '&',
-                '&lt;': '<',
-                '&gt;': '>'
-            };
-            return this.replace(/(&amp;|&lt;|&gt;)/g, function(tag) {
-                return tagsToReplace[tag] || tag;
-            });
-        };
-    }
-
 })(ActionAppCore, $);
-
 //--- Common Functionality Extensions
-
 /**
      * subscribe / unsubscribe / publish
     *     - Standard Pub / Sub functionality
     * @return void
     * 
     */
-
-
 //--- PubSub Functionality
 (function (ActionAppCore, $) {
 

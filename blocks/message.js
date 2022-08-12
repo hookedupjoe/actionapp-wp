@@ -69,13 +69,10 @@
                         var tmpChild = tmpChildren[iPosChildPos];
                         if( tmpChild && tmpChild.attributes && tmpChild.attributes.content){
                             if( theProps.attributes.text != ''){
-                                //ToDo: Wrap in div with class?
+                                //ToDo: Wrap in div with class instead?  Wrap in p?
                                 theProps.attributes.text += "<br />";
                             }
                             theProps.attributes.text += tmpChild.attributes.content;
-
-                            //theProps.attributes.text = new Option(theProps.attributes.text).innerHTML;
-                            theProps.attributes.text = theProps.attributes.text.escapeHTML();
                         }
                     }
                 }
