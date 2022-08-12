@@ -527,11 +527,13 @@ class ActAppDesigner {
 		//-> __design_app - Name of the related application
 		//-> __design_props - JSON string for post properties (field / value pairs of related data)
 		//-> __design_source - The source text for this design element to be used when viewed.  Couild be JSON or HTML.
-		//-> __design_setup - JSON string that is the setup object passed into a setup function of the main object if it exists
+		//-> __design_setup - JSON string that is the setup object passed into a setup function of the main object on load if this param exists
 		
 		//$tmpCustomMetaFields = ['__design_props','__design_app','__design_setup','__design_source','__doctype','__doctitle'];
-		$tmpCustomMetaFields = ['__doctype'];
-		$tmpCustomMetaFieldsDev = ['__design_props','__design_app','__design_setup','__design_source'];
+		//--- Text fields
+		$tmpCustomMetaFields = ['__design_app','__doctype'];
+		//--- Designer Element Only Fields (actappdesign capability required to save)
+		$tmpCustomMetaFieldsDev = ['__design_props','__design_setup','__design_source'];
 		//--- Register all used meta fields designed for block update use
 		foreach ($tmpCustomMetaFields as $iFN) {
 			register_post_meta( '', $iFN, $tmpMetaDetails);
