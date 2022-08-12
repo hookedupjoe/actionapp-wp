@@ -8948,7 +8948,7 @@ License: MIT
             }
 
             var tmpClass = tmpObject.class || '';
-            var tmpControlClass = tmpClass || theControlName;
+            var tmpControlClass = theControlName;
             var tmpClasses = tmpObject.classes || '';
             tmpClasses += getValueIfTrue(theObject, ['floating', 'dividing', 'block', 'link', 'fluid', 'placeholder', 'raised', 'tall', 'stacked', 'piled', 'vertical', 'loading', 'inverted', 'bottom', 'top', 'attached', 'padded', 'slim', 'compact', 'secondary', 'tertiary', 'circular', 'clearing', 'right', 'left', 'center', 'aligned', 'basic']);
             tmpClasses += getValueIfThere(theObject, ['color', 'icon', 'size', 'alignment', 'attached']);

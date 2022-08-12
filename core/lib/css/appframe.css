@@ -941,7 +941,7 @@ div.ui.message.floating {
 }
 
 
-.break-both-after:after {
+.clear-both-after:after, .break-both-after:after {
   content: "";
   display: block;
   clear: both;
@@ -955,4 +955,8 @@ div.ui.message.floating {
   clear: both;
   visibility: hidden;
   height: 0;
+}
+
+.actapp-in-design {
+  margin: 2px; padding: 7px; border: 2px dashed black;
 }

@@ -26,7 +26,7 @@
     var el = wp.element.createElement;
     var useBlockProps = wp.blockEditor.useBlockProps;
     var BlockEditor = ActionAppCore.common.blocks.Editor;
-    //var be = wp.data.dispatch('core/editor');
+    //var be = wp.data.dispatch('core/block-editor');
     
     var info = {
         name: 'controlspot',
@@ -57,22 +57,42 @@
          console.log('getDisplayValue', theProps, theIsEditMode);
          var props = theProps;
          var tmpAttr = props.attributes;
-         if (tmpAttr.spotcontent) {
+         var tmpContent = tmpAttr.spotcontent;
+         if (tmpContent) {
+            if(typeof(tmpContent) == 'string'){
+                tmpContent = tmpContent.trim();
+                var tmpObj = false;
+                if( tmpContent.substring(0,1) == '{' ){
+                    try {
+                        console.log( 'tmpContent string', tmpContent);
+                        tmpObj = JSON.parse(tmpContent);
+                        console.log( 'tmpContent tmpObj', tmpObj);
+                    } catch (ex) {
+                        console.error("Invalid JSON");
+                    }
+                }
+                if( typeof(tmpObj) == 'object'){
+                    var tmpCtl = tmpObj.ctl;
+                    var tmpCtlName = tmpObj.name;
+                    var tmpActiveCtl = ActionAppCore.common.activeControl|| {};
+                    console.log( 'tmpActiveCtl', tmpActiveCtl);
+                    if( tmpCtl && tmpCtlName ){
+                        var tmpWCH = ThisApp.controls.getWebControl(tmpCtl);
+                        tmpContent = tmpWCH.getHTML(tmpCtl, tmpObj, tmpActiveCtl);
+                        console.log( 'tmpContent as hTML', tmpContent);
+                    }
+                }
+            }
              if (theIsEditMode) {
-                // return el('div', {
-                //     className: 'clear-both-after ui message pad5 mar5', dangerouslySetInnerHTML: {
-                //         __html: tmpAttr.spotcontent
-                //     }
-                // });
                 return el('div', {
-                    dangerouslySetInnerHTML: {
-                        __html: tmpAttr.spotcontent
+                    className: 'clear-both-after actapp-in-design', dangerouslySetInnerHTML: {
+                        __html: tmpContent
                     }
                 });
             } else {
                 return el('div', {
                     dangerouslySetInnerHTML: {
-                        __html: tmpAttr.spotcontent
+                        __html: tmpContent
                     }
                 });
              }
@@ -131,9 +151,14 @@
         console.log( 'onSelectControl', tmpParams);
         console.log( 'tmpTargetBlock', tmpTargetBlock);
         tmpAttr.spotsourcetype = 'html'; //controls //panels
-        ThisApp.input('Enter something','Can be HTML').then(function(theValue){
+        ThisApp.input('Enter something','Can be HTML','Update',tmpAttr.spotcontent).then(function(theValue){
+            if( !(theValue) ){return;}
+            if(typeof(theValue) == 'object'){
+                theValue = JSON.stringify(theValue);
+            }
             tmpAttr.spotcontent = theValue;
-            wp.data.dispatch('core/editor').synchronizeTemplate();
+            console.log('set theValue',typeof(theValue))
+            wp.data.dispatch('core/block-editor').synchronizeTemplate();
             wp.data.dispatch( 'core/block-editor' ).selectBlock( tmpParams.clientid )
         })
     }
@@ -159,7 +184,7 @@
             // }
             //---> To Write To Post Doc: controlDirty = true;
             //---> To Write To Post Doc: if( controlDetailsLoaded === false){
-            //---> To Write To Post Doc:     controlDetailsLoaded = wp.data.select('core/editor').getEditedPostAttribute('meta').details || ''
+            //---> To Write To Post Doc:     controlDetailsLoaded = wp.data.select('core/block-editor').getEditedPostAttribute('meta').details || ''
             //---> To Write To Post Doc: }
             
             //controlDetails['working'] = true;
@@ -222,7 +247,7 @@
             //---> To Write To Post Doc: 
             // if( controlDirty && (controlDetailsLoaded != tmpDetails)){
             //     //console.log('Saving tmpDetails',tmpDetails);
-            //     wp.data.dispatch('core/editor').editPost({meta: {__doctype:"manual",details:tmpDetails}});
+            //     wp.data.dispatch('core/block-editor').editPost({meta: {__doctype:"manual",details:tmpDetails}});
             //     //console.log('SAVED tmpDetails',tmpDetails);
             //     controlDirty = false;
             // }
@@ -231,12 +256,11 @@
             //console.log('Demo saving of HTML is backend meta data');
             //var tmpDetails = '<b>Test</b> HTML is working.';
             //console.log( 'tmpDetails', tmpDetails);
-            //wp.data.dispatch('core/editor').editPost({meta: {__design_source:tmpDetails}});
+            //wp.data.dispatch('core/block-editor').editPost({meta: {__design_source:tmpDetails}});
+
             
-            //window.tmpCE = window.tmpCE || wp.data.dispatch('core/editor');
-            //return getDisplayValue(props, false);
-            //--- DO NOT set any attributes at top level
-            //     pass everything as children
+            //--- DO NOT set any attributes at top level (it sticks)
+            //     pass everything as children, like this (everytime)
             return el('div',false,[getDisplayValue(props, false)]);
         },
     });
