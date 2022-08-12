@@ -41,7 +41,7 @@
     var controlDetailsLoaded = false;
     //---> To Write To Post Doc: var controlDirty = false;
     //BlockEditor.addBooleanAtts(info.atts, []);
-    BlockEditor.addStringAtts(info.atts, ['spotname', 'spotsourcetype', 'spotsourcename', 'spotsourcecatalog', 'spotsourcepartname']);
+    BlockEditor.addStringAtts(info.atts, ['spotname', 'spotsourcetype', 'spotsourcename', 'spotsourcecatalog', 'spotsourcepartname', 'spotcontent']);
 
     var tmpClassSpecs = {
         boolean: [],
@@ -53,55 +53,76 @@
         }
         return '';
     }
-    function getDisplayValue(theProps, theIsEditMode) {
-        console.log( 'getDisplayValue', theProps, theIsEditMode);
-        var props = theProps;
-        var tmpClass = getClass(props, true);
-        if (theIsEditMode) { //&& !props.isSelected 
-            tmpClass += ' actapp-block-box';
-        }
-        var tmpAtts = { className: tmpClass };
-        var tmpPropAtts = theProps.attributes;
-
-        var tmpEls = [];
-        if (tmpPropAtts.spotname && tmpPropAtts.spotname != '') {
-            var tmpSpotTopAtts = { spot: tmpPropAtts.spotname };
-            if (tmpPropAtts.spotsourcetype) {
-                tmpSpotTopAtts.sourcetype = tmpPropAtts.spotsourcetype;
-                tmpSpotTopAtts.appuse = 'blockmarkup';
-            }
-            if (tmpPropAtts.spotsourcename) {
-                tmpSpotTopAtts.sourcename = tmpPropAtts.spotsourcename;
-            }
-            if (tmpPropAtts.spotsourcecatalog) {
-                tmpSpotTopAtts.catalog = tmpPropAtts.spotsourcecatalog;
-            }
-            if (tmpPropAtts.spotsourcepartname) {
-                tmpSpotTopAtts.sourcepartname = tmpPropAtts.spotsourcepartname;
-            }
-
-            tmpEls.push(el('div', tmpSpotTopAtts, ''));
-        }
-
-        if (theIsEditMode) {
-            var tmpMe = wp.data.select('core/block-editor').getBlock(props.clientId);
-            if (tmpMe) {
-                //-- optional action                
-            }
-            if (tmpPropAtts.spotname == '') {
-                tmpEls.push(el('div',{className:'ui message orange small compact'},'Every spot needs a name, set it using the side bar panel option' ) );
+     function getDisplayValue(theProps, theIsEditMode) {
+         console.log('getDisplayValue', theProps, theIsEditMode);
+         var props = theProps;
+         var tmpAttr = props.attributes;
+         if (tmpAttr.spotcontent) {
+             if (theIsEditMode) {
+                // return el('div', {
+                //     className: 'clear-both-after ui message pad5 mar5', dangerouslySetInnerHTML: {
+                //         __html: tmpAttr.spotcontent
+                //     }
+                // });
+                return el('div', {
+                    dangerouslySetInnerHTML: {
+                        __html: tmpAttr.spotcontent
+                    }
+                });
             } else {
-                tmpEls.push(el('div',{className:'ui message blue small'},'Spot: ' +  tmpPropAtts.spotname +  ' spotsourcetype:' + (tmpPropAtts.spotsourcetype || '(none)') ) );
-                //tmpEls.push(el('div',{spotname: tmpPropAtts.spotname, className:'ui button fluid blue circular'},'Select Control or Panel ...') );
-            }
-            //tmpEls.push(el(wp.blockEditor.InnerBlocks));
-        } else {
-            //tmpEls.push(el(wp.blockEditor.InnerBlocks.Content));
-        }
+                return el('div', {
+                    dangerouslySetInnerHTML: {
+                        __html: tmpAttr.spotcontent
+                    }
+                });
+             }
+         }
+         var tmpClass = getClass(props, true);
+         if (theIsEditMode) { //&& !props.isSelected 
+             tmpClass += ' actapp-block-box';
+         }
+         var tmpAtts = { className: tmpClass };
+         var tmpPropAtts = theProps.attributes;
 
-        return el('div', tmpAtts, tmpEls);
+         var tmpEls = [];
+         if (tmpPropAtts.spotname && tmpPropAtts.spotname != '') {
+             var tmpSpotTopAtts = { spot: tmpPropAtts.spotname };
+             if (tmpPropAtts.spotsourcetype) {
+                 tmpSpotTopAtts.sourcetype = tmpPropAtts.spotsourcetype;
+                 tmpSpotTopAtts.appuse = 'blockmarkup';
+             }
+             if (tmpPropAtts.spotsourcename) {
+                 tmpSpotTopAtts.sourcename = tmpPropAtts.spotsourcename;
+             }
+             if (tmpPropAtts.spotsourcecatalog) {
+                 tmpSpotTopAtts.catalog = tmpPropAtts.spotsourcecatalog;
+             }
+             if (tmpPropAtts.spotsourcepartname) {
+                 tmpSpotTopAtts.sourcepartname = tmpPropAtts.spotsourcepartname;
+             }
 
-    }
+             tmpEls.push(el('div', tmpSpotTopAtts, ''));
+         }
+
+         if (theIsEditMode) {
+             var tmpMe = wp.data.select('core/block-editor').getBlock(props.clientId);
+             if (tmpMe) {
+                 //-- optional action                
+             }
+             if (tmpPropAtts.spotname == '') {
+                 tmpEls.push(el('div', { className: 'ui message orange small compact' }, 'Every spot needs a name, set it using the side bar panel option'));
+             } else {
+                 tmpEls.push(el('div', { className: 'ui message blue small' }, 'Spot: ' + tmpPropAtts.spotname + ' spotsourcetype:' + (tmpPropAtts.spotsourcetype || '(none)')));
+                 //tmpEls.push(el('div',{spotname: tmpPropAtts.spotname, className:'ui button fluid blue circular'},'Select Control or Panel ...') );
+             }
+             //tmpEls.push(el(wp.blockEditor.InnerBlocks));
+         } else {
+             //tmpEls.push(el(wp.blockEditor.InnerBlocks.Content));
+         }
+
+         return el('div', tmpAtts, tmpEls);
+
+     }
 
     function onSelectControl(theParams, theTarget) {
         var tmpParams = ThisApp.getActionParams(theParams, theTarget, ['spotname','clientid']);
@@ -109,9 +130,12 @@
         var tmpAttr = tmpTargetBlock[0].attributes;
         console.log( 'onSelectControl', tmpParams);
         console.log( 'tmpTargetBlock', tmpTargetBlock);
-        tmpAttr.spotsourcetype = ''; //controls //panels
-        wp.data.dispatch('core/editor').synchronizeTemplate();
-        wp.data.dispatch( 'core/block-editor' ).selectBlock( tmpParams.clientid )
+        tmpAttr.spotsourcetype = 'html'; //controls //panels
+        ThisApp.input('Enter something','Can be HTML').then(function(theValue){
+            tmpAttr.spotcontent = theValue;
+            wp.data.dispatch('core/editor').synchronizeTemplate();
+            wp.data.dispatch( 'core/block-editor' ).selectBlock( tmpParams.clientid )
+        })
     }
 
     function initControl(){
@@ -127,12 +151,12 @@
         example: info.example,
         attributes: info.atts,
         edit: function (props) {
-            if( (this._autoRendered !== true)){
-                this._autoRendered = true;
-                ThisApp.delay(1).then(function(){
-                    ActAppBlocksController.loadFromMarkup();
-                });
-            }
+            // if( (this._autoRendered !== true)){
+            //     this._autoRendered = true;
+            //     ThisApp.delay(1).then(function(){
+            //         ActAppBlocksController.loadFromMarkup();
+            //     });
+            // }
             //---> To Write To Post Doc: controlDirty = true;
             //---> To Write To Post Doc: if( controlDetailsLoaded === false){
             //---> To Write To Post Doc:     controlDetailsLoaded = wp.data.select('core/editor').getEditedPostAttribute('meta').details || ''
@@ -173,6 +197,9 @@
                 //example: -> var tmpBarContent = [];
                 //example: -> tmpBarContent.push(el('div', { className: 'ui compact button blue basic ', action: 'beAddElement', elementname: 'header' }, 'Header'));
                 //example: -> tmpBtnBar = el('div', {}, [el('div', { className: 'ui fluid label blue mar5' }, 'UI Spot'), el('div', { className: 'ui spot raised slim' }, tmpBarContent, el('div', { className: 'endfloat' }))]);
+                // var tmpBarContent = [];
+                // tmpBarContent.push(el('div', { className: 'ui compact button blue basic ', action: 'beAddElement', elementname: 'header' }, 'Header'));
+                // tmpBtnBar = el('div', {}, [el('div', { className: 'ui fluid label blue mar5' }, 'UI Spot'), el('div', { className: 'ui spot raised slim' }, tmpBarContent, el('div', { className: 'endfloat' }))]);
             }
 
             return el(
@@ -199,19 +226,18 @@
             //     //console.log('SAVED tmpDetails',tmpDetails);
             //     controlDirty = false;
             // }
-            console.log('save');
-            var tmpDetails = '<b>Test</b> HTML is working.';
-            var tmpDetailsO = wp.element.createElement( 'div', {
-                dangerouslySetInnerHTML: {
-                    __html: '<b>HTML</b> here'
-                }
-            } );
-            console.log( 'tmpDetails', tmpDetails);
-            wp.data.dispatch('core/editor').editPost({meta: {__design_source:tmpDetails}});
-            
 
+
+            //console.log('Demo saving of HTML is backend meta data');
+            //var tmpDetails = '<b>Test</b> HTML is working.';
+            //console.log( 'tmpDetails', tmpDetails);
+            //wp.data.dispatch('core/editor').editPost({meta: {__design_source:tmpDetails}});
+            
+            //window.tmpCE = window.tmpCE || wp.data.dispatch('core/editor');
             //return getDisplayValue(props, false);
-            return el('div',{className: 'ui message'},'Test Saved Out');
+            //--- DO NOT set any attributes at top level
+            //     pass everything as children
+            return el('div',false,[getDisplayValue(props, false)]);
         },
     });
 })(window.wp, window.ActionAppCore);
