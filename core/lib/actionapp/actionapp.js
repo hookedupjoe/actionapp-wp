@@ -8139,6 +8139,9 @@ License: MIT
             outline: []
         }
         tmpIndex.errors = tmpIndex.errors || [];
+        tmpIndex.locs = tmpIndex.locs || {};
+        tmpIndex.entries = tmpIndex.entries || {};
+        tmpIndex.entryList = tmpIndex.entryList || [];
         var tmpOL = theOptionalOutline || tmpIndex.outline;
         var tmpItems = theItems || [];
         if (!(tmpItems && tmpItems.length)) {
@@ -8171,6 +8174,9 @@ License: MIT
 
             if (tmpItem.name) {
                 var tmpName = tmpItem.name;
+
+                tmpIndex.locs[tmpItem.name] = {in:theItems,pos:iPos};
+
                 if (tmpCtl == 'control' || tmpCtl == 'panel') {
                     var tmpAppComp = tmpCtl;
                     tmpIndex.controls[tmpName] = tmpItem;
@@ -8210,7 +8216,17 @@ License: MIT
                     tmpIndex[tmpType][tmpName] = tmpToAdd;
                     tmpIndex[tmpType + 'List'].push(tmpName)
                 }
+                if (tmpIndex.entries[tmpName]) {
+                    tmpIndex.entries[tmpName] = [tmpIndex.entries[tmpName]];
+                    console.warn("Control content has the same name more than once for " + tmpName);
+                    tmpIndex.errors.push({text: 'All fields and items require a control name (ctl).',name:'' + tmpItem.name});
+                    tmpIndex.entries[tmpName].push(tmpToAdd);
+                } else {
+                    tmpIndex.entries[tmpName] = tmpToAdd;
+                    tmpIndex.entryList.push(tmpName)
+                }
             }
+            
             var tmpContentItems = ['items', 'tabs', 'content', 'center', 'north', 'south', 'east', 'west'];
             for (var aIndex in tmpContentItems) {
                 var tmpContentItem = tmpContentItems[aIndex];
@@ -10587,3 +10603,4 @@ License: MIT
 
 
 })(ActionAppCore, $);
+
