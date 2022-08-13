@@ -2323,7 +2323,6 @@ window.ActionAppCore = window.ActionAppCore || ActionAppCore;
     * @return void
     */
     me.getContext = function () {
-        var tmpOptions = theOptions || {};
         var tmpRet = {}
         tmpRet.app = ThisApp.context
         return tmpRet;
@@ -7775,9 +7774,9 @@ License: MIT
         }
     }
 
-    meInstance.initControlComponents = function () {
+    meInstance.initControlComponents = function (theOptionalEl) {
         var dfd = jQuery.Deferred();
-        var tmpEl = this.parentEl;
+        var tmpEl = theOptionalEl || this.parentEl;
         var tmpDefs = [];
         try {
             
@@ -7790,7 +7789,10 @@ License: MIT
                 var tmpPartName = tmpControlEl.attr('partname') || tmpControlEl.attr('name') || tmpControlName;
                 if (tmpControlName && tmpPartName) {
 
-                    var tmpCtl = this.parentControl.getControl(tmpControlName);
+                    var tmpCtl = false;
+                    if(this.parentControl && this.parentControl.getControl){
+                        tmpCtl = this.parentControl.getControl(tmpControlName);
+                    }
                     if (!(tmpCtl)) {
                         //var tmpCached = ThisApp.resCache['controls'][tmpControlName];
                         console.warn("initControlComponents Could not find parent control " + tmpControlName)
