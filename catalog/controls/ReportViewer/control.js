@@ -438,12 +438,12 @@
   }
 
   ControlCode.refreshSearchUI = function () {
-    var tmpClearDisabled = !(this.getFieldValue('search').trim());
+    var tmpClearDisabled = !(this.parts.searchbar.getFieldValue('search').trim());
     this.setItemDisabled('btn-clear-search', tmpClearDisabled)
   };
 
   ControlCode.quickSearch = function () {
-    var tmpSS = this.getFieldValue('search');
+    var tmpSS = this.parts.searchbar.getFieldValue('search');
     this.mainTable.clearFilter();
     this.mainTable.addFilter(matchAny, {
       columns: this.columnSpecs,
