@@ -281,6 +281,8 @@
             
         }
 
+        //--- Temp Testing
+        //ToDo: load as we go
         var tmpAC = ThisApp.common.activeControl;
         tmpAC.controlConfig.content.push({"ctl":"control","catalog":"_designer","controlname":"SearchBar","name":"searchbar"});
                 
