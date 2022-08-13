@@ -7236,32 +7236,32 @@ License: MIT
     }
 
     //meInstance.defaultDesignAction = 'actappControlSelected';
-    meInstance.getControlConfigLocation = function(theName, theStartParent){
-        var tmpName = theName;
-        var tmpParent = theStartParent || this.getConfig()
-        var tmpParentArray = tmpParent.content || tmpParent.items || tmpParent.tabs;
-        var tmpRet = {};
-        for( var iPos in tmpParentArray ){
-            var tmpEntry = tmpParentArray[iPos];
-            if( tmpEntry && tmpEntry.name && tmpEntry.name == tmpName ){
-                return {
-                    pos: iPos,
-                    array: tmpParentArray,
-                    parent: tmpParent
-                }
+    // meInstance.getControlConfigLocation = function(theName, theStartParent){
+    //     var tmpName = theName;
+    //     var tmpParent = theStartParent || this.getConfig()
+    //     var tmpParentArray = tmpParent.content || tmpParent.items || tmpParent.tabs;
+    //     var tmpRet = {};
+    //     for( var iPos in tmpParentArray ){
+    //         var tmpEntry = tmpParentArray[iPos];
+    //         if( tmpEntry && tmpEntry.name && tmpEntry.name == tmpName ){
+    //             return {
+    //                 pos: iPos,
+    //                 array: tmpParentArray,
+    //                 parent: tmpParent
+    //             }
                 
-            }
-            var tmpSubParent = tmpEntry.content || tmpEntry.items || tmpEntry.tabs;
-            if( tmpSubParent ){
-                tmpRet = this.getControlConfigLocation(theName, tmpEntry);
-                if (tmpRet){
-                    return tmpRet;
-                }
-            }
-        }
+    //         }
+    //         var tmpSubParent = tmpEntry.content || tmpEntry.items || tmpEntry.tabs;
+    //         if( tmpSubParent ){
+    //             tmpRet = this.getControlConfigLocation(theName, tmpEntry);
+    //             if (tmpRet){
+    //                 return tmpRet;
+    //             }
+    //         }
+    //     }
         
 
-    }
+    // }
 
     
     meInstance.wrapControl = function (theName, theOptions) {
@@ -7518,19 +7518,6 @@ License: MIT
 
     }
 
-    //ToDo: Does this ever run?
-    // meInstance.onControlResize = onControlResize;
-    // function onControlResize(theEvent) {
-    //     var tmpEl = this.getEl();
-    //     var tmpWidth = tmpEl.width();
-    //     if (tmpWidth < 450) {
-    //         tmpEl.addClass('mobile');
-    //     } else {
-    //         tmpEl.removeClass('mobile');
-    //     }
-    // }
-
-
     function itemTouchEnd(theEvent) {
         var tmpTarget = theEvent.target || theEvent.currentTarget || theEvent.delegetTarget || {};
         var tmpBounds = tmpTarget.getBoundingClientRect();
@@ -7779,138 +7766,133 @@ License: MIT
         var tmpEl = theOptionalEl || this.parentEl;
         var tmpDefs = [];
         try {
-            
-        ThisApp.initAppComponents(tmpEl);
-        var tmpControls = ThisApp.getByAttr$({ ctlcomp: 'control' }, tmpEl);
-        if (tmpControls.length) {
-            for (var iControl = 0; iControl < tmpControls.length; iControl++) {
-                var tmpControlEl = $(tmpControls[iControl]);
-                var tmpControlName = tmpControlEl.attr('controlname');
-                var tmpPartName = tmpControlEl.attr('partname') || tmpControlEl.attr('name') || tmpControlName;
-                if (tmpControlName && tmpPartName) {
+            ThisApp.initAppComponents(tmpEl);
+            var tmpControls = ThisApp.getByAttr$({ ctlcomp: 'control' }, tmpEl);
+            if (tmpControls.length) {
+                for (var iControl = 0; iControl < tmpControls.length; iControl++) {
+                    var tmpControlEl = $(tmpControls[iControl]);
+                    var tmpControlName = tmpControlEl.attr('controlname');
+                    var tmpPartName = tmpControlEl.attr('partname') || tmpControlEl.attr('name') || tmpControlName;
+                    if (tmpControlName && tmpPartName) {
 
-                    var tmpCtl = false;
-                    if(this.parentControl && this.parentControl.getControl){
-                        tmpCtl = this.parentControl.getControl(tmpControlName);
-                    }
-                    if (!(tmpCtl)) {
-                        //var tmpCached = ThisApp.resCache['controls'][tmpControlName];
-                        console.warn("initControlComponents Could not find parent control " + tmpControlName)
-                    } else {
-                        var tmpPart = tmpCtl.create(tmpPartName, {parent:this});
-                        this.parts[tmpPartName] = tmpPart;
-                        tmpDefs.push(tmpPart.loadToElement(tmpControlEl));
-                    }
-                }
-            }
-        }
-        var tmpPanels = ThisApp.getByAttr$({ ctlcomp: 'panel' }, tmpEl);
-        if (tmpPanels.length) {
-            for (var iControl = 0; iControl < tmpPanels.length; iControl++) {
-                var tmpControlEl = $(tmpPanels[iControl]);
-                var tmpControlName = tmpControlEl.attr('controlname');
-
-                var tmpPartName = tmpControlEl.attr('partname') || tmpControlEl.attr('name') || tmpControlName;
-                if (tmpControlName && tmpPartName) {
-
-                    var tmpCtl = this.parentControl.getPanel(tmpControlName);
-                    if (!(tmpCtl)) {
-                        console.warn("Could not find parent control " + tmpControlName)
-                        
-                    } else {
-                        var tmpPart = tmpCtl.create(tmpPartName, {parent:this});
-                        this.parts[tmpPartName] = tmpPart;
-                        tmpDefs.push(tmpPart.loadToElement(tmpControlEl));
+                        var tmpCtl = false;
+                        if(this.parentControl && this.parentControl.getControl){
+                            tmpCtl = this.parentControl.getControl(tmpControlName);
+                        }
+                        if (!(tmpCtl)) {
+                            //var tmpCached = ThisApp.resCache['controls'][tmpControlName];
+                            console.warn("initControlComponents Could not find parent control " + tmpControlName)
+                        } else {
+                            var tmpPart = tmpCtl.create(tmpPartName, {parent:this});
+                            this.parts[tmpPartName] = tmpPart;
+                            tmpDefs.push(tmpPart.loadToElement(tmpControlEl));
+                        }
                     }
                 }
-
             }
-        }
+            var tmpPanels = ThisApp.getByAttr$({ ctlcomp: 'panel' }, tmpEl);
+            if (tmpPanels.length) {
+                for (var iControl = 0; iControl < tmpPanels.length; iControl++) {
+                    var tmpControlEl = $(tmpPanels[iControl]);
+                    var tmpControlName = tmpControlEl.attr('controlname');
 
-        var tmpTplCtls = ThisApp.getByAttr$({ ctlcomp: 'template' }, tmpEl);
-        if (tmpTplCtls.length) {
-            for (var iControl = 0; iControl < tmpTplCtls.length; iControl++) {
-                var tmpControlEl = $(tmpTplCtls[iControl]);
-                var tmpControlName = tmpControlEl.attr('controlname');
-                var tmpTplName = tmpControlEl.attr('templatename') || '';
-                tmpDefs.push(this.loadTemplate(tmpControlName, tmpTplName, tmpControlEl));
-            }
-        }
+                    var tmpPartName = tmpControlEl.attr('partname') || tmpControlEl.attr('name') || tmpControlName;
+                    if (tmpControlName && tmpPartName) {
 
-        var tmpHTMLs = ThisApp.getByAttr$({ ctlcomp: 'html' }, tmpEl);
-        if (tmpHTMLs.length) {
-            for (var iControl = 0; iControl < tmpHTMLs.length; iControl++) {
-                var tmpControlEl = $(tmpHTMLs[iControl]);
-                var tmpControlName = tmpControlEl.attr('controlname');
-                if (tmpControlName) {
-                    this.parts[tmpPartName] = tmpPart;                    
-                    tmpDefs.push(this.loadHTML(tmpControlName, tmpControlEl));
+                        var tmpCtl = this.parentControl.getPanel(tmpControlName);
+                        if (!(tmpCtl)) {
+                            console.warn("Could not find parent control " + tmpControlName)
+                            
+                        } else {
+                            var tmpPart = tmpCtl.create(tmpPartName, {parent:this});
+                            this.parts[tmpPartName] = tmpPart;
+                            tmpDefs.push(tmpPart.loadToElement(tmpControlEl));
+                        }
+                    }
+
                 }
             }
-        }
 
-        var tmpDDs = ThisApp.getByAttr$({ ctlcomp: 'dropdown' }, tmpEl);
-
-        if (tmpDDs.length) {
-            this.liveIndex.dropdown = tmpDDs;
-            tmpDDs.dropdown({
-                showOnFocus: false
-            })
-                .attr('ctlcomp', '')
-                .attr('appcomp', '');
-        }
-
-        var tmpCBs = ThisApp.getByAttr$({ ctlcomp: 'checkbox' }, tmpEl);
-
-        if (tmpCBs.length) {
-            this.liveIndex.checkbox = tmpCBs;
-            tmpCBs.checkbox()
-                .attr('ctlcomp', '')
-                .attr('appcomp', '');
-        }
-
-        var tmpLayouts = ThisApp.getByAttr$({ ctlcomp: 'layout' }, tmpEl);
-
-        if (tmpLayouts.length) {
-            this.layoutElements = tmpLayouts;
-
-            tmpLayouts
-                .addClass('ctl-layout-frame')
-                .css('min-height', '200px')
-                .attr('ctlcomporig', 'layout')
-                .attr('ctlcomp', '')
-                ;
-            //--- Assure all the elements to the next pane are 100%
-            //ToDo: Verify still needed ***
-            ThisApp.util.resizeToParent(this.layoutElements);
-            //comeback2
-
-
-            //--- Assure layouts index is in there
-            this.liveIndex.layouts = this.liveIndex.layouts || {};
-            //--- Loop to create each one, getting details if needed from el
-            for (var iLayout = 0; iLayout < tmpLayouts.length; iLayout++) {
-                var tmpLayoutEntry = $(tmpLayouts.get(iLayout));
-                var tmpLayoutTemplateName = tmpLayoutEntry.attr('template') || '';
-                var tmpLayoutOptions = defaultLayoutOptions;
-                if (tmpLayoutTemplateName && StaticApp.layoutTemplates[tmpLayoutTemplateName]) {
-                    //--- Using custom template
-                    tmpLayoutOptions = StaticApp.layoutTemplates[tmpLayoutTemplateName];
+            var tmpTplCtls = ThisApp.getByAttr$({ ctlcomp: 'template' }, tmpEl);
+            if (tmpTplCtls.length) {
+                for (var iControl = 0; iControl < tmpTplCtls.length; iControl++) {
+                    var tmpControlEl = $(tmpTplCtls[iControl]);
+                    var tmpControlName = tmpControlEl.attr('controlname');
+                    var tmpTplName = tmpControlEl.attr('templatename') || '';
+                    tmpDefs.push(this.loadTemplate(tmpControlName, tmpTplName, tmpControlEl));
                 }
-                this.controlLayoutChanged = ActionAppCore.debounce(function () {
-                    this.publish('resized', this);
-                }, 200).bind(this);
-
-                tmpLayoutOptions.onresize_end = this.controlLayoutChanged;
-                this.layoutCount = this.layoutCount || 0;
-                this.layoutCount++;
-                var tmpControlLayout = tmpLayoutEntry.layout(tmpLayoutOptions);
-                this.liveIndex.layouts['layout-' + this.layoutCount] = tmpControlLayout;
             }
-        }
-    } catch (theError) {
+
+            var tmpHTMLs = ThisApp.getByAttr$({ ctlcomp: 'html' }, tmpEl);
+            if (tmpHTMLs.length) {
+                for (var iControl = 0; iControl < tmpHTMLs.length; iControl++) {
+                    var tmpControlEl = $(tmpHTMLs[iControl]);
+                    var tmpControlName = tmpControlEl.attr('controlname');
+                    if (tmpControlName) {
+                        this.parts[tmpPartName] = tmpPart;                    
+                        tmpDefs.push(this.loadHTML(tmpControlName, tmpControlEl));
+                    }
+                }
+            }
+
+            var tmpDDs = ThisApp.getByAttr$({ ctlcomp: 'dropdown' }, tmpEl);
+
+            if (tmpDDs.length) {
+                this.liveIndex.dropdown = tmpDDs;
+                tmpDDs.dropdown({
+                    showOnFocus: false
+                })
+                    .attr('ctlcomp', '')
+                    .attr('appcomp', '');
+            }
+
+            var tmpCBs = ThisApp.getByAttr$({ ctlcomp: 'checkbox' }, tmpEl);
+
+            if (tmpCBs.length) {
+                this.liveIndex.checkbox = tmpCBs;
+                tmpCBs.checkbox()
+                    .attr('ctlcomp', '')
+                    .attr('appcomp', '');
+            }
+
+            var tmpLayouts = ThisApp.getByAttr$({ ctlcomp: 'layout' }, tmpEl);
+
+            if (tmpLayouts.length) {
+                this.layoutElements = tmpLayouts;
+                tmpLayouts
+                    .addClass('ctl-layout-frame')
+                    .css('min-height', '200px')
+                    .attr('ctlcomporig', 'layout')
+                    .attr('ctlcomp', '')
+                    ;
+                //--- Assure all the elements to the next pane are 100%
+                //ToDo: Verify still needed ***
+                ThisApp.util.resizeToParent(this.layoutElements);
+                //--- Assure layouts index is in there
+                this.liveIndex.layouts = this.liveIndex.layouts || {};
+                //--- Loop to create each one, getting details if needed from el
+                for (var iLayout = 0; iLayout < tmpLayouts.length; iLayout++) {
+                    var tmpLayoutEntry = $(tmpLayouts.get(iLayout));
+                    var tmpLayoutTemplateName = tmpLayoutEntry.attr('template') || '';
+                    var tmpLayoutOptions = defaultLayoutOptions;
+                    if (tmpLayoutTemplateName && StaticApp.layoutTemplates[tmpLayoutTemplateName]) {
+                        //--- Using custom template
+                        tmpLayoutOptions = StaticApp.layoutTemplates[tmpLayoutTemplateName];
+                    }
+                    this.controlLayoutChanged = ActionAppCore.debounce(function () {
+                        this.publish('resized', this);
+                    }, 200).bind(this);
+
+                    tmpLayoutOptions.onresize_end = this.controlLayoutChanged;
+                    this.layoutCount = this.layoutCount || 0;
+                    this.layoutCount++;
+                    var tmpControlLayout = tmpLayoutEntry.layout(tmpLayoutOptions);
+                    this.liveIndex.layouts['layout-' + this.layoutCount] = tmpControlLayout;
+                }
+            }
+        } catch (theError) {
             console.error('error in control init',theError);
-    }
+        }
         $.whenAll(tmpDefs).then(function (theReply) {
             //--- Tell the app to resize it's layouts
             ThisApp.resizeLayouts();
