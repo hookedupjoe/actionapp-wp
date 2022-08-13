@@ -54,7 +54,6 @@
         return '';
     }
      function getDisplayValue(theProps, theIsEditMode) {
-         console.log('getDisplayValue', theProps, theIsEditMode);
          var props = theProps;
          var tmpAttr = props.attributes;
          var tmpContent = tmpAttr.spotcontent;
@@ -64,9 +63,7 @@
                 var tmpObj = false;
                 if( tmpContent.substring(0,1) == '{' ){
                     try {
-                        console.log( 'tmpContent string', tmpContent);
                         tmpObj = JSON.parse(tmpContent);
-                        console.log( 'tmpContent tmpObj', tmpObj);
                     } catch (ex) {
                         console.error("Invalid JSON");
                     }
@@ -75,11 +72,9 @@
                     var tmpCtl = tmpObj.ctl;
                     var tmpCtlName = tmpObj.name;
                     var tmpActiveCtl = ActionAppCore.common.activeControl|| {};
-                    console.log( 'tmpActiveCtl', tmpActiveCtl);
                     if( tmpCtl && tmpCtlName ){
                         var tmpWCH = ThisApp.controls.getWebControl(tmpCtl);
                         tmpContent = tmpWCH.getHTML(tmpCtl, tmpObj, tmpActiveCtl);
-                        console.log( 'tmpContent as hTML', tmpContent);
                     }
                 }
             }
@@ -148,8 +143,6 @@
         var tmpParams = ThisApp.getActionParams(theParams, theTarget, ['spotname','clientid']);
         var tmpTargetBlock = wp.data.select('core/block-editor').getBlocksByClientId(tmpParams.clientid);
         var tmpAttr = tmpTargetBlock[0].attributes;
-        console.log( 'onSelectControl', tmpParams);
-        console.log( 'tmpTargetBlock', tmpTargetBlock);
         tmpAttr.spotsourcetype = 'html'; //controls //panels
         ThisApp.input('Enter something','Can be HTML','Update',tmpAttr.spotcontent).then(function(theValue){
             if( !(theValue) ){return;}
@@ -157,7 +150,6 @@
                 theValue = JSON.stringify(theValue);
             }
             tmpAttr.spotcontent = theValue;
-            console.log('set theValue',typeof(theValue))
             wp.data.dispatch('core/block-editor').synchronizeTemplate();
             wp.data.dispatch( 'core/block-editor' ).selectBlock( tmpParams.clientid )
         })
@@ -166,7 +158,6 @@
     function initControl(){
         ThisApp.actions['ControlSpot:selectControl'] = onSelectControl;
     }
-    console.log('load spot control',typeof(ThisApp));
     ActionAppCore.subscribe('app-loaded', initControl);
     
     wp.blocks.registerBlockType(info.category + '/' + info.name, {
@@ -264,4 +255,39 @@
             return el('div',false,[getDisplayValue(props, false)]);
         },
     });
+
+
+//---- Temp Dev - Will this work?
+    ActionAppCore.subscribe('app-loaded', function(){
+        if(!ThisApp.common.activeControl){
+            var tmpPanelSpec = {
+                "options": {
+                "padding": true
+                },
+                "content": [{
+                "ctl": "spot",
+                "text": "",
+                "name": "main"
+                }]
+            };
+    
+            var tmpControl = ThisApp.controls.newControl(tmpPanelSpec, {
+                parent: ThisApp
+            });
+            var tmpName = 'previewControl';
+            var tmpInstance = tmpControl.create(tmpName);
+            tmpInstance.parentEl = $('.block-editor-block-list__layout');
+            ThisApp.common.activeControl = tmpInstance
+            
+        }
+
+        var tmpAC = ThisApp.common.activeControl;
+        tmpAC.controlConfig.content.push({"ctl":"control","catalog":"_designer","controlname":"SearchBar","name":"searchbar"});
+                
+        tmpAC.assureRequired().then(function () {
+            tmpAC.initControlComponents($('.block-editor-block-list__layout'))
+        })		
+
+    })
+
 })(window.wp, window.ActionAppCore);
