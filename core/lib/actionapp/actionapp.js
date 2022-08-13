@@ -5102,7 +5102,7 @@ License: MIT
                 return true;
             }
             //-- Pass true to run validation
-            var tmpFormObj = this.getControlDetails();
+            var tmpFormObj = this.getEntryDetails();
             //See if valid,if so - save the data to resolve when done
             var tmpValidation = this.validate();
             var tmpIsValid = tmpValidation && tmpValidation.isValid === true;
@@ -5467,8 +5467,8 @@ License: MIT
 
 
 
-    me.getControlEl$ = getControlEl$;
-    function getControlEl$(theControlName) {
+    me.getEntryEl$ = getEntryEl$;
+    function getEntryEl$(theControlName) {
         return ThisApp.getByAttr$({ controls: '', control: '', name: theControlName })
     }
 
@@ -5545,7 +5545,7 @@ License: MIT
 
         var tmpControlEl = theControlNameOrEl;
         if (isStr(tmpControlEl)) {
-            tmpControlEl = getControlEl$(theControlNameOrEl);
+            tmpControlEl = getEntryEl$(theControlNameOrEl);
         }
 
         var tmpEl = ThisApp.getByAttr$(tmpAttr, tmpControlEl);
@@ -5597,7 +5597,7 @@ License: MIT
         }
         tmpAttr[tmpType] = '';
 
-        var tmpControlEl = isStr(theControlNameOrEl) ? getControlEl$(theControlNameOrEl) : theControlNameOrEl;
+        var tmpControlEl = isStr(theControlNameOrEl) ? getEntryEl$(theControlNameOrEl) : theControlNameOrEl;
         return ThisApp.getByAttr$(tmpAttr, tmpControlEl);
     }
 
@@ -5688,13 +5688,13 @@ License: MIT
 
     }
 
-    me._getControlDetails = function (theControlNameOrEl) {
+    me._getEntryDetails = function (theControlNameOrEl) {
         var tmpFieldsIndex = {};
         var tmpItemsIndex = {};
 
         var tmpControl = theControlNameOrEl;
         if (typeof (tmpControl) == 'string') {
-            tmpControl = getControlEl$(theControlNameOrEl);
+            tmpControl = getEntryEl$(theControlNameOrEl);
         }
 
         if (tmpControl && tmpControl.length == 1) {
@@ -6032,8 +6032,8 @@ License: MIT
         return '';
     }
 
-    meControl.getControlEl$ = function () {
-        return getControlEl$(this.getControlName())
+    meControl.getEntryEl$ = function () {
+        return getEntryEl$(this.getControlName())
     }
 
     meControl.getHTML = function (theControlName, theInstance) {
@@ -6760,8 +6760,8 @@ License: MIT
 
         return tmpData;
     }
-    meInstance.getControlDetails = function () {
-        var tmpDetails = me._getControlDetails(this.getEl());
+    meInstance.getEntryDetails = function () {
+        var tmpDetails = me._getEntryDetails(this.getEl());
         tmpDetails.data = this.getData();
         return tmpDetails;
     }
@@ -6794,7 +6794,7 @@ License: MIT
 
     meInstance.validate = function (theOptions) {
         var tmpOptions = theOptions || {};
-        var tmpDetails = this.getControlDetails();
+        var tmpDetails = this.getEntryDetails();
         var tmpControl = this.getEl();
         var tmpConfig = this.getConfig();
         tmpControl.find('.error').removeClass('error');
@@ -6998,7 +6998,7 @@ License: MIT
         }
     }
 
-    meInstance.getControlSpecs = function (theFN) {
+    meInstance.getEntrySpecs = function (theFN) {
         try {
             if( this.hasField(theFN) ){
                 return this.getFieldSpecs(theFN);
@@ -7309,7 +7309,7 @@ License: MIT
         $(tmpAll).each(function( theIndex ) {
             var thisEl = $(this);
             var tmpName = thisEl.attr('name');
-            var tmpThisSpec = tmpThisControl.getControlSpecs(tmpName);
+            var tmpThisSpec = tmpThisControl.getEntrySpecs(tmpName);
             
 
             var tmpControlDisp = tmpThisSpec.ctl;
@@ -7340,7 +7340,7 @@ License: MIT
         var tmpWrapperEl = this.getWrapperEl(theName);
         if( tmpWrapperEl ){
             tmpWrapperEl.data('name',theName);
-            tmpWrapperEl.data('specs',this.getControlSpecs(theName));
+            tmpWrapperEl.data('specs',this.getEntrySpecs(theName));
             tmpWrapperEl.data('control',this);
 
             if(tmpAddOverlay){
@@ -7434,7 +7434,7 @@ License: MIT
         var tmpDesWrap = tmpEl.closest('[appuse=actapp-design-body-wrap]')
         return $(tmpDesWrap);
     }
-    meInstance.getControlEls = function (theName) {
+    meInstance.getEntryEls = function (theName) {
         var tmpAll = []
         if (this.hasField(theName)) {
             tmpAll.push(this.getFieldEl(theName))
@@ -7446,8 +7446,8 @@ License: MIT
     }
 
     //--- Returns only one el if exists, else array (should be one per, validate that)
-    meInstance.getControlEl = function (theName) {
-        var tmpAll = this.getControlEls(theName);
+    meInstance.getEntryEl = function (theName) {
+        var tmpAll = this.getEntryEls(theName);
         if( tmpAll && tmpAll.length == 1){
             return $(tmpAll[0]);
         }
