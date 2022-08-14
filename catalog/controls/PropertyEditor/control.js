@@ -180,7 +180,7 @@
     this.showIndex = {};
     var tmpExcludeIndex = {name:1,ctl:1};
     var tmpIndex = this.getIndex();
-    for( var iName in tmpIndex.fields ){
+    for( var iName in tmpIndex.entries ){
       if( !(tmpExcludeIndex[iName]) ){
         this.showIndex[iName] = false;  
       }
@@ -236,6 +236,7 @@
 
   ControlCode.webControlChange = function() {
     var tmpCtl = this.getFieldValue('ctl');
+    console.log( 'webControlChange tmpCtl', tmpCtl);
     if( !(tmpCtl) ){
       return;
     }
