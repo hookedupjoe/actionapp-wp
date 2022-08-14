@@ -6281,13 +6281,9 @@ License: MIT
     meInstance.getEl = function () {
         return this.parentEl
     }
-
     meInstance.showAll = function(){
-        for( var iName in this.getIndex().items ){
-            this.setItemDisplay(iName, true);
-        }
-        for( var iName in this.getIndex().fields ){
-            this.setFieldDisplay(iName, true);
+        for( var iName in this.getIndex().entries ){
+            this.setEntryDisplay(iName, true);
         }
     }
     meInstance.setItemDisabled = function (theEntryName, theIsDisabled) {
@@ -6689,9 +6685,13 @@ License: MIT
         this.refreshForField(theName);
         return tmpRet;
     }
-    meInstance.setAnyDisplay = function (theName, theIsVis, theAnimOptions) {
-        me.setFieldDisplay(this.getEl(), theName, theIsVis, theAnimOptions)
-        me.setItemDisplay(this.getEl(), theName, theIsVis, theAnimOptions)
+    
+    meInstance.setEntryDisplay = function (theName, theIsVis, theAnimOptions) {
+        if( this.hasField(theName)){
+            me.setFieldDisplay(this.getEl(), theName, theIsVis, theAnimOptions)
+        } else {
+            me.setItemDisplay(this.getEl(), theName, theIsVis, theAnimOptions)
+        }
         return true;
     }
 
@@ -7208,10 +7208,7 @@ License: MIT
     meInstance.setDesignMode = function (theIsOn, theOptions) {
         var tmpIndex = this.getIndex();
         this._designModeFlag = theIsOn;
-        for( var iName in tmpIndex.items){
-            this.setControlDesignMode(iName,theIsOn, theOptions)
-        }
-        for( var iName in tmpIndex.fields){
+        for( var iName in tmpIndex.entries){
             this.setControlDesignMode(iName,theIsOn, theOptions)
         }
         if( theIsOn ){
@@ -10545,16 +10542,10 @@ License: MIT
                 theControlObj.setFieldDisplay(tmpEntryName, tmpShowFlag)
             }
         }
-
     }
     me.actions.add('showif', actionShowOrHideIf);
     me.actions.add('hideif', actionShowOrHideIf);
-
     me.actions.add('showfor', actionShowFor);
-
-
-
-
 
     //==== ==== ==== ==== ==== ==== ==== ==== ==== ==== ==== 
     //--- Common Validations
@@ -10585,9 +10576,6 @@ License: MIT
     }
     me.validations.add('exactlen', exactLen);
 
-
-
-
     //--- =========== =========== =========== =========== =========== ===========
     //---- End Common Controls
     //--- =========== =========== =========== =========== =========== ===========
@@ -10596,4 +10584,3 @@ License: MIT
 
 
 })(ActionAppCore, $);
-
