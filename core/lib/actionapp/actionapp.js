@@ -8196,15 +8196,6 @@ License: MIT
                     }
                 }
                 var tmpToAdd = tmpItem;
-                // if (tmpIndex[tmpType][tmpName]) {
-                //     tmpIndex[tmpType][tmpName] = [tmpIndex[tmpType][tmpName]];
-                //     console.warn("Control content has the same name more than once for " + tmpName);
-                //     tmpIndex.errors.push({text: 'All fields and items require a control name (ctl).',name:'' + tmpItem.name});
-                //     tmpIndex[tmpType][tmpName].push(tmpToAdd);
-                // } else {
-                //     tmpIndex[tmpType][tmpName] = tmpToAdd;
-                //     tmpIndex[tmpType + 'List'].push(tmpName)
-                // }
                 if (tmpIndex.all[tmpName]) {
                     tmpIndex.all[tmpName] = [tmpIndex.all[tmpName]];
                     console.error("Control content has the same name more than once for " + tmpName);

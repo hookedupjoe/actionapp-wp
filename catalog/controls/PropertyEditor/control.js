@@ -236,7 +236,6 @@
 
   ControlCode.webControlChange = function() {
     var tmpCtl = this.getFieldValue('ctl');
-    console.log( 'webControlChange tmpCtl', tmpCtl);
     if( !(tmpCtl) ){
       return;
     }
