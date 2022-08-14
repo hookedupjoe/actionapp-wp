@@ -476,7 +476,7 @@ License: MIT
 
 	ControlCode.showControlDetails = showControlDetails;
 	function showControlDetails() {
-		var tmpDetails = activeControl.getEntryDetails()
+		var tmpDetails = activeControl.getWebControlDetails()
 		this.aceEditor.setValue(ThisApp.json(tmpDetails.data));
 		this.aceEditor.clearSelection();
 	};

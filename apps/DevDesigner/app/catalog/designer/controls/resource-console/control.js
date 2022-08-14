@@ -384,7 +384,7 @@ License: MIT
 			tmpLastError = this;
 			return;
 		}
-		var tmpSpecs = this.activeControl.getEntrySpecs(tmpName)
+		var tmpSpecs = this.activeControl.getWebControlSpecs(tmpName)
 		if(!tmpSpecs){
 			console.error(tmpParams,"Selected item not found, refresh",this.activeControl);
 			return;
@@ -686,7 +686,7 @@ License: MIT
 
 	ControlCode.showControlDetails = showControlDetails;
 	function showControlDetails() {
-		var tmpDetails = this.activeControl.getEntryDetails()
+		var tmpDetails = this.activeControl.getWebControlDetails()
 		this.aceEditor.setValue(ThisApp.json(tmpDetails.data));
 		this.aceEditor.clearSelection();
 	};
@@ -863,7 +863,7 @@ License: MIT
 			
 		})
 
-		// var tmpEls = tmpCtl.getEntryEls(tmpCtlName);
+		// var tmpEls = tmpCtl.getWebControlEls(tmpCtlName);
 		// if( tmpEls && tmpEls.length == 1){
 		// 	//$(tmpEls[0]).html(tmpNewHTML);
 		// } else {
@@ -1073,8 +1073,8 @@ License: MIT
 		return tmpCodeText;
 	}
 
-	ControlCode.getEntrySpecsVar = getEntrySpecsVar;
-	function getEntrySpecsVar(theJson){
+	ControlCode.getWebControlSpecsVar = getWebControlSpecsVar;
+	function getWebControlSpecsVar(theJson){
 		var tmpJson = theJson;
 		if( typeof(tmpJson) == 'object'){
 			tmpJson = JSON.stringify(tmpJson,null,2);
@@ -1102,7 +1102,7 @@ License: MIT
 			tmpHTML.push(tmpCWC.Start);
 		}
 
-		tmpHTML.push(this.getEntrySpecsVar(this.getConfigObjectFromCode()));
+		tmpHTML.push(this.getWebControlSpecsVar(this.getConfigObjectFromCode()));
 		if( tmpResType == 'Control'){
 			tmpHTML.push(tmpCWC.AfterConfig);
 			tmpHTML.push(this.getCodeText());
@@ -1125,7 +1125,7 @@ License: MIT
 			tmpHTML.push(tmpCWC.Start);
 		}
 
-		tmpHTML.push(this.getEntrySpecsVar(this.getConfigObjectFromDesigner()));
+		tmpHTML.push(this.getWebControlSpecsVar(this.getConfigObjectFromDesigner()));
 
 		if( tmpResType == 'Control'){
 			tmpHTML.push(tmpCWC.AfterConfig);

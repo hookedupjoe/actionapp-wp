@@ -319,7 +319,7 @@ License: MIT
 
     ThisPage.showControlDetails = showControlDetails;
     function showControlDetails() {
-        var tmpDetails = activeControl.getEntryDetails()
+        var tmpDetails = activeControl.getWebControlDetails()
         ThisPage.detailsEditor.setValue(ThisApp.json(tmpDetails.data));
         ThisPage.detailsEditor.clearSelection();
     };
