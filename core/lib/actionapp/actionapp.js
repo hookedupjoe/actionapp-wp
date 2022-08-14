@@ -10513,13 +10513,10 @@ License: MIT
         //--- Set display on / off based on show list status
         for (var aFieldName in tmpShowIndex) {
             var tmpShowFlag = tmpShowIndex[aFieldName];
-            console.log( 'tmpShowFlag', tmpShowFlag, aFieldName);
             if (theControlObj.hasItem(aFieldName)) {
-                console.log( 'setItemDisplay', aFieldName, tmpShowFlag);
                 theControlObj.setItemDisplay(aFieldName, tmpShowFlag);
             }
             if (theControlObj.hasField(aFieldName)) {
-                console.log( 'setItemDisplay', aFieldName, tmpShowFlag);
                 theControlObj.setFieldDisplay(aFieldName, tmpShowFlag);
             }
         }
