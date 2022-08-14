@@ -63,7 +63,113 @@ var ActionAppCore = {
         }
         return ActionAppCore.getListAsArrays(tmpSource);
     },
+    //--- Returns HTML element based on the specs passed
+    /*
+    var tmpSpecChG1 = {
+        type: 'div',
+        className: 'content',
+        attr: {name: 'G1'},
+        text: 'I am content'
+    }
+    var tmpSpecCh1 = {
+        type: 'div',
+        className: ['ui','card'],
+        style: {border: "dashed 2px red", 'font-size': "14px"},
+        attr: {appuse: 'testing', name: 'Debbie'},
+        text: 'Debbie'
+    }
+    var tmpSpecCh2 = {
+        type: 'div',
+        className: 'ui card',
+        style: 'border: dashed 2px blue;font-size:14px',
+        attr: {appuse: 'testing', name: 'John'},
+        children: [tmpSpecChG1],
+    }
+    var tmpSpecs = {
+        type: 'div',
+        className:'ui cards',
+        attr: {appuse:'testing',name:'mom'},
+        children: [tmpSpecCh1,tmpSpecCh2]
+    }
+    var tmpTE1 = ActionAppCore.el(tmpSpecs)
+    tmpTE1 // show content on console
+    //--- in console
+    <div class="ui cards" appuse="testing" name="mom">
+        <div class="ui card" appuse="testing" name="Debbie" style="border: 2px dashed red; font-size: 14px;">Debbie</div>
+        <div class="ui card" appuse="testing" name="John" style="border: 2px dashed blue; font-size: 14px;">
+            <div class="content" name="G1">I am content</div>
+        </div>
+    </div>
+    */
+    el: function(theSpecs){
+        var tmpSpecs = theSpecs || {};
+        var tmpType = tmpSpecs.type || 'div';
+        var tmpRet = document.createElement(tmpType)
+        var tmpContent = tmpSpecs.content || '';
+        if( tmpSpecs.className ){
+            var tmpClasses = tmpSpecs.className;
+            var tmpClassText = tmpClasses;
+            if( Array.isArray(tmpClasses)){
+                tmpClassText = '';
+                tmpClassTextHit = false;
+                for( var iPos in tmpClasses ){
+                    var tmpClassName = tmpClasses[iPos];
+                    if( tmpClassName ){
+                        if(!tmpClassTextHit){
+                            tmpClassTextHit = true;
+                        } else {
+                            tmpClassText += " ";                             
+                        }
+                        tmpClassText += tmpClassName.trim();
+                    }
+                }
+                tmpStyles = this.util.getStyleObject(tmpStyles);
+            }
+            tmpRet.className = tmpClassText;
+        }
+        var tmpStyles = tmpSpecs.style || tmpSpecs.styles;
+        if( tmpStyles){
+            if( typeof(tmpStyles) == 'string'){
+                tmpStyles = this.util.getStyleObject(tmpStyles);
+            }
+            if( typeof(tmpStyles) == 'object'){
+                for( var iName in tmpStyles){
+                    tmpRet.style[iName] = tmpStyles[iName];
+                }
+            }
+        }
+        var tmpAttrs = tmpSpecs.attr;
+        if( typeof(tmpAttrs) == 'object'){
+            for( var iName in tmpAttrs ){
+                var tmpAttrVal = tmpAttrs[iName];
+                if( (iName) && typeof(tmpAttrVal) == 'string' ){
+                    tmpRet.setAttribute(iName,tmpAttrVal);
+                }
+            }
+        }
+        var tmpContent = tmpSpecs.children || tmpSpecs.content || tmpSpecs.text || tmpSpecs.html || '';
+        if( tmpContent ){
+            if( Array.isArray(tmpContent)){
+                for( var iPos in tmpContent ){
+                    var tmpChild = tmpContent[iPos];
+                    if(typeof(tmpChild) == 'object'){
+                        var tmpCE = this.el(tmpChild);
+                        tmpRet.appendChild(tmpCE);
+                    }
+                }
+            } else {
+                tmpRet.innerHTML = tmpContent;
+            }
+        }
+        return tmpRet;
+    },    
     util: {
+        getStyleObject(theString){
+            var regex = /([\w-]*)\s*:\s*([^;]*)/g;
+            var match, properties={};
+            while(match=regex.exec(theString)) properties[match[1]] = match[2].trim();
+            return properties;
+        },
         isStr: function(theItem) {
             return (typeof (theItem) == 'string')
         },
