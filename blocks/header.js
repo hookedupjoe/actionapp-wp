@@ -41,10 +41,6 @@
         string: ['color','size', 'attached', 'alignment']
     }
     
-    // function getObjectDoc(theProps){
-    //     return theProps.attributes;
-    // }
-
     function getContent(theProps, theIsEditMode){
         var tmpAtts = theProps.attributes;
         tmpAtts.ctl = 'header';

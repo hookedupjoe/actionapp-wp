@@ -121,10 +121,10 @@
         BlockEditor.getCommonBlock = function(theElementName){
             return CommonBlocks.getBlock(theElementName);
         }
-        BlockEditor.getCommonBlocksListControl = function(theCurrentValue, theOnChangeEvent){
-            var tmpSelection = CommonBlocks.getSelection();
-            return BlockEditor.getSelectControl(theCurrentValue,theOnChangeEvent,tmpSelection);
-        }
+        // BlockEditor.getCommonBlocksListControl = function(theCurrentValue, theOnChangeEvent){
+        //     var tmpSelection = CommonBlocks.getSelection();
+        //     return BlockEditor.getSelectControl(theCurrentValue,theOnChangeEvent,tmpSelection);
+        // }
 
         BlockEditor.getColorListControl = function(theCurrentValue, theOnChangeEvent){
             var tmpSelection = [
