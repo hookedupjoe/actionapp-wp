@@ -6457,7 +6457,7 @@ License: MIT
     meInstance.getFieldSpecs = function (theFieldName) {
         try {
             var tmpConfig = this.getConfig();
-            return tmpConfig.index.fields[theFieldName];
+            return tmpConfig.index.entries[theFieldName];
         } catch (ex) {
             console.error("Error getting field, not found " + theFieldName);
             return {}
@@ -6811,12 +6811,12 @@ License: MIT
         for (var index = 0; index < tmpConfig.index.fieldsList.length; index++) {
             var tmpFN = tmpConfig.index.fieldsList[index];
             this.setFieldMessage(tmpFN, '');
-            var tmpField = tmpDetails.fields[tmpFN]
+            var tmpField = tmpDetails.entries[tmpFN]
             var tmpIsAvail = this.getFieldDisplay(tmpFN);
             var tmpFieldIsValid = true;
             var tmpReasonText = '';
             if (tmpIsAvail) {
-                var tmpFieldSpec = tmpConfig.index.fields[tmpFN];
+                var tmpFieldSpec = tmpConfig.index.entries[tmpFN];
                 if (tmpFieldSpec.req === true) {
                     var tmpFieldData = tmpDetails.data[tmpFN];
                     if (!(tmpFieldData)) {
@@ -7014,37 +7014,33 @@ License: MIT
 
     meInstance.getFieldSpecs = function (theFN) {
         try {
-            return this.getConfig().index.fields[theFN];
+            return this.getConfig().index.entries[theFN];
         } catch (ex) {
             return false;
         }
     }
     meInstance.getItemSpecs = function (theFN) {
         try {
-            return this.getConfig().index.items[theFN];
+            return this.getConfig().index.entries[theFN];
         } catch (ex) {
             return false;
         }
     }
     meInstance.hasField = function (theName) {
         try {
-            if (isObj(this.getConfig().index.fields[theName])) {
-                return true;
-            }
+            var tmpPos = this.getIndex().fieldsList.indexOf(theName);
+            return (tmpPos > -1);
         } catch (ex) {
             return false;
         }
-        return false;
     }
     meInstance.hasItem = function (theName) {
         try {
-            if (isObj(this.getConfig().index.items[theName])) {
-                return true;
-            }
+            var tmpPos = this.getIndex().itemsList.indexOf(theName);
+            return (tmpPos > -1);
         } catch (ex) {
             return false;
         }
-        return false;
     }
     meInstance.hasAny = function (theName) {
         if (this.hasField(theName)) {
@@ -8207,15 +8203,15 @@ License: MIT
                     }
                 }
                 var tmpToAdd = tmpItem;
-                if (tmpIndex[tmpType][tmpName]) {
-                    tmpIndex[tmpType][tmpName] = [tmpIndex[tmpType][tmpName]];
-                    console.warn("Control content has the same name more than once for " + tmpName);
-                    tmpIndex.errors.push({text: 'All fields and items require a control name (ctl).',name:'' + tmpItem.name});
-                    tmpIndex[tmpType][tmpName].push(tmpToAdd);
-                } else {
-                    tmpIndex[tmpType][tmpName] = tmpToAdd;
-                    tmpIndex[tmpType + 'List'].push(tmpName)
-                }
+                // if (tmpIndex[tmpType][tmpName]) {
+                //     tmpIndex[tmpType][tmpName] = [tmpIndex[tmpType][tmpName]];
+                //     console.warn("Control content has the same name more than once for " + tmpName);
+                //     tmpIndex.errors.push({text: 'All fields and items require a control name (ctl).',name:'' + tmpItem.name});
+                //     tmpIndex[tmpType][tmpName].push(tmpToAdd);
+                // } else {
+                //     tmpIndex[tmpType][tmpName] = tmpToAdd;
+                //     tmpIndex[tmpType + 'List'].push(tmpName)
+                // }
                 if (tmpIndex.entries[tmpName]) {
                     tmpIndex.entries[tmpName] = [tmpIndex.entries[tmpName]];
                     console.warn("Control content has the same name more than once for " + tmpName);
@@ -8223,6 +8219,7 @@ License: MIT
                     tmpIndex.entries[tmpName].push(tmpToAdd);
                 } else {
                     tmpIndex.entries[tmpName] = tmpToAdd;
+                    tmpIndex[tmpType + 'List'].push(tmpName)
                     tmpIndex.entryList.push(tmpName)
                 }
             }
@@ -10520,10 +10517,13 @@ License: MIT
         //--- Set display on / off based on show list status
         for (var aFieldName in tmpShowIndex) {
             var tmpShowFlag = tmpShowIndex[aFieldName];
+            console.log( 'tmpShowFlag', tmpShowFlag, aFieldName);
             if (theControlObj.hasItem(aFieldName)) {
+                console.log( 'setItemDisplay', aFieldName, tmpShowFlag);
                 theControlObj.setItemDisplay(aFieldName, tmpShowFlag);
             }
             if (theControlObj.hasField(aFieldName)) {
+                console.log( 'setItemDisplay', aFieldName, tmpShowFlag);
                 theControlObj.setFieldDisplay(aFieldName, tmpShowFlag);
             }
         }
