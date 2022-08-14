@@ -401,9 +401,9 @@ License: MIT
 			//return;
 		}
 		if( !this.muliSelectModeActive === true ){
-			this.activeControl.controlSelection(false);
+			this.activeControl.entrySelection(false);
 		}
-		this.activeControl.setControlSelected(tmpName);
+		this.activeControl.setEntrySelected(tmpName);
 		this.lastControlSelected = tmpName;
 		
 		//this.parts['properties'].setValue(JSON.stringify(tmpSpecs,null,2));
@@ -422,7 +422,7 @@ License: MIT
 		tmpCtl.refreshUI()
 		tmpCtl.setDesignMode(true,{myaction:'onDesignClick'});
 		if(this.lastControlSelected){
-			tmpCtl.setControlSelected(this.lastControlSelected);
+			tmpCtl.setEntrySelected(this.lastControlSelected);
 		}
 		tmpCtl.setState(tmpState);
 	}
