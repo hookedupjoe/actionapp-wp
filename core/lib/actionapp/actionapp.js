@@ -6282,7 +6282,7 @@ License: MIT
         return this.parentEl
     }
     meInstance.showAll = function(){
-        for( var iName in this.getIndex().entries ){
+        for( var iName in this.getIndex().all ){
             this.setEntryDisplay(iName, true);
         }
     }
@@ -6453,7 +6453,7 @@ License: MIT
     meInstance.getFieldSpecs = function (theFieldName) {
         try {
             var tmpConfig = this.getConfig();
-            return tmpConfig.index.entries[theFieldName];
+            return tmpConfig.index.all[theFieldName];
         } catch (ex) {
             console.error("Error getting field, not found " + theFieldName);
             return {}
@@ -6811,12 +6811,12 @@ License: MIT
         for (var index = 0; index < tmpConfig.index.fieldsList.length; index++) {
             var tmpFN = tmpConfig.index.fieldsList[index];
             this.setFieldMessage(tmpFN, '');
-            var tmpField = tmpDetails.entries[tmpFN]
+            var tmpField = tmpDetails.all[tmpFN]
             var tmpIsAvail = this.getFieldDisplay(tmpFN);
             var tmpFieldIsValid = true;
             var tmpReasonText = '';
             if (tmpIsAvail) {
-                var tmpFieldSpec = tmpConfig.index.entries[tmpFN];
+                var tmpFieldSpec = tmpConfig.index.all[tmpFN];
                 if (tmpFieldSpec.req === true) {
                     var tmpFieldData = tmpDetails.data[tmpFN];
                     if (!(tmpFieldData)) {
@@ -7014,14 +7014,14 @@ License: MIT
 
     meInstance.getFieldSpecs = function (theFN) {
         try {
-            return this.getConfig().index.entries[theFN];
+            return this.getConfig().index.all[theFN];
         } catch (ex) {
             return false;
         }
     }
     meInstance.getItemSpecs = function (theFN) {
         try {
-            return this.getConfig().index.entries[theFN];
+            return this.getConfig().index.all[theFN];
         } catch (ex) {
             return false;
         }
@@ -7208,7 +7208,7 @@ License: MIT
     meInstance.setDesignMode = function (theIsOn, theOptions) {
         var tmpIndex = this.getIndex();
         this._designModeFlag = theIsOn;
-        for( var iName in tmpIndex.entries){
+        for( var iName in tmpIndex.all){
             this.setControlDesignMode(iName,theIsOn, theOptions)
         }
         if( theIsOn ){
@@ -8129,7 +8129,7 @@ License: MIT
         }
         tmpIndex.errors = tmpIndex.errors || [];
         tmpIndex.locs = tmpIndex.locs || {};
-        tmpIndex.entries = tmpIndex.entries || {};
+        tmpIndex.all = tmpIndex.all || {};
         tmpIndex.entryList = tmpIndex.entryList || [];
         var tmpOL = theOptionalOutline || tmpIndex.outline;
         var tmpItems = theItems || [];
@@ -8205,13 +8205,13 @@ License: MIT
                 //     tmpIndex[tmpType][tmpName] = tmpToAdd;
                 //     tmpIndex[tmpType + 'List'].push(tmpName)
                 // }
-                if (tmpIndex.entries[tmpName]) {
-                    tmpIndex.entries[tmpName] = [tmpIndex.entries[tmpName]];
-                    console.warn("Control content has the same name more than once for " + tmpName);
+                if (tmpIndex.all[tmpName]) {
+                    tmpIndex.all[tmpName] = [tmpIndex.all[tmpName]];
+                    console.error("Control content has the same name more than once for " + tmpName);
                     tmpIndex.errors.push({text: 'All fields and items require a control name (ctl).',name:'' + tmpItem.name});
-                    tmpIndex.entries[tmpName].push(tmpToAdd);
+                    tmpIndex.all[tmpName].push(tmpToAdd);
                 } else {
-                    tmpIndex.entries[tmpName] = tmpToAdd;
+                    tmpIndex.all[tmpName] = tmpToAdd;
                     tmpIndex[tmpType + 'List'].push(tmpName)
                     tmpIndex.entryList.push(tmpName)
                 }

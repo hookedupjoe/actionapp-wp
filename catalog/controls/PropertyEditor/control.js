@@ -180,7 +180,7 @@
     this.showIndex = {};
     var tmpExcludeIndex = {name:1,ctl:1};
     var tmpIndex = this.getIndex();
-    for( var iName in tmpIndex.entries ){
+    for( var iName in tmpIndex.all ){
       if( !(tmpExcludeIndex[iName]) ){
         this.showIndex[iName] = false;  
       }
