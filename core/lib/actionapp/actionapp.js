@@ -7121,23 +7121,19 @@ License: MIT
         return true;
     }
 
-    meInstance.controlSelection = function (theOptions) {
+    meInstance.entrySelection = function (theOptions) {
         var tmpIndex = this.getIndex();
         var tmpOnOff = false;
         if( typeof(theOptions) == 'boolean'){
             tmpOnOff = theOptions;
         }
-        for( var iPos in tmpIndex.fieldsList ){
-            var tmpName = tmpIndex.fieldsList[iPos]
-            this.setControlSelected(tmpName,tmpOnOff);
-        }
-        for( var iPos in tmpIndex.itemsList ){
-            var tmpName = tmpIndex.itemsList[iPos];
-            this.setControlSelected(tmpName,tmpOnOff);
+        for( var iPos in tmpIndex.entryList ){
+            var tmpName = tmpIndex.entryList[iPos]
+            this.setEntrySelected(tmpName,tmpOnOff);
         }
     }
     
-    meInstance.setControlSelected = function (theName, theIsOn, theOptions) {
+    meInstance.setEntrySelected = function (theName, theIsOn, theOptions) {
         if( !(theName) || 'string' != typeof(theName) ){
             console.error("no name provided");
             return;
