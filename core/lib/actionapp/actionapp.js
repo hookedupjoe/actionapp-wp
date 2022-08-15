@@ -179,10 +179,6 @@ var ActionAppCore = {
                 if( tmpEntry ){
                     var tmpParts = tmpEntry.split('=');
                     var tmpVal = tmpParts[1];
-                    if( tmpVal === undefined){
-                        console.log( 'bad tmpEntry', tmpEntry);
-                    }
-                    console.log( 'tmpVal', tmpVal);
                     if( !(tmpVal)){
                         tmpRet[tmpParts[0]] = '';
                     } else {
@@ -6928,7 +6924,6 @@ License: MIT
     meInstance.validate = function (theOptions) {
         var tmpOptions = theOptions || {};
         var tmpDetails = this.getWebControlDetails();
-        console.log('tmpDetails',tmpDetails);
         var tmpControl = this.getEl();
         var tmpConfig = this.getConfig();
         tmpControl.find('.error').removeClass('error');
