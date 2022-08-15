@@ -146,11 +146,27 @@
             return BlockEditor.getSelectControl(theCurrentValue,theOnChangeEvent,tmpSelection);
         }
         
-        
-        BlockEditor.getAttachedListControl = function(theCurrentValue, theOnChangeEvent){
+        //--- Singleton cache of drop down selection objects
+        BlockEditor._selcache = {};
+
+        //--- Updated to use selection details from the core
+        BlockEditor.getListControl = function(theProp, theCurrentValue, theOnChangeEvent){
             //--- Updated to use selection details from the core
-            var tmpSelList = ThisApp.controls.getSelectionFor('attached',theCurrentValue,theOnChangeEvent);
-            return this.elFromUDom(tmpSelList);
+            if( !(theProp)){
+                console.error('no property passed to get list control');
+                return el('select',{});
+            }
+            var tmpProp = theProp;
+            var tmpList = ThisApp.controls.getSelListFor(tmpProp);
+            var tmpSel = [];
+            for( var iPos in tmpList ){
+                var tmpEntry = tmpList[iPos];
+                tmpSel.push(el("option",{value:tmpEntry.value}, tmpEntry.text));
+            }
+            return BlockEditor.getSelectControl(theCurrentValue,theOnChangeEvent,tmpSel);
+        }
+        BlockEditor.getAttachedListControl = function(theCurrentValue, theOnChangeEvent){
+            return this.getListControl('attached',theCurrentValue, theOnChangeEvent)
         }
         BlockEditor.getAttachedListControlORIGINAL_REMOVE = function(theCurrentValue, theOnChangeEvent){
             var tmpSelection = [
