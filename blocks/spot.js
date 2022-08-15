@@ -25,7 +25,7 @@
     var el = wp.element.createElement;
     var useBlockProps = wp.blockEditor.useBlockProps;
     var BlockEditor = ActionAppCore.common.blocks.Editor;
-    var be = wp.data.dispatch('core/editor');
+    var be = wp.data.dispatch('core/block-editor');
 
     var info = {
         name: 'spot',
@@ -121,7 +121,7 @@
             }
             //---> To Write To Post Doc: controlDirty = true;
             //---> To Write To Post Doc: if( controlDetailsLoaded === false){
-            //---> To Write To Post Doc:     controlDetailsLoaded = wp.data.select('core/editor').getEditedPostAttribute('meta').details || ''
+            //---> To Write To Post Doc:     controlDetailsLoaded = wp.data.select('core/block-editor').getEditedPostAttribute('meta').details || ''
             //---> To Write To Post Doc: }
             
             //controlDetails['working'] = true;
@@ -178,7 +178,7 @@
             //---> To Write To Post Doc: 
             // if( controlDirty && (controlDetailsLoaded != tmpDetails)){
             //     //console.log('Saving tmpDetails',tmpDetails);
-            //     wp.data.dispatch('core/editor').editPost({meta: {__doctype:"manual",details:tmpDetails}});
+            //     wp.data.dispatch('core/block-editor').editPost({meta: {__doctype:"manual",details:tmpDetails}});
             //     //console.log('SAVED tmpDetails',tmpDetails);
             //     controlDirty = false;
             // }

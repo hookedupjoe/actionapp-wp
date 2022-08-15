@@ -24,7 +24,7 @@
     var el = wp.element.createElement;
     var useBlockProps = wp.blockEditor.useBlockProps;
     var BlockEditor = ActionAppCore.common.blocks.Editor;
-    var be = wp.data.dispatch('core/editor');
+    var be = wp.data.dispatch('core/block-editor');
 
     var info = {
         name: 'actappelemdesigncontrol',
@@ -128,7 +128,7 @@
 
             controlDirty = true;
             if( controlDetailsLoaded === false){
-                controlDetailsLoaded = '' + (wp.data.select('core/editor').getEditedPostAttribute('meta').__design_props || '{}');
+                controlDetailsLoaded = '' + (wp.data.select('core/block-editor').getEditedPostAttribute('meta').__design_props || '{}');
                 controlDetails = JSON.parse(controlDetailsLoaded);
             }
             
@@ -176,7 +176,7 @@
             if( controlDirty && (controlDetailsLoaded != tmpDetails)){
                 var tmpMeta = {__doctype:controlDetails['designtype'],__design_props:tmpDetails};
                 console.log( 'tmpMeta', tmpMeta);
-                wp.data.dispatch('core/editor').editPost({meta: tmpMeta});
+                wp.data.dispatch('core/block-editor').editPost({meta: tmpMeta});
                 
                 controlDirty = false;
             }

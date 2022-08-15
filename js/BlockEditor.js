@@ -76,7 +76,7 @@
             if( tmpThis && tmpThis.clientId){
                 tmpBlockClientId = tmpThis.clientId;
             }
-            wp.data.dispatch('core/editor').synchronizeTemplate();
+            wp.data.dispatch('core/block-editor').synchronizeTemplate();
             if( tmpBlockClientId ){
                 wp.data.dispatch( 'core/block-editor' ).selectBlock( tmpBlockClientId )
             }
@@ -501,7 +501,7 @@
             }
             var tmpItemToAdd = 'card';
             var tmpToAddElement = BlockEditor.getCommonBlock(tmpItemToAdd);
-            wp.data.dispatch('core/editor').insertBlocks(tmpToAddElement,tmpPos,tmpThis.clientId) 
+            wp.data.dispatch('core/block-editor').insertBlocks(tmpToAddElement,tmpPos,tmpThis.clientId) 
         }
 
         ThisApp.actions.beAddField = function(){
@@ -512,7 +512,7 @@
             }
             var tmpItemToAdd = 'field';
             var tmpToAddElement = BlockEditor.getCommonBlock(tmpItemToAdd);
-            wp.data.dispatch('core/editor').insertBlocks(tmpToAddElement,tmpPos,tmpThis.clientId) 
+            wp.data.dispatch('core/block-editor').insertBlocks(tmpToAddElement,tmpPos,tmpThis.clientId) 
         }
 
         ThisApp.actions.beAddElement = function(theParams, theTarget){
@@ -528,7 +528,7 @@
                 return;
             }
             var tmpToAddElement = BlockEditor.getCommonBlock(tmpItemToAdd);
-            wp.data.dispatch('core/editor').insertBlocks(tmpToAddElement,tmpPos,tmpThis.clientId) 
+            wp.data.dispatch('core/block-editor').insertBlocks(tmpToAddElement,tmpPos,tmpThis.clientId) 
         }
         
     }

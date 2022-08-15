@@ -24,7 +24,7 @@
     var el = wp.element.createElement;
     var useBlockProps = wp.blockEditor.useBlockProps;
     var BlockEditor = ActionAppCore.common.blocks.Editor;
-    var be = wp.data.dispatch('core/editor');
+    var be = wp.data.dispatch('core/block-editor');
 
     var info = {
         name: 'segment',
