@@ -144,6 +144,10 @@ var ActionAppCore = {
                 var tmpAttrVal = tmpAttrs[iName];
                 if( (iName) && typeof(tmpAttrVal) == 'string' ){
                     tmpRet.setAttribute(iName,tmpAttrVal);
+                } else if( (iName) && typeof(tmpAttrVal) == 'function' ){
+                    //--- For onchange type events
+                    //ToDo: Another way
+                    tmpRet[iName.toLowerCase()] = tmpAttrVal;                    
                 }
             }
         }
@@ -308,7 +312,7 @@ var ActionAppCore = {
                 if (tmpEntry) {
                     var tmpText = tmpEntry;
                     var tmpVal = tmpEntry;
-                    if (!isStr(tmpEntry) && tmpEntry.length == 2) {
+                    if ( (typeof(tmpEntry) != 'string') && tmpEntry.length == 2) {
                         //--- This is an array, get values
                         tmpText = tmpEntry[0]
                         tmpVal = tmpEntry[1]
@@ -10771,23 +10775,89 @@ License: MIT
     //---- Start Designer Helpers
     //--- =========== =========== =========== =========== =========== ===========
 
+
+    function elSpecs(theList){
+        console.log( 'elSpecs', theList);
+        var tmpRet = [];
+        for( var iPos in theList ){
+            tmpRet.push(elSpec.apply(this,theList[iPos]))
+        }
+        return tmpRet;
+    }
     //--- Create element spec object (domspec)
     function elSpec(theTag, theOptions, theContent){
         var tmpRet = {type:theTag};
+        var tmpOptions = theOptions || {};
+        
+        for( var iName in tmpOptions ){
+            var tmpChkName = iName.toLowerCase();
+            var tmpVal = tmpOptions[iName];
+            if( tmpChkName == 'classname'){
+                tmpRet.className = tmpVal;
+            } else if( tmpChkName == 'style' || tmpChkName == 'styles'){
+                tmpRet.style = tmpVal;
+            } else if( tmpChkName == 'children'){
+                tmpRet.children = elSpec(tmpVal)
+            } else {
+                //--- if nothing else, must be an attribute
+                tmpRet.attr = tmpRet.attr || {};
+                tmpRet.attr[iName] = tmpVal;
+            }
+        }
+        if( theContent ){
+            tmpRet.children = theContent;
+        }
         return tmpRet;
     }
 
+   var gSelLookup = {
+        _ex: {},
+        'attached': 'None|,Top|top attached,Middle|attached,Bottom|bottom attached'
+    };
+    function getSelListFor(thePropName){
+        if( !gSelLookup._ex[thePropName] ){
+            gSelLookup._ex[thePropName] = ActionAppCore.getListAsObjects(gSelLookup[thePropName])
+        }
+        return gSelLookup._ex[thePropName];
+    }
+
     me.getSelectionFor = function(thePropName, theCurrentValue, theOnChangeEvent){
-        var tmpSelection = [
-            elSpec("option", {value: ""}, "None"),
-            elSpec("option", {value: "attached top"}, "Top"),
-            elSpec("option", {value: "attached"}, "Middle"),
-            elSpec("option", {value: "attached bottom"}, "Bottom"),
-        ];
+        var tmpSelection = getSelListFor(thePropName);
+        if( !(tmpSelection) ){
+            console.error("Unknown property name passed", thePropName);
+            return;
+        }
         return me.getSelectControl(theCurrentValue,theOnChangeEvent,tmpSelection);
     }
-    me.getSelectControl = function(theValue,theOnChange, theDropDownValues){
-        return elSpec("select", {className:'fluid-field', value:theValue, onChange: theOnChange},theDropDownValues)
+
+    me.getSelectControl = function(theValue,theOnChange, theDropDownValues, theOptionalClassName){
+        var tmpRet = {type:'select'};
+
+        if( theOptionalClassName ){
+            tmpRet.className = theOptionalClassName;
+        } else {
+            //--- ToDo: Move this to wp blocks only
+            tmpRet.className = 'fluid-field';
+            tmpRet.value = theValue;
+        }
+console.log( 'theOnChange', theOnChange);
+        if( theOnChange ){
+            //ToDo: Function?
+            tmpRet.attr = tmpRet.attr || {};
+            tmpRet.attr.onChange = theOnChange;
+        }
+        var tmpKids = [];
+        for( var iPos in theDropDownValues ){
+            var tmpEntry = theDropDownValues[iPos];
+            var tmpOption = {type:'option', text: tmpEntry.text, attr:{value:tmpEntry.value}};
+            if( tmpEntry.value == theValue ){
+                tmpOption.attr.selected = '';
+            }
+            tmpKids.push(tmpOption);
+        }
+        tmpRet.children = tmpKids;
+        return tmpRet;
+        //return elSpec("select", {className:'fluid-field', value:theValue, onChange: theOnChange},theDropDownValues)
     }
     me.getTextControl = function(theValue,theOnChange){
         return elSpec("input", {className:'fluid-field', value:theValue, onChange: theOnChange})
