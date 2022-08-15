@@ -8167,6 +8167,12 @@ License: MIT
         return tmpHTML;
     }
 
+    
+    me.getContentDomSpecs = getContentDomSpecs;
+    function getContentDomSpecs(theControlName, theItems, theControlObj) {
+        var tmpRet = {}
+        return tmpRet;
+    }
     me.getContentHTML = getContentHTML;
     function getContentHTML(theControlName, theItems, theControlObj) {
         var tmpHTML = [];
@@ -9077,7 +9083,7 @@ License: MIT
                 tmpClasses += ' ui';
             }
             tmpClasses += ' ' + tmpControlClass;
-            tmpRet.className = tmpClasses; //string ok
+            tmpRet.className = tmpClasses.trim(); //string ok
 
             var tmpType = 'div';
             var tmpAttrs = getItemAttrObj(theObject);
@@ -9085,12 +9091,13 @@ License: MIT
                 tmpRet.attr = tmpAttrs;
             }
             var tmpTextContent = tmpObject.text || tmpObject.html || '';
-            var tmpContentArray = tmpObject.items || tmpObject.content || [];
+            var tmpContentArray = tmpObject.items || tmpObject.content;
             var tmpContentSpecs = false;
             if (tmpContentArray) {
                 tmpContentSpecs = getContentDomSpecs(theControlName, tmpContentArray, theControlObj);
                 tmpRet.children = tmpContentSpecs;
             }
+            tmpRet.text = tmpTextContent;
             return tmpRet;
         },
         getHTML: function (theControlName, theObject, theControlObj, theIsUI) {
@@ -9098,41 +9105,43 @@ License: MIT
             // if( theControlObj.__inDesignMode ){
             //     return this.getHTMLForDesign(theControlName, theObject, theControlObj, theIsUI)
             // }
-            var tmpObject = theObject || {};
-            var tmpHTML = [];
-            var tmpHidden = '';
-            if (tmpObject.hidden === true) {
-                tmpHidden = 'display:none;';
-            }
-            var tmpStyle = tmpObject.style || tmpObject.styles || tmpObject.css || '';
-            if (tmpHidden) {
-                tmpStyle += tmpHidden;
-            }
-            if (tmpStyle) {
-                tmpStyle = ' style="' + tmpStyle + '" '
-            }
+            var tmpDomSpecs = this.getDomSpecs(theControlName, theObject, theControlObj, theIsUI);
+            return ActionAppCore.el(tmpDomSpecs).outerHTML
+            // var tmpObject = theObject || {};
+            // var tmpHTML = [];
+            // var tmpHidden = '';
+            // if (tmpObject.hidden === true) {
+            //     tmpHidden = 'display:none;';
+            // }
+            // var tmpStyle = tmpObject.style || tmpObject.styles || tmpObject.css || '';
+            // if (tmpHidden) {
+            //     tmpStyle += tmpHidden;
+            // }
+            // if (tmpStyle) {
+            //     tmpStyle = ' style="' + tmpStyle + '" '
+            // }
 
-            var tmpClass = tmpObject.class || '';
-            var tmpControlClass = theControlName;
-            var tmpClasses = tmpObject.classes || '';
-            tmpClasses += getValueIfTrue(theObject, ['floating', 'dividing', 'block', 'link', 'fluid', 'placeholder', 'raised', 'tall', 'stacked', 'piled', 'vertical', 'loading', 'inverted', 'bottom', 'top', 'attached', 'padded', 'slim', 'compact', 'secondary', 'tertiary', 'circular', 'clearing', 'right', 'left', 'center', 'aligned', 'basic']);
-            tmpClasses += getValueIfThere(theObject, ['color', 'icon', 'size', 'alignment', 'attached']);
+            // var tmpClass = tmpObject.class || '';
+            // var tmpControlClass = theControlName;
+            // var tmpClasses = tmpObject.classes || '';
+            // tmpClasses += getValueIfTrue(theObject, ['floating', 'dividing', 'block', 'link', 'fluid', 'placeholder', 'raised', 'tall', 'stacked', 'piled', 'vertical', 'loading', 'inverted', 'bottom', 'top', 'attached', 'padded', 'slim', 'compact', 'secondary', 'tertiary', 'circular', 'clearing', 'right', 'left', 'center', 'aligned', 'basic']);
+            // tmpClasses += getValueIfThere(theObject, ['color', 'icon', 'size', 'alignment', 'attached']);
 
-            var tmpUI = (theIsUI!==false) ? 'ui ' : '';
+            // var tmpUI = (theIsUI!==false) ? 'ui ' : '';
 
-            tmpHTML = [];
-            tmpHTML.push('<div ' + getItemAttrString(theObject) + ' class="' + tmpUI + ' ' + tmpControlClass + ' ' + tmpClasses + '" ' + tmpStyle + '>')
+            // tmpHTML = [];
+            // tmpHTML.push('<div ' + getItemAttrString(theObject) + ' class="' + tmpUI + ' ' + tmpControlClass + ' ' + tmpClasses + '" ' + tmpStyle + '>')
 
-            tmpHTML.push(tmpObject.text || tmpObject.html || '')
+            // tmpHTML.push(tmpObject.text || tmpObject.html || '')
 
-            var tmpItems = tmpObject.items || tmpObject.content || [];
-            if (tmpItems) {
-                tmpHTML.push(getContentHTML(theControlName, tmpItems, theControlObj))
-            }
+            // var tmpItems = tmpObject.items || tmpObject.content || [];
+            // if (tmpItems) {
+            //     tmpHTML.push(getContentHTML(theControlName, tmpItems, theControlObj))
+            // }
 
-            tmpHTML.push('</div>')
-            tmpHTML = tmpHTML.join('');
-            return tmpHTML;
+            // tmpHTML.push('</div>')
+            // tmpHTML = tmpHTML.join('');
+            // return tmpHTML;
 
         },
         isField: false
