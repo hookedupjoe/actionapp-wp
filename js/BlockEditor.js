@@ -374,6 +374,38 @@
             //--- ToDo: Review usage / initial need of the above call
         }
 
+        //--- Returns React element from universal DOM specs
+        BlockEditor.elFromSpecs = function(theSpecs){
+            var tmpSpec = theSpecs;
+            var tmpElProps = tmpSpec.attr || {};
+            if( tmpSpec.className ){
+                tmpElProps.className = tmpSpec.className;
+            }
+            var tmpStyles = tmpSpec.styles || tmpSpec.style;
+            if( tmpStyles ){
+                tmpElProps.style = tmpStyles;
+            }
+            var tmpType = tmpSpec.type || 'div';
+            var tmpParams = [tmpType,tmpElProps];
+            var tmpContent = tmpSpec.children || tmpSpec.content || tmpSpec.text || tmpSpec.html || '';
+            
+            if( tmpContent ){
+                if( Array.isArray(tmpContent)){
+                    for( var iPos in tmpContent ){
+                        var tmpChild = tmpContent[iPos];
+                        if(typeof(tmpChild) == 'object'){
+                            var tmpCE = this.elFromSpecs(tmpChild);
+                            tmpParams.push(tmpCE);
+                        }
+                    }
+                } else {
+                    tmpParams.push(tmpContent);
+                }
+            }
+            var tmpRet = el.apply(this,tmpParams);
+            return tmpRet
+        }
+
         BlockEditor.getStandardProperty = function(theProps, theAttName, theLabel, theControlType, theOnChange, theSelectionList){
             var tmpAtts = theProps.attributes;
             var tmpContents = [];
@@ -439,8 +471,8 @@
                             )
                         } else {
                             return el('div',{className:'pad2'},
-                            el('div', {className:'ui button blue basic', onClick: obj.open}, 'Replace'),
-                            el('div', {className:'ui button blue basic', onClick: onRemoveImage}, 'Remove'),                                            
+                                el('div', {className:'ui button blue basic', onClick: obj.open}, 'Replace'),
+                                el('div', {className:'ui button blue basic', onClick: onRemoveImage}, 'Remove'),                                            
                                 el('div',{className:'pad2'}),
                                 el('img',{className:'ui image rounded fluid', src:tmpMediaURL})
                             )
