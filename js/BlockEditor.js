@@ -177,17 +177,23 @@
             ];
             return BlockEditor.getSelectControl(theCurrentValue,theOnChangeEvent,tmpSelection);
         }
+
         
+        BlockEditor.getHeaderSizeListControl = function(theCurrentValue, theOnChangeEvent){
+            return this.getListControl('sizeheader',theCurrentValue, theOnChangeEvent)
+        }
+
         BlockEditor.getSizeListControl = function(theCurrentValue, theOnChangeEvent){
-            var tmpSelection = [
-                el("option", {value: ""}, ""),
-                el("option", {value: "huge"}, "Huge"),
-                el("option", {value: "large"}, "Large"),
-                el("option", {value: "medium"}, "Medium"),
-                el("option", {value: "small"}, "Small"),
-                el("option", {value: "tiny"}, "Tiny")
-            ];
-            return BlockEditor.getSelectControl(theCurrentValue,theOnChangeEvent,tmpSelection);
+            return this.getListControl('size',theCurrentValue, theOnChangeEvent)
+            // var tmpSelection = [
+            //     el("option", {value: ""}, ""),
+            //     el("option", {value: "huge"}, "Huge"),
+            //     el("option", {value: "large"}, "Large"),
+            //     el("option", {value: "medium"}, "Medium"),
+            //     el("option", {value: "small"}, "Small"),
+            //     el("option", {value: "tiny"}, "Tiny")
+            // ];
+            // return BlockEditor.getSelectControl(theCurrentValue,theOnChangeEvent,tmpSelection);
         }
 
         BlockEditor.getAlignmentListControl = function(theCurrentValue, theOnChangeEvent){
@@ -315,6 +321,9 @@
             if( tmpCT == 'color' ){
                 return 'getColorListControl';
             }
+            if( tmpCT == 'sizeheader' ){
+                return 'getHeaderSizeListControl';
+            }            
             if( tmpCT == 'size' ){
                 return 'getSizeListControl';
             }            

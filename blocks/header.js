@@ -74,7 +74,7 @@
                 BlockEditor.getStandardProperty(props,'text', 'Header Text'),
                 BlockEditor.getStandardProperty(props,'subtext', 'Sub Text' ),
                 BlockEditor.getStandardProperty(props,'color', 'Header Color', 'color' ),
-                BlockEditor.getStandardProperty(props,'size', 'Size', 'size' ),
+                BlockEditor.getStandardProperty(props,'size', 'Size', 'sizeheader' ),
                 BlockEditor.getStandardProperty(props,'inverted', 'Inverted', 'checkbox' ),
                 BlockEditor.getStandardProperty(props,'dividing', 'Line at bottom', 'checkbox' ),
                 BlockEditor.getStandardProperty(props,'block', 'Show as block', 'checkbox' ),

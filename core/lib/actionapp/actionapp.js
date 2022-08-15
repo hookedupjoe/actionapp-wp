@@ -30,6 +30,7 @@ var ActionAppCore = {
     sources: {
         yesno: 'Yes,No',
         sys_grid_sizes: 'Default|,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16',
+        sys_sizes_header: 'Default|,Tiny|tiny,Small|small,Medium|medium,Large|large,Huge|huge',
         sys_sizes: 'Default|,Mini|mini,Tiny|tiny,Small|small,Medium|medium,Large|large,Big|big,Huge|huge,Massive|massive',
         sys_colors: 'Default|,Red|red,Orange|orange,Yellow|yellow,Olive|olive,Green|green,Teal|teal,Blue|blue,Violet|violet,Purple|purple,Pink|pink,Brown|brown,Black|black',
         sys_attached: 'None|,Top|top attached,Middle|attached,Bottom|bottom attached',
@@ -10813,7 +10814,9 @@ License: MIT
 
    var gSelLookup = {
         _ex: {},
-        'attached': ActionAppCore.sources.sys_attached
+        'attached': ActionAppCore.sources.sys_attached,
+        'sizeheader': ActionAppCore.sources.sys_sizes_header,
+        'size': ActionAppCore.sources.sys_sizes
     };
 
     me.getSelListFor = getSelListFor;
