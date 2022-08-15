@@ -405,7 +405,7 @@
                     tmpToSet[theAttName] = theURL;
                     theProps.setAttributes(tmpToSet);
                 }
-                var tmpEl = el(wp.editor.URLInput, {onChange: tmpOnChangeFunc, value: tmpAtts[theAttName] || ''},'Browse for Link');
+                var tmpEl = el(wp.blockEditor.URLInput, {onChange: tmpOnChangeFunc, value: tmpAtts[theAttName] || ''},'Browse for Link');
                 tmpContents.push(tmpEl);
             } else if( theControlType == 'image') {
                 var onSelectImage = function( media ) {
@@ -427,7 +427,7 @@
     
                 //var tmpEl = el('div',{className:'ui label black fluid'},'Card Image');
               //ToDo: Remove hard coded mediaID and mediaURL references
-                var tmpMediaEl = el( wp.editor.MediaUpload, {
+                var tmpMediaEl = el( wp.blockEditor.MediaUpload, {
                     onSelect: onSelectImage,
                     type: 'image',
                     value: theProps.attributes[theAttName['mediaID']],

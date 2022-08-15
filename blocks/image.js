@@ -78,7 +78,7 @@ var onSelectImage = function( media ) {
     
 };
 
-tmpEl = el( wp.editor.MediaUpload, {
+tmpEl = el( wp.blockEditor.MediaUpload, {
     onSelect: onSelectImage,
     type: 'image',
     value: '',
