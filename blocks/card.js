@@ -166,7 +166,7 @@
 
             return el(
                 'div',
-                {}, //useBlockProps(),
+                {},
                 [
                     tmpSidebarControls,               
                     tmpDisplayObject

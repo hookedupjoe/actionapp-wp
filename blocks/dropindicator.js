@@ -58,7 +58,7 @@
 
             return el(
                 'div',
-                {}, //useBlockProps(),
+                {},
                 [
                     tmpDisplayObject
                 ]

@@ -160,7 +160,7 @@
 
             return el(
                 'div',
-                {}, //useBlockProps(),
+                {},
                 [
                     tmpBtnBar,
                     tmpSidebarControls,
