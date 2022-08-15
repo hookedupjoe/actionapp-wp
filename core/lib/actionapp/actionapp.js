@@ -6928,6 +6928,7 @@ License: MIT
     meInstance.validate = function (theOptions) {
         var tmpOptions = theOptions || {};
         var tmpDetails = this.getWebControlDetails();
+        console.log('tmpDetails',tmpDetails);
         var tmpControl = this.getEl();
         var tmpConfig = this.getConfig();
         tmpControl.find('.error').removeClass('error');
@@ -6944,7 +6945,7 @@ License: MIT
         for (var index = 0; index < tmpConfig.index.fieldsList.length; index++) {
             var tmpFN = tmpConfig.index.fieldsList[index];
             this.setFieldMessage(tmpFN, '');
-            var tmpField = tmpDetails.all[tmpFN]
+            var tmpField = tmpDetails.fields[tmpFN]
             var tmpIsAvail = this.getFieldDisplay(tmpFN);
             var tmpFieldIsValid = true;
             var tmpReasonText = '';
