@@ -121,29 +121,9 @@
         BlockEditor.getCommonBlock = function(theElementName){
             return CommonBlocks.getBlock(theElementName);
         }
-        // BlockEditor.getCommonBlocksListControl = function(theCurrentValue, theOnChangeEvent){
-        //     var tmpSelection = CommonBlocks.getSelection();
-        //     return BlockEditor.getSelectControl(theCurrentValue,theOnChangeEvent,tmpSelection);
-        // }
 
         BlockEditor.getColorListControl = function(theCurrentValue, theOnChangeEvent){
-            var tmpSelection = [
-                el("option", {value: ""}, ""),
-                el("option", {value: "blue"}, "Blue"),
-                el("option", {value: "green"}, "Green"),
-                el("option", {value: "red"}, "Red"),
-                el("option", {value: "orange"}, "Orange"),
-                el("option", {value: "purple"}, "Purple"),
-                el("option", {value: "violet"}, "Violet"),
-                el("option", {value: "yellow"}, "Yellow"),
-                el("option", {value: "olive"}, "Olive"),
-                el("option", {value: "pink"}, "Pink"),
-                el("option", {value: "brown"}, "Brown"),
-                el("option", {value: "teal"}, "Teal"),                
-                el("option", {value: "black"}, "Black"),
-                el("option", {value: "gray"}, "Gray")
-            ];
-            return BlockEditor.getSelectControl(theCurrentValue,theOnChangeEvent,tmpSelection);
+            return this.getListControl('color',theCurrentValue, theOnChangeEvent)
         }
         
         //--- Singleton cache of drop down selection objects
@@ -168,68 +148,26 @@
         BlockEditor.getAttachedListControl = function(theCurrentValue, theOnChangeEvent){
             return this.getListControl('attached',theCurrentValue, theOnChangeEvent)
         }
-        BlockEditor.getAttachedListControlORIGINAL_REMOVE = function(theCurrentValue, theOnChangeEvent){
-            var tmpSelection = [
-                el("option", {value: ""}, "None"),
-                el("option", {value: "attached top"}, "Top"),
-                el("option", {value: "attached"}, "Middle"),
-                el("option", {value: "attached bottom"}, "Bottom"),
-            ];
-            return BlockEditor.getSelectControl(theCurrentValue,theOnChangeEvent,tmpSelection);
-        }
-
-        
         BlockEditor.getHeaderSizeListControl = function(theCurrentValue, theOnChangeEvent){
             return this.getListControl('sizeheader',theCurrentValue, theOnChangeEvent)
         }
 
         BlockEditor.getSizeListControl = function(theCurrentValue, theOnChangeEvent){
             return this.getListControl('size',theCurrentValue, theOnChangeEvent)
-            // var tmpSelection = [
-            //     el("option", {value: ""}, ""),
-            //     el("option", {value: "huge"}, "Huge"),
-            //     el("option", {value: "large"}, "Large"),
-            //     el("option", {value: "medium"}, "Medium"),
-            //     el("option", {value: "small"}, "Small"),
-            //     el("option", {value: "tiny"}, "Tiny")
-            // ];
-            // return BlockEditor.getSelectControl(theCurrentValue,theOnChangeEvent,tmpSelection);
         }
 
         BlockEditor.getAlignmentListControl = function(theCurrentValue, theOnChangeEvent){
-            var tmpSelection = [
-                el("option", {value: ""}, "None"),
-                el("option", {value: "center aligned"}, "Center"),
-                el("option", {value: "left aligned"}, "Left"),
-                el("option", {value: "right aligned"}, "Right")
-            ];
-            return BlockEditor.getSelectControl(theCurrentValue,theOnChangeEvent,tmpSelection);
+            return this.getListControl('alignment',theCurrentValue, theOnChangeEvent)
         }
         
         BlockEditor.getVerticalAlignmentListControl = function(theCurrentValue, theOnChangeEvent){
-            var tmpSelection = [
-                el("option", {value: ""}, "None"),
-                el("option", {value: "top aligned"}, "Top"),
-                el("option", {value: "middle aligned"}, "Middle"),
-                el("option", {value: "bottom aligned"}, "Bottom")
-            ];
-            return BlockEditor.getSelectControl(theCurrentValue,theOnChangeEvent,tmpSelection);
+            return this.getListControl('valignment',theCurrentValue, theOnChangeEvent)
         }
         BlockEditor.getLeftRightAlignmentListControl = function(theCurrentValue, theOnChangeEvent){
-            var tmpSelection = [
-                el("option", {value: ""}, "None"),
-                el("option", {value: "left aligned"}, "Left"),
-                el("option", {value: "right aligned"}, "Right")
-            ];
-            return BlockEditor.getSelectControl(theCurrentValue,theOnChangeEvent,tmpSelection);
+            return this.getListControl('lralignment',theCurrentValue, theOnChangeEvent)
         }
         BlockEditor.getLeftRighFloatListControl = function(theCurrentValue, theOnChangeEvent){
-            var tmpSelection = [
-                el("option", {value: ""}, "None"),
-                el("option", {value: "floated left"}, "Float Left"),
-                el("option", {value: "floated right"}, "Float Right")
-            ];
-            return BlockEditor.getSelectControl(theCurrentValue,theOnChangeEvent,tmpSelection);
+            return this.getListControl('float',theCurrentValue, theOnChangeEvent)
         }
         
         BlockEditor.NUMLOOKUPS = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen"];
