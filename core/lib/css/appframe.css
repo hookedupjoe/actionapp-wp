@@ -941,20 +941,13 @@ div.ui.message.floating {
 }
 
 
-.clear-both-after:after, .break-both-after:after {
-  content: "";
-  display: block;
-  clear: both;
-  visibility: hidden;
-  height: 0;
-}
 
-[appuse="actapp-design-body-wrap"]:after {
+.clear-both-after:after, .ui.segment:not(.floater):after, [appuse="actapp-design-body-wrap"]:after {
   content: "";
   display: block;
   clear: both;
   visibility: hidden;
-  height: 0;
+  height: 0px;
 }
 
 .actapp-in-design {
