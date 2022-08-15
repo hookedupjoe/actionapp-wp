@@ -31,7 +31,7 @@ if( is_string($tmpDetails) ){
 }
 //--- If both are true and there is not framed control, it will look funny on resize
 //--- For content sites not in a frame, set $includeFrame = false.
-//--- For sites with a framed contro, set $includeFrame = true if $includeSite is true also.
+//--- For sites with a framed control, set $includeFrame = true if $includeSite is true also.
 $includeSite = true;
 $includeFrame = true;
 
