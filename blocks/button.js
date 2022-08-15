@@ -92,7 +92,7 @@
         var tmpDisplayObject = el('div',{className:'clear-both-after'},el('div',{className:tmpCN},[tmpText,tmpContent]));
             return el(
                 'div',
-                useBlockProps(),
+                {}, //useBlockProps(),
                 [
                     tmpSidebarControls,
                     tmpDisplayObject

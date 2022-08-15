@@ -95,7 +95,7 @@
             
             return el(
                 'div',
-                useBlockProps(),
+                {}, //useBlockProps(),
                 [
                     tmpSidebarControls,               
                     tmpDisplayObject

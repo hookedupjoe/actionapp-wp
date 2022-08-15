@@ -82,7 +82,7 @@
 
             return el(
                 'div',
-                useBlockProps(),
+                {}, //useBlockProps(),
                 [
                     tmpDisplayObject
                 ]
