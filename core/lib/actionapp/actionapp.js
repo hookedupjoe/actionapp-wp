@@ -123,14 +123,14 @@ var ActionAppCore = {
                         tmpClassText += tmpClassName.trim();
                     }
                 }
-                tmpStyles = this.util.getStyleObject(tmpStyles);
+                tmpStyles = this.util.getStylesAsObject(tmpStyles);
             }
             tmpRet.className = tmpClassText;
         }
         var tmpStyles = tmpSpecs.style || tmpSpecs.styles;
         if( tmpStyles){
             if( typeof(tmpStyles) == 'string'){
-                tmpStyles = this.util.getStyleObject(tmpStyles);
+                tmpStyles = this.util.getStylesAsObject(tmpStyles);
             }
             if( typeof(tmpStyles) == 'object'){
                 for( var iName in tmpStyles){
@@ -164,11 +164,26 @@ var ActionAppCore = {
         return tmpRet;
     },    
     util: {
-        getStyleObject(theString){
+        getStylesAsObject(theString){
             var regex = /([\w-]*)\s*:\s*([^;]*)/g;
             var match, properties={};
             while(match=regex.exec(theString)) properties[match[1]] = match[2].trim();
             return properties;
+        },
+        getAttrAsObject(theString){
+            var tmpEntries = theString.split(' ');
+            var tmpRet = {};
+            for( var iPos in tmpEntries){
+                var tmpEntry = tmpEntries[iPos];
+                var tmpParts = tmpEntry.split('=');
+                var tmpVal = tmpParts[1];
+                if( tmpVal.substring(0,1) == '"'){
+                    tmpVal = tmpVal.substring(1);
+                    tmpVal = tmpVal.slice(0, -1);
+                }
+                tmpRet[tmpParts[0]] = tmpVal;
+            }
+            return tmpRet;
         },
         isStr: function(theItem) {
             return (typeof (theItem) == 'string')
@@ -8350,7 +8365,6 @@ License: MIT
     //---   this is so you can get any item that has a name in the contorl, 
     //...   but not include markup when not needed
     //---   This also gets any attr values and includes them since that is common to items
-    me.getItemAttrString = getItemAttrString
     function getItemAttrString(theObject) {
         var tmpRet = '';
         if (!(theObject)) { return '' };
@@ -8365,19 +8379,20 @@ License: MIT
         } else if (isStr(theObject.attr)) {
             tmpAttr += ' ' + theObject.attr + ' ';
         }
-
         tmpAttr = tmpAttr + ' controls item ';
         if (tmpName) {
             tmpName = ' name="' + tmpName + '" ';
         }
         tmpRet += tmpAttr + tmpName;
-
-        return tmpRet
-
+        return tmpRet;
+    }
+    me.getItemAttrObj = getItemAttrObj
+    function getItemAttrObj(theObject) {
+        if (!(theObject)) { return {} };
+        return ActionAppCore.util.getAttrAsObject(this.getItemAttrString(theObject));
     }
 
     me.sources = ActionAppCore.sources;
-
     /**
      * addListSource
     *  - Returns a source list use for dropdown and other like controls
@@ -9014,6 +9029,49 @@ License: MIT
         },
         getHTMLForDesign: function (theControlName, theObject, theControlObj, theIsUI){
             return "DEIGN"
+        },
+        getDomSpecs: function (theControlName, theObject, theControlObj, theIsUI) {
+            var tmpObject = theObject || {};
+            var tmpRet = {};
+            var tmpStyles = {};
+            var tmpHidden = '';
+            if (tmpObject.hidden === true) {
+                tmpStyles.display = 'none';
+            }
+            var tmpStyle = tmpObject.style || tmpObject.styles || tmpObject.css || '';
+            if (tmpHidden) {
+                tmpStyle += tmpHidden;
+            }
+            if (tmpStyle) {
+                tmpRet.style = tmpStyle;
+            }
+
+            var tmpControlClass = theControlName;
+            var tmpClasses = tmpObject.classes || '';
+            tmpClasses += getValueIfTrue(theObject, ['floating', 'dividing', 'block', 'link', 'fluid', 'placeholder', 'raised', 'tall', 'stacked', 'piled', 'vertical', 'loading', 'inverted', 'bottom', 'top', 'attached', 'padded', 'slim', 'compact', 'secondary', 'tertiary', 'circular', 'clearing', 'right', 'left', 'center', 'aligned', 'basic']);
+            tmpClasses += getValueIfThere(theObject, ['color', 'icon', 'size', 'alignment', 'attached']);
+            if( theIsUI!==false ){
+                tmpClasses += ' ui';
+            }
+            tmpClasses += ' ' + tmpControlClass;
+            tmpRet.className = tmpClasses; //string ok
+            var tmpType = 'div';
+            var tmpAttrs = getItemAttrString(theObject);
+
+            tmpRet.attr = tmpAttrs;
+            // tmpHTML = [];
+            // tmpHTML.push('<div ' + getItemAttrString(theObject) + ' class="' + tmpClasses + '" ' + tmpStyle + '>')
+            // tmpHTML.push(tmpObject.text || tmpObject.html || '')
+            var tmpTextContent = tmpObject.text || tmpObject.html || '';
+
+            var tmpItems = tmpObject.items || tmpObject.content || [];
+            if (tmpItems) {
+                tmpHTML.push(getContentHTML(theControlName, tmpItems, theControlObj))
+            }
+
+            tmpHTML.push('</div>')
+            tmpHTML = tmpHTML.join('');
+            return tmpHTML;
         },
         getHTML: function (theControlName, theObject, theControlObj, theIsUI) {
             //--> Concept of having the control send alternate output for designer
@@ -10366,9 +10424,9 @@ License: MIT
     }
 
     me.getValueIfTrue = getValueIfTrue;
-    function getValueIfTrue(theObject, theParamName) {
+    function getValueIfTrue(theObject, theParamName, theReturnArray) {
         var tmpParams = theParamName;
-        var tmpRet = '';
+        var tmpRet = [];
         if (isStr(tmpParams)) {
             tmpParams = [tmpParams];
         }
@@ -10376,27 +10434,29 @@ License: MIT
             var tmpParamName = tmpParams[iPos];
             if (theObject[tmpParamName] === true) {
                 var tmpClassName = tmpParamName;
-                tmpRet += (' ' + tmpClassName + '')
+                tmpRet.push(tmpClassName)
             }
         }
-        return tmpRet
+        if(theReturnArray){return tmpRet};
+        return tmpRet.join(' ');
     }
 
     me.getValueIfThere = getValueIfThere
-    function getValueIfThere(theObject, theParamName) {
+    function getValueIfThere(theObject, theParamName, theReturnArray) {
 
         var tmpParams = theParamName;
-        var tmpRet = '';
+        var tmpRet = [];
         if (isStr(tmpParams)) {
             tmpParams = [tmpParams];
         }
         for (var iPos = 0; iPos < tmpParams.length; iPos++) {
             var tmpParamName = tmpParams[iPos];
             if (isStr(theObject[tmpParamName])) {
-                tmpRet += (' ' + theObject[tmpParamName] + '').toLowerCase();
+                tmpRet.push((theObject[tmpParamName] + '').toLowerCase());
             }
         }
-        return tmpRet
+        if(theReturnArray){return tmpRet};
+        return tmpRet.join(' ');
     }
 
     //---- Functions to extend global pallet
@@ -10681,3 +10741,4 @@ License: MIT
 
 
 })(ActionAppCore, $);
+
