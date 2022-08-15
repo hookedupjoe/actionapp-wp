@@ -10438,7 +10438,7 @@ License: MIT
             }
         }
         if(theReturnArray){return tmpRet};
-        return tmpRet.join(' ');
+        return ' ' + tmpRet.join(' ') + ' ';
     }
 
     me.getValueIfThere = getValueIfThere
@@ -10456,7 +10456,7 @@ License: MIT
             }
         }
         if(theReturnArray){return tmpRet};
-        return tmpRet.join(' ');
+        return ' ' + tmpRet.join(' ');
     }
 
     //---- Functions to extend global pallet
