@@ -36,12 +36,13 @@
     const iconEl = BlockEditor.getControlIcon(info.name);
 
     BlockEditor.addBooleanAtts(info.atts,['fluid','compact','basic','circular','urlopentab']);
-    BlockEditor.addStringAtts(info.atts,['text','color','size', 'attached', 'alignment', 'url']);
-
+    BlockEditor.addStringAtts(info.atts,['text','color','size', 'attached', 'url', 'float']);
+//removed 'alignment', 
     var tmpClassSpecs = {
         boolean: ['fluid','compact','basic','circular'],
-        string: ['color','size', 'attached', 'alignment']
+        string: ['color','size', 'attached', 'float']
     }
+    //removed  'alignment',
     
     function getContent(theProps, theIsEditMode){
         var tmpAtts = theProps.attributes;
@@ -74,21 +75,21 @@
                 BlockEditor.getStandardProperty(props,'basic', 'Outlined', 'checkbox' ),
                 BlockEditor.getStandardProperty(props,'compact', 'Compact', 'checkbox' ),
                 BlockEditor.getStandardProperty(props,'fluid', 'Full width', 'checkbox' ),
+                BlockEditor.getStandardProperty(props,'float', 'Float Left/Right', 'tofloat'),
+                BlockEditor.getStandardProperty(props,'attached', 'Attached', 'attached' ),
                 BlockEditor.getStandardProperty(props,'url', 'Target Content or Link', 'url' ),
                 !(tmpAtts.url) ? '' : BlockEditor.getStandardProperty(props,'urlopentab', 'Open link in new tab?', 'checkbox' ),
             ];
-            var tmpFormatProperties = [
-                BlockEditor.getStandardProperty(props,'attached', 'Attached', 'attached' ),
-                BlockEditor.getStandardProperty(props,'alignment', 'Alignment', 'alignmentleftright' ),
-            ];
+            // var tmpFormatProperties = [
+            //     BlockEditor.getStandardProperty(props,'alignment', 'Alignment', 'alignmentleftright' ),
+            // ];
             var tmpSidebarPanels = [
                 BlockEditor.getSidebarPanel('Button Options', tmpStandardProperties),
-                BlockEditor.getSidebarPanel('Formatting Options', tmpFormatProperties),
+//                BlockEditor.getSidebarPanel('Formatting Options', tmpFormatProperties),
             ];
 
             var tmpSidebarControls = BlockEditor.getSidebarControls(tmpSidebarPanels);
-
-        var tmpDisplayObject = el('div',{className:tmpCN},[tmpText,tmpContent]);
+        var tmpDisplayObject = el('div',{className:'clear-both-after'},el('div',{className:tmpCN},[tmpText,tmpContent]));
             return el(
                 'div',
                 useBlockProps(),

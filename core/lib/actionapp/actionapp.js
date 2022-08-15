@@ -8421,6 +8421,7 @@ License: MIT
     sys_lralignment: 'Default|,Left|left aligned,Right|right aligned',
     sys_valignment: 'Default|,Top|top aligned,Middle|middle aligned,Bottom|bottom aligned',
     sys_float: 'Default|,Floated Left|floated left,Floated Right|floated right',
+    sys_tofloat: 'Default|,Float Left|toleft,Float Right|toright',
     sys_attached: 'Default|,Top|top attached,Middle|attached,Bottom|bottom attached'
     });
     
@@ -10828,6 +10829,7 @@ License: MIT
         'lralignment': ActionAppCore.sources.sys_lralignment,
         'valignment': ActionAppCore.sources.sys_valignment,
         'float': ActionAppCore.sources.sys_float,
+        'tofloat': ActionAppCore.sources.sys_tofloat,
     };
 
     me.getSelListFor = getSelListFor;

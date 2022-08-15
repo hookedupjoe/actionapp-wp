@@ -61,11 +61,7 @@
         var tmpEl = el('img', { className: tmpCN, src: tmpAtts.mediaURL });
         if (theIsEditMode) {
             if (tmpAtts.float) {
-                var tmpSide = 'Floating Left';
-                if (tmpAtts.float == 'floated right') {
-                    tmpSide = 'Floating Right';
-                }
-                tmpEl = el('div', { className: 'ui segment basic pad0' }, el('div', { className: 'ui message fluid yellow' }, tmpSide), tmpEl);
+                tmpEl = el('div', { className: 'clear-both-after' }, tmpEl);
             }
             if (!(tmpAtts.mediaURL)) {
                 //                tmpEl = el('div',{className:'ui message compact small orange'},'Select image on sidebar');

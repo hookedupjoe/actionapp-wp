@@ -169,6 +169,9 @@
         BlockEditor.getLeftRighFloatListControl = function(theCurrentValue, theOnChangeEvent){
             return this.getListControl('float',theCurrentValue, theOnChangeEvent)
         }
+        BlockEditor.getFloatControl = function(theCurrentValue, theOnChangeEvent){
+            return this.getListControl('tofloat',theCurrentValue, theOnChangeEvent)
+        }
         
         BlockEditor.NUMLOOKUPS = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen"];
         BlockEditor.getColumnListControl = function(theCurrentValue, theOnChangeEvent){
@@ -280,6 +283,10 @@
             if( tmpCT == 'floatleftright' ){
                 return 'getLeftRighFloatListControl';
             }            
+            if( tmpCT == 'tofloat' ){
+                return 'getFloatControl';
+            }            
+            
             
             if( tmpCT == 'columns' ){
                 return 'getColumnListControl';
