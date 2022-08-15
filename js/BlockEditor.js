@@ -146,8 +146,13 @@
             return BlockEditor.getSelectControl(theCurrentValue,theOnChangeEvent,tmpSelection);
         }
         
-
+        
         BlockEditor.getAttachedListControl = function(theCurrentValue, theOnChangeEvent){
+            //--- Updated to use selection details from the core
+            var tmpSelList = ThisApp.controls.getSelectionFor('attached',theCurrentValue,theOnChangeEvent);
+            return this.elFromUDom(tmpSelList);
+        }
+        BlockEditor.getAttachedListControlORIGINAL_REMOVE = function(theCurrentValue, theOnChangeEvent){
             var tmpSelection = [
                 el("option", {value: ""}, "None"),
                 el("option", {value: "attached top"}, "Top"),
@@ -375,7 +380,7 @@
         }
 
         //--- Returns React element from universal DOM specs
-        BlockEditor.elFromSpecs = function(theSpecs){
+        BlockEditor.elFromUDom = function(theSpecs){
             var tmpSpec = theSpecs;
             var tmpElProps = tmpSpec.attr || {};
             if( tmpSpec.className ){
@@ -394,7 +399,7 @@
                     for( var iPos in tmpContent ){
                         var tmpChild = tmpContent[iPos];
                         if(typeof(tmpChild) == 'object'){
-                            var tmpCE = this.elFromSpecs(tmpChild);
+                            var tmpCE = this.elFromUDom(tmpChild);
                             tmpParams.push(tmpCE);
                         }
                     }
