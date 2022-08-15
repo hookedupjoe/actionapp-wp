@@ -147,7 +147,11 @@ var ActionAppCore = {
                 }
             }
         }
-        var tmpContent = tmpSpecs.children || tmpSpecs.content || tmpSpecs.text || tmpSpecs.html || '';
+        var tmpTextContent = tmpSpecs.text || tmpSpecs.html;
+        var tmpContent = tmpSpecs.children || tmpSpecs.content;
+        if( tmpTextContent ){
+            tmpRet.innerHTML = tmpTextContent;
+        }
         if( tmpContent ){
             if( Array.isArray(tmpContent)){
                 for( var iPos in tmpContent ){
@@ -158,7 +162,8 @@ var ActionAppCore = {
                     }
                 }
             } else {
-                tmpRet.innerHTML = tmpContent;
+            //--- children/content will override incorrectly duplicate text value in text/html
+            tmpRet.innerHTML = tmpContent;
             }
         }
         return tmpRet;
@@ -10761,6 +10766,33 @@ License: MIT
     //--- =========== =========== =========== =========== =========== ===========
     //---- End Common Controls
     //--- =========== =========== =========== =========== =========== ===========
+
+    //--- =========== =========== =========== =========== =========== ===========
+    //---- Start Designer Helpers
+    //--- =========== =========== =========== =========== =========== ===========
+
+    //--- Create element spec object (domspec)
+    function elSpec(theTag, theOptions, theContent){
+        var tmpRet = {type:theTag};
+        return tmpRet;
+    }
+
+    me.getSelectionFor = function(thePropName, theCurrentValue, theOnChangeEvent){
+        var tmpSelection = [
+            elSpec("option", {value: ""}, "None"),
+            elSpec("option", {value: "attached top"}, "Top"),
+            elSpec("option", {value: "attached"}, "Middle"),
+            elSpec("option", {value: "attached bottom"}, "Bottom"),
+        ];
+        return me.getSelectControl(theCurrentValue,theOnChangeEvent,tmpSelection);
+    }
+    me.getSelectControl = function(theValue,theOnChange, theDropDownValues){
+        return elSpec("select", {className:'fluid-field', value:theValue, onChange: theOnChange},theDropDownValues)
+    }
+    me.getTextControl = function(theValue,theOnChange){
+        return elSpec("input", {className:'fluid-field', value:theValue, onChange: theOnChange})
+    }
+
 
     //==== END ===== HTML Control Builder ======  ======  ======  ======  ======  ======  ======  ======  ======  ======     
 
