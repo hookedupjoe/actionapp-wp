@@ -175,13 +175,25 @@ var ActionAppCore = {
             var tmpRet = {};
             for( var iPos in tmpEntries){
                 var tmpEntry = tmpEntries[iPos];
-                var tmpParts = tmpEntry.split('=');
-                var tmpVal = tmpParts[1];
-                if( tmpVal.substring(0,1) == '"'){
-                    tmpVal = tmpVal.substring(1);
-                    tmpVal = tmpVal.slice(0, -1);
+                tmpEntry = tmpEntry.trim();
+                if( tmpEntry ){
+                    var tmpParts = tmpEntry.split('=');
+                    var tmpVal = tmpParts[1];
+                    if( tmpVal === undefined){
+                        console.log( 'bad tmpEntry', tmpEntry);
+                    }
+                    console.log( 'tmpVal', tmpVal);
+                    if( !(tmpVal)){
+                        tmpRet[tmpParts[0]] = '';
+                    } else {
+                        if( tmpVal.substring(0,1) == '"'){
+                            tmpVal = tmpVal.substring(1);
+                            tmpVal = tmpVal.slice(0, -1);
+                        }
+                        tmpRet[tmpParts[0]] = tmpVal;
+                    }
+                    
                 }
-                tmpRet[tmpParts[0]] = tmpVal;
             }
             return tmpRet;
         },
@@ -8389,7 +8401,7 @@ License: MIT
     me.getItemAttrObj = getItemAttrObj
     function getItemAttrObj(theObject) {
         if (!(theObject)) { return {} };
-        return ActionAppCore.util.getAttrAsObject(this.getItemAttrString(theObject));
+        return ActionAppCore.util.getAttrAsObject(getItemAttrString(theObject));
     }
 
     me.sources = ActionAppCore.sources;
@@ -8449,6 +8461,17 @@ License: MIT
         return tmpRet
     }
 
+    me.getDomSpecsForControl = getDomSpecsForControl
+    function getDomSpecsForControl(theControlName, theObject, theControlObj) {
+        var tmpDataObject = me.processDynamicContent(theControlName, theObject, theControlObj);
+        var tmpControl = me.webControls.get(theControlName);
+        if (!(tmpControl && tmpControl.getDomSpecs)) {
+            console.error("No getDomSpecs for " + theControlName)
+            return '';
+        }
+        return tmpControl.getDomSpecs(theControlName, tmpDataObject, theControlObj);
+    }
+
     me.getHTMLForControl = getHTMLForControl
     function getHTMLForControl(theControlName, theObject, theControlObj) {
         var tmpHTML = [];
@@ -8463,7 +8486,7 @@ License: MIT
 
         var tmpControl = me.webControls.get(theControlName);
         if (!(tmpControl && tmpControl.getHTML)) {
-            console.warn("No HTML for " + theControlName)
+            console.error("No HTML for " + theControlName)
             return '';
         }
 
@@ -9055,23 +9078,20 @@ License: MIT
             }
             tmpClasses += ' ' + tmpControlClass;
             tmpRet.className = tmpClasses; //string ok
+
             var tmpType = 'div';
-            var tmpAttrs = getItemAttrString(theObject);
-
-            tmpRet.attr = tmpAttrs;
-            // tmpHTML = [];
-            // tmpHTML.push('<div ' + getItemAttrString(theObject) + ' class="' + tmpClasses + '" ' + tmpStyle + '>')
-            // tmpHTML.push(tmpObject.text || tmpObject.html || '')
-            var tmpTextContent = tmpObject.text || tmpObject.html || '';
-
-            var tmpItems = tmpObject.items || tmpObject.content || [];
-            if (tmpItems) {
-                tmpHTML.push(getContentHTML(theControlName, tmpItems, theControlObj))
+            var tmpAttrs = getItemAttrObj(theObject);
+            if( tmpAttrs ){
+                tmpRet.attr = tmpAttrs;
             }
-
-            tmpHTML.push('</div>')
-            tmpHTML = tmpHTML.join('');
-            return tmpHTML;
+            var tmpTextContent = tmpObject.text || tmpObject.html || '';
+            var tmpContentArray = tmpObject.items || tmpObject.content || [];
+            var tmpContentSpecs = false;
+            if (tmpContentArray) {
+                tmpContentSpecs = getContentDomSpecs(theControlName, tmpContentArray, theControlObj);
+                tmpRet.children = tmpContentSpecs;
+            }
+            return tmpRet;
         },
         getHTML: function (theControlName, theObject, theControlObj, theIsUI) {
             //--> Concept of having the control send alternate output for designer
@@ -9158,13 +9178,13 @@ License: MIT
         isField: false
     }
 
-    //--- UI Elements
-    me.ControlElementUI = {
-        getHTML: function (theControlName, theObject, theControlObj) {
-            return me.ControlElement.getHTML(theControlName, theObject, theControlObj, true)
-        },
-        isField: false
-    }
+    // //--- UI Elements
+    // me.ControlElementUI = {
+    //     getHTML: function (theControlName, theObject, theControlObj) {
+    //         return me.ControlElement.getHTML(theControlName, theObject, theControlObj, true)
+    //     },
+    //     isField: false
+    // }
 
 
     me.ControlFieldRow = {
