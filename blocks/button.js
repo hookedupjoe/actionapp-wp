@@ -57,6 +57,18 @@
         icon: iconEl,
         category: info.category,
         example: info.example,
+        // transforms: {
+        //     to: [
+        //         {
+        //             type: "block",
+        //             blocks: [info.category + '/' + info.name],
+        //             transform: ({ content }) => {
+        //                 console.log(content);
+        //                 return wp.blocks.createBlock(info.category + '/' + info.name);
+        //             },
+        //         },
+        //     ],
+        // },
         attributes: info.atts,
         edit: function ( props ) {
             var tmpAtts = props.attributes;
@@ -87,7 +99,7 @@
                 BlockEditor.getSidebarPanel('Button Options', tmpStandardProperties),
 //                BlockEditor.getSidebarPanel('Formatting Options', tmpFormatProperties),
             ];
-
+            
             var tmpSidebarControls = BlockEditor.getSidebarControls(tmpSidebarPanels);
         var tmpDisplayObject = el('div',{className:'clear-both-after'},el('div',{className:tmpCN},[tmpText,tmpContent]));
             return el(
