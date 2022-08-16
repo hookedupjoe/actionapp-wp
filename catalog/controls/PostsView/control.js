@@ -239,7 +239,8 @@
         }
         tmpURL += tmpToAdd;
       }
-      window.open(tmpURL,'_blank');
+      //window.open(tmpURL,'_blank');
+      this.publish('urlOpenRequest', [this,tmpURL]);
     };
 
     ControlCode.restoreSelected = function() {
