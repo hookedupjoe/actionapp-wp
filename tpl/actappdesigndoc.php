@@ -100,7 +100,14 @@ foreach ($tmpPostFields as $iFieldName) {
   $tmpExportFN = '___'.$iFieldName;
   $tmpPFVal = $tmpDoc[$tmpExportFN];
   $tmpPFLab = $tmpPostFieldLookup[$tmpExportFN].' ('.$iFieldName.')';
-  echo('<td><b>'.$tmpPFLab.'</b></td><td>'.$tmpPFVal.'</td>');
+  if( 'guid' == $iFieldName || 'post_name' == $iFieldName ){
+    echo('<td><b>'.$tmpPFLab.'</b></td><td><input readonly="" value="'.$tmpPFVal.'" /></td>');  
+  } else {
+    echo('<td><b>'.$tmpPFLab.'</b></td><td>'.$tmpPFVal.'</td>');
+  }
+  
+
+  
   //echo('<td><div class="ui header small">' . $tmpPFLab . '</div></td>');
   //echo('<td><div class="ui bolder">' . $tmpPFVal . '</div></td>');
   echo('</tr>');
@@ -123,8 +130,11 @@ foreach ($tmpDoc as $iFieldName => $iVal) {
     if( '__design_props' == $iFieldName || 'source' == $iFieldName ){
       $tmpPFVal = html_entity_decode((''.$tmpPFVal));
       echo('<td><b>'.$tmpPFLab.'</b></td><td><textarea class="ui textarea" style="width:100%;height:150px;">'.$tmpPFVal.'</textarea></td>');
+    } else if( '__uid' == $iFieldName || '__url' == $iFieldName ){
+      echo('<td><b>'.$tmpPFLab.'</b></td><td><input readonly="" value="'.$tmpPFVal.'" /></td>');  
     } else {
       echo('<td><b>'.$tmpPFLab.'</b></td><td>'.$tmpPFVal.'</td>');
+      //echo('<td><b>'.$tmpPFLab.'</b></td><td><input readonly="" value="'.$tmpPFVal.'" /></td>');
     }
     //echo('<td><div class="ui header small">' . $tmpPFLab . '</div></td>');
     //echo('<td><div class="ui bolder">' . $tmpPFVal . '</div></td>');
@@ -135,15 +145,15 @@ echo('</table>');
 
 echo ('</div>'); //end of segment wrapper
 
-echo ('<div class="ui segment pad7 mar5">');
-echo('<div class="ui header small black">Content</div><div class="ui segment raised">'.$tmpDoc['___post_content'].'</div>');
-echo ('</div>'); //end of segment wrapper
-
 
 
 echo ('</div>'); //End of column 2
 
 echo ('</div>'); //End of grid
+
+echo ('<div class="ui segment">');
+echo('<div class="ui header small black">Content</div><div class="ui segment raised">'.$tmpDoc['___post_content'].'</div>');
+echo ('</div>'); //end of segment wrapper
 
 ?>
   <!-- OPTIONAL - Dev-Libraries -->
