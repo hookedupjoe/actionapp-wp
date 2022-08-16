@@ -1315,6 +1315,7 @@ window.ActionAppCore = window.ActionAppCore || ActionAppCore;
             resizable: true,
             togglerLength_open: 100,
             togglerLength_closed: 100,
+            center__maskContents:	true,
             south__resizable: false,
             south__closable: false,
             south__slidable: false,
@@ -1333,6 +1334,7 @@ window.ActionAppCore = window.ActionAppCore || ActionAppCore;
             resizable: true,
             togglerLength_open: 100,
             togglerLength_closed: 100,
+            center__maskContents:	true,
             south__resizable: false,
             south__closable: false,
             south__slidable: false,
@@ -1343,6 +1345,7 @@ window.ActionAppCore = window.ActionAppCore || ActionAppCore;
             north__slidable: false,
             north__togglerLength_open: 0,
             north__spacing_open: 0,
+            center__maskContents:	true,
             center__paneSelector: ".middle-center",
             north__paneSelector: ".middle-north",
             south__paneSelector: ".middle-south",
@@ -1361,6 +1364,7 @@ window.ActionAppCore = window.ActionAppCore || ActionAppCore;
             resizable: true,
             togglerLength_open: 100,
             togglerLength_closed: 100,
+            center__maskContents:	true,
             south__resizable: false,
             south__closable: false,
             south__slidable: false,
@@ -1381,6 +1385,7 @@ window.ActionAppCore = window.ActionAppCore || ActionAppCore;
             resizable: true,
             togglerLength_open: 100,
             togglerLength_closed: 100,
+            center__maskContents:	true,
             south__resizable: false,
             south__closable: false,
             south__slidable: false,
@@ -1401,6 +1406,7 @@ window.ActionAppCore = window.ActionAppCore || ActionAppCore;
             resizable: true,
             togglerLength_open: 100,
             togglerLength_closed: 100,
+            center__maskContents:	true,
             south__resizable: false,
             south__closable: false,
             south__slidable: false,
@@ -3475,6 +3481,7 @@ window.ActionAppCore = window.ActionAppCore || ActionAppCore;
 
 
         var tmpLOSpecs = {
+            center__maskContents:	true,
             center__paneSelector: ".site-layout-center"
             , north__spacing_open: 0
             , north__spacing_closed: 0
