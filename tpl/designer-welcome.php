@@ -26,4 +26,10 @@ $tmpRootPath = ActAppCommon::getRootPath();
 echo ('Plugin Data Version: ' . $tmpVersion . '<br />  SUID: ' . $tmpSUID  );
 echo ('<br/>Site Root: ' . $tmpRootPath );
 
+
+$registered_block_slugs = array_keys( WP_Block_Type_Registry::get_instance()->get_all_registered() );
+
+echo '<pre>' . print_r( $registered_block_slugs, true ) . '</pre>';
+
+
 ?>
