@@ -662,7 +662,7 @@ License: MIT
 		//console.log( 'tmpBasePath', tmpBasePath);
 
 		//--- Set Preview Link
-		this.controlConfig.index.items["preview-link"].attr = {
+		this.controlConfig.index.all["preview-link"].attr = {
 			href: tmpBasePath + "/" + tmpAppName,
 			target: "app" + tmpAppName
 		}

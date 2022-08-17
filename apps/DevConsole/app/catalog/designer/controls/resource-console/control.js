@@ -235,7 +235,7 @@ License: MIT
 		var tmpIndex = this.getIndex();
 		if (tmpIndex && tmpIndex.items) {
 			for (var aName in tmpIndex.items) {
-				var tmpEntry = tmpIndex.items[aName];
+				var tmpEntry = tmpindex.all[aName];
 				if (tmpEntry && ThisApp.util.isStr(tmpEntry.group)) {
 					tmpEntry.group += theUniqueness;
 				}
