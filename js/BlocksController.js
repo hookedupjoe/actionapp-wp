@@ -190,5 +190,7 @@ if( tmpType == 'controls'){
     //--- Initialize common block functionality for the editor
     init();
 
-    initRTMods()   
+    if( wp && wp.richText ){
+        initRTMods()   
+    }
 } )( window.wp, window.ActionAppCore );
