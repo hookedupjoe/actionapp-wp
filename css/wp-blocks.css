@@ -32,3 +32,8 @@ i.arrow:after {
     background-color: #2185d0;
     color: white;
 }
+
+
+.color-block-support-panel .block-editor-contrast-checker {
+    display:none;
+}

@@ -512,6 +512,64 @@
 
     ActionAppCore.subscribe('app-loaded', function(){
         ThisApp.delay(1000).then(function(){
+            //wp.richText.unregisterFormatType('core/text-color');
+            wp.richText.unregisterFormatType('core/image');
+
+
+            
+    
+        var withSelect  = wp.data.withSelect;
+        var ifCondition = wp.compose.ifCondition;
+        var compose     = wp.compose.compose;
+    
+        var TextHighlighButton = function( props ) {
+            return wp.element.createElement(
+                wp.blockEditor.RichTextToolbarButton, 
+                {
+                    icon: BlockEditor.controlIcon, 
+                    title: 'Bordered label', 
+                    onClick: function() {
+                        props.onChange( 
+                            wp.richText.toggleFormat(props.value, {
+                                type: 'actappformat/inline-label',
+                                attributes: {
+                                    class: 'ui label'
+                                }
+                            }) 
+                        );
+                    }
+                }
+            );
+        }
+    
+        var ConditionalTextHighlighButton = compose(
+            withSelect( function( select ) {
+                return {
+                    selectedBlock: select( 'core/block-editor' ).getSelectedBlock()
+                }
+            } ),
+            ifCondition( function( props ) {
+                return (
+                    props.selectedBlock &&
+                    (props.selectedBlock.name === 'core/paragraph' || props.selectedBlock.name === 'actappui/richtext')
+                );
+            } )
+        )( TextHighlighButton );
+    
+    
+
+
+            wp.richText.registerFormatType(
+                'actappformat/inline-label', {
+                    title: 'Bordered label',
+                    tagName: 'span',
+                    text: 'HL',
+                    className: 'actapp-border-label',
+                    edit: ConditionalTextHighlighButton,
+                }
+            );
+
+
             addBlockEditorActions();
             //--- Open the sidebar editor automatically due to that being where our settings live
             wp.data.dispatch( 'core/edit-post' ).openGeneralSidebar( 'edit-post/block' );
@@ -656,26 +714,35 @@
     
 
     //---- Demo removing supports options                
-    // function extendBlockQuoteBlock(settings, name) {
-    //     if (name !== 'actappui/richtext') {
-    //         return settings;
-    //     }
-    //     console.log( 'extendBlockQuoteBlock', settings, name);
+    function extendBlockQuoteBlock(settings, name) {
+        if (name == 'core/paragraph') {
+            //settings.supports = settings.supports || {};
+            if( settings.supports && settings.supports ){
+                settings.supports.anchor = false;
+                settings.supports.className = false;
+                settings.supports.customClassName = false;
+                console.log('settings.supports',settings.supports)
+                return settings;
+            }
+        }
+        
+        return settings;
+    }
     
-    //     return lodash.assign({}, settings, {
-    //         supports: lodash.assign({}, settings.supports, {
-    //             typography: false, // Previous question 71637137
-    //             className: false, // Removes "Additional CSS classes" panel for blocks that support it
-    //             customClassName: false // **Updated** For blocks that don't have className
-    //         }),
-    //     });
-    // }
+    wp.hooks.addFilter(
+        'blocks.registerBlockType',
+        'actionapp',
+        extendBlockQuoteBlock
+    );
+
     
-    // wp.hooks.addFilter(
-    //     'blocks.registerBlockType',
-    //     'actionapp',
-    //     extendBlockQuoteBlock
-    // );
+
+    
+    //    wp.richText.unregisterFormatType('core/underline');
+
+    
+    
+   
 
     
 } )( window.wp, window.ActionAppCore );
