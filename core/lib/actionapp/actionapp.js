@@ -8269,8 +8269,6 @@ License: MIT
         var tmpIndex = theOptionalIndex || {
             fieldsList: [],
             itemsList: [],
-            fields: {},
-            items: {},
             controls: {},
             required: {},
             outline: []
