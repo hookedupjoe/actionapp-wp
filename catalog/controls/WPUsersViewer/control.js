@@ -88,8 +88,8 @@
     //--- Update the internal configuration to hide stuff we don't need for our use / in dialog
     var tmpToHide = ['submit-bar', 'title', 'welcome'];
     for (var iPos in tmpToHide) {
-      this.parts.mainform.controlConfig.index.items[tmpToHide[iPos]].classes = 'hidden';
-      this.parts.mainform.controlConfig.index.items[tmpToHide[iPos]].hidden = true;
+      this.parts.mainform.controlConfig.index.all[tmpToHide[iPos]].classes = 'hidden';
+      this.parts.mainform.controlConfig.index.all[tmpToHide[iPos]].hidden = true;
     }
     this.viewer.subscribe('selectionChange', this.onSelectionChange.bind(this))
     this.viewer.subscribe('doubleClick', this.editDoc.bind(this))

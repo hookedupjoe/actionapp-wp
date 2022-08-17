@@ -71,6 +71,7 @@
         icon: iconEl,
         category: info.category,
         example: info.example,
+        supports: BlockEditor.defaultSupports,
         attributes: info.atts,
         parent: 'actappui/card',
         supports: {

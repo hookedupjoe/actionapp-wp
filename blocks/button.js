@@ -57,6 +57,7 @@
         icon: iconEl,
         category: info.category,
         example: info.example,
+        supports: BlockEditor.defaultSupports,
         // transforms: {
         //     to: [
         //         {

@@ -119,6 +119,7 @@
         icon: iconEl,
         category: info.category,
         example: info.example,
+        supports: BlockEditor.defaultSupports,
         attributes: info.atts,
         edit: function (props) {
             var tmpAtts = props.attributes;

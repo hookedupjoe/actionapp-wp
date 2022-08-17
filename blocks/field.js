@@ -131,6 +131,7 @@
         icon: iconEl,
         category: info.category,
         example: info.example,
+        supports: BlockEditor.defaultSupports,
         attributes: info.atts,
         rem_parent: 'actappdesign/tabledef',
         supports: {

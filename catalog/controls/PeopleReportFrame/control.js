@@ -113,8 +113,8 @@
         'title',
         'welcome'];
       for (var iPos in tmpToHide) {
-        this.parts.personform.controlConfig.index.items[tmpToHide[iPos]].classes = 'hidden';
-        this.parts.personform.controlConfig.index.items[tmpToHide[iPos]].hidden = true;
+        this.parts.personform.controlConfig.index.all[tmpToHide[iPos]].classes = 'hidden';
+        this.parts.personform.controlConfig.index.all[tmpToHide[iPos]].hidden = true;
       }
   
       this.parts.personform.refreshUI();
