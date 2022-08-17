@@ -19,7 +19,9 @@
  */
 
 ( function ( wp,  ActionAppCore) {
-    var BlockEditor = {};
+    var BlockEditor = {
+        defaultSupports: {className: false, typography: false, customClassName: false}
+    };
     var el = wp.element.createElement;
 
     ActionAppCore.common = ActionAppCore.common || {};
@@ -647,6 +649,35 @@
         }
     }
 
+
+
+
+    
+    
+
+    //---- Demo removing supports options                
+    // function extendBlockQuoteBlock(settings, name) {
+    //     if (name !== 'actappui/richtext') {
+    //         return settings;
+    //     }
+    //     console.log( 'extendBlockQuoteBlock', settings, name);
+    
+    //     return lodash.assign({}, settings, {
+    //         supports: lodash.assign({}, settings.supports, {
+    //             typography: false, // Previous question 71637137
+    //             className: false, // Removes "Additional CSS classes" panel for blocks that support it
+    //             customClassName: false // **Updated** For blocks that don't have className
+    //         }),
+    //     });
+    // }
+    
+    // wp.hooks.addFilter(
+    //     'blocks.registerBlockType',
+    //     'actionapp',
+    //     extendBlockQuoteBlock
+    // );
+
+    
 } )( window.wp, window.ActionAppCore );
 
 
