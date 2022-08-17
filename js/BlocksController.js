@@ -124,23 +124,71 @@ if( tmpType == 'controls'){
                     for( var iPos in tmpExludedBlocks ){
                         var tmpEntry = tmpExludedBlocks[iPos];
                         try {
-                           wp.blocks.unregisterBlockType(tmpEntry);    
+//                           wp.blocks.unregisterBlockType(tmpEntry);    
                         } catch (error) {}
                     }
                 } );
             }
-
-            
         })
-
-        
     }
 
 
+    function initRTMods(){
+        var withSelect  = wp.data.withSelect;
+        var ifCondition = wp.compose.ifCondition;
+        var compose     = wp.compose.compose;
     
+        var TextHighlighButton = function( props ) {
+            return wp.element.createElement(
+                wp.blockEditor.RichTextToolbarButton, 
+                {
+                    icon: 'admin-customizer', 
+                    title: 'Text Highlight', 
+                    onClick: function() {
+                        props.onChange( 
+                            wp.richText.toggleFormat(props.value, {
+                                type: 'webomnizz/text-highlight',
+                                attributes: {
+                                    class: 'ui label blue basic'
+                                }
+                            }) 
+                        );
+                    }
+                }
+            );
+        }
+    
+        var ConditionalTextHighlighButton = compose(
+            withSelect( function( select ) {
+                return {
+                    selectedBlock: select( 'core/block-editor' ).getSelectedBlock()
+                }
+            } ),
+            ifCondition( function( props ) {
+                return (
+                    props.selectedBlock &&
+                    props.selectedBlock.name === 'actappui/richtext'
+                );
+            } )
+        )( TextHighlighButton );
+    
+    
+    //    wp.richText.unregisterFormatType('core/underline');
+        wp.richText.registerFormatType(
+            'webomnizz/text-highlight', {
+                title: 'Text Highlight',
+                tagName: 'span',
+                text: 'HL',
+                className: 'text-hl',
+                edit: ConditionalTextHighlighButton,
+            }
+        );
+    
+    
+    }
 
     //--- Initialize common block functionality for the editor
     init();
 
-
+    initRTMods()   
 } )( window.wp, window.ActionAppCore );
