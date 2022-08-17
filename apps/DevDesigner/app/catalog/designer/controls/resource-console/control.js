@@ -168,6 +168,7 @@ License: MIT
 							},
 							{
 								ctl: "control",
+								hidden: false,
 								name: "props",
 								controlname: "TabsContainer",
 								source: "_designer",
@@ -287,9 +288,13 @@ License: MIT
 
 	//---- Initial Setup of the control
 	function setup(theDetails) {
-		var tmpProps = this.parts.props;
+		//--- FLAGS
 		//--- Turn on once designer is ready for use
-		this.designModeOpen = true;
+		this.designModeOpen = false;
+		//--- End FLAGS
+
+		var tmpProps = this.parts.props;
+		this.setItemDisplay('props',false);
 
 		var tmpPostItems = {data:[
 			{
@@ -935,7 +940,8 @@ License: MIT
 			this.activeControl.setDesignMode(true,{myaction:'onDesignClick'});
 			this.setEditorPanel(false);
 
-			
+			this.setItemDisplay('props',true);
+			this.setItemDisplay('editor',false)			
 
 			// window.tmpFields = tmpFields;
 			// window.tmpItems = tmpItems;
@@ -951,9 +957,11 @@ License: MIT
 			this.loadEditorFromDesigner()
 			this.activeControl.setDesignMode(false);
 			this.activeControl.refreshControl();
+			this.setEditorPanel(true);
+
 			this.setItemDisplay('props',false);
 			this.setItemDisplay('editor',true)			
-			this.setEditorPanel(true);
+
 			this.refreshControlDisplay();
 
 		}
