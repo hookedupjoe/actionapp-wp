@@ -1059,8 +1059,8 @@ License: MIT
 
 	ControlCode.CodeWrapConfig = {
 		"Start": "(function (ActionAppCore, $) {\r\n\r\n",
-		"AfterConfig": "\r\n\t\t\t\tvar ControlCode = {};\r\n\t\t\t\t//--- Do not edit or place code above this area (only JSON ControlSpecs Edit)\r\n//--- ActAppDesigner ---: No Edit\r\n\t\t\t\t",
-		"EndFile": "\r\n//--- ActAppDesigner ---: No Edit\r\n\t\t\t\t//--- Do not edit or place code below this area\r\n\t\t\t\tvar ThisControl = {specs: ControlSpecs, options: { proto: ControlCode, parent: ThisApp }};\r\n\t\t\t\treturn ThisControl;\r\n\t\t\t})(ActionAppCore, $);"
+		"AfterConfig": "\r\n\t\t\t\tvar ControlCode = {};\r\n\t\t\t\t//--- Do not edit or place code above this area (only JSON ControlSpecs Edit)\r\n//--- ActAppDesigner ---: No Edit",
+		"EndFile": "//--- ActAppDesigner ---: No Edit\r\n\t\t\t\t//--- Do not edit or place code below this area\r\n\t\t\t\tvar ThisControl = {specs: ControlSpecs, options: { proto: ControlCode, parent: ThisApp }};\r\n\t\t\t\treturn ThisControl;\r\n\t\t\t})(ActionAppCore, $);"
 	}
 	
 		
