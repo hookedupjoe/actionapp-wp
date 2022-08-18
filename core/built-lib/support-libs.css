@@ -128,10 +128,6 @@
 	border:			1px solid #BBB;
 	border-width:	0;
 	}
-	.ui-layout-resizer-drag {		/* REAL resizer while resize in progress */
-	}
-	.ui-layout-resizer-hover	{	/* affects both open and closed states */
-	}
 	/* NOTE: It looks best when 'hover' and 'dragging' are set to the same color,
 		otherwise color shifts while dragging when bar can't keep up with mouse */
 	.ui-layout-resizer-open-hover ,	/* hover-color to 'resize' */
@@ -232,9 +228,15 @@
 	width:		100% !important;
 	height:		100% !important;
 }
-div.ui-layout-mask {}		/* standard mask for iframes */
-iframe.ui-layout-mask {}	/* extra mask for objects/applets */
 
+/*
+.ui-layout-resizer-drag {		// REAL resizer while resize in progress 
+}
+.ui-layout-resizer-hover	{	// affects both open and closed states 
+}
+div.ui-layout-mask {}		// standard mask for iframes 
+iframe.ui-layout-mask {}	// extra mask for objects/applets 
+*/
 /*
  *	Default printing styles
  */
