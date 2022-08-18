@@ -17,9 +17,16 @@
  * @package actionappwp
  * @since actionappwp 1.0.0
  */
-
 ( function ( wp,  ActionAppCore) {
-    
+    //--- If in React environment already, attach to it instead
+    if(typeof(React) == 'object'&& typeof(ReactDOM) == 'object'){
+        window.$R = React;
+        window.$RD = ReactDOM;
+        console.log("Attached to existing React", $R.version);
+    } else {
+        console.log("Kept my own React", $R.version);
+    }
+
     var BlocksController = {
         parts: {}
     };
