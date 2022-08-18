@@ -1464,7 +1464,6 @@ window.ActionAppCore = window.ActionAppCore || ActionAppCore;
        * 
        * Example: ThisApp.loadSpot('myarea:out', '', 'tpl-some-registered-template');
        *   - This loads the spot <div spot="myarea:out" ... with a rendered template 'tpl-some-registered-template'
-       *
        * 
        * Note:  theContent is usually HTML if no template name passed
        *        theContent can be blank, a string value or an objet to be passed into the template for rendering
@@ -1487,15 +1486,19 @@ window.ActionAppCore = window.ActionAppCore || ActionAppCore;
        * 
        */
     me.loadSpot = function (theName, theContent, theRenderer, theOptionalParent$, theOptionalTagName) {
-        var tmpTagName = theOptionalTagName || 'spot';
         var tmpContent = theContent || '';
         if (theRenderer) {
             if( typeof(theRenderer) == 'string'){
                 tmpContent = me.getTemplatedContent(theRenderer, tmpContent);
+            } else if( this.util.isReactClass(theRenderer) ){
+                console.log( 'isReactClass theRenderer');
+                tmpContent = $R.createElement(theRenderer, theContent);
             } else if( typeof(theRenderer) == 'function'){
+                console.log( 'function theRenderer');
                 tmpContent = theRenderer(theName, theContent);
             } else {
-                tmpContent = $R.createElement(theRenderer, theContent);
+                console.error('Unknown content type',typeof(theContent), theContent);
+                return false;
             }
         }
         var tmpSpot = me.getSpot$(theName, theOptionalParent$, theOptionalTagName)
@@ -1504,13 +1507,21 @@ window.ActionAppCore = window.ActionAppCore || ActionAppCore;
                 if( typeof(tmpContent) == 'object'){
                     for( var iPos = 0 ; iPos < tmpSpot.length ; iPos++){
                         var tmpSpotEl = tmpSpot[iPos];
-                        console.log( 'render to tmpSpotEl', tmpSpotEl);
-                        $RD.render(tmpContent, tmpSpotEl);
+                        var tmpData = $(tmpSpotEl).data();
+                        if( tmpData && tmpData._reel ){
+                            $RD.unmountComponentAtNode(tmpSpotEl);
+                            delete tmpData._reel;
+                        }
+                        var tmpReelObj = $RD.render(tmpContent, tmpSpotEl);
+                        console.log( 'tmpReelObj', tmpReelObj);
+                        $(tmpSpotEl).data({_reel:tmpReelObj});
                     }
                 } else {
                     tmpSpot.html(tmpContent);
                 }
             } catch (ex) {
+                console.error("loadSpot error",ex);
+                return false;
                 //--- ToDo: Global error handling
             }
         }
@@ -3031,7 +3042,7 @@ window.ActionAppCore = window.ActionAppCore || ActionAppCore;
 
         me.isSetup = true;
         //--- Init Required Plugins
-        me.useModuleComponents('plugin', ['ObjectManager', 'Prompter', 'Controls']);
+        me.useModuleComponents('plugin', ['ObjectManager', 'Prompter', 'Controls', 'React']);
         me.om = me.getComponent("plugin:ObjectManager");
         me.prompter = me.getComponent("plugin:Prompter");
         //--- General Util Functions
@@ -3044,7 +3055,10 @@ window.ActionAppCore = window.ActionAppCore || ActionAppCore;
 
         //--- Add controls plugin at the app level
         // ..... as global entrypoint for controls module
-        me.controls = me.getComponent("plugin:Controls");
+        me.controls = me.getComponent("plugin:Controls");        
+        me.react = me.getComponent("plugin:React");        
+        //me.react = ActionAppCore.module("plugin").React;
+        console.log( 'me.react', me.react);
 
         var tmpPromRequired = true;
         var tmpPromConfigReqired = true;
@@ -3941,9 +3955,14 @@ window.ActionAppCore = window.ActionAppCore || ActionAppCore;
         return arr;
       }
 
+      function isReactClass(component){
+        return (typeof component === 'function' && !!component.prototype.isReactComponent)
+      }
+      
     //ThisApp.util...
     var utilFunctions = {
         MIN_TOUCH_DISTANCE: 20,
+        isReactClass: isReactClass,
         removeItemOnce: removeItemOnce,
         removeItemAll: removeItemAll,
         itemTouchStart: itemTouchStart,
@@ -5419,38 +5438,6 @@ License: MIT
 
 
 //=========     Controls Plugin
-
-//=== === === === === === === === === === === === === === === === === 
-//=== === === === === === === === === === === === === === === === === 
-//=== === === === === === === === === === === === === === === === === 
-//=== === === === === === === === === === === === === === === === === 
-//=== === === === === === === === === === === === === === === === === 
-//=== === === === === === === === === === === === === === === === === 
-//=== === === === === === === === === === === === === === === === === 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//=== === === === === === === === === === === === === === === === === 
-//=== === === === === === === === === === === === === === === === === 
-//=== === === === === === === === === === === === === === === === === 
-//=== === === === === === === === === === === === === === === === === 
-//=== === === === === === === === === === === === === === === === === 
-//=== === === === === === === === === === === === === === === === === 
-
-
-
 /*
 Author: Joseph Francis
 License: MIT
@@ -5477,6 +5464,7 @@ License: MIT
 
     //--- Base class for application pages
     function ThisPageController(theOptions) {
+        console.log( 'ThisPageController ctl', theOptions);
         this.options = theOptions || {};
         this.actions = this.options.actions || {};
         var defaults = {};
@@ -10917,6 +10905,96 @@ License: MIT
 
 
     //==== END ===== HTML Control Builder ======  ======  ======  ======  ======  ======  ======  ======  ======  ======     
+
+
+})(ActionAppCore, $);
+
+
+
+//=========     React Plugin
+(function (ActionAppCore, $) {
+    var pluginConfig = {
+        name: "React",
+        ns: "_react"
+    }
+    var SiteMod = ActionAppCore.module("site");
+    var MyMod = ActionAppCore.module("plugin");
+    MyMod[pluginConfig.name] = ThisModuleController;
+    var thisComponentID = "plugin:" + pluginConfig.name;
+
+    function ThisModuleController(theOptions) {
+        this.options = theOptions || {};
+        this.catalog = catalog;
+        if (typeof (this.options.app) == 'object') {
+            var tmpApp = this.options.app;
+            if (tmpApp && tmpApp.registerComponent) {
+                tmpApp.registerComponent(thisComponentID, this);
+            }
+        }
+    }
+
+    var me = ThisModuleController.prototype;
+
+    function Message(props) {
+        if (!props.warn) {
+            return null;
+        }
+        return $R.createElement("div", { className: "ui message " + props.color }, props.msg || 'Warning');
+    }
+
+    class TestComp extends $R.Component {
+        constructor(props) {
+            super(props);
+            var tmpMsg = props.msg || 'Just saying Hi';
+            this.state = { msg: tmpMsg, showWarning: true, color:'orange'};
+            this.handleToggleClick = this.handleToggleClick.bind(this);
+        }
+        toggleState(theState) {
+            return {
+                showWarning: !theState.showWarning
+            };
+        }
+        componentDidMount() {
+            console.log('componentDidMount')
+        }
+
+        componentWillUnmount() {
+            console.log('componentWillUnmount')
+        }
+
+        setMessage(theMsg) {
+            this.setState({ 'msg': theMsg || 'Warning!' });
+        }
+        getMessage() {
+            if (!(this.state.msg)) {
+                return '';
+            }
+            return this.state.msg;
+        }
+
+        handleToggleClick() {
+            this.setState(this.toggleState.bind(this));
+        }
+
+        render() {
+            return (
+                $R.createElement("div", null,
+                    $R.createElement(Message, { color: this.state.color, msg: this.state.msg, warn: this.state.showWarning }),
+                    $R.createElement("div", { className: 'ui button blue', onClick: this.handleToggleClick },
+                        this.state.showWarning ? 'Hide' : 'Show'
+                    )
+                )
+            );
+        }
+    }
+    
+    var catalog = {
+        "sys_common": {
+            Message:Message,
+            TestComp:TestComp
+        }
+    }
+    //--- Demo controls
 
 
 })(ActionAppCore, $);
