@@ -521,7 +521,21 @@
         var withSelect  = wp.data.withSelect;
         var ifCondition = wp.compose.ifCondition;
         var compose     = wp.compose.compose;
-    
+        
+        var SemLabelPopOver = function(props){
+            //wp.components.Popover
+            return wp.element.createElement(
+                wp.components.Popover, 
+                {
+                    children: wp.element.createElement('div',{},'hello popup'),
+                    title: 'Label Options', 
+                    onClose: function() {
+                        console.log('onClose this,props',this,props)
+                    }
+                }
+                
+            );
+        }
         var TextHighlighButton = function( props ) {
             return wp.element.createElement(
                 wp.blockEditor.RichTextToolbarButton, 
@@ -535,9 +549,14 @@
                                 attributes: {
                                     class: 'ui label'
                                 }
-                            }) 
+                            })
+                            
                         );
+                        
+
+                        console.log('props',props)
                     }
+                    
                 }
             );
         }
@@ -708,11 +727,6 @@
     }
 
 
-
-
-    
-    
-
     //---- Demo removing supports options                
     function extendBlockQuoteBlock(settings, name) {
         if (name == 'core/paragraph') {
@@ -721,7 +735,6 @@
                 settings.supports.anchor = false;
                 settings.supports.className = false;
                 settings.supports.customClassName = false;
-                console.log('settings.supports',settings.supports)
                 return settings;
             }
         }
