@@ -1491,10 +1491,8 @@ window.ActionAppCore = window.ActionAppCore || ActionAppCore;
             if( typeof(theRenderer) == 'string'){
                 tmpContent = me.getTemplatedContent(theRenderer, tmpContent);
             } else if( this.util.isReactClass(theRenderer) ){
-                console.log( 'isReactClass theRenderer');
                 tmpContent = $R.createElement(theRenderer, theContent);
             } else if( typeof(theRenderer) == 'function'){
-                console.log( 'function theRenderer');
                 tmpContent = theRenderer(theName, theContent);
             } else {
                 console.error('Unknown content type',typeof(theContent), theContent);
@@ -1513,7 +1511,6 @@ window.ActionAppCore = window.ActionAppCore || ActionAppCore;
                             delete tmpData._reel;
                         }
                         var tmpReelObj = $RD.render(tmpContent, tmpSpotEl);
-                        console.log( 'tmpReelObj', tmpReelObj);
                         $(tmpSpotEl).data({_reel:tmpReelObj});
                     }
                 } else {
@@ -3057,8 +3054,6 @@ window.ActionAppCore = window.ActionAppCore || ActionAppCore;
         // ..... as global entrypoint for controls module
         me.controls = me.getComponent("plugin:Controls");        
         me.react = me.getComponent("plugin:React");        
-        //me.react = ActionAppCore.module("plugin").React;
-        console.log( 'me.react', me.react);
 
         var tmpPromRequired = true;
         var tmpPromConfigReqired = true;
@@ -5464,7 +5459,6 @@ License: MIT
 
     //--- Base class for application pages
     function ThisPageController(theOptions) {
-        console.log( 'ThisPageController ctl', theOptions);
         this.options = theOptions || {};
         this.actions = this.options.actions || {};
         var defaults = {};
