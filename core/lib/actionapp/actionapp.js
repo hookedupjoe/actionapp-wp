@@ -1468,13 +1468,17 @@ window.ActionAppCore = window.ActionAppCore || ActionAppCore;
        * 
        * Note:  theContent is usually HTML if no template name passed
        *        theContent can be blank, a string value or an objet to be passed into the template for rendering
-       *        if there is a string value for theOptionalTemplateName, 
-       *         ... theOptionalTemplateName is used to render the content and theContent passed as the input
+       *        if there is a string value for theRenderer, 
+       *         ... theRenderer is used to render the content and theContent passed as the input
+       *        if there is an object value for theRenderer, 
+       *         ... theRenderer is expected to be a React component to render using the data as props
+       *        if there is an function value for theRenderer, 
+       *         ... theRenderer function is run, passing in theName and theContent and uses the return value
        * 
        * 
        * @param  {String} theName   [The name of the spot to load]
        * @param  {String} theContent   [The content to load or object to use when rendering the template]
-       * @param  {String} theOptionalTemplateName   [The content to load or object to use when rendering the template]
+       * @param  {String} theRenderer   [The rendering agent for this content if applicable]
        * @param  {String} theOptionalParent$   [The jQuery element to use instead of global]
        * @param  {String} theOptionalTagName   [The tag name to use (i.e. pagespot)]
        * 
@@ -1482,20 +1486,33 @@ window.ActionAppCore = window.ActionAppCore || ActionAppCore;
        * 
        * 
        */
-    me.loadSpot = function (theName, theContent, theOptionalTemplateName, theOptionalParent$, theOptionalTagName) {
+    me.loadSpot = function (theName, theContent, theRenderer, theOptionalParent$, theOptionalTagName) {
         var tmpTagName = theOptionalTagName || 'spot';
         var tmpContent = theContent || '';
-        if (theOptionalTemplateName) {
-            tmpContent = me.getTemplatedContent(theOptionalTemplateName, tmpContent);
+        if (theRenderer) {
+            if( typeof(theRenderer) == 'string'){
+                tmpContent = me.getTemplatedContent(theRenderer, tmpContent);
+            } else if( typeof(theRenderer) == 'function'){
+                tmpContent = theRenderer(theName, theContent);
+            } else {
+                tmpContent = $R.createElement(theRenderer, theContent);
+            }
         }
         var tmpSpot = me.getSpot$(theName, theOptionalParent$, theOptionalTagName)
         if (tmpSpot) {
             try {
-                tmpSpot.html(tmpContent);
+                if( typeof(tmpContent) == 'object'){
+                    for( var iPos = 0 ; iPos < tmpSpot.length ; iPos++){
+                        var tmpSpotEl = tmpSpot[iPos];
+                        console.log( 'render to tmpSpotEl', tmpSpotEl);
+                        $RD.render(tmpContent, tmpSpotEl);
+                    }
+                } else {
+                    tmpSpot.html(tmpContent);
+                }
             } catch (ex) {
                 //--- ToDo: Global error handling
             }
-
         }
         return tmpSpot;
     }
@@ -1509,7 +1526,7 @@ window.ActionAppCore = window.ActionAppCore || ActionAppCore;
        * 
        * @param  {String} theName   [The name of the spot to append/prepend to]
        * @param  {String} theContent   [The content to load or object to use when rendering the template]
-       * @param  {String} theOptionalTemplateName   [The content to load or object to use when rendering the template]
+       * @param  {String} theRenderer   [The rendering agent for this content if applicable (React not allowed for append operation)]
        * @param  {String} thePrepend   [true to prepend, blank or false to append (default)]
        * @param  {String} theOptionalParent$   [The jQuery element to use instead of global]
        * @param  {String} theOptionalTagName   [The tag name to use (i.e. pagespot)]
@@ -1518,17 +1535,29 @@ window.ActionAppCore = window.ActionAppCore || ActionAppCore;
        * 
        */
 
-    me.addToSpot = function (theName, theContent, theOptionalTemplateName, thePrepend, theOptionalParent$, theOptionalTagName) {
+    me.addToSpot = function (theName, theContent, theRenderer, thePrepend, theOptionalParent$, theOptionalTagName) {
         var tmpContent = theContent || '';
-        if (theOptionalTemplateName) {
-            tmpContent = me.getTemplatedContent(theOptionalTemplateName, tmpContent);
+        if (theRenderer) {
+            if(typeof(theRenderer) == 'string'){
+                tmpContent = me.getTemplatedContent(theRenderer, tmpContent);
+            } else if( typeof(theRenderer) == 'function'){
+                tmpContent = theRenderer(theName, theContent);
+            } else {
+                tmpContent = $R.createElement(theRenderer, theContent);
+            }
         }
         var tmpSpot = me.getSpot$(theName, theOptionalParent$, theOptionalTagName)
-        if (thePrepend === true) {
-            tmpSpot.prepend(tmpContent);
+        if( typeof(tmpContent) == 'object'){
+            //ToDo: Allow this?
+            console.error("Can not append to spot using React controls, one per spot");
         } else {
-            tmpSpot.append(tmpContent);
+            if (thePrepend === true) {
+                tmpSpot.prepend(tmpContent);
+            } else {
+                tmpSpot.append(tmpContent);
+            }
         }
+
         return tmpSpot;
     }
 
@@ -4055,9 +4084,9 @@ License: MIT
             //             ).bind(this);
 
             //--- Extend with new layout related spot functions
-            this.addToRegion = function (theRegion, theContent, theOptionalTemplateName, thePrepend) {
+            this.addToRegion = function (theRegion, theContent, theRenderer, thePrepend) {
                 var tmpRegionSpotName = this.layoutOptions.spotPrefix + ":" + theRegion;
-                ThisApp.addToSpot(tmpRegionSpotName, theContent, theOptionalTemplateName, thePrepend, this.getParent$())
+                ThisApp.addToSpot(tmpRegionSpotName, theContent, theRenderer, thePrepend, this.getParent$())
             }
 
             this.createInstance = function (theControl, theInstanceName) {
@@ -4075,9 +4104,9 @@ License: MIT
                 var tmpInstance = this.createInstance(theControl, (theInstanceName || theRegion));
                 tmpInstance.loadToElement(tmpRegionSpotName);
             }
-            this.loadRegion = function (theRegion, theContent, theOptionalTemplateName) {
+            this.loadRegion = function (theRegion, theContent, theRenderer) {
                 var tmpRegionSpotName = this.layoutOptions.spotPrefix + ":" + theRegion;
-                ThisApp.loadSpot(tmpRegionSpotName, theContent, theOptionalTemplateName, this.getParent$())
+                ThisApp.loadSpot(tmpRegionSpotName, theContent, theRenderer, this.getParent$())
             }
         }
 
@@ -4552,15 +4581,15 @@ License: MIT
     me.focus = me.open;
 
     //--- Will prefix with this.pageName as needed
-    me.loadLayoutSpot = function (theRegionName, theContent, theOptionalTemplateName) {
+    me.loadLayoutSpot = function (theRegionName, theContent, theRenderer) {
         var tmpName = theRegionName || 'center';
         tmpName = this.pageName + ":" + tmpName;
-        return this.loadSpot(tmpName, theContent, theOptionalTemplateName);
+        return this.loadSpot(tmpName, theContent, theRenderer);
     }
 
     //--- Calls parent loadSpot within this page DOM and refreshes layouts
-    me.loadSpot = function (theName, theContent, theOptionalTemplateName) {
-        ThisApp.loadSpot(theName, theContent, theOptionalTemplateName, this.getParent$(), 'pagespot');
+    me.loadSpot = function (theName, theContent, theRenderer) {
+        ThisApp.loadSpot(theName, theContent, theRenderer, this.getParent$(), 'pagespot');
         try {
             this.refreshLayouts();
         } catch (error) {
@@ -4569,8 +4598,8 @@ License: MIT
     }
 
     //--- Calls parent loadSpot within this page DOM and refreshes layouts
-    me.addToSpot = function (theName, theContent, theOptionalTemplateName, thePrepend) {
-        ThisApp.addToSpot(theName, theContent, theOptionalTemplateName, thePrepend, this.getParent$(), 'pagespot');
+    me.addToSpot = function (theName, theContent, theRenderer, thePrepend) {
+        ThisApp.addToSpot(theName, theContent, theRenderer, thePrepend, this.getParent$(), 'pagespot');
         try {
             this.refreshLayouts();
         } catch (error) {
@@ -6498,8 +6527,8 @@ License: MIT
 
 
     //--- Calls parent loadSpot with this instance DOM and refreshes layouts
-    meInstance.loadSpot = function (theName, theContent, theOptionalTemplateName) {
-        ThisApp.loadSpot(theName, theContent, theOptionalTemplateName, this.getParent$(), 'myspot');
+    meInstance.loadSpot = function (theName, theContent, theRenderer) {
+        ThisApp.loadSpot(theName, theContent, theRenderer, this.getParent$(), 'myspot');
         try {
             this.refreshLayouts();
         } catch (error) {
@@ -6507,8 +6536,8 @@ License: MIT
         }
     }
     //--- Calls parent loadSpot with this instance DOM and refreshes layouts
-    meInstance.addToSpot = addToSpot = function (theName, theContent, theOptionalTemplateName, thePrepend) {
-        ThisApp.addToSpot(theName, theContent, theOptionalTemplateName, thePrepend, this.getParent$(), 'myspot');
+    meInstance.addToSpot = addToSpot = function (theName, theContent, theRenderer, thePrepend) {
+        ThisApp.addToSpot(theName, theContent, theRenderer, thePrepend, this.getParent$(), 'myspot');
         try {
             this.refreshLayouts();
         } catch (error) {
