@@ -18,14 +18,6 @@
  * @since actionappwp 1.0.0
  */
 ( function ( wp,  ActionAppCore) {
-    //--- If in React environment already, attach to it instead
-    if(typeof(React) == 'object'&& typeof(ReactDOM) == 'object'){
-        window.$R = React;
-        window.$RD = ReactDOM;
-        console.log("Attached to existing React", $R.version);
-    } else {
-        console.log("Kept my own React", $R.version);
-    }
 
     var BlocksController = {
         parts: {}
@@ -118,6 +110,8 @@ if( tmpType == 'controls'){
         }
 
         ActionAppCore.subscribe('app-loaded', function(){            
+            onAppLoaded();
+
             ThisApp.actions.updatePreview = function(){
                 ActAppBlocksController.loadFromMarkup();
             }
@@ -139,6 +133,25 @@ if( tmpType == 'controls'){
         })
     }
 
+    function onAppLoaded(){
+            //--- If in React environment already, attach to it instead
+            if(typeof(React) == 'object'&& typeof(ReactDOM) == 'object'){
+                window.$R = React;
+                window.$RD = ReactDOM;
+                console.debug("Attached to existing React", $R.version);
+                var tmpWPSetup = {}
+                if( typeof(wp) == 'object' ){
+                    tmpWPSetup.render = wp.element.render;
+                    tmpWPSetup.createElement = wp.element.createElement;
+                    tmpWPSetup.unmountComponentAtNode = wp.element.unmountComponentAtNode;
+                    ThisApp.react.setupReact(tmpWPSetup);
+                    console.info("setupReact for WP", tmpWPSetup);
+                }
+            } else {
+                console.debug("Kept my own React", $R.version);
+            }
+
+    }
 
     //--- Initialize common block functionality for the editor
     init();
