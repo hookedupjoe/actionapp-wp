@@ -510,12 +510,14 @@
         
     }
 
+    
     ActionAppCore.subscribe('app-loaded', function(){
         ThisApp.delay(1000).then(function(){
             //wp.richText.unregisterFormatType('core/text-color');
             wp.richText.unregisterFormatType('core/image');
-
-
+            
+            //ThisApp.react
+            //actappformat/blue-label
             
     
         var withSelect  = wp.data.withSelect;
@@ -536,12 +538,13 @@
                 
             );
         }
-        var TextHighlighButton = function( props ) {
+        var TextHighlightButton = function( props ) {
             return wp.element.createElement(
                 wp.blockEditor.RichTextToolbarButton, 
                 {
                     icon: BlockEditor.controlIcon, 
                     title: 'Bordered label', 
+                    isActive: props.isActive,
                     onClick: function() {
                         props.onChange( 
                             wp.richText.toggleFormat(props.value, {
@@ -552,8 +555,6 @@
                             })
                             
                         );
-                        
-
                         console.log('props',props)
                     }
                     
@@ -561,7 +562,7 @@
             );
         }
     
-        var ConditionalTextHighlighButton = compose(
+        var ConditionalTextHighlightButton = compose(
             withSelect( function( select ) {
                 return {
                     selectedBlock: select( 'core/block-editor' ).getSelectedBlock()
@@ -573,7 +574,7 @@
                     (props.selectedBlock.name === 'core/paragraph' || props.selectedBlock.name === 'actappui/richtext')
                 );
             } )
-        )( TextHighlighButton );
+        )( TextHighlightButton );
     
     
 
@@ -584,7 +585,7 @@
                     tagName: 'span',
                     text: 'HL',
                     className: 'actapp-border-label',
-                    edit: ConditionalTextHighlighButton,
+                    edit: ConditionalTextHighlightButton,
                 }
             );
 
