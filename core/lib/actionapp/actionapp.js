@@ -1491,11 +1491,11 @@ window.ActionAppCore = window.ActionAppCore || ActionAppCore;
             if( typeof(theRenderer) == 'string'){
                 tmpContent = me.getTemplatedContent(theRenderer, tmpContent);
             } else if( this.util.isReactClass(theRenderer) ){
-                tmpContent = $R.createElement(theRenderer, theContent);
+                tmpContent = ThisApp.react.createElement(theRenderer, theContent);
             } else if( typeof(theRenderer) == 'function'){
                 tmpContent = theRenderer(theName, theContent);
             } else {
-                console.error('Unknown content type',typeof(theContent), theContent);
+                console.error('ActionApp loadSpot: Unknown content type',typeof(theContent), theContent);
                 return false;
             }
         }
@@ -1507,11 +1507,11 @@ window.ActionAppCore = window.ActionAppCore || ActionAppCore;
                         var tmpSpotEl = tmpSpot[iPos];
                         var tmpData = $(tmpSpotEl).data();
                         if( tmpData && tmpData._reel ){
-                            $RD.unmountComponentAtNode(tmpSpotEl);
+                            ThisApp.react.unmountComponentAtNode(tmpSpotEl);
                             delete tmpData._reel;
                         }
-                        var tmpReelObj = $RD.render(tmpContent, tmpSpotEl);
-                        $(tmpSpotEl).data({_reel:tmpReelObj});
+                        var tmpReelObj = ThisApp.react.render(tmpContent, tmpSpotEl);
+                        $(tmpSpotEl).data({_reel:true, _reobj: tmpReelObj});
                     }
                 } else {
                     tmpSpot.html(tmpContent);
@@ -3951,7 +3951,17 @@ window.ActionAppCore = window.ActionAppCore || ActionAppCore;
       }
 
       function isReactClass(component){
-        return (typeof component === 'function' && !!component.prototype.isReactComponent)
+        if(typeof(component) === 'function' && component.prototype && !!(component.prototype.isReactComponent)){
+            return true;
+        }
+        //--ToDo: Do not assume every object is React
+        if(typeof(component) === 'object'){
+            if( typeof(component.$$typeof) == 'sympbol'){
+                //This is a ref?
+            }
+            return true;
+        }
+        return false;
       }
       
     //ThisApp.util...
@@ -10911,14 +10921,51 @@ License: MIT
         name: "React",
         ns: "_react"
     }
-    var SiteMod = ActionAppCore.module("site");
     var MyMod = ActionAppCore.module("plugin");
     MyMod[pluginConfig.name] = ThisModuleController;
     var thisComponentID = "plugin:" + pluginConfig.name;
 
+    function render(){
+        if( (this.renderCall) ){
+            return this.renderCall.apply(this, arguments);
+        }
+        return $RD.render.apply(this, arguments);
+    }
+    function createElement(){
+        if( (this.createElementCall) ){
+            return this.createElementCall.apply(this, arguments);
+        }
+        return $R.createElement.apply(this, arguments);
+    }
+    function unmountComponentAtNode(){
+        if( (this.unmountComponentAtNodeCall) ){
+            return this.unmountComponentAtNodeCall.apply(this, arguments);
+        }
+        return $RD.unmountComponentAtNode.apply(this, arguments);
+
+    }
+
+    function setupReact(theOptions){
+        if(!theOptions){return;}
+        if( theOptions.render ){
+            this.renderCall = theOptions.render
+        }
+        if( theOptions.createElement ){
+            this.createElementCall = theOptions.createElement
+        }
+        if( theOptions.unmountComponentAtNode ){
+            this.unmountComponentAtNodeCall = theOptions.unmountComponentAtNode
+        }
+    }
+
     function ThisModuleController(theOptions) {
         this.options = theOptions || {};
         this.catalog = catalog;
+        this.setupReact = setupReact.bind(this);
+        this.render = render.bind(this);
+        this.createElement = createElement.bind(this);
+        this.unmountComponentAtNode = unmountComponentAtNode.bind(this);
+
         if (typeof (this.options.app) == 'object') {
             var tmpApp = this.options.app;
             if (tmpApp && tmpApp.registerComponent) {
