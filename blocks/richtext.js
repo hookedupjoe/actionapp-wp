@@ -98,10 +98,10 @@
             } )
 
             var tmpAligner = el(
-                wp.editor.BlockControls,
+                wp.blockEditor.BlockControls,
                 {},
                 el(
-                    wp.editor.AlignmentToolbar,
+                    wp.blockEditor.AlignmentToolbar,
                     {
                         value: props.attributes.alignment,
                         onChange: onChangeAlignment
