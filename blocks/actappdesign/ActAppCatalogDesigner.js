@@ -129,8 +129,11 @@
 
             controlDirty = true;
             if( controlDetailsLoaded === false){
-                controlDetailsLoaded = '' + (wp.data.select('core/block-editor').getEditedPostAttribute('meta').__design_props || '{}');
-                controlDetails = JSON.parse(controlDetailsLoaded);
+                var tmpBE = wp.data.select('core/block-editor');
+                if( tmpBE && tmpBE.getEditedPostAttribute ){
+                    controlDetailsLoaded = '' + (tmpBE.getEditedPostAttribute('meta').__design_props || '{}');
+                    controlDetails = JSON.parse(controlDetailsLoaded);
+                }
             }
             
   
