@@ -39,6 +39,8 @@ class ActAppDynamicDemo {
 		$tmpCount = sizeof($block_attributes);
 		$tmpJSON = json_encode($block_attributes);
 		//return $tmpJSON;
+		
+		$tmpUserID = get_current_user_id();
 
 		if( $tmpCount == 0){
 			return 'no attributes';
@@ -50,7 +52,7 @@ class ActAppDynamicDemo {
 		
 		if( $block_attributes['message'] ){
 			//<div class="ui button blue fluid" action="runClickMe">Click Me</div>
-			return '<div class="ui message blue large">' . $block_attributes['message'] . "</div>";
+			return '<div>Welcome user:' . $tmpUserID . '</div><div class="ui message blue large">' . $block_attributes['message'] . "</div>";
 		}
 		
 

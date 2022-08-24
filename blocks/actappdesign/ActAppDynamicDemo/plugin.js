@@ -86,7 +86,7 @@
         apiVersion: 2,
         title: 'ActApp Dynamic Demo',
         icon: tmpIconEl,
-        category: 'actappdesign',
+        category: 'actappblk',
         edit: function ( props ) {
             if( !(ThisApp.actions.runClickMe) ){
                 ThisApp.actions.runClickMe = function(theParams, theTarget){
@@ -151,10 +151,11 @@
                     ]
                     ),]
                 ),
-                el( ServerSideRender, {
-                    block: 'actappdesign/dynamic-demo',
-                    attributes: props.attributes,
-                } )
+                el('div',{className:'ui message'},props.attributes.message)
+                // el( ServerSideRender, {
+                //     block: 'actappdesign/dynamic-demo',
+                //     attributes: props.attributes,
+                // } )
                 ]
             );
         },
