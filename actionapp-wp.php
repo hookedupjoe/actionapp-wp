@@ -29,7 +29,7 @@
  * 
  * Version: 1.0.14
  */
-define( 'ACTIONAPP_WP_CORE_VERSION', '1.0.14' );
+define( 'ACTIONAPP_WP_CORE_VERSION', '1.0.14.1' );
  
 if ( !defined( 'ABSPATH' ) ) {
 	exit;

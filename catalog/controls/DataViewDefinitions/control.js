@@ -100,9 +100,9 @@
   
       //--- Update the internal configuration to hide stuff we don't need for our use / in dialog
       var tmpToHide = ['submit-bar',
-        'title',
+        'headertitle',
         'welcome'];
-      var tmpItems = this.parts.mainform.controlConfig.index.items;
+      var tmpItems = this.parts.mainform.controlConfig.index.all;
       for (var iPos in tmpToHide) {
         var tmpKey = tmpToHide[iPos];
         if( tmpItems[tmpKey] ){

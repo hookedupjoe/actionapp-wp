@@ -8,7 +8,7 @@
         "ctl": "title",
         "size": "Large",
         "color": "blue",
-        "name": "title",
+        "name": "headertitle",
         "text": "Data View Definition"
       },
         {

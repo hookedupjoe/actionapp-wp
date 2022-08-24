@@ -29,7 +29,7 @@ class ActAppDesigner {
 	}
 
 	public static function getDataVersion(){
-		return 1.12;
+		return ACTIONAPP_WP_CORE_VERSION;
 	}
 
 	public static function actapp_block_category( $categories, $post ) {
@@ -221,6 +221,12 @@ class ActAppDesigner {
         $content = 'Internal Use';
 		$tmpNewDoc = ActAppCommon::assure_doc($slug, $post_type, $title, $content);
 
+		$slug = 'appconsole';
+        $title = 'Applications Console';
+        $content = 'Internal Use';
+		$tmpNewDoc = ActAppCommon::assure_doc($slug, $post_type, $title, $content);
+
+		//--- ToDo: Change to use internal call to build form to support external login types
 		$slug = 'login';
         $title = 'Log In Form';
         $content = 'Internal Use';
