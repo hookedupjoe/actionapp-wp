@@ -126,9 +126,14 @@ foreach ($tmpDoc as $iFieldName => $iVal) {
     
     echo('<tr>');
     $tmpPFVal = $iVal;
+    if( is_array($tmpPFVal)){
+      $tmpPFVal = implode(", ",$tmpPFVal);
+    }
+
     $tmpPFLab = ''.$iFieldName.'';
     if( '__design_props' == $iFieldName || 'source' == $iFieldName ){
-      $tmpPFVal = html_entity_decode((''.$tmpPFVal));
+//ToDo: Review - Need to still do this?      
+$tmpPFVal = html_entity_decode((''.$tmpPFVal));
       echo('<td><b>'.$tmpPFLab.'</b></td><td><textarea class="ui textarea" style="width:100%;height:150px;">'.$tmpPFVal.'</textarea></td>');
     } else if( '__uid' == $iFieldName || '__url' == $iFieldName ){
       echo('<td><b>'.$tmpPFLab.'</b></td><td><input readonly="" value="'.$tmpPFVal.'" /></td>');  
