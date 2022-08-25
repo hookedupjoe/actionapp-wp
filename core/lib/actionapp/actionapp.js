@@ -6780,7 +6780,39 @@ License: MIT
 
         var tmpCtl = tmpFieldSpecs.ctl || 'field';
         var tmpControl = me.webControls.get(tmpCtl);
-        if (!(tmpControl.getFieldValue)) {
+
+        if( typeof(tmpFieldSpecs.value) == 'object' ){
+            
+            var tmpCompKey = '[computed]';
+            var tmpObj = tmpFieldSpecs.value;
+            
+            if (isObj(tmpObj) && tmpObj.hasOwnProperty(tmpCompKey)) {
+                var tmpComputed = tmpObj[tmpCompKey];
+                
+                if (isStr(tmpComputed)) {
+                    tmpComputed = {
+                        "context": tmpComputed
+                    }
+                }
+
+                if (isObj(tmpComputed)) {
+                    var tmpCompValue = '';
+                    var tmpCompContext = tmpComputed.context || '';
+                    if (tmpCompContext) {
+                        try {
+                            //--- This is used in the eval statement, do not remove
+                            var context = this.context;
+                            tmpCompValue = eval(tmpCompContext)
+                        } catch (ex) {
+                            console.warn("Attempt to us computed context value failed ", ex)
+                        }
+                    } else {
+                        console.warn("No context passed for computed value, see documentation for details.")
+                    }
+                    tmpRet = tmpCompValue;
+                }
+            }
+        } else if (!(tmpControl.getFieldValue)) {
             tmpRet = me._getControlData(this.getEl(), theFieldName);
         } else {
             tmpRet = tmpControl.getFieldValue(this.getEl(), tmpFieldSpecs);
@@ -8475,9 +8507,9 @@ License: MIT
         for (var aFN in tmpRet) {
             var tmpObj = tmpRet[aFN];
             var tmpCompKey = '[computed]';
+            
             if (isObj(tmpObj) && tmpObj.hasOwnProperty(tmpCompKey)) {
                 var tmpComputed = tmpObj[tmpCompKey];
-
                 if (isStr(tmpComputed)) {
                     tmpComputed = {
                         "context": tmpComputed
