@@ -61,10 +61,23 @@
                   "icon": "trash",
                   compact: true,
                   "name": "btn-page-tb-recycle",
-                  "label": "Recycle",
+                  "label": "",
                   "onClick": {
                     "run": "action",
                     "action": "recycleSelected"
+                  }
+                },
+                {
+                  "ctl": "button",
+                  "toLeft": true,
+                  "color": "blue",
+                  "icon": "right arrow",
+                  compact: true,
+                  "name": "btn-page-tb-open",
+                  "label": "Open",
+                  "onClick": {
+                    "run": "action",
+                    "action": "openInDesigner"
                   }
                 }]
             }]
@@ -164,6 +177,7 @@
     ControlCode.newDoc = function() {
       var self = this;
       var tmpViewer = this.getViewControl();
+      self.parts.mainform.getFieldSpecs('name').readonly = false;
       self.parts.mainform.prompt({
         title: 'Add Application', submitLabel: 'Save Application'
       }).then(function(theSubmit, theData) {
@@ -180,12 +194,29 @@
   
     };
   
+    ControlCode.openInDesigner = function() {
+      var tmpViewer = this.getViewControl();
+      var tmpSelected = tmpViewer.getSelectedKeys();
+      var tmpRow = tmpViewer.mainTable.getRow(tmpSelected[0]);
+      var self = this;
+      var tmpDoc = tmpRow._row.data;
+      console.log( 'tmpDoc', tmpDoc);
+      var tmpName = tmpDoc.name || '';
+      if( !(tmpName) ){
+        alert('No name found for this app', "Error", 'e');
+        return;
+      }
+      
+
+    };
+
     ControlCode.editDoc = function() {
       var tmpViewer = this.getViewControl();
       var tmpSelected = tmpViewer.getSelectedKeys();
       var tmpRow = tmpViewer.mainTable.getRow(tmpSelected[0]);
       var self = this;
-  
+      self.parts.mainform.getFieldSpecs('name').readonly = true;
+
       self.parts.mainform.prompt({
         title: 'Edit Application Definition',
         submitLabel: 'Save Changes',
@@ -255,8 +286,9 @@
         tmpNoneDisabled);
   
       var tmpNotOneDisabled = (tmpViewer.counts.selected !== 1);
-      this.setItemDisabled('btn-page-tb-edit',
-        tmpNotOneDisabled);
+      this.setItemDisabled('btn-page-tb-edit',tmpNotOneDisabled);
+      this.setItemDisabled('btn-page-tb-open',tmpNotOneDisabled);
+        
     }
   
     var ThisControl = {
