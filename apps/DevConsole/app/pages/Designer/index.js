@@ -104,7 +104,8 @@ ThisPage.ctlBody.loadTabSpot('home','Initial Page, Welcome');
 ThisPage.ctlBody.gotoTab('home');
 
 ThisPage.ctlNav.addTab({item:'apps',text: 'Apps', icon: 'icon globe blue', content:''});
-ThisPage.ctlNav.addTab({item:'catalogs',text: 'Catalogs', icon: 'icon archive blue', content:''});
+ThisPage.ctlNav.addTab({item:'outline',text: 'Outline', icon: 'icon tree blue', content:''});
+//ThisPage.ctlNav.addTab({item:'catalogs',text: 'Catalogs', icon: 'icon archive blue', content:''});
 ThisPage.ctlNav.gotoTab('apps');
 
 ThisPage.ctlStatusbar.setContent('Welcome to the designer console');
@@ -131,10 +132,13 @@ ThisPage.ctlStatusbar.setContent('Welcome to the designer console');
 
     //------- --------  --------  --------  --------  --------  --------  -------- 
     //~YourPageCode//~
-actions.showDocs = showDocs;
+
+    actions.showDocs = showDocs;
 function showDocs(){
   alert('show');
 }
+
+
 //~YourPageCode~//~
 
 })(ActionAppCore, $);
