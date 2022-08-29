@@ -147,8 +147,7 @@
       return;
     }
     var tmpOptions = theOptions || {};
-    var tmpTabKey = tmpOptions.tabname;
-    //var tmpPartName = tmpOptions.partname || tmpTabKey;
+    var tmpTabKey = tmpOptions.tabname || tmpOptions.name || tmpOptions.item;
     var tmpTabTitle = tmpOptions.tabtitle || tmpOptions.itemtitle || tmpOptions.title || tmpTabKey;
     if (this.parts[tmpTabKey]) {
       this.gotoTab(tmpTabKey);
