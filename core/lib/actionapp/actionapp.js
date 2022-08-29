@@ -6818,6 +6818,11 @@ License: MIT
         } else {
             tmpRet = tmpControl.getFieldValue(this.getEl(), tmpFieldSpecs);
         }
+        //--- Account for value and default on hidden fields
+        //--- ToDo: What if default is not blank and we want blank value?
+        if( typeof(tmpRet) !== 'boolean' && !(tmpRet) && tmpFieldSpecs && tmpFieldSpecs.ctl == 'hidden' && (tmpFieldSpecs.value || tmpFieldSpecs.default)){
+            tmpRet = tmpFieldSpecs.value || tmpFieldSpecs.default;                
+        }
         return tmpRet;
     }
 
