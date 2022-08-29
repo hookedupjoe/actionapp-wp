@@ -103,7 +103,14 @@ ThisPage.ctlBody.loadTabSpot('home','Initial Page, Welcome');
 //ThisPage.ctlBody.addTab({item:'doctypes',text: 'Document Types', icon: 'icon circle green', content:'Initial Content for Doc Types'});
 ThisPage.ctlBody.gotoTab('home');
 
-ThisPage.ctlNav.addTab({item:'apps',text: 'Apps', icon: 'icon globe blue', content:''});
+ThisPage.ctlNav.openTab({
+	name:'apps',
+	catalog: '_designer',
+	controlname: 'AppSidebar',
+	title: 'Apps'
+})
+
+//ThisPage.ctlNav.addTab({item:'apps',text: 'Apps', icon: 'icon globe blue', content:''});
 ThisPage.ctlNav.addTab({item:'outline',text: 'Outline', icon: 'icon tree blue', content:''});
 //ThisPage.ctlNav.addTab({item:'catalogs',text: 'Catalogs', icon: 'icon archive blue', content:''});
 ThisPage.ctlNav.gotoTab('apps');
