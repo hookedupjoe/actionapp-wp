@@ -6800,8 +6800,9 @@ License: MIT
                     var tmpCompContext = tmpComputed.context || '';
                     if (tmpCompContext) {
                         try {
-                            //--- This is used in the eval statement, do not remove
+                            //--- Variables used in the eval statement, do not remove
                             var context = this.context;
+                            var thisControl = this;
                             tmpCompValue = eval(tmpCompContext)
                         } catch (ex) {
                             console.warn("Attempt to us computed context value failed ", ex)
@@ -8521,8 +8522,9 @@ License: MIT
                     var tmpCompContext = tmpComputed.context || '';
                     if (tmpCompContext) {
                         try {
-                            //--- This is used in the eval statement, do not remove
+                            //--- Variables used in the eval statement, do not remove
                             var context = tmpContext;
+                            var thisControl = theControlObj;
                             tmpCompValue = eval(tmpCompContext)
                         } catch (ex) {
                             console.warn("Attempt to us computed context value failed ", ex)
