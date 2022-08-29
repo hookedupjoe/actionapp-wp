@@ -237,6 +237,7 @@
           // var tmpH = theEl.closest('.ui-layout-pane').height();
   
           this.tableConfig = $.extend({
+            rowDblClick: onDoubleClick.bind(this),
             height: "100%",
             selectableRangeMode: "click",
             selectable: true,
@@ -528,6 +529,12 @@
       this.refreshSelection();
     };
 
+    function onDoubleClick(e,row){
+      this.publish('doubleClick',[row]);
+      window.getSelection().removeAllRanges();
+    }
+
+    
     ControlCode._onDestroy = function() {
       if(this.mainTable && this.mainTable.destroy){
         this.mainTable.destroy();
