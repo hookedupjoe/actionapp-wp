@@ -161,7 +161,7 @@
       var tmpThis = this;
       ThisApp.getResourceFromSource('control', tmpControlName, tmpControlSource, tmpControlName).then(function (theLoadedControl) {
         var tmpNewTabControl = theLoadedControl.create(tmpTabKey);
-        tmpThis.addTab({ item: tmpTabKey, text: tmpTabTitle + tmpCloseMe, icon: 'table', content: '' })
+        tmpThis.addTab({ item: tmpTabKey, text: tmpTabTitle + tmpCloseMe, icon: (tmpOptions.icon || ''), content: '' })
         var tmpNewSpot = tmpThis.getTabSpot(tmpTabKey);
         tmpNewTabControl.loadToElement(tmpNewSpot).then(function () {
           tmpThis.parts[tmpTabKey] = tmpNewTabControl;
@@ -208,6 +208,9 @@
     var tmpIcon = '';
     if (tmpOptions.icon) {
       tmpIcon = tmpOptions.icon;
+      if( tmpIcon.indexOf('icon') == -1){
+        tmpIcon = 'icon ' + tmpIcon;
+      }
     }
     var tmpText = '';
     if (tmpOptions.text) {
