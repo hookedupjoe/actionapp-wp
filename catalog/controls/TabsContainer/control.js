@@ -34,6 +34,7 @@
 
   ControlCode._onInit = _onInit;
   function _onInit() {
+    //this.parts = {};
     this.uniqueName = 'tab-group' + ThisApp.controls.getNextCounter();
     this.config = {
       group: this.uniqueName
@@ -74,15 +75,39 @@
       return;
     }
   }
-  
+
+  //--- Control Action: closeTabRequest
+  ControlCode.closeTabRequest = function(theParams, theTarget){
+      var tmpParams = ThisApp.getActionParams(theParams, theTarget, ['tab']);
+      var tmpTabName = tmpParams.tab;
+      if( !(tmpTabName) ){
+          alert('Could not close tab, no tab name provided');
+      }
+      this.closeTab(tmpTabName);
+      this.publish('closeTab',[this,tmpTabName]);
+  }
+
   //--- ToDo: Add control mgmt with destroy and reopen tab
   ControlCode.closeTab = closeTab;
   function closeTab(theTabName) {
+
+    if( this.parts[theTabName] ){
+      var tmpToRemove = this.parts[theTabName];
+      if( tmpToRemove && tmpToRemove._subid ){
+          tmpToRemove.unsubscribe('',tmpToRemove._subid);
+      }
+      if( tmpToRemove && tmpToRemove.destroy ){
+          tmpToRemove.destroy();
+      }
+      delete this.parts[theTabName];
+    }
+
     var tmpAttrs = this.getByAttr$({group:this.config.group,item:theTabName});
     tmpAttrs.remove();
     tmpAttrs = this.getByAttr$({group:this.config.group,item:''});
     if( tmpAttrs && tmpAttrs.length > 0){
       var tmpItem = $(tmpAttrs.get(tmpAttrs.length-1)).attr('item');
+      //--- ToDo: Go to last tab, track open tab history?
       this.gotoTab(tmpItem);
     }
     if( this.tabIndex.hasOwnProperty(theTabName) ){
@@ -108,6 +133,56 @@
       return '';
     }
   }
+
+  function onTabAction(){
+    console.log( 'onTabAction', arguments);
+    this.publish('tabAction',[this])
+  }
+  
+  //--- Will create a new tab with dynamic content or open if exists already
+  //--- ** Use addTab for simple tab with a spot for general use
+  ControlCode.openTab = openTab;
+  function openTab(theOptions) {
+    if( !(theOptions) ){
+      return;
+    }
+    var tmpOptions = theOptions || {};
+    var tmpTabKey = tmpOptions.tabname;
+    //var tmpPartName = tmpOptions.partname || tmpTabKey;
+    var tmpTabTitle = tmpOptions.tabtitle || tmpOptions.itemtitle || tmpOptions.title || tmpTabKey;
+    if (this.parts[tmpTabKey]) {
+      this.gotoTab(tmpTabKey);
+    } else {
+      //--- ToDo: Expose external / centralize ???
+      var tmpCloseMe = '<i style="margin-right:-5px;margin-left:10px;" tab="' + tmpTabKey + '" myaction="closeTabRequest" class="icon close grey inverted"></i>';
+
+      var tmpSetupDetails = tmpOptions;
+      var tmpControlName = tmpSetupDetails.controlname || 'PostsView';
+      var tmpControlSource = tmpSetupDetails.catalog || '_designer';
+      var tmpThis = this;
+      ThisApp.getResourceFromSource('control', tmpControlName, tmpControlSource, tmpControlName).then(function (theLoadedControl) {
+        var tmpNewTabControl = theLoadedControl.create(tmpTabKey);
+        tmpThis.addTab({ item: tmpTabKey, text: tmpTabTitle + tmpCloseMe, icon: 'table', content: '' })
+        var tmpNewSpot = tmpThis.getTabSpot(tmpTabKey);
+        tmpNewTabControl.loadToElement(tmpNewSpot).then(function () {
+          tmpThis.parts[tmpTabKey] = tmpNewTabControl;
+          //--- Go to the newly added card (to show it and hide others)
+          if (tmpNewTabControl.setup) {
+            tmpNewTabControl.setup(tmpSetupDetails);
+          }
+          if (tmpControlName) {
+            var tmpSubID = tmpNewTabControl.subscribe('tabAction', onTabAction.bind(this))
+            tmpNewTabControl._subid = tmpSubID;
+          }
+          ThisApp.delay(1).then(function () {
+            tmpThis.gotoTab(tmpTabKey);
+          })
+        });
+      })
+    }
+  }
+
+
 
   ControlCode.addTab = addTab;
   function addTab(theOptions) {
