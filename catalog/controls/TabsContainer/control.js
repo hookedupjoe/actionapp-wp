@@ -35,6 +35,7 @@
   ControlCode._onInit = _onInit;
   function _onInit() {
     //this.parts = {};
+    this.opentabs = {};
     this.uniqueName = 'tab-group' + ThisApp.controls.getNextCounter();
     this.config = {
       group: this.uniqueName
@@ -134,15 +135,21 @@
     }
   }
 
-  function onTabAction(){
-    console.log( 'onTabAction', arguments);
-    this.publish('tabAction',[this])
+  function onTabAction(theEvent, theControl, theTabAction){
+    console.log( 'onTabAction', theTabAction);
+    //ToDo: Different
+    if( theTabAction === 'close'){
+      this.closeTab(theControl.options.name);
+    } else {
+      this.publish('tabAction',[this,theControl, theTabAction])
+    }
   }
   
   //--- Will create a new tab with dynamic content or open if exists already
   //--- ** Use addTab for simple tab with a spot for general use
   ControlCode.openTab = openTab;
   function openTab(theOptions) {
+    var dfd = jQuery.Deferred();
     if( !(theOptions) ){
       return;
     }
@@ -151,37 +158,52 @@
     var tmpTabTitle = tmpOptions.tabtitle || tmpOptions.itemtitle || tmpOptions.title || tmpTabKey;
     if (this.parts[tmpTabKey]) {
       this.gotoTab(tmpTabKey);
+      dfd.resolve(this.parts[tmpTabKey]);
+    } else if(this.opentabs[tmpTabKey]) {
+      this.gotoTab(tmpTabKey);
+      dfd.resolve(true);
     } else {
+
       //--- ToDo: Expose external / centralize ???
-      var tmpCloseMe = '<i style="margin-right:-5px;margin-left:10px;" tab="' + tmpTabKey + '" myaction="closeTabRequest" class="icon close grey inverted"></i>';
+      var tmpCloseMe = '<i style="margin-right:-5px;margin-left:10px;" tab="' + tmpTabKey + '" myaction="closeTabRequest" class="icon window close outline black inverted"></i>';
+      if( tmpOptions.closable == false){
+        tmpCloseMe = '';
+      }
 
       var tmpSetupDetails = tmpOptions;
-      var tmpControlName = tmpSetupDetails.controlname || 'PostsView';
+      var tmpControlName = tmpSetupDetails.controlname || '';
       var tmpControlSource = tmpSetupDetails.catalog || '_designer';
       var tmpThis = this;
-      ThisApp.getResourceFromSource('control', tmpControlName, tmpControlSource, tmpControlName).then(function (theLoadedControl) {
-        var tmpNewTabControl = theLoadedControl.create(tmpTabKey);
-        tmpThis.addTab({ item: tmpTabKey, text: tmpTabTitle + tmpCloseMe, icon: (tmpOptions.icon || ''), content: '' })
-        var tmpNewSpot = tmpThis.getTabSpot(tmpTabKey);
-        tmpNewTabControl.loadToElement(tmpNewSpot).then(function () {
-          tmpThis.parts[tmpTabKey] = tmpNewTabControl;
-          //--- Go to the newly added card (to show it and hide others)
-          if (tmpNewTabControl.setup) {
-            tmpNewTabControl.setup(tmpSetupDetails);
-          }
-          if (tmpControlName) {
-            var tmpSubID = tmpNewTabControl.subscribe('tabAction', onTabAction.bind(this))
-            tmpNewTabControl._subid = tmpSubID;
-          }
-          ThisApp.delay(1).then(function () {
-            tmpThis.gotoTab(tmpTabKey);
-          })
-        });
-      })
+      if( !(tmpControlName) ){
+        this.opentabs[tmpTabKey] = true;
+        var tmpContent = tmpOptions.content || tmpOptions.text || tmpOptions.html || '';
+        tmpThis.addTab({ item: tmpTabKey, text: tmpTabTitle + tmpCloseMe, icon: (tmpOptions.icon || ''), content: tmpContent });
+        dfd.resolve(true);
+      } else {
+        ThisApp.getResourceFromSource('control', tmpControlName, tmpControlSource, tmpControlName).then(function (theLoadedControl) {
+          var tmpNewTabControl = theLoadedControl.create(tmpTabKey);
+          tmpThis.addTab({ item: tmpTabKey, text: tmpTabTitle + tmpCloseMe, icon: (tmpOptions.icon || ''), content: '' })
+          var tmpNewSpot = tmpThis.getTabSpot(tmpTabKey);
+          tmpNewTabControl.loadToElement(tmpNewSpot).then(function () {
+            tmpThis.parts[tmpTabKey] = tmpNewTabControl;
+            //--- Go to the newly added card (to show it and hide others)
+            if (tmpNewTabControl.setup) {
+              tmpNewTabControl.setup(tmpSetupDetails);
+            }
+            if (tmpControlName) {
+              var tmpSubID = tmpNewTabControl.subscribe('tabAction', onTabAction.bind(tmpThis))
+              tmpNewTabControl._subid = tmpSubID;
+            }
+            ThisApp.delay(1).then(function () {
+              tmpThis.gotoTab(tmpTabKey);
+              dfd.resolve(tmpThis.parts[tmpTabKey]);
+            })
+          });
+        })
+      }
     }
+    return dfd.promise();
   }
-
-
 
   ControlCode.addTab = addTab;
   function addTab(theOptions) {
