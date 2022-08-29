@@ -52,6 +52,9 @@ class ActAppCommon {
 		wp_register_style( 'tabulator_css',    $tmplibloc . 'lib/tabulator/css/tabulator.min.css', false,   $my_css_ver );
 		wp_enqueue_style ( 'tabulator_css' );
 
+		wp_register_style( 'jodit_css',    $tmplibloc . 'lib/jodit/jodit.min.css', false,   $my_css_ver );
+		wp_enqueue_style ( 'jodit_css' );
+
 //		wp_register_style( 'tabulator_sem_css',    $tmplibloc . 'lib/tabulator/css/tabulator_semanticui.min.css', false,   $my_css_ver );
 //		wp_enqueue_style ( 'tabulator_sem_css' );
 
@@ -64,6 +67,7 @@ class ActAppCommon {
 		wp_enqueue_script( 'tabulator', $tmplibloc . 'lib/tabulator/js/tabulator.min.js', array(), $my_js_ver );
 		wp_enqueue_script( 'tabulator_xlsx', $tmplibloc . 'lib/tabulator/addons/xlsx.full.min.js', array(), $my_js_ver );
 		wp_enqueue_script( 'tabulator_moment', $tmplibloc . 'lib/tabulator/addons/moment.2.24.js', array(), $my_js_ver );
+		wp_enqueue_script( 'jodit', $tmplibloc . 'lib/jodit/jodit.min.js', array(), $my_js_ver );
 
 		
 		$tmpConfig = array(
