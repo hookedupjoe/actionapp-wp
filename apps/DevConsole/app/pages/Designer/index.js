@@ -80,7 +80,8 @@ thisPageSpecs.required = {
         ThisPage.initOnFirstLoad().then(
             function () {
                 //~_onFirstLoad//~
-//for debug in console
+
+//temporary - for debug in console
 window.tmpPage = ThisPage;
 window.tmpParts = ThisPage.parts;
 
@@ -99,12 +100,16 @@ ThisPage.ctlHeader.setHeader('Developer Workspace');
 ThisPage.ctlBody.addTab({item:'home',text: '', icon: 'icon home blue', content:''});
 ThisPage.ctlBody.loadTabSpot('home','Initial Page, Welcome');
 
-ThisPage.ctlBody.addTab({item:'doctypes',text: 'Document Types', icon: 'icon circle green', content:'Initial Content for Doc Types'});
+//ThisPage.ctlBody.addTab({item:'doctypes',text: 'Document Types', icon: 'icon circle green', content:'Initial Content for Doc Types'});
 ThisPage.ctlBody.gotoTab('home');
 
+ThisPage.ctlNav.addTab({item:'apps',text: 'Apps', icon: 'icon globe blue', content:''});
 ThisPage.ctlNav.addTab({item:'catalogs',text: 'Catalogs', icon: 'icon archive blue', content:''});
+ThisPage.ctlNav.gotoTab('apps');
 
 ThisPage.ctlStatusbar.setContent('Welcome to the designer console');
+
+
 //~_onFirstLoad~//~
                 ThisPage._onActivate();
             }
