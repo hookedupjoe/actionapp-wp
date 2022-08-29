@@ -93,6 +93,9 @@
       tmpViewer.subscribe('selectionChange', refreshSelection.bind(this));
       tmpViewer.subscribe('tableBuilt', onTableBuilt.bind(this));
   
+      tmpViewer.subscribe('doubleClick', this.editDoc.bind(this))
+
+
       //--- Update the internal configuration to hide stuff we don't need for our use / in dialog
       var tmpToHide = ['submit-bar',
         'headertitle',
@@ -167,9 +170,7 @@
         if (!theSubmit) {
           return;
         }
-  
         self.parts.mainform.submitForm().then(function() {
-          console.log('submitted', arguments);
           tmpViewer.showReport();
         });
   
@@ -232,7 +233,6 @@
       };
   
       ThisApp.apiCall(tmpPostOptions).then(function() {
-        console.log('recycle complete', arguments);
         tmpViewer.showReport();
       });
   

@@ -139,7 +139,6 @@
 
     var self = this;
     ThisApp.apiCall(tmpPostOptions).then(function () {
-      console.log('recycle complete', arguments);
       self.viewer.showReport();
     });
 

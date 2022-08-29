@@ -244,7 +244,6 @@
       };
   
       ThisApp.apiCall(tmpPostOptions).then(function() {
-        console.log('recycle complete', arguments);
         tmpViewer.showReport();
       });
   
