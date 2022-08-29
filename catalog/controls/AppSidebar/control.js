@@ -35,7 +35,7 @@
                 "icon": "plus",
                 compact: true,
                 "name": "btn-page-tb-new",
-                "label": "Add",
+                "label": "",
                 "onClick": {
                   "run": "action",
                   "action": "newDoc"
@@ -48,7 +48,7 @@
                   "icon": "pencil",
                   compact: true,
                   "name": "btn-page-tb-edit",
-                  "label": "Edit",
+                  "label": "",
                   "onClick": {
                     "run": "action",
                     "action": "editDoc"
@@ -71,10 +71,10 @@
                   "ctl": "button",
                   "toLeft": true,
                   "color": "blue",
-                  "icon": "right arrow",
+                  "icon": "globe",
                   compact: true,
                   "name": "btn-page-tb-open",
-                  "label": "Open",
+                  "label": "Design",
                   "onClick": {
                     "run": "action",
                     "action": "openInDesigner"
@@ -106,7 +106,7 @@
       tmpViewer.subscribe('selectionChange', refreshSelection.bind(this));
       tmpViewer.subscribe('tableBuilt', onTableBuilt.bind(this));
   
-      tmpViewer.subscribe('doubleClick', this.editDoc.bind(this))
+      tmpViewer.subscribe('doubleClick', this.openInDesigner.bind(this))
 
 
       //--- Update the internal configuration to hide stuff we don't need for our use / in dialog
@@ -198,16 +198,13 @@
       var tmpViewer = this.getViewControl();
       var tmpSelected = tmpViewer.getSelectedKeys();
       var tmpRow = tmpViewer.mainTable.getRow(tmpSelected[0]);
-      var self = this;
       var tmpDoc = tmpRow._row.data;
-      console.log( 'tmpDoc', tmpDoc);
       var tmpName = tmpDoc.name || '';
       if( !(tmpName) ){
         alert('No name found for this app', "Error", 'e');
         return;
       }
-      
-
+      this.publish('openDesign',[this,tmpName,tmpDoc]);
     };
 
     ControlCode.editDoc = function() {
