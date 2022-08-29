@@ -98,10 +98,6 @@
               ctl: "div",
               classes: "item",
               text: '<span class="table-footer one-liner" myspot="selected-count"></span>'
-            }, {
-              ctl: "divider",
-              fitted: true,
-              clearing: true
             }]
         }]
       }]

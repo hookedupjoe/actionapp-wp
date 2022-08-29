@@ -72,12 +72,6 @@ License: MIT
 						ctl: "layout",
 						name: "layout",
 						east: [
-							
-							{
-								ctl: "divider",
-								fitted: true,
-								clearing: true
-							},
 							{
 								ctl: "spot",
 								name: "preview-area",
