@@ -34,6 +34,16 @@ if( is_string($tmpDetails) ){
 //--- For sites with a framed control, set $includeFrame = true if $includeSite is true also.
 $includeSite = true;
 $includeFrame = true;
+$tmpNoSiteParam = $_GET['nosite'];
+if( $tmpNoSiteParam ){
+	$includeSite = false;
+}
+
+$tmpNoFrameParam = $_GET['noframe'];
+if( $tmpNoFrameParam ){
+	$includeFrame = false;
+}
+
 
 // Summary:  ANY-F for unframed; ANY-T for framed 
 // Note: If there is a control with a frame, use a frame always
