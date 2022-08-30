@@ -332,6 +332,8 @@ class ActAppDesigner {
 		add_action('enqueue_block_editor_assets',  array('ActAppDesigner','actapp_init_blocks_content'),11,2);
 		add_action('enqueue_block_editor_assets',  array('ActAppDesigner','actapp_init_blocks'),11,2);
 
+
+
 	}
 
 	
@@ -788,8 +790,6 @@ class ActAppDesigner {
 
 }
 
-//--- Just a demo, consider use case for server side dynamic ***
-require_once ACTIONAPP_WP_BLOCKS_DIR . '/blocks/actappdesign/ActAppDynamicDemo/Object.php';
 
 //--- Create stub documents when plugin initialized
 register_activation_hook( __FILE__, array( 'ActAppDesigner', 'activation_hook' ) );
@@ -806,3 +806,6 @@ add_filter(
 
 add_action( 'wp_ajax_foobar', array('ActAppDesigner','foobar_handler') );
 
+//--- Just a demo, consider use case for server side dynamic ***
+require_once ACTIONAPP_WP_BLOCKS_DIR . '/blocks/actappdesign/ActAppDynamicDemo/Object.php';
+require_once ACTIONAPP_WP_BLOCKS_DIR . '/blocks/actappdesign/ActAppReportView/Object.php';
