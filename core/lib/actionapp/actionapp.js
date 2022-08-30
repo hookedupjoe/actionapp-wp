@@ -9447,15 +9447,6 @@ License: MIT
                 tmpDateType = 'time';
             } else if( theControlName == 'datetime'){
                 tmpDateType = 'datetime-local';
-            // } else if( theControlName == 'datectl'){
-            //     tmpAutoIcon = 'calendar';
-            //     tmpDateFormat = 'date';
-            // } else if( theControlName == 'timectl'){
-            //     tmpAutoIcon = 'clock';
-            //     tmpDateFormat = 'time';
-            // } else if( theControlName == 'datetimectl'){
-            //     tmpAutoIcon = 'calendar outline';
-            //     tmpDateFormat = 'datetime';
             }
             if( tmpAutoIcon ){
                 tmpIsDate = true;
@@ -9463,10 +9454,7 @@ License: MIT
             } else if( tmpDateType ){
                 tmpIsDate = true;
             }
-            
-            
             var tmpValue = tmpObject.default || '';
-
             //ToDo: Only do this to tmpObject.default ??
             if( tmpValue === undefined || tmpValue === 'undefined'){
                 tmpValue = '';
@@ -9599,8 +9587,10 @@ License: MIT
             if( tmpIcon ){
                 tmpHTML.push('<i class="' + tmpIcon + ' icon"></i>');
             }
-            tmpHTML.push(getNoteMarkup(theObject));
-            tmpHTML.push(getContentHTML(theControlName, tmpItems, theControlObj));
+            if (theControlName !== 'hidden') {
+                tmpHTML.push(getNoteMarkup(theObject));
+                tmpHTML.push(getContentHTML(theControlName, tmpItems, theControlObj));
+            }
             tmpHTML.push('</div>');
             if (tmpIcon || (tmpItems && tmpItems.length > 0)) {
                 tmpHTML.push('</div>');
