@@ -261,7 +261,7 @@
     if (tmpOptions.content) {
       tmpContent = tmpOptions.content;
     }
-    var tmpCard = '<div appuse="cards" class="hidden" myspot="' + tmpSpotName + '" group="' + tmpGroup + '" item="' + tmpItem + '">';
+    var tmpCard = '<div appuse="cards" style="height:100%;width:100%;margin:auto;overflow:hidden;" class="hidden" myspot="' + tmpSpotName + '" group="' + tmpGroup + '" item="' + tmpItem + '">';
     tmpCard += tmpContent + '</div>';
 
     var tmpPostFix = '-' + this.uniqueName;

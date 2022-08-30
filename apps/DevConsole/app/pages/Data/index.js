@@ -331,11 +331,17 @@ var thisPageSpecs = {
 
     function onURLOpenRequest(theEvent, theControl, theURL){
         console.log( 'onURLOpenRequest', theEvent, theControl, theURL);
-        window.open(theURL);
+        //window.open(theURL);
+        var tmpURL = theURL;
+        tmpURL += '?nosite=1';
+
 //--- ToDo: Enable and make this like others with close request, etc
-        //tmpDataPage.parts.body.addTab({item:'temp1',text: "Viewer", icon: 'eye', content:''})
-        //tmpDataPage.parts.body.loadTabSpot('temp1','<style>.embed-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; } .embed-container iframe, .embed-container object, .embed-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }</style><div class="embed-container"><iframe src="' + theURL + '" style="border:0"></iframe></div>')
-    }
+// tmpDataPage.parts.body.addTab({item:'temp1',text: "Viewer", icon: 'eye', content:''})
+// tmpDataPage.parts.body.loadTabSpot('temp1','<style>.embed-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; } .embed-container iframe, .embed-container object, .embed-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }</style><div class="embed-container"><iframe src="' + tmpURL + '" style="border:0"></iframe></div>')
+
+tmpDataPage.parts.body.addTab({item:'temp1',text: "Viewer", icon: 'eye', content:''})
+tmpDataPage.parts.body.loadTabSpot('temp1','<iframe src="' + tmpURL + '" style="border:0;height:100%;width:100%;margin:auto;"></iframe>')
+}
 
     ThisPage._onActivate = function () {
         //~_onActivate//~
