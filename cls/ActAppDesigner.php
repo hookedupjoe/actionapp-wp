@@ -712,10 +712,12 @@ class ActAppDesigner {
 					array_push($tmpJson[$iFieldName], $tmpMeta[$iFieldName]);
 				}
 			}
-			foreach($tmpJson as $iField => $iVal) {
-				if( count($iVal) == 1){
-					$tmpVal = $iVal[0];
-					$tmpJson[$iField] = maybe_unserialize($tmpVal);
+			if( is_array($tmpJson)){
+				foreach($tmpJson as $iField => $iVal) {
+					if( count($iVal) == 1){
+						$tmpVal = $iVal[0];
+						$tmpJson[$iField] = maybe_unserialize($tmpVal);
+					}
 				}
 			}
 		}
