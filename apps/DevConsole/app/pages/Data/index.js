@@ -320,27 +320,38 @@ var thisPageSpecs = {
                     
                 });
             })
-            
-
         }
-
-        
-        
-
     }
 
-    function onURLOpenRequest(theEvent, theControl, theURL){
-        console.log( 'onURLOpenRequest', theEvent, theControl, theURL);
-        //window.open(theURL);
+    function onURLOpenRequest(theEvent, theControl, theURL, theOptions){
+        var tmpOptions = theOptions || {};
+        
+        var tmpUseFrame = true;
+
+        if (!(tmpUseFrame)){
+            window.open(theURL);
+            return;
+        } 
+
         var tmpURL = theURL;
-        tmpURL += '?nosite=1';
+        var tmpToAdd = 'nosite=1';
+        if( tmpURL.indexOf('?') == -1){
+          tmpToAdd = '?' + tmpToAdd;
+        } else {
+          tmpToAdd = '&' + tmpToAdd;
+        }
+        tmpURL += tmpToAdd;
+        var tmpTabID = tmpOptions.name || ('tab-' + ThisApp.controls.getNextCounter());
 
-//--- ToDo: Enable and make this like others with close request, etc
-// tmpDataPage.parts.body.addTab({item:'temp1',text: "Viewer", icon: 'eye', content:''})
-// tmpDataPage.parts.body.loadTabSpot('temp1','<style>.embed-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; } .embed-container iframe, .embed-container object, .embed-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }</style><div class="embed-container"><iframe src="' + tmpURL + '" style="border:0"></iframe></div>')
+        var tmpTabDetails = {
+            tabname: tmpTabID,
+            icon: tmpOptions.icon || '',
+            tabtitle: tmpOptions.title || tmpTabID,
+            url: tmpURL
+        }
+        tmpDataPage.parts.body.openTab(tmpTabDetails);
 
-tmpDataPage.parts.body.addTab({item:'temp1',text: "Viewer", icon: 'eye', content:''})
-tmpDataPage.parts.body.loadTabSpot('temp1','<iframe src="' + tmpURL + '" style="border:0;height:100%;width:100%;margin:auto;"></iframe>')
+
 }
 
     ThisPage._onActivate = function () {

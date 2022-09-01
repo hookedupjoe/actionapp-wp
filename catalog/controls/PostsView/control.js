@@ -23,10 +23,10 @@
                 "ctl": "button",
                 "toLeft": true,
                 "color": "blue",
-                "icon": "plus",
+                "icon": "wordpress simple",
                 compact: true,
                 "name": "btn-page-tb-open",
-                "label": "Open in new tab",
+                "label": "Open",
                 "onClick": {
                   "run": "action",
                   "action": "openURL"
@@ -39,7 +39,7 @@
                 "icon": "eye",
                 compact: true,
                 "name": "btn-page-tb-open-details",
-                "label": "Post Details",
+                "label": "Show Details",
                 "onClick": {
                   "run": "action",
                   "action": "openDetails"
@@ -226,11 +226,19 @@
       }
       var tmpDoc = tmpData[0];
       var tmpURL = tmpDoc['__url'];
+      var tmpID = tmpDoc['id'];
       if( !tmpURL ){
         alert('No URL found');
         return;
       }
+
+      var tmpTitle = tmpDoc['__doctitle'] || tmpURL;
+      var tmpIcon = 'wordpress simple';
+      var tmpTabName = 'doc-' + tmpID;
+
       if( theShowDetails === true ){
+        tmpIcon = 'eye'
+        tmpTabName += '-details';
         var tmpToAdd = 'devonlyview=fields';
         if( tmpURL.indexOf('?') == -1){
           tmpToAdd = '?' + tmpToAdd;
@@ -240,7 +248,7 @@
         tmpURL += tmpToAdd;
       }
       //window.open(tmpURL,'_blank');
-      this.publish('urlOpenRequest', [this,tmpURL]);
+      this.publish('urlOpenRequest', [this,tmpURL,{name: tmpTabName, title:tmpTitle, icon: tmpIcon}]);
     };
 
     ControlCode.restoreSelected = function() {

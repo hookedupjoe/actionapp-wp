@@ -102,6 +102,10 @@
       }
       delete this.parts[theTabName];
     }
+    if( this.opentabs[theTabName] ){
+      //ToDo: Anything else?
+      delete this.opentabs[theTabName];
+    }
 
     var tmpAttrs = this.getByAttr$({group:this.config.group,item:theTabName});
     tmpAttrs.remove();
@@ -151,11 +155,14 @@
   function openTab(theOptions) {
     var dfd = jQuery.Deferred();
     if( !(theOptions) ){
+      console.log( 'no theOptions');
       return;
     }
     var tmpOptions = theOptions || {};
     var tmpTabKey = tmpOptions.tabname || tmpOptions.name || tmpOptions.item;
     var tmpTabTitle = tmpOptions.tabtitle || tmpOptions.itemtitle || tmpOptions.title || tmpTabKey;
+    var tmpTabURL = tmpOptions.url || '';
+
     if (this.parts[tmpTabKey]) {
       this.gotoTab(tmpTabKey);
       dfd.resolve(this.parts[tmpTabKey]);
@@ -170,13 +177,17 @@
         tmpCloseMe = '';
       }
 
+      var tmpFrameContent = '';
+      if( tmpTabURL ){
+        tmpFrameContent = '<iframe src="' + tmpTabURL + '" style="border:0;height:100%;width:100%;margin:auto;"></iframe>';
+      }
       var tmpSetupDetails = tmpOptions;
       var tmpControlName = tmpSetupDetails.controlname || '';
       var tmpControlSource = tmpSetupDetails.catalog || '_designer';
       var tmpThis = this;
-      if( !(tmpControlName) ){
+      if( tmpFrameContent && !(tmpControlName) ){
         this.opentabs[tmpTabKey] = true;
-        var tmpContent = tmpOptions.content || tmpOptions.text || tmpOptions.html || '';
+        var tmpContent = tmpFrameContent || tmpOptions.content || tmpOptions.text || tmpOptions.html || '';
         tmpThis.addTab({ item: tmpTabKey, text: tmpTabTitle + tmpCloseMe, icon: (tmpOptions.icon || ''), content: tmpContent });
         dfd.resolve(true);
       } else {
