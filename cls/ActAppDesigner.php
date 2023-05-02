@@ -40,7 +40,7 @@ class ActAppDesigner {
 					'title' => __( 'Designer Widgets'),
 				),
 			),
-			$categories,
+			$categories
 		);
 	}
 

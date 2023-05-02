@@ -62,6 +62,17 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 	  );
 	  register_rest_route( $namespace, '/' . $path, [$routeInfo]);     
 
+	//--- To get csv file as json
+	$path = 'json_from_csv_file';
+	$routeInfo = array(
+		'methods'             => 'GET',
+		'callback'            => array( $this, 'get_json_from_csv_file' ),
+		'permission_callback' => array( $this, 'get_edit_permissions_check' )
+	);
+	register_rest_route( $namespace, '/' . $path, [$routeInfo]);     
+	
+	  
+
 //=========== ADMIN MANAGEMENT APIs ===============
 	  //--- Admin / Developer access to user data for user mgmt
 	  $path = 'users';
@@ -730,7 +741,7 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 		unset($theDoc->__postdate);
 		unset($theDoc->__posttype);
 		
-		$tmpResults = self::save_doc(wp_json_encode($theDoc),$tmpPostType,false,);
+		$tmpResults = self::save_doc(wp_json_encode($theDoc),$tmpPostType,false);
 		//--- Return new post id or slug?
 		return $tmpResults;
 	}
@@ -1226,6 +1237,61 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 		exit();
 	}
 	
+	public function get_json_from_csv_file($request) {
+		//$file="C:\\aa\\mock-data.csv";
+		$file = ACTIONAPP_WP_URL . '/extra/DepthChartPreWeek7.csv';
+		$csv = file_get_contents($file);
+		$array = array_map("str_getcsv", explode("\n", $csv));
+		$tmpDocCount = count($array);
+
+		$tmpID = 'na';
+		$pos = $_GET['pos'];
+		$fn = $_GET['fn'];
+		// if(!empty($fn)){
+		// 	$file = ACTIONAPP_WP_URL . '/extra/'. $fn;
+		// }
+		$tmpStart = 1;
+		$tmpEnd = $tmpDocCount;		
+		if( $pos != ''){
+			if( $pos == 'auto'){
+				$current_user = wp_get_current_user();
+				$tmpID = $current_user->ID;
+				$tmpLastPos = get_user_meta( $tmpID, 'mock_data_pos', true ); 
+				if( $tmpLastPos == ''){
+					$pos = 1;
+				} else {
+					$pos = intval(''.$tmpLastPos) + 1;
+					if( $pos >= $tmpDocCount-1){
+						$pos = 1;
+					}
+				}
+				update_user_meta( $tmpID, 'mock_data_pos', $pos ); 
+			}
+			$tmpStart = intval($pos);
+			$tmpEnd = $tmpStart + 1;
+		}
+		$tmpFieldNames = $array[0];
+		$tmpFNCount = count($tmpFieldNames);
+		$tmpData = [];
+		for ($iPos = $tmpStart; $iPos < $tmpEnd; $iPos++) {
+			$tmpDoc = $array[$iPos];
+			$tmpDocEntry = [];
+			if(count($tmpDoc) == $tmpFNCount){
+				for ($iFieldPos = 0; $iFieldPos < $tmpFNCount; $iFieldPos++) {
+					$tmpFN = $tmpFieldNames[$iFieldPos];
+					$tmpDocEntry[$tmpFN] = $tmpDoc[$iFieldPos];
+				}
+				$tmpDocEntry['posid'] = ''.$iPos;
+				array_push($tmpData, $tmpDocEntry);
+			}
+		}
+		$tmpRet = array('data' => $tmpData,'id' => $tmpID, 'pos' => $pos);
+		$json = json_encode($tmpRet);
+		header('Content-Type: application/json');
+		echo $json;
+		exit();
+	}
+
 	public function get_json_from_csv($request) {
 		//$file="C:\\aa\\mock-data.csv";
 		$file = ACTIONAPP_WP_URL . '/extra/mock-data.csv';

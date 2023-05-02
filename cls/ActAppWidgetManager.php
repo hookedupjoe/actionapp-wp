@@ -38,7 +38,7 @@ class ActAppWidgetManager {
 					'title' => __( 'UI Widgets'),
 				),
 			),
-			$categories,
+			$categories
 		);
 	}
 
