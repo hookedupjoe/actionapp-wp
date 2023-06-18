@@ -344,7 +344,7 @@ class ActAppDesigner {
 		self::custom_post_design_doc();
 	}
 
-	private function custom_post_actapp_doc() {
+	private static function custom_post_actapp_doc() {
 
 		$labels = array(
 		'name'               => __( 'ActApp Docs' ),
@@ -384,7 +384,7 @@ class ActAppDesigner {
 
 	}
 
-	private function custom_post_design_element() {
+	private static function custom_post_design_element() {
 
 		$labels = array(
 		'name'               => __( 'Design Elements' ),
@@ -423,7 +423,7 @@ class ActAppDesigner {
 		register_post_type( 'actappelem', $args);
 	}
 
-	private function custom_post_designer_access() {
+	private static function custom_post_designer_access() {
 
 		$labels = array(
 		'name'               => __( 'Designer Access Points' ),
@@ -471,7 +471,7 @@ class ActAppDesigner {
 	}
 
 
-	private function custom_post_design_doc() {
+	private static function custom_post_design_doc() {
 
 		$labels = array(
 		'name'               => __( 'Designer Docs' ),
