@@ -216,10 +216,10 @@ class ActAppDesigner {
         $content = 'Internal Use';
 		$tmpNewDoc = ActAppCommon::assure_doc($slug, $post_type, $title, $content);
 
-		$slug = 'resources';
-        $title = 'Designer Resources';
-        $content = 'Internal Use';
-		$tmpNewDoc = ActAppCommon::assure_doc($slug, $post_type, $title, $content);
+		// $slug = 'resources';
+        // $title = 'Designer Resources';
+        // $content = 'Internal Use';
+		// $tmpNewDoc = ActAppCommon::assure_doc($slug, $post_type, $title, $content);
 
 		$slug = 'appconsole';
         $title = 'Applications Console';
