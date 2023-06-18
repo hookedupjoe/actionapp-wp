@@ -37,11 +37,11 @@
     };
     const iconEl = BlockEditor.getControlIcon(info.name);
 
-    BlockEditor.addBooleanAtts(info.atts, ['raised', 'stacked', 'vertical', 'clearing', 'hasdropindicator']);
+    BlockEditor.addBooleanAtts(info.atts, ['raised', 'stacked', 'vertical', 'clearing', 'hasdropindicator', 'inverted']);
     BlockEditor.addStringAtts(info.atts, ['color', 'size', 'attached', 'alignment', 'basic']);
 
     var tmpClassSpecs = {
-        boolean: ['raised', 'stacked', 'vertical', 'basic', 'clearing'],
+        boolean: ['raised', 'stacked', 'vertical', 'basic', 'clearing', 'inverted'],
         string: ['color', 'size', 'attached', 'alignment']
     }
     function getClass(theProps, theIsEditMode) {
@@ -131,7 +131,8 @@
                 BlockEditor.getStandardProperty(props, 'attached', 'Attached', 'attached'),
                 BlockEditor.getStandardProperty(props, 'raised', 'Raised', 'checkbox'),
                 BlockEditor.getStandardProperty(props, 'stacked', 'Stacked', 'checkbox'),
-                BlockEditor.getStandardProperty(props, 'vertical', 'Vertical', 'checkbox'),
+                BlockEditor.getStandardProperty(props, 'vertical', 'Fitted', 'checkbox'),
+                BlockEditor.getStandardProperty(props,'inverted', 'Inverted', 'checkbox' ),
                 BlockEditor.getStandardProperty(props, 'clearing', 'Contain Floaters', 'checkbox')
             ];
             var tmpFormatProperties = [
