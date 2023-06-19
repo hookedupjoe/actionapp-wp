@@ -243,7 +243,6 @@ License: MIT
 			
 			var tmpTabTitle = tmpSetupDetails.tabTitle || theName;
 			
-			//console.log('tmpSetupDetails',tmpSetupDetails)
             var tmpControlName = tmpSetupDetails.controlname || '';
             var tmpControlSource = tmpSetupDetails.catalog || '_designer';
 			if( !(tmpControlName) ){
@@ -407,7 +406,6 @@ License: MIT
 		
 		//this.parts['properties'].setValue(JSON.stringify(tmpSpecs,null,2));
 		this.editSpecs = tmpSpecs; //by reference
-		console.log( 'this.editSpecs', this.editSpecs);
 		var tmpProps = this.parts.propeditor.parts.propeditor;
 		tmpProps.loadData(tmpSpecs);
 
@@ -848,18 +846,16 @@ License: MIT
 		var tmpNewSpecs = this.parts.propeditor.parts.propeditor.getData({excludeHidden:true});
 		var tmpCtl = this.activeControl;
 		$.extend(this.editSpecs, tmpNewSpecs);		
-		console.log( 'this.editSpecs', this.editSpecs);
 		var tmpName = this.editSpecs.name;
 		var tmpCtlName = this.editSpecs.ctl;
 		var tmpNewHTML = ThisApp.controls.getHTMLForControl(tmpCtlName, this.editSpecs, tmpCtl);
-		console.log( 'tmpNewHTML', tmpNewHTML);
 		var tmpWE = tmpCtl.getDesignerFieldEl(tmpName);
-		console.log( 'tmpWE', tmpWE);
 		tmpWE.html(tmpNewHTML);
 		var tmpThis = this;
 		tmpThis.designModeProtect(true,tmpWE);
 		ThisApp.delay(100).then(function(){
-			
+			//-- ToDo: take next action
+
 		})
 
 		// var tmpEls = tmpCtl.getWebControlEls(tmpCtlName);
@@ -1017,7 +1013,6 @@ License: MIT
 			var tmpContent = this.aceEditor.getValue();
 			var tmpTplName = 'resource-console--preview--only--' + this.details.resname;
 			ThisApp.addTemplate(tmpTplName,tmpContent);
-			console.log('previewObject',this.previewObject);
 			this.loadSpot('preview-area', this.previewObject || {},tmpTplName);
 		} else if (tmpResType == 'Panel') {
 			var tmpObject = this.aceEditor.getValue();
@@ -1249,7 +1244,6 @@ License: MIT
 		var tmpThis = this;
 		ThisApp.input("Enter JSON", "Valid JSON Required").then(
 			function(theReply){
-				console.log("theReply",theReply);
 				try {					
 					var tmpDoc = theReply;
 					if( typeof(tmpDoc) == 'string'){
