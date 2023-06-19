@@ -96,7 +96,7 @@ License: MIT
 								toRight: true,
 								hidden: true,
 								"name": "btn-set-data",
-								"label": "Set Preview Object",
+								"label": "Set Template JSON",
 								"onClick": {
 									"run": "action",
 									"action": "setPreviewObject"
@@ -1017,6 +1017,7 @@ License: MIT
 			var tmpContent = this.aceEditor.getValue();
 			var tmpTplName = 'resource-console--preview--only--' + this.details.resname;
 			ThisApp.addTemplate(tmpTplName,tmpContent);
+			console.log('previewObject',this.previewObject);
 			this.loadSpot('preview-area', this.previewObject || {},tmpTplName);
 		} else if (tmpResType == 'Panel') {
 			var tmpObject = this.aceEditor.getValue();
@@ -1248,8 +1249,17 @@ License: MIT
 		var tmpThis = this;
 		ThisApp.input("Enter JSON", "Valid JSON Required").then(
 			function(theReply){
-				var tmpDoc = JSON.parse(theReply);
-				tmpThis.previewObject = tmpDoc;
+				console.log("theReply",theReply);
+				try {					
+					var tmpDoc = theReply;
+					if( typeof(tmpDoc) == 'string'){
+						tmpDoc = JSON.parse(theReply)
+					}
+					tmpThis.previewObject = tmpDoc;	
+				} catch (theError) {
+					alert("Error processing JSON");
+				}
+				
 			}
 		);		
 	}
