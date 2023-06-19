@@ -278,6 +278,7 @@
     var tmpPostFix = '-' + this.uniqueName;
     this.addToSpot('navbody' + tmpPostFix, tmpNav);
     this.addToSpot('cardbody' + tmpPostFix, tmpCard);
+    ThisApp.util.resizeToParent(this.getSpot(tmpSpotName));
     this.gotoTab(tmpItem);
   }
 
