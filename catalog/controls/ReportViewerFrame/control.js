@@ -594,7 +594,17 @@
   
       this.refreshSelection();
     };
-  
+
+    ControlCode.getFirstSelectedDoc = function() {
+      var tmpSelected = this.getSelectedKeys();
+      if( !(tmpSelected && tmpSelected.length > 0)){return false;}
+      var tmpRow = this.mainTable.getRow(tmpSelected[0]);
+      if( tmpRow && tmpRow._row && tmpRow._row.data){
+        return tmpRow._row.data;
+      }
+      return false;
+    };
+
     ControlCode.getSelectedKeys = function() {
       var tmpRet = [];
   

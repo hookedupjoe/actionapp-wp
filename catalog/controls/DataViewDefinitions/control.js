@@ -67,6 +67,19 @@
                     "run": "action",
                     "action": "recycleSelected"
                   }
+                },
+                {
+                  "ctl": "button",
+                  "toLeft": true,
+                  "color": "blue",
+                  "icon": "right chevron",
+                  compact: true,
+                  "name": "btn-page-tb-open",
+                  "label": "Open",
+                  "onClick": {
+                    "run": "action",
+                    "action": "openSelected"
+                  }
                 }]
             },
               {
@@ -215,17 +228,15 @@
   
   
     };
-  
+
+    
     ControlCode.editDoc = function() {
-      var tmpViewer = this.getViewControl();
-      var tmpSelected = tmpViewer.getSelectedKeys();
-      var tmpRow = tmpViewer.mainTable.getRow(tmpSelected[0]);
+      var tmpDoc = this.getViewControl().getFirstSelectedDoc();
       var self = this;
-  
       self.parts.mainform.prompt({
         title: 'Edit Data View Definition',
         submitLabel: 'Save Changes',
-        doc: tmpRow._row.data
+        doc: tmpDoc
       }).then(function(theSubmit,
         theData) {
         if (!theSubmit) {
@@ -242,9 +253,14 @@
   
   
   
+    
+    ControlCode.openSelected = function() {
+      var tmpRowData = this.getViewControl().getFirstSelectedDoc();
+      ThisApp.actions.selectListItem({itemname: tmpRowData.name, itemtitle: tmpRowData.title, dataview:'y', viewname:tmpRowData.name })
+    };
+
     ControlCode.recycleSelected = function() {
       var self = this;
-      var tmpViewer = this.getViewControl();
       ThisApp.confirm('Recycle the selected documents?',
         'Recycle?').then(function(theIsYes) {
           if (theIsYes) {
@@ -256,7 +272,6 @@
     ControlCode.recycleSelectedRun = function() {
       var tmpViewer = this.getViewControl();
       var tmpSelected = tmpViewer.getSelectedKeys();
-      var self = this;
       var tmpData = {
         ids: tmpSelected
       };

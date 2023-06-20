@@ -163,9 +163,9 @@ var thisPageSpecs = {
         tmpHTML.push('<div class="ui top attached header">Action App Docs</div>');
         tmpHTML.push('<div class="ui attached segment">');
         tmpHTML.push('<div class="basic slim buttons vertical fluid">');
-        tmpHTML.push('  {{#each data}}');
+        tmpHTML.push('  {{#each data}}{{#if showlink}}');        
         tmpHTML.push('  <div itemname="{{name}}" itemtitle="{{title}}" pageaction="selectListItem" class="ui button fluid basic blue">{{title}}</div>');
-        tmpHTML.push('  {{/each}}');
+        tmpHTML.push('  {{/if}}{{/each}}');
         tmpHTML.push('</div>');
         tmpHTML.push('</div>');
         tmpHTML.push('</div>');
@@ -175,28 +175,47 @@ var thisPageSpecs = {
         var tmpPostItems = {data:[
             {
                 name:'actappdoc',
-                title: 'Application Docs'
+                title: 'Application Docs',
+                showlink: true
             },
             {
                 name:'actappdesigndoc',
-                title: 'Designer Docs'
+                title: 'Designer Docs',
+                showlink: true
             },
             {
                 name:'actappelem',
-                title: 'Design Element Docs'
+                title: 'Design Element Docs',
+                showlink: true
             },
             {
                 name:'thetrash',
                 isTrash: true,
-                title: 'The Trash Bin'
+                title: 'The Trash Bin',
+                showlink: true
             },
             {
                 name:'importexport',
                 catalog: '_designer',
                 controlname: 'ImportExport',
-                title: 'Import / Export'
-            }
-            // },
+                title: 'Import / Export',
+                showlink: true
+            },
+            {
+                name:'dvposts',
+                isDataView: true,
+                viewname: 'posts',
+                title: 'Posts'
+            },
+            {
+                name:'dvpages',
+                isDataView: true,
+                viewname: 'pages',
+                title: 'Pages'
+            }            
+        ]}
+        //--- Examples of app docs ..
+        // },
             // {
             //     name:'dvpeople',
             //     isDataView: true,
@@ -215,7 +234,9 @@ var thisPageSpecs = {
             //     viewname: 'tests',
             //     title: 'Tests'
             // }
-        ]}
+
+
+
         //--- Load to index
         for( var iPos in tmpPostItems.data ){
             var tmpDetails = tmpPostItems.data[iPos];
@@ -287,7 +308,7 @@ var thisPageSpecs = {
     }
 
     actions.selectListItem = function(theParams, theTarget){
-        var tmpParams = ThisApp.getActionParams(theParams, theTarget, ['itemname','itemtitle']);
+        var tmpParams = ThisApp.getActionParams(theParams, theTarget, ['itemname','itemtitle','dataview','viewname']);
         
         var tmpTabKey = 'tab-' + tmpParams.itemname;
         var tmpTabTitle = tmpParams.itemtitle || tmpParams.itemname;
@@ -299,9 +320,19 @@ var thisPageSpecs = {
             var tmpSetupDetails = selectionListIndex[tmpParams.itemname] || tmpParams;
             var tmpControlName = tmpSetupDetails.controlname || 'PostsView';
             var tmpControlSource = tmpSetupDetails.catalog || '_designer';
+            tmpSetupDetails.controlname = tmpControlName;
+            tmpSetupDetails.catalog = tmpControlSource;
+            //--- Use values from params instead of selectionListIndex entry
+            //     this allows anything to open, not just what is in the list
+            if( tmpParams.dataview ){
+                tmpSetupDetails.isDataView = true;
+            }
+            if( tmpParams.viewname ){
+                tmpSetupDetails.viewname = tmpParams.viewname;
+            }
+            
             ThisApp.getResourceFromSource('control',tmpControlName,tmpControlSource,tmpControlName).then(function(theLoadedControl){
                 var tmpNewTabControl = theLoadedControl.create(tmpTabKey);
-                //var tmpNewTabControl = ThisPage.getControl('PostsView').create(tmpTabKey);
                 ThisPage.ctlBody.addTab({item:tmpTabKey,text: tmpTabTitle + tmpCloseMe, icon: 'table', content:''})
                 var tmpNewSpot = ThisPage.ctlBody.getTabSpot(tmpTabKey);
                 tmpNewTabControl.loadToElement(tmpNewSpot).then(function () {
@@ -328,9 +359,9 @@ var thisPageSpecs = {
         
 
     }
+    ThisApp.actions.selectListItem = actions.selectListItem;
 
     function onURLOpenRequest(theEvent, theControl, theURL){
-        console.log( 'onURLOpenRequest', theEvent, theControl, theURL);
         window.open(theURL);
 //--- ToDo: Enable and make this like others with close request, etc
         //tmpDataPage.parts.body.addTab({item:'temp1',text: "Viewer", icon: 'eye', content:''})
