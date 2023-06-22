@@ -1,6 +1,6 @@
 /*
 ActionAppCore Core Library
-Author: Joseph Francis, 2017 - 2021
+Author: Joseph Francis, 2017 - 2023
 License: MIT
 */
 
@@ -462,8 +462,41 @@ window.ActionAppCore = window.ActionAppCore || ActionAppCore;
             return this.indexOf(suffix) === 0;
         };
     }
+
+    
+    if( !String.prototype.escapeHTML ){
+        String.prototype.escapeHTML = function() {
+            var tagsToReplace = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;'
+            };
+            return this.replace(/[&<>]/g, function(tag) {
+                return tagsToReplace[tag] || tag;
+            });
+        };
+    }
+    
+    
+    if( !String.prototype.unescapeHTML ){
+        String.prototype.unescapeHTML = function() {
+            var tagsToReplace = {
+                '&amp;': '&',
+                '&lt;': '<',
+                '&gt;': '>'
+            };
+            return this.replace(/(&amp;|&lt;|&gt;)/g, function(tag) {
+                return tagsToReplace[tag] || tag;
+            });
+        };
+    }
+    
+    
+
 })(ActionAppCore, $);
+
 //--- Common Functionality Extensions
+
 /**
      * subscribe / unsubscribe / publish
     *     - Standard Pub / Sub functionality
@@ -7665,6 +7698,7 @@ License: MIT
                     if( !tmpAction ){
                         var tmpToRun = false;
                         var tmpPCtr = 0;
+                        //was var tmpParent = this.parentControl;
                         var tmpParent = this;
                         while ((tmpParent && !isFunc(tmpToRun))) {
                             tmpPCtr++;
@@ -7694,6 +7728,8 @@ License: MIT
                 }
             }
         }
+        //new from base
+        this.publish('field-change', [this, tmpFN, this.getFieldValue(tmpFN)])
     }
 
     meInstance.refreshControl = function () {
@@ -7706,6 +7742,16 @@ License: MIT
             }
         }
 
+    }
+    meInstance.onControlResize = onControlResize;
+    function onControlResize(theEvent) {
+        var tmpEl = this.getEl();
+        var tmpWidth = tmpEl.width();
+        if (tmpWidth < 450) {
+            tmpEl.addClass('mobile');
+        } else {
+            tmpEl.removeClass('mobile');
+        }
     }
 
     function itemTouchEnd(theEvent) {
@@ -8422,6 +8468,8 @@ License: MIT
                 }
             }
         }
+        tmpIndex.fields = tmpIndex.all;
+        tmpIndex.items = tmpIndex.all;
         return tmpIndex;
     }
 
@@ -8449,6 +8497,7 @@ License: MIT
     //---   this is so you can get any item that has a name in the contorl, 
     //...   but not include markup when not needed
     //---   This also gets any attr values and includes them since that is common to items
+    me.getItemAttrString = getItemAttrString
     function getItemAttrString(theObject) {
         var tmpRet = '';
         if (!(theObject)) { return '' };
@@ -11012,56 +11061,10 @@ License: MIT
         return $R.createElement("div", { className: "ui message " + props.color }, props.msg || 'Warning');
     }
 
-    class TestComp extends $R.Component {
-        constructor(props) {
-            super(props);
-            var tmpMsg = props.msg || 'Just saying Hi';
-            this.state = { msg: tmpMsg, showWarning: true, color:'orange'};
-            this.handleToggleClick = this.handleToggleClick.bind(this);
-        }
-        toggleState(theState) {
-            return {
-                showWarning: !theState.showWarning
-            };
-        }
-        componentDidMount() {
-            console.log('componentDidMount')
-        }
-
-        componentWillUnmount() {
-            console.log('componentWillUnmount')
-        }
-
-        setMessage(theMsg) {
-            this.setState({ 'msg': theMsg || 'Warning!' });
-        }
-        getMessage() {
-            if (!(this.state.msg)) {
-                return '';
-            }
-            return this.state.msg;
-        }
-
-        handleToggleClick() {
-            this.setState(this.toggleState.bind(this));
-        }
-
-        render() {
-            return (
-                $R.createElement("div", null,
-                    $R.createElement(Message, { color: this.state.color, msg: this.state.msg, warn: this.state.showWarning }),
-                    $R.createElement("div", { className: 'ui button blue', onClick: this.handleToggleClick },
-                        this.state.showWarning ? 'Hide' : 'Show'
-                    )
-                )
-            );
-        }
-    }
     
     var catalog = {
         "sys_common": {
-            Message:Message,
-            TestComp:TestComp
+            Message:Message
         }
     }
     //--- Demo controls

@@ -939,17 +939,3 @@ div.ui.message.floating {
   padding-right:7px !important;
   padding-left:4px !important;
 }
-
-
-
-.clear-both-after:after, .ui.segment:not(.floater):after, [appuse="actapp-design-body-wrap"]:after {
-  content: "";
-  display: block;
-  clear: both;
-  visibility: hidden;
-  height: 0px;
-}
-
-.actapp-in-design {
-  margin: 2px; padding: 7px; border: 2px dashed black;
-}
