@@ -5,7 +5,7 @@
   try {
 
 
-    var tmpPageNames = ["MyApps"];
+    var tmpPageNames = ["AppDataPage"];
     var tmpPluginNames = [];
 
     if (typeof (window.cordova) == 'undefined') {
@@ -90,6 +90,7 @@
       ThisApp.init({  pages: tmpPageNames, plugins: tmpPluginNames, required: tmpRequired }).then(function (theReply) {
         ThisApp.getByAttr$({ appuse: "app-loader" }).remove();
 
+        ThisApp.siteLayout.toggle('north');
         $.extend(ThisApp.common, {})
 
       });

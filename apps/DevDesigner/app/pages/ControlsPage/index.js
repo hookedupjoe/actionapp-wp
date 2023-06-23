@@ -11,7 +11,7 @@ License: MIT
         pageName: "ControlsPage",
         pageTitle: "Sandbox",
         navOptions: {
-            topLink: true,
+            topLink: false,
             sideLink: true
         }
     };

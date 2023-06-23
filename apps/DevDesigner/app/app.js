@@ -5,6 +5,7 @@
   var tmpPageNames = [   
     'WorkspacePage',
     'ControlsPage',
+    'AppDataPage',
     //'ControlBuilderPage',
     'JsonHelperPage',
     'LogsPage'

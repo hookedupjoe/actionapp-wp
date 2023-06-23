@@ -5,8 +5,8 @@
     //~thisPageSpecs//~
 
 var thisPageSpecs = {
-	"pageName": "MyApps",
-	"pageTitle": "My Apps",
+	"pageName": "AppDataPage",
+	"pageTitle": "Data",
 	"navOptions": {
 		"topLink": true,
 		"sideLink": false
