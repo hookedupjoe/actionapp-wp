@@ -13,16 +13,36 @@ License: MIT
 
 */
 
+
 //--- Global Entry Point / Always available functionality
 var ActionAppCore = {
     //--- Directory of where stuff is located
+
+    //--- ToDo: Move the _designer and _data to designer app
+    //-    ** How to deploy / if we should deploy catalog resources ?
     dir: {
         catalogs: {
-            common: '/catalogs/common/',
+            common: '/dir/catalogs/_designer/',
+            _designer: '/dir/catalogs/_designer/',
+            _data: '/dir/catalogs/_data/',
             getResourceCatalogURL: function(theCatName, theResType, theResName){
                 var tmpBaseURL = '/';
                 var tmpResType = ThisApp.controls.getUnifiedPluralName(theResType);
-                var tmpURL = tmpBaseURL + "catalogs/" + theCatName + '/' + tmpResType + '/' + theResName;
+                //--- Directory is tpl not templates
+                if( tmpResType == 'templates' ){
+                    tmpResType = 'tpl';
+                }
+                var tmpCatDir = tmpBaseURL + "catalogs/" + theCatName + '/';
+                if( theCatName == '__app'){
+                    if( ActionAppCore.inDesigner ){
+                        var tmpAppName = ThisApp.common.designerResApp
+                        //--- Serve the page from the application itself, in diff area
+                        tmpCatDir = 'http://localhost:33461/' + tmpAppName + '/catalog/'
+                    } else {
+                        tmpCatDir = './catalog/'
+                    }
+                }
+                var tmpURL = tmpCatDir + tmpResType + '/' + theResName;
                 return tmpURL
             }
         }
@@ -60,44 +80,7 @@ var ActionAppCore = {
         }
         return ActionAppCore.getListAsArrays(tmpSource);
     },
-    //--- Returns HTML element based on the specs passed
-    /*
-    var tmpSpecChG1 = {
-        type: 'div',
-        className: 'content',
-        attr: {name: 'G1'},
-        text: 'I am content'
-    }
-    var tmpSpecCh1 = {
-        type: 'div',
-        className: ['ui','card'],
-        style: {border: "dashed 2px red", 'font-size': "14px"},
-        attr: {appuse: 'testing', name: 'Debbie'},
-        text: 'Debbie'
-    }
-    var tmpSpecCh2 = {
-        type: 'div',
-        className: 'ui card',
-        style: 'border: dashed 2px blue;font-size:14px',
-        attr: {appuse: 'testing', name: 'John'},
-        children: [tmpSpecChG1],
-    }
-    var tmpSpecs = {
-        type: 'div',
-        className:'ui cards',
-        attr: {appuse:'testing',name:'mom'},
-        children: [tmpSpecCh1,tmpSpecCh2]
-    }
-    var tmpTE1 = ActionAppCore.el(tmpSpecs)
-    tmpTE1 // show content on console
-    //--- in console
-    <div class="ui cards" appuse="testing" name="mom">
-        <div class="ui card" appuse="testing" name="Debbie" style="border: 2px dashed red; font-size: 14px;">Debbie</div>
-        <div class="ui card" appuse="testing" name="John" style="border: 2px dashed blue; font-size: 14px;">
-            <div class="content" name="G1">I am content</div>
-        </div>
-    </div>
-    */
+    
     el: function(theSpecs){
         var tmpSpecs = theSpecs || {};
         var tmpType = tmpSpecs.type || 'div';
@@ -364,6 +347,43 @@ var ActionAppCore = {
 
     }
 };
+
+ActionAppCore.ActAppData = {
+    rootPath: '/',
+    formatters: {
+        "multivaluenewline": function(cell){
+            var value = cell.getValue();
+            value = value.join('<br />');
+            return value;
+        },
+        "textarea": function(cell){
+            var value = cell.getValue();
+            value = value.replace(/\n/g,'<br />');
+            return value;
+        },
+        "datetime": {
+            formatterParams: {
+                inputFormat: "YYYY-MM-DD hh:mm:ss",
+                outputFormat: "MMM D, Y hh:mm a",
+                invalidPlaceholder: "(invalid)"
+            }
+        },
+        "date": {
+            formatterParams: {
+                inputFormat: "YYYY-MM-DD",
+                outputFormat: "MMM D, Y",
+                invalidPlaceholder: "(invalid)"
+            }
+        },
+        "time": {
+            formatterParams: {
+                inputFormat: "hh:mm:ss",
+                outputFormat: "hh:mm a",
+                invalidPlaceholder: "(invalid)"
+            }
+        }
+    }
+}
 
 //--- Global Spot
 window.ActionAppCore = window.ActionAppCore || ActionAppCore;
@@ -1063,6 +1083,7 @@ window.ActionAppCore = window.ActionAppCore || ActionAppCore;
                 tmpExisting = ThisApp.resCache[tmpURI.type][tmpURI.uri];
                 //--- If existing in cache, also load reference as resource name
                 //     ** so a page can alias the control and use a cached version
+                tmpThis.res[tmpURI.type] = tmpThis.res[tmpURI.type] || {};
                 tmpThis.res[tmpURI.type][(tmpURI.name || tmpURI.uri)] = tmpExisting;
             }
             
@@ -1076,6 +1097,12 @@ window.ActionAppCore = window.ActionAppCore || ActionAppCore;
             if (tmpURI.uri.startsWith('design/')) {
                 tmpExists = false;
             }
+            //--- Allow global / temporary disabling of the cache system for dev
+            if( ThisApp.resCacheFlags.disabled === true){
+                tmpExists = false;
+            }
+            
+            
             //--- ToDo: Revisit cachine / using cache versions
 
             if (!(tmpExists)) {
@@ -1283,14 +1310,16 @@ window.ActionAppCore = window.ActionAppCore || ActionAppCore;
                     }
 
                 }
+                
                 if (isObj(tmpSpec.map)) {
                     for (var aURI in tmpSpec.map) {
-
                         var tmpEntryName = tmpSpec.map[aURI];
                         var tmpBaseMapURL = tmpBaseURL;
 
                         if (isObj(tmpEntryName)) {
+                            
                             var tmpSource = tmpEntryName.source || tmpEntryName.catalog;
+                            
                             var tmpEntrySpecs = tmpEntryName;
                             tmpEntryName = tmpEntryName.name;
                             if( tmpSource ){
@@ -2948,7 +2977,7 @@ window.ActionAppCore = window.ActionAppCore || ActionAppCore;
     //--- ToDo - Implement better message center with toastr as UI option or toastless
     function initMessageCenter() {
         toastr.options.closeButton = true;
-        toastr.options.timeOut = 1000;
+        toastr.options.timeOut = 4000;
         /*
         //--- Some other available options
         toastr.options.timeOut = 2000;
@@ -4301,7 +4330,7 @@ License: MIT
         var tmpPromLayoutReq = true;
 
         var tmpLayoutReq = this.getLayoutRequired();
-
+        
         var tmpInitReq = ThisApp.loadResources.bind(this);
 
         if (this.options.required) {
@@ -4461,11 +4490,13 @@ License: MIT
                     tmpLTName = tmpLT.control || tmpLT.value || tmpLT.panel || tmpLT.html;
                 }
 
-                if (tmpLT.source) {
+                var tmpCatalog = tmpLT.source || tmpLT.catalog;
+                if (tmpCatalog) {
                     tmpPanelsNode.map[tmpLTName] = {
-                        source: tmpLT.source,
+                        source: tmpCatalog,
                         name: tmpLTName
                     };
+                    delete tmpPanelsNode.baseURL;
                 } else {
                     tmpPanelsNode.map[tmpLTName] = tmpLTName;
                 }
@@ -4499,11 +4530,13 @@ License: MIT
                     tmpLTName = tmpLT.control || tmpLT.value || tmpLT.panel || tmpLT.html;
                 }
 
-                if (tmpLT.source) {
+                var tmpCatalog = tmpLT.source || tmpLT.catalog;
+                if (tmpCatalog) {
                     tmpControlsNode.map[tmpLTName] = {
-                        source: tmpLT.source,
+                        source: tmpCatalog,
                         name: tmpLTName
                     };
+                    delete tmpControlsNode.baseURL;
                 } else {
                     tmpControlsNode.map[tmpLTName] = tmpLTName;
                 }
@@ -6417,9 +6450,15 @@ License: MIT
         var tmpPromRequired = true;
         var tmpPromLayoutReq = true;
         var tmpLayoutReq = this.getContentRequired();
-        
         var tmpInitReq = ThisApp.loadResources.bind(this);
+        
+        if( this.controlConfig && this.controlConfig.options && this.controlConfig.options.required){
+            var tmpSpecs = this.controlConfig.options.required;
+            tmpPromRequired = tmpInitReq(tmpSpecs)
+        }
+
         //--- Do not cache controls that have ? as they are dynamic calls
+        //--- ToDo: Move this to the ignore process?
         if( tmpLayoutReq && tmpLayoutReq.panel && tmpLayoutReq.panel.list ){
             for( var iPos in tmpLayoutReq.panel.list ){
                 var tmpControlName = tmpLayoutReq.panel.list[iPos];
@@ -7690,8 +7729,6 @@ License: MIT
         
         var tmpFN = theFN;
         var tmpSpecs = this.getFieldSpecs(tmpFN);
-        //var tmpFV = this.getFieldValue(tmpFN);
-        //console.log("erf",this,tmpSpecs)
         if (tmpSpecs) {
             var tmpOnChange = tmpSpecs.onChange || false;
             if (tmpOnChange) {
@@ -9662,7 +9699,7 @@ License: MIT
         getFieldValue: function (theControlEl, theFieldSpecs) {
             //ToDo: Check DataType
             tmpRet = me._getControlData(theControlEl, theFieldSpecs.name);
-            if( typeof(tmpRet == 'string')){
+            if( typeof(tmpRet) == 'string'){
                 if( tmpRet.substr(0,1) == '{'){
                     try {
                         tmpRet = JSON.parse(tmpRet);
@@ -10890,15 +10927,6 @@ License: MIT
     //---- Start Designer Helpers
     //--- =========== =========== =========== =========== =========== ===========
 
-
-    // function elSpecs(theList){
-    //     console.log( 'elSpecs', theList);
-    //     var tmpRet = [];
-    //     for( var iPos in theList ){
-    //         tmpRet.push(elSpec.apply(this,theList[iPos]))
-    //     }
-    //     return tmpRet;
-    // }
     //--- Create element spec object (domspec)
     function elSpec(theTag, theOptions, theContent){
         var tmpRet = {type:theTag};
