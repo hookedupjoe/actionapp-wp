@@ -258,10 +258,41 @@ class ActAppCommon {
 	}
 
 	/**
-	 * post_exists_by_slug.
+	 * post_exists_by_name.
 	 *
-	 * @return mixed boolean false if no post exists; post ID otherwise.
+	 * @return mixed boolean false if no post exists; post name otherwise.
 	 */
+	public static function post_exists_by_name( $postname ) {
+		//--- Start with blank query
+		$tmpQuery = array();
+
+		// //--- If getting a doc type then add to the query
+		// array_push($tmpQuery, array(
+		// 	'key'     => 'name',
+		// 	'value'   => $postname,
+		// 	'compare' => '=',
+		// 	)
+		// );
+
+		array_push($tmpQuery, array(
+			"post_type" => 'any',
+			"name" => $postname
+		));
+	
+
+
+		$loop_posts = new WP_Query( $tmpQuery );
+		if ( ! $loop_posts->have_posts() ) {
+			return false;
+		} else {
+			// if( $loop_posts->found_posts != 1){
+			// 	return false;
+			// }
+			$loop_posts->the_post();
+			return $loop_posts->post->ID;
+		}
+	}
+
 	public static function post_exists_by_uid( $post_uid ) {
 		//--- Start with blank query
 		$tmpQuery = array();
@@ -292,6 +323,7 @@ class ActAppCommon {
 			return $loop_posts->post->ID;
 		}
 	}
+
 	
 	public static function assure_no_doc($slug, $post_type){
 		$author_id = 1;

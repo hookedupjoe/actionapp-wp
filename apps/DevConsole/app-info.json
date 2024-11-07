@@ -1,1 +1,1 @@
-{"pages":["Home","JSON"],"title":"Developer Console","prefix":"","hideheader":[],"name":"devconsole","cdn":"local","libraries":["Ace"],"plugins":[],"app-id":"","app-version":"","app-title":"","app-desc":"","app-author":"","app-author-email":"","app-url":"","headtags":""}
+{"pages":["Home","JSON"],"title":"Developer Console","prefix":"","hideheader":["y"],"name":"devconsole","cdn":"local","libraries":["Ace"],"plugins":[],"app-id":"","app-version":"","app-title":"","app-desc":"","app-author":"","app-author-email":"","app-url":"","headtags":""}

@@ -5,7 +5,7 @@
   try {
 
 
-    var tmpPageNames = ["AppDataPage"];
+    var tmpPageNames = ["Home"];
     var tmpPluginNames = [];
 
     if (typeof (window.cordova) == 'undefined') {
@@ -86,8 +86,7 @@
       ThisApp = new siteMod.CoreApp();
 
       var tmpRequired = {}
-
-      ThisApp.init({  pages: tmpPageNames, plugins: tmpPluginNames, required: tmpRequired }).then(function (theReply) {
+      ThisApp.init({  hideheader: true, pages: tmpPageNames, plugins: tmpPluginNames, required: tmpRequired }).then(function (theReply) {
         ThisApp.getByAttr$({ appuse: "app-loader" }).remove();
 
         ThisApp.siteLayout.toggle('north');

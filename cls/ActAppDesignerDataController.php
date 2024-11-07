@@ -706,7 +706,7 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 		exit();
 	}
 
-	public function import_doc($theDoc){
+	public static function import_doc($theDoc){
 		if( !is_object($theDoc) ){
 			return false;
 		}
@@ -714,33 +714,37 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 		$tmpPostType = $theDoc->__posttype;
 		$tmpPostTitle = $theDoc->__doctitle;
 		
-		// $tmpIsDesign = ($tmpPostType == 'actappdesigndoc');
-		// if( !$tmpIsDesign && ($tmpPostType !== 'actappdoc')){
-		// 	return false;
-		// }
-		
 		$tmpExistingID = ActAppCommon::post_exists_by_uid($tmpSlug);
+		
 		$tmpExistingStatus = 'na';
 		if($tmpExistingID){
 			$tmpExistingStatus = get_post_status($tmpExistingID);
+			
 			$tmpPost = get_post( $tmpExistingID );
 			if( 'trash' == $tmpExistingStatus ){
+				$tmpDebug .= ' >> was in trash, removed it ' ;
 				wp_delete_post($tmpExistingID, true);
 				$tmpExistingID = false;
 			}
+			$tmpDebug .= ' $tmpExistingStatus '. $tmpExistingStatus ;
+		} else {
+			$tmpDebug .= ' NOT FOUND ' . $tmpExistingID ;
 		}
-		if($tmpExistingID){
+		if($tmpExistingID != false){
 			$theDoc->id = $tmpExistingID;
 			$theDoc->_id = $tmpExistingID;
+			$tmpDebug .= ' FOUND ' . $tmpExistingID ;
+			return false; //Already in system
 		} else {
 			unset($theDoc->id);
 			unset($theDoc->__id);
 		}
 
+
 		unset($theDoc->__url);
 		unset($theDoc->__postdate);
 		unset($theDoc->__posttype);
-		
+
 		$tmpResults = self::save_doc(wp_json_encode($theDoc),$tmpPostType,false);
 		//--- Return new post id or slug?
 		return $tmpResults;

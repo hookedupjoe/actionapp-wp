@@ -5,7 +5,7 @@
     //~thisPageSpecs//~
 
 var thisPageSpecs = {
-	"pageName": "AppDataPage",
+	"pageName": "Home",
 	"pageTitle": "App Data",
 	"navOptions": {
 		"topLink": true,
@@ -14,8 +14,8 @@ var thisPageSpecs = {
 }
 
 //~thisPageSpecs~//~
-
     var pageBaseURL = 'app/pages/' + thisPageSpecs.pageName + '/';
+    console.log('base url',pageBaseURL)
 
     //~layoutOptions//~
     thisPageSpecs.layoutOptions =  {

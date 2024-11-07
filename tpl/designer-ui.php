@@ -20,7 +20,27 @@
  */
 
 echo '<img class="ui image medium" src="'.ACTIONAPP_WP_IMAGE_PATH.'single-page-header.png" />';
- echo ('<div spot="mainspot">out here</div>');
+echo ('<div spot="mainspot"></div>');
+ 
+//--- Assure there is a data view definition so the dataview control can show dataviews
+$tmpDoc = (object) array(
+    "name" => "dataviews",
+    "title" => "Data View Definitions",
+    "sourceposttype" => "actappdesigndoc",
+    "sourcedoctype" => "dataview",
+    "formname" => "DataViewDefinition",
+    "catalog" => "design",
+    "writecaps" => "actappdesign",
+    "readcaps" => "actappapps",
+    "__doctype" => "dataview",
+    "__title" => "Data View Definitions",
+    "__uid" => "316062cae38715a25_100062d3f28f755e3",
+    "__posttype" => "actappdesigndoc",
+    "__doctitle" => "Data View Definitions",
+ );
+
+ActAppDesignerDataController::import_doc($tmpDoc);
+
 ?>
 <script>
 

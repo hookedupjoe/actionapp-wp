@@ -21,6 +21,7 @@
 
 class ActAppDesigner {
 	private static $instance;
+
 	public static function get_instance() {
 		if ( null == self::$instance ) {
 			self::$instance = new ActAppDesigner();
@@ -157,6 +158,8 @@ class ActAppDesigner {
 		}
 		return $tmpVersion;
 	}
+	 
+	
 
 	public static function assure_plugin_initialized() {
 		$tmpVersion = self::getPluginSetupVersion();
@@ -214,22 +217,20 @@ class ActAppDesigner {
 		$slug = 'dashboard';
         $title = 'Designer Dashboard';
         $content = 'Internal Use';
+		ActAppCommon::assure_no_doc($slug, $post_type);
 		$tmpNewDoc = ActAppCommon::assure_doc($slug, $post_type, $title, $content);
 
-		// $slug = 'resources';
-        // $title = 'Designer Resources';
-        // $content = 'Internal Use';
-		// $tmpNewDoc = ActAppCommon::assure_doc($slug, $post_type, $title, $content);
-
 		$slug = 'resources';
-		$title = 'Designer Resources';
-
+        $title = 'Data Dashboard';
+        $content = 'Internal Use';
 		ActAppCommon::assure_no_doc($slug, $post_type);
+		$tmpNewDoc = ActAppCommon::assure_doc($slug, $post_type, $title, $content);
 
 		$slug = 'appconsole';
         $title = 'Applications Console';
         $content = 'Internal Use';
-		$tmpNewDoc = ActAppCommon::assure_doc($slug, $post_type, $title, $content);
+		ActAppCommon::assure_no_doc($slug, $post_type);
+		//$tmpNewDoc = ActAppCommon::assure_doc($slug, $post_type, $title, $content);
 
 		//--- ToDo: Change to use internal call to build form to support external login types
 		$slug = 'login';
@@ -240,6 +241,7 @@ class ActAppDesigner {
 
 		return $tmpMainID;
 	}
+
 
 	
 
