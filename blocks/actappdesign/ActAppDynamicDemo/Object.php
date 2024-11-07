@@ -60,7 +60,7 @@ class ActAppDynamicDemo {
 	}
 
 
-	function init_this_control() {
+	static function init_this_control() {
 	 
 		wp_register_script(
 			'actappdesign-dynamic-demo',

@@ -65,7 +65,7 @@ class ActAppReportView {
 	}
 
 
-	function init_this_control() {
+	static function init_this_control() {
 	 
 		wp_register_script(
 			'actappdesign-report-view',
