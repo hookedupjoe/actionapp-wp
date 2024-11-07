@@ -2,7 +2,7 @@
 /**
  * actionapp-wp.php
  *
- * Copyright (c) 2021-2023 Joseph Francis / hookedup, inc.
+ * Copyright (c) 2021-2024 Joseph Francis / hookedup, inc.
  *
  * This code is released under the GNU General Public License.
  * See COPYRIGHT.txt and LICENSE.txt.
@@ -27,9 +27,9 @@
  * Text Domain: actapp
  * License: GPLv3
  * 
- * Version: 1.0.19
+ * Version: 1.0.21
  */
-define( 'ACTIONAPP_WP_CORE_VERSION', '1.0.19' );
+define( 'ACTIONAPP_WP_CORE_VERSION', '1.0.21' );
  
 if ( !defined( 'ABSPATH' ) ) {
 	exit;

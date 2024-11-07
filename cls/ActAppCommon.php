@@ -2,7 +2,7 @@
 /**
  * Server Side Widget Manager: ActAppCommon
  * 
- * Copyright (c) 2021-2022 Joseph Francis / hookedup, inc. 
+ * Copyright (c) 2021-2024 Joseph Francis / hookedup, inc. 
  *
  * This code is released under the GNU General Public License.
  * See COPYRIGHT.txt and LICENSE.txt.
@@ -293,6 +293,15 @@ class ActAppCommon {
 		}
 	}
 	
+	public static function assure_no_doc($slug, $post_type){
+		$author_id = 1;
+		$tmpPostID = self::post_exists_by_slug( $slug, $post_type );
+		
+		if( $tmpPostID ) {
+			wp_delete_post($tmpPostID); 
+		}
+	}
+
     public static function assure_doc($slug, $post_type, $title, $content){
 		$author_id = 1;
 		if( !self::post_exists_by_slug( $slug, $post_type ) ) {

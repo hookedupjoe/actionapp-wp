@@ -2,7 +2,7 @@
 /**
  * Server Side Designer Functionality: ActAppDesigner
  * 
- * Copyright (c) 2021-2022 Joseph Francis / hookedup, inc. 
+ * Copyright (c) 2021-2024 Joseph Francis / hookedup, inc. 
  *
  * This code is released under the GNU General Public License.
  * See COPYRIGHT.txt and LICENSE.txt.
@@ -220,6 +220,11 @@ class ActAppDesigner {
         // $title = 'Designer Resources';
         // $content = 'Internal Use';
 		// $tmpNewDoc = ActAppCommon::assure_doc($slug, $post_type, $title, $content);
+
+		$slug = 'resources';
+		$title = 'Designer Resources';
+
+		ActAppCommon::assure_no_doc($slug, $post_type);
 
 		$slug = 'appconsole';
         $title = 'Applications Console';

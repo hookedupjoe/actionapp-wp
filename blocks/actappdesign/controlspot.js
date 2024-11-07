@@ -2,7 +2,7 @@
  * Block Widget: controlspot.js - Action App Control Spot
  * - A spot for a control or panel
  * 
- * Copyright (c) 2021-2022 Joseph Francis / hookedup, inc. 
+ * Copyright (c) 2021-2024 Joseph Francis / hookedup, inc. 
  *
  * This code is released under the GNU General Public License.
  * See COPYRIGHT.txt and LICENSE.txt.
