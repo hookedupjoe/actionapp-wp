@@ -695,6 +695,245 @@ width:250px !important;
 width:150px !important;
 }
 
+/* Semantic color match */
+
+.ui.red.colored {
+  background-color: #FFE8E6;
+  color: #DB2828;
+}
+
+.ui.red.colored .header {
+  color: #c82121;
+}
+
+.ui.orange.colored {
+  background-color: #FFEDDE;
+  color: #F2711C;
+}
+
+.ui.orange.colored .header {
+  color: #e7640d;
+}
+
+.ui.yellow.colored {
+  background-color: #FFF8DB;
+  color: #B58105;
+}
+
+.ui.yellow.colored .header {
+  color: #9c6f04;
+}
+
+.ui.olive.colored {
+  background-color: #FBFDEF;
+  color: #8ABC1E;
+}
+
+.ui.olive.colored .header {
+  color: #7aa61a;
+}
+
+.ui.green.colored {
+  background-color: #E5F9E7;
+  color: #1EBC30;
+}
+
+.ui.green.colored .header {
+  color: #1aa62a;
+}
+
+.ui.teal.colored {
+  background-color: #E1F7F7;
+  color: #10A3A3;
+}
+
+.ui.teal.colored .header {
+  color: #0e8c8c;
+}
+
+.ui.blue.colored {
+  background-color: #DFF0FF;
+  color: #2185D0;
+}
+
+.ui.blue.colored .header {
+  color: #1e77ba;
+}
+
+.ui.violet.colored {
+  background-color: #EAE7FF;
+  color: #6435C9;
+}
+
+.ui.violet.colored .header {
+  color: #5a30b5;
+}
+
+.ui.purple.colored {
+  background-color: #F6E7FF;
+  color: #A333C8;
+}
+
+.ui.purple.colored .header {
+  color: #922eb4;
+}
+
+.ui.pink.colored {
+  background-color: #FFE3FB;
+  color: #E03997;
+}
+
+.ui.pink.colored .header {
+  color: #dd238b;
+}
+
+.ui.brown.colored {
+  background-color: #F1E2D3;
+  color: #A5673F;
+}
+
+.ui.brown.colored .header {
+  color: #935b38;
+}
+
+
+
+/*  INVERTED POPUP MENU UPDATE */
+
+/*--- Red ---*/
+.ui.red.menu.inverted .dropdown.item .menu .item {
+	background-color: #DB2828 !important;
+	color: #FFFFFF !important;
+}
+
+.ui.red.menu.inverted .dropdown.item .menu .item:hover {
+	background-color: #d01919 !important;
+}
+
+
+/*--- Orange ---*/
+.ui.orange.menu.inverted .dropdown.item .menu .item {
+	background-color: #F2711C !important;
+	color: #FFFFFF !important;
+}
+
+.ui.orange.menu.inverted .dropdown.item .menu .item:hover {
+	background-color: #f26202 !important;
+}
+
+
+/*--- Olive ---*/
+.ui.olive.menu.inverted .dropdown.item .menu .item {
+	background-color: #B5CC18 !important;
+	color: #FFFFFF !important;
+}
+
+.ui.olive.menu.inverted .dropdown.item .menu .item:hover {
+	background-color: #a7bd0d !important;
+}
+
+
+/*--- Yellow ---*/
+.ui.yellow.menu.inverted .dropdown.item .menu .item {
+	background-color: #FBBD08 !important;
+	color: #FFFFFF !important;
+}
+
+.ui.yellow.menu.inverted .dropdown.item .menu .item:hover {
+	background-color: #eaae00 !important;
+}
+
+
+/*--- Green ---*/
+.ui.green.menu.inverted .dropdown.item .menu .item {
+	background-color: #21BA45 !important;
+	color: #FFFFFF !important;
+}
+
+.ui.green.menu.inverted .dropdown.item .menu .item:hover {
+	background-color: #16ab39 !important;
+}
+
+
+/*--- Teal ---*/
+.ui.teal.menu.inverted .dropdown.item .menu .item {
+	background-color: #00B5AD !important;
+	color: #FFFFFF !important;
+}
+
+.ui.teal.menu.inverted .dropdown.item .menu .item:hover {
+	background-color: #009c95 !important;
+}
+
+
+/*--- Blue ---*/
+.ui.blue.menu.inverted .dropdown.item .menu .item {
+	background-color: #2185D0 !important;
+	color: #FFFFFF !important;
+}
+
+.ui.blue.menu.inverted .dropdown.item .menu .item:hover {
+	background-color: #1678c2 !important;
+}
+
+
+/*--- Violet ---*/
+.ui.violet.menu.inverted .dropdown.item .menu .item {
+	background-color: #6435C9 !important;
+	color: #FFFFFF !important;
+}
+
+.ui.violet.menu.inverted .dropdown.item .menu .item:hover {
+	background-color: #5829bb !important;
+}
+
+
+/*--- Purple ---*/
+.ui.purple.menu.inverted .dropdown.item .menu .item {
+	background-color: #A333C8 !important;
+	color: #FFFFFF !important;
+}
+
+.ui.purple.menu.inverted .dropdown.item .menu .item:hover {
+	background-color: #9627ba !important;
+}
+
+
+/*--- Pink ---*/
+.ui.pink.menu.inverted .dropdown.item .menu .item {
+	background-color: #E03997 !important;
+	color: #FFFFFF !important;
+}
+
+.ui.pink.menu.inverted .dropdown.item .menu .item:hover {
+	background-color: #e61a8d !important;
+}
+
+
+/*--- Brown ---*/
+.ui.brown.menu.inverted .dropdown.item .menu .item {
+	background-color: #A5673F !important;
+	color: #FFFFFF !important;
+}
+
+.ui.brown.menu.inverted .dropdown.item .menu .item:hover {
+	background-color: #975b33 !important;
+}
+
+
+/*--- Grey ---*/
+.ui.grey.menu.inverted .dropdown.item .menu .item {
+	background-color: #767676 !important;
+	color: #FFFFFF !important;
+}
+
+.ui.grey.menu.inverted .dropdown.item .menu .item:hover {
+	background-color: #838383 !important;
+}
+
+
+
+/*  INVERTED POPUP MENU UPDATE END */
 
 
 

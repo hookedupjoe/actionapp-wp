@@ -27,10 +27,10 @@
  * Text Domain: actapp
  * License: GPLv3
  * 
- * Version: 1.0.25
+ * Version: 1.0.32
  */
-define( 'ACTIONAPP_WP_CORE_VERSION', '1.0.25' );
- 
+define( 'ACTIONAPP_WP_CORE_VERSION', '1.0.32' );
+
 if ( !defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -45,12 +45,15 @@ if ( !defined( 'ACTIONAPP_WP_URL' ) ) {
 	define( 'ACTIONAPP_WP_URL', plugins_url( 'actionapp-wp' ) );
 }
 
+if ( !defined( 'ACTAPP_CORE_URL' ) ) {
+	define( 'ACTAPP_CORE_URL', plugins_url( 'actionapp-wp' ) );
+}
+
 if ( !defined( 'ACTIONAPP_WP_IMAGE_PATH' ) ) {
 	define( 'ACTIONAPP_WP_IMAGE_PATH', ACTIONAPP_WP_URL.'/images/' );
 }
 
 
-define( 'ACTIONAPP_WP_FILE', __FILE__ );
 if ( !defined( 'ACTIONAPP_WP_BASE_DIR' ) ) {
 	define( 'ACTIONAPP_WP_BASE_DIR', untrailingslashit( plugin_dir_path( __FILE__ ) ) );
 }

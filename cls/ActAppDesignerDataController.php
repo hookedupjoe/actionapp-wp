@@ -650,7 +650,7 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 		return $tmpRet[0];
 	}
 	
-	public function import_docs($request) {
+	public static function import_docs($request) {
 		if( !current_user_can('actappdesign') ){
 			return new WP_Error('actapp_data_error', 'Not autorized', array('status' => 403));
 		}
@@ -713,9 +713,10 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 		$tmpSlug = $theDoc->__uid;
 		$tmpPostType = $theDoc->__posttype;
 		$tmpPostTitle = $theDoc->__doctitle;
+		$tmpDebug = '';
 		
 		$tmpExistingID = ActAppCommon::post_exists_by_uid($tmpSlug);
-		
+
 		$tmpExistingStatus = 'na';
 		if($tmpExistingID){
 			$tmpExistingStatus = get_post_status($tmpExistingID);
@@ -749,7 +750,7 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 		//--- Return new post id or slug?
 		return $tmpResults;
 	}
-	public function save_user($request) {
+	public static function save_user($request) {
 		//ToDo: Use wp user update / add caps instead
 		if( !current_user_can('actappdesign') ){
 			return new WP_Error('actapp_data_error', 'Not autorized', array('status' => 403));
@@ -857,16 +858,16 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 	}
 
 	
-	public function save_document($request) {
+	public static function save_document($request) {
 		return self::save_doc($request,false);
 	}	
 
-	public function save_design($request) {
+	public static function save_design($request) {
 		return self::save_doc($request,true);
 	}	
 	
 	//--- $thePostType: True = designerdoc, False or Null = appdoc, String Value = posttype
-	public function save_doc($request, $thePostType, $theIsRequest = true) {
+	public static function save_doc($request, $thePostType, $theIsRequest = true) {
 		$tmpPostType = 'actappdoc';
 		
 		$tmpDoDebug = false;
@@ -1169,14 +1170,28 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 		echo $tmpRet;
 		exit();
 	}
+	
+	public static function getParam($theName){
+	    if( isset( $_GET[$theName] ) ){
+	        return $_GET[$theName];
+	    }
+	    return '';
+	}
+
+    public static function getIfSet($theObj, $theName){
+	    if( isset( $theObj[$theName] ) ){
+	        return $theObj[$theName];
+	    }
+	    return '';
+	}
 
 	public function get_all_docs($request) {
-		$posttype = $_GET['posttype'];		
-		$doctype = $_GET['doctype'];
-		$query = $_GET['query'];
-		$fields = $_GET['fields'];
-		$status = $_GET['status'];		
-		$dataview = $_GET['dataview'];
+		$posttype = self::getParam('posttype');		
+		$doctype = self::getParam('doctype');
+		$query = self::getParam('query');
+		$fields = self::getParam('fields');
+		$status = self::getParam('status');		
+		$dataview = self::getParam('dataview');
 
 		if( empty($status) ){
 			$status = array('any');
@@ -1194,7 +1209,7 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 
 			$posttype = $tmpDoc['sourceposttype'];
 			$doctype = $tmpDoc['sourcedoctype'];
-			$posttypeother = $tmpDoc['sourceposttypeother'];
+			$posttypeother = self::getIfSet($tmpDoc,'sourceposttypeother');
 			if( 'other' == $posttype && $posttypeother != null ){
 				$posttype = $posttypeother;
 			}

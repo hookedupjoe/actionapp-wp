@@ -592,7 +592,11 @@
 
             addBlockEditorActions();
             //--- Open the sidebar editor automatically due to that being where our settings live
-            wp.data.dispatch( 'core/edit-post' ).openGeneralSidebar( 'edit-post/block' );
+            $tmpDispatch = wp.data.dispatch( 'core/edit-post' );
+            if( $tmpDispatch ){
+                $tmpDispatch.openGeneralSidebar( 'edit-post/block' );
+            }
+           
             var tmpWarnings = $('.block-editor-warning__action > .components-button.is-primary');
             //--- Open the sidebar editor automatically due to that being where our settings live
 

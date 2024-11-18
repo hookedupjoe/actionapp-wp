@@ -21,7 +21,7 @@
 
 echo '<img class="ui image medium" src="'.ACTIONAPP_WP_IMAGE_PATH.'single-page-header.png" />';
 echo ('<div spot="mainspot"></div>');
- 
+
 //--- Assure there is a data view definition so the dataview control can show dataviews
 $tmpDoc = (object) array(
     "name" => "dataviews",

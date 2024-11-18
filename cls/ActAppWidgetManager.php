@@ -22,6 +22,7 @@
 
 class ActAppWidgetManager {
 	private static $instance;
+	
 	public static function get_instance() {
 		if ( null == self::$instance ) {
 			self::$instance = new ActAppWidgetManager();
@@ -65,6 +66,7 @@ class ActAppWidgetManager {
 			'catalogURL'=> ACTIONAPP_WP_BLOCKS_URL . '/catalog'
 		);
 
+        $my_css_ver = '1';//Todo
 
 		wp_register_style( 'actapp-blocks-content_css',   ACTIONAPP_WP_BLOCKS_URL . '/css/wp-blocks-content.css', false,  $my_css_ver );
 		wp_enqueue_style ( 'actapp-blocks-content_css' );
@@ -87,12 +89,14 @@ class ActAppWidgetManager {
 	}
 
 	public static function actapp_init_admin_scripts(){
+	    $my_css_ver = '1';//Todo
 		wp_register_style( 'aa-core-admin_css',   ACTIONAPP_WP_BLOCKS_URL . '/css/wp-admin.css', false,  $my_css_ver );
 		wp_enqueue_style ( 'aa-core-admin_css' );
 	}
 	
 	public static function actapp_init_blocks($theHook) {
 		
+	    $my_css_ver = '1';//Todo
 	
 		wp_register_style( 'aa-core-blocks_css',   ACTIONAPP_WP_BLOCKS_URL . '/css/wp-blocks.css', false,  $my_css_ver );
 		//--- Load the action app core components and ActionAppCore.common.blocks add on

@@ -73,7 +73,10 @@ class ActAppDesigner {
 		$pagename = $post->post_name;
 		$current_user = wp_get_current_user();
 
-		$tmpIsDeveloperView = $_GET['devonlyview'];
+		$tmpIsDeveloperView = '';
+		if( isset($_GET['devonlyview'] )){
+				$tmpIsDeveloperView = $_GET['devonlyview'];
+		}
 		if( $tmpIsDeveloperView == 'fields' && current_user_can('actappdesign') ){
 			$template = ACTIONAPP_WP_DIR . '/tpl/actappdesigndoc.php';
 			return $template;
@@ -127,6 +130,8 @@ class ActAppDesigner {
 	public static function getRootPostID(){
 		$post_type = 'actappdesign';
 		$slug = 'welcome';
+		$title = 'Welcome';
+		$content = 'welcome';
 		$tmpMainID = ActAppCommon::post_exists_by_slug($slug, $post_type, $title, $content);
 		if( $tmpMainID ){
 			return $tmpMainID;
@@ -199,6 +204,7 @@ class ActAppDesigner {
 		$slug = 'welcome';
         $title = 'Designer Home Page';
         $content = 'Internal Use';
+
 		$tmpMainID = ActAppCommon::assure_doc($slug, $post_type, $title, $content);
 		
 		$tmpMainID = ActAppCommon::post_exists_by_slug($slug, $post_type);
@@ -217,19 +223,19 @@ class ActAppDesigner {
 		$slug = 'dashboard';
         $title = 'Designer Dashboard';
         $content = 'Internal Use';
-		ActAppCommon::assure_no_doc($slug, $post_type);
+		//ActAppCommon::assure_no_doc($slug, $post_type);
 		$tmpNewDoc = ActAppCommon::assure_doc($slug, $post_type, $title, $content);
-
+	
 		$slug = 'resources';
         $title = 'Data Dashboard';
         $content = 'Internal Use';
-		ActAppCommon::assure_no_doc($slug, $post_type);
+		//ActAppCommon::assure_no_doc($slug, $post_type);
 		$tmpNewDoc = ActAppCommon::assure_doc($slug, $post_type, $title, $content);
 
 		$slug = 'appconsole';
         $title = 'Applications Console';
         $content = 'Internal Use';
-		ActAppCommon::assure_no_doc($slug, $post_type);
+		//ActAppCommon::assure_no_doc($slug, $post_type);
 		//$tmpNewDoc = ActAppCommon::assure_doc($slug, $post_type, $title, $content);
 
 		//--- ToDo: Change to use internal call to build form to support external login types
@@ -274,7 +280,7 @@ class ActAppDesigner {
 	}
 	
 	public static function actapp_init_blocks($theHook) {
-		
+		$my_css_ver = '1'; //todo
 		wp_register_style( 'act-app-designer_css',   ACTIONAPP_WP_URL . '/css/designer.css', false,  $my_css_ver );
 		//--- Load the action app core components and ActionAppCore.common.blocks add on
 		wp_enqueue_script(

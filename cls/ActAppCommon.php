@@ -236,6 +236,16 @@ class ActAppCommon {
 	
 	}
 
+	 /**
+	 * getif.
+	 *
+	 * @return mixed get from array if value present else ''
+	 */
+	public static function getif( $theKey, $theArray ) {
+		if( array_key_exists($theKey, $theArray) ){
+			return $theArray[$theKey];
+		} 
+	}
 
 	 /**
 	 * post_exists_by_slug.
