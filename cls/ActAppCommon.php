@@ -54,10 +54,6 @@ class ActAppCommon {
 
 		wp_register_style( 'jodit_css',    $tmplibloc . 'lib/jodit/jodit.min.css', false,   $my_css_ver );
 		wp_enqueue_style ( 'jodit_css' );
-		
-
-//		wp_register_style( 'tabulator_sem_css',    $tmplibloc . 'lib/tabulator/css/tabulator_semanticui.min.css', false,   $my_css_ver );
-//		wp_enqueue_style ( 'tabulator_sem_css' );
 
 		wp_enqueue_script( 'support_libs', $tmplibloc . 'built-lib/support-libs.js', array(), $my_js_ver );
 		wp_enqueue_script( 'semantic_js', $tmplibloc . 'lib/semantic/dist/semantic.min.js', array(), $my_js_ver );
@@ -71,13 +67,18 @@ class ActAppCommon {
 		wp_enqueue_script( 'jodit', $tmplibloc . 'lib/jodit/jodit.min.js', array(), $my_js_ver );
 
 
-		wp_enqueue_script(
-			'actapp-blocks-iframe-polyfill', 
-			ACTIONAPP_WP_BLOCKS_URL . '/js/FixIFramePreviewInWP.js',
-			array('wp-blocks','wp-editor','wp-element'),
-			true
-		);
-		
+		//-- For places that use patterns in an iframe, we have to use this ugly solution to get css for now 
+		//-- ToDo: Revisit in future releases for a fix - 11-2024
+		$screeninfo =  get_current_screen();
+		$screenbase = isset($screeninfo) ? get_current_screen()->base : '';
+		if( $screenbase == 'site-editor' || $screenbase == 'post' || $screenbase == 'page' ){
+			wp_enqueue_script(
+				'actapp-blocks-iframe-polyfill', 
+				ACTIONAPP_WP_BLOCKS_URL . '/js/FixIFramePreviewInWP.js',
+				array('wp-blocks','wp-editor','wp-element'),
+				true
+			);
+		}
 
 		wp_localize_script(
 			'wp-block-editor',
