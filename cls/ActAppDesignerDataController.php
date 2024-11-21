@@ -586,6 +586,7 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 
 	public static function getDataFromQuery($query){
 		$tmpRet = array();
+		$tmpAdded = false;
 		if ( $query->have_posts() ) {
 			while ( $query->have_posts() ) {
 				$query->the_post();
@@ -770,8 +771,8 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 			}			
 			$tmpDocID = (ActAppDesigner::getSUID() . '_' . uniqid('' . random_int(1000, 9999)));
 			$body->__uid = $tmpDocID;
-			$body->__doctype = $doctype;
-			$body->__doctitle = $doctitle;
+			$body->__doctype = '';
+			$body->__doctitle = '';
 		}
 		
 		$jsonDoc = json_encode($body);
@@ -845,7 +846,7 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 			'full_id' => $body->id,
 			'new_id' => $newid,
 			'update_id' => $tmpPostID,
-			'doctype' => $doctype,
+			'doctype' => '',
 			'newuser' => $newuser,
 			'result' => $tmpResultCode,
 			'body' => $body
@@ -917,13 +918,13 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 		$doctype = $body->__doctype;
 		$doctitle = $body->__doctitle;
 
-		$tmpContent = $body->__postcontent;
-		$tmpExcerpt = $body->__postexcerpt;
+		$tmpContent = isset($body->__postcontent) ? $body->__postcontent : '';
+		$tmpExcerpt = isset($body->__postexcerpt) ? $body->__postexcerpt : '';
 
 		$tmpDocID = '';
 		$tmpPostID = false;
 		if (!empty($body->__uid) && empty($body->id)){
-			$tmpExistingID = ActAppCommon::post_exists_by_uid($tmpSlug);
+			$tmpExistingID = ActAppCommon::post_exists_by_uid($body->__uid);
 			if($tmpExistingID){
 				//ToDo: Delete from trash instead?
 				$tmpExistingStatus = get_post_status($tmpExistingID);
@@ -935,7 +936,7 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 			}
 		}
 		
-		if ($body->id != null && $body->id != ""){
+		if (isset($body->id) && $body->id != ""){
 			$tmpPostID = $body->id;
 			$tmpDocID = $body->id;
 			//--- If being updated, assure $doctitle
@@ -943,7 +944,7 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 				$doctitle = get_the_title($tmpPostID);
 			}
 		} else {
-			if($body->id != null){
+			if(isset($body->id)){
 				unset($body["id"]);
 			}
 			if( empty($body->__uid) ){
@@ -977,7 +978,7 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 			'post_title'        =>   $doctitle,
 			'post_content'      =>   '',
 			'json' => $jsonDoc,
-			'body_topic' => $body->topic,
+			'body_topic' => isset($body->topic) ? $body->topic : '',
 			'post_status'       =>   'publish',
 			'post_type'         =>   $tmpPostType
 		);
@@ -1088,7 +1089,8 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 		$catname = $_GET['catname'];
 		$resname = $_GET['resname'];
 		$restype = $_GET['restype'];
-	
+		$tmpDocType = "design-catalog-res";
+
 		//--- Start with blank query
 		$tmpExtraQuery = array();
 		array_push($tmpExtraQuery, array(
@@ -1423,6 +1425,7 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 		//$tmpPostType = 'actappdesigndoc';
 		$tmpDocs = self::getDesignDocs($tmpDocType);
 		$tmpRet = '';
+		$tmpAdded = false;
 		foreach ($tmpDocs as $tmpJson) {
 			$tmpToAdd = '{
 				"ctl": "tbl-ol-node",
@@ -1531,6 +1534,7 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 
 		$tmpDocs = self::getDesignDocs($tmpDocType,$tmpExtraQuery);
 		$tmpRet = '';
+		$tmpAdded = false;
 		foreach ($tmpDocs as $tmpJson) {
 			$tmpIcon = ActAppDesigner::getIconForType($tmpJson['restype']);
 			$tmpToAdd = '{"ctl":"tbl-ol-node","type":"resource","item":"'.$tmpJson['catname'].'--'.$tmpJson['resname'].'","details":"'.$tmpJson['resname'].'","meta":"&#160;","level":1,"icon":"'.$tmpIcon.'","color":"brown","attr":{"catname":"'.$tmpJson['catname'].'","appname":"","pagename":"","resname":"'.$tmpJson['resname'].'","restype":"'.$tmpJson['restype'].'","source":"cat"},"group":"workspace-outline"}';

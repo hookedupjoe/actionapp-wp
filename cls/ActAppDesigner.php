@@ -718,7 +718,7 @@ class ActAppDesigner {
 				
 				
 			} else {
-				$tmpFieldList = explode(',',$tmpFields);
+				$tmpFieldList = explode(',',$theFields);
 				$tmpJson = array();
 				foreach ($tmpFieldList as $iFieldName) {
 					$tmpJson[$iFieldName] = array();
