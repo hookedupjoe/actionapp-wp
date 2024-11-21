@@ -60,19 +60,12 @@ class ActAppWidgetManager {
 		wp_enqueue_style ( 'aa-core-blocks_css' );
 	}
 
+	
 	public static function actapp_init_blocks_content($theHook) {
 		$tmpConfig = array(
 			'baseURL'=> ACTIONAPP_WP_BLOCKS_URL,
 			'catalogURL'=> ACTIONAPP_WP_BLOCKS_URL . '/catalog'
 		);
-
-        $my_css_ver = '1';//Todo
-
-		wp_register_style( 'actapp-blocks-content_css',   ACTIONAPP_WP_BLOCKS_URL . '/css/wp-blocks-content.css', false,  $my_css_ver );
-		wp_enqueue_style ( 'actapp-blocks-content_css' );
-
-		// wp_register_style( 'actapp-blocks-fonts_css',   ACTIONAPP_WP_BLOCKS_URL . '/css/fonts/demo2/css/demo2.css', false,  $my_css_ver );
-		// wp_enqueue_style ( 'actapp-blocks-fonts_css' );
 
 		$tmpJson = json_encode($tmpConfig);
 		$tmpScript = 'window.ActionAppCore.BlockManagerConfig = ' . $tmpJson;
@@ -87,6 +80,20 @@ class ActAppWidgetManager {
 			true
 		);
 	}
+	
+
+	public static function actapp_init_blocks_css($theHook) {
+		$tmpConfig = array(
+			'baseURL'=> ACTIONAPP_WP_BLOCKS_URL,
+			'catalogURL'=> ACTIONAPP_WP_BLOCKS_URL . '/catalog'
+		);
+
+        $my_css_ver = '1';//Todo
+
+		wp_register_style( 'actapp-blocks-content_css',   ACTIONAPP_WP_BLOCKS_URL . '/css/wp-blocks-content.css', false,  $my_css_ver );
+		wp_enqueue_style ( 'actapp-blocks-content_css' );
+	}
+
 
 	public static function actapp_init_admin_scripts(){
 	    $my_css_ver = '1';//Todo
@@ -106,6 +113,8 @@ class ActAppWidgetManager {
 			array('wp-blocks','wp-editor','wp-element'),
 			true
 		);
+
+
 		//--- Load standardly created widgets;
 		$tmpWidgetList = array('segment','header','card', 'cards', 'message', 'button', 'image', 'cardsection','dropindicator','spot','richtext');
 		//ToAdd _. , 'buttons'
@@ -124,16 +133,25 @@ class ActAppWidgetManager {
 		add_filter('block_categories',  array('ActAppWidgetManager','actapp_block_category'), 10, 2);
 		add_action('enqueue_block_editor_assets',  array('ActAppWidgetManager','actapp_init_blocks_content'),10,2);
 		add_action('enqueue_block_editor_assets',  array('ActAppWidgetManager','actapp_init_blocks'),10,2);
+		add_action('wp_enqueue_block_style',  array('ActAppWidgetManager','actapp_init_blocks_css'),20,2);
+		add_action('wp_enqueue_block_style',  array('ActAppCommon','setup_scripts'),20,2);
+		add_action('enqueue_block_editor_assets',  array('ActAppCommon','setup_scripts'),20,2);
+		
 		
 		add_action('wp_enqueue_scripts', array('ActAppCommon','setup_scripts'),20);
 		add_action('wp_enqueue_scripts',  array('ActAppWidgetManager','actapp_init_blocks_content'),20,2);
+		add_action('wp_enqueue_scripts',  array('ActAppWidgetManager','actapp_init_blocks_css'),20,2);
 		
 		
-
 		add_action('admin_enqueue_scripts', array('ActAppCommon','setup_scripts'),20);
 		add_action('admin_enqueue_scripts',  array('ActAppWidgetManager','actapp_init_blocks_content'),20,2);
 		add_action('admin_enqueue_scripts',  array('ActAppWidgetManager','actapp_init_admin_scripts'),20);
+		add_action('admin_enqueue_scripts',  array('ActAppWidgetManager','actapp_init_blocks_css'),20);
 
+		$tmplibloc = ACTIONAPP_WP_CORE_LIB_URL . '/';
+		add_editor_style($tmplibloc . 'built-lib/support-libs.css');
+		add_editor_style($tmplibloc . 'lib/semantic/dist/semantic.min.css');
+		add_editor_style(ACTIONAPP_WP_BASE_URL . '/css/wp-editor.css');
 
 		self::setup_data();
 	}

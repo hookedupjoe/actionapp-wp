@@ -54,6 +54,7 @@ class ActAppCommon {
 
 		wp_register_style( 'jodit_css',    $tmplibloc . 'lib/jodit/jodit.min.css', false,   $my_css_ver );
 		wp_enqueue_style ( 'jodit_css' );
+		
 
 //		wp_register_style( 'tabulator_sem_css',    $tmplibloc . 'lib/tabulator/css/tabulator_semanticui.min.css', false,   $my_css_ver );
 //		wp_enqueue_style ( 'tabulator_sem_css' );
@@ -69,7 +70,23 @@ class ActAppCommon {
 		wp_enqueue_script( 'tabulator_moment', $tmplibloc . 'lib/tabulator/addons/moment.2.24.js', array(), $my_js_ver );
 		wp_enqueue_script( 'jodit', $tmplibloc . 'lib/jodit/jodit.min.js', array(), $my_js_ver );
 
+
+		wp_enqueue_script(
+			'actapp-blocks-iframe-polyfill', 
+			ACTIONAPP_WP_BLOCKS_URL . '/js/FixIFramePreviewInWP.js',
+			array('wp-blocks','wp-editor','wp-element'),
+			true
+		);
 		
+
+		wp_localize_script(
+			'wp-block-editor',
+			'semantic_css',
+			'additionalIframeScripts',
+			array (
+				'semantic' =>  $tmplibloc . 'lib/semantic/dist/semantic.min.js'
+			)
+		);
 		$tmpConfig = array(
 			'rootPath'=>self::getRootPath(),
 			'actappCatalogURL'=> ACTIONAPP_WP_BASE_URL . '/catalog/', 
@@ -381,8 +398,6 @@ class ActAppCommon {
 		$ActAppCommon = array();
 	}
 
-
-
-
 }
+
 add_action( 'init', array( 'ActAppCommon', 'init' ) );

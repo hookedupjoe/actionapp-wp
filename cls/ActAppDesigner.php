@@ -342,8 +342,8 @@ class ActAppDesigner {
 		add_action('admin_enqueue_scripts',  array('ActAppDesigner','actapp_init_blocks_content'),20,2);
 		add_action('admin_enqueue_scripts',  array('ActAppDesigner','actapp_init_admin_scripts'),20);
 
-		add_action('enqueue_block_editor_assets',  array('ActAppDesigner','actapp_init_blocks_content'),11,2);
-		add_action('enqueue_block_editor_assets',  array('ActAppDesigner','actapp_init_blocks'),11,2);
+		add_action('wp_enqueue_style',  array('ActAppDesigner','actapp_init_blocks_content'),11,2);
+		add_action('wp_enqueue_style',  array('ActAppDesigner','actapp_init_blocks'),11,2);
 
 
 
