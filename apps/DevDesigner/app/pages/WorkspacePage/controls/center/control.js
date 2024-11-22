@@ -46,7 +46,7 @@ License: MIT
 											icon: "hdd",
 											color: "black",
 											size: "large",
-											text: "WordPress Designer Workspace"
+											text: "Designer Workspace"
 										},
 										{
 											ctl: "segment",

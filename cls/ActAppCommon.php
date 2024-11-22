@@ -69,6 +69,10 @@ class ActAppCommon {
 
 		//-- For places that use patterns in an iframe, we have to use this ugly solution to get css for now 
 		//-- ToDo: Revisit in future releases for a fix - 11-2024
+		if ( !function_exists( 'get_current_screen' ) ) { 
+			require_once ABSPATH . '/wp-admin/includes/screen.php'; 
+		} 
+		
 		$screeninfo =  get_current_screen();
 		$screenbase = isset($screeninfo) ? get_current_screen()->base : '';
 		if( $screenbase == 'site-editor' || $screenbase == 'post' || $screenbase == 'page' ){

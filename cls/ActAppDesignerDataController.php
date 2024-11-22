@@ -945,7 +945,7 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 			}
 		} else {
 			if(isset($body->id)){
-				unset($body["id"]);
+				unset($body->id);
 			}
 			if( empty($body->__uid) ){
 				$tmpDocID = (ActAppDesigner::getSUID() . '_' . uniqid('' . random_int(1000, 9999)));
@@ -1153,9 +1153,9 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 	}
 	
 	public function get_catalog_res($request) {
-		$catname = $_GET['catname'];
-		$resname = $_GET['resname'];
-		$restype = $_GET['restype'];
+		$catname = self::getIfSet($_GET,'catname');
+		$resname = self::getIfSet($_GET,'resname');
+		$restype = self::getIfSet($_GET,'restype');
 		
 		if( $catname ){
 			if( !(empty($resname) || empty($restype)) ){

@@ -144,10 +144,10 @@ var thisPageSpecs = {
         //ThisPage.ctlHeader.addSideContent('<div type="button" pageaction="showDocs" class="ui button  blue icon">Docs</div>');
 
         ThisPage.ctlBody.addTab({item:'home',text: '', icon: 'icon home blue', content:''});
-        ThisPage.ctlBody.loadTabSpot('home','Initial Page, Welcome');
+        ThisPage.ctlBody.loadTabSpot('home','<div class="ui segment"><div class="ui header blue">Browse Post Data</div>View, manage import and export all POST data in this system. </div>');
         ThisPage.ctlBody.gotoTab('home');
 
-        ThisPage.ctlNav.addTab({item:'posts',text: 'Posts', icon: 'icon database blue', content:''});
+        ThisPage.ctlNav.addTab({item:'posts',text: 'Data Browser', icon: 'icon database blue', content:''});
         ThisPage.ctlNav.addTab({item:'dataviews',text: 'Data Views', icon: 'icon table green', content:''});
         ThisPage.ctlNav.gotoTab('posts');
 
@@ -160,7 +160,7 @@ var thisPageSpecs = {
 
         tmpHTML = [];
         tmpHTML.push('<div class="ui segment raised">');
-        tmpHTML.push('<div class="ui top attached header">Action App Docs</div>');
+        tmpHTML.push('<div class="ui top attached header">Post Data</div>');
         tmpHTML.push('<div class="ui attached segment">');
         tmpHTML.push('<div class="basic slim buttons vertical fluid">');
         tmpHTML.push('  {{#each data}}{{#if showlink}}');        

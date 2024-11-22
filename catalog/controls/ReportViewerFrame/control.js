@@ -20,6 +20,12 @@
           "controlname": "SearchBar",
           "catalog": "_wordpress",
           "name": "searchbar"
+        },
+        {
+          ctl: 'div',
+          classes: 'ui message small mar0 pad4 hidden',
+          attr: {'myspot':'filtered-count'},
+          name: 'filtered-count'
         }],
         "disabled-east": [{
           "ctl": "segment",
@@ -453,8 +459,53 @@
       return dfd.promise();
     }
   
-  
-    ControlCode.refreshSelection = function() {
+ 
+    
+  ControlCode.refreshSelection = function () {
+
+    var tmpLastCounts = this.counts || {
+      all: 0,
+      filtered: 0,
+      selected: 0
+    };
+
+    var tmpDocCount = this.tableData.length;
+
+    var tmpSelected = this.mainTable.getSelectedRows();
+    // --- replace old counts
+    this.counts = {
+      all: tmpDocCount,
+      filtered: this.mainTable.getDataCount('active'),
+      selected: tmpSelected.length
+    };
+    if (this.counts.all == this.counts.filtered) {
+      this.counts.filtered = 0;
+    }
+    var tmpCountChanged = true;
+    if (tmpLastCounts.all == this.counts.all && tmpLastCounts.filtered == this.counts.filtered && tmpLastCounts.selected == this.counts.selected) {
+      tmpCountChanged = false;
+    }
+
+    this.refreshSearchUI();
+
+    var tmpTotalCount = " " + (this.counts.all || "none") + " records.";
+    var tmpSelCount = " (" + (this.counts.selected || "none")
+      + " selected)";
+    var tmpFilterCount = "Search found " + (this.counts.filtered || "none");
+    if( this.counts.filtered == 0){
+      this.getItemEl('filtered-count').removeClass('green').addClass('hidden');
+      tmpFilterCount = ''
+    } else {
+      this.getItemEl('filtered-count').addClass('green').removeClass('hidden');
+    }
+    this.loadSpot('selected-count', tmpTotalCount + " " + tmpSelCount)
+    this.loadSpot('filtered-count', tmpFilterCount);
+    this.publish('selectionChange', [tmpCountChanged, this.counts, this]);
+
+  };
+
+
+    ControlCode.refreshSelectionORIG_DELETEME = function() {
   
       var tmpLastCounts = this.counts || {
         all: 0,
@@ -563,7 +614,13 @@
       this.refreshSelection();
     };
   
-    ControlCode.selectAll = function() {
+    
+    ControlCode.selectAll = function () {
+      this.mainTable.deselectRow();
+      this.selectFiltered();
+    };
+
+    ControlCode.selectAllDELTEME_ORIGINAL_VERSION = function() {
       this.mainTable.deselectRow();
       var selectedRows = this.mainTable.getRows();
       this.batchSelect = true;

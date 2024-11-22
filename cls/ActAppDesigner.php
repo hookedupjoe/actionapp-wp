@@ -70,8 +70,8 @@ class ActAppDesigner {
 
 	public static function override_tpl($template){
 		$post = get_post();
-		$pagename = $post->post_name;
-		$current_user = wp_get_current_user();
+		$pagename = isset($post->post_name) ? $post->post_name : '';
+		//$current_user = wp_get_current_user();
 
 		$tmpIsDeveloperView = '';
 		if( isset($_GET['devonlyview'] )){
@@ -376,7 +376,7 @@ class ActAppDesigner {
 		'description'       => 'Holds general data managed by the ActApp model',
 		'public'            => true,
 		'menu_position'     => 21,
-		'show_in_rest' => true,
+		'show_in_rest'      => false,
 		'supports'          => array( 'title', 'editor', 'custom-fields' , 'excerpt' ),
 		'has_archive'       => false,
 		'show_in_admin_bar' => false,
@@ -416,7 +416,7 @@ class ActAppDesigner {
 		'description'       => 'Holds general data managed by the ActApp model',
 		'public'            => true,
 		'menu_position'     => 22,
-		'show_in_rest' => true,
+		'show_in_rest'      => true,
 		'supports'          => array( 'title', 'editor', 'custom-fields' ),
 		'has_archive'       => false,
 		'show_in_admin_bar' => true,
@@ -455,7 +455,7 @@ class ActAppDesigner {
 		'description'       => 'Used to provide access entrypoints into the designer',
 		'public'            => true,
 		'menu_position'     => 23,
-		'show_in_rest' => true,
+		'show_in_rest'      => false,
 		'supports'          => array( 'title', 'editor', 'custom-fields', 'excerpt' ),
 		'has_archive'       => false,
 		'show_in_admin_bar' => false,
@@ -503,7 +503,7 @@ class ActAppDesigner {
 		'description'       => 'Holds design related details, managed by development team only',
 		'public'            => true,
 		'menu_position'     => 22,
-		'show_in_rest' => true,
+		'show_in_rest'      => false,
 		'supports'          => array( 'title', 'editor', 'custom-fields' ),
 		'has_archive'       => false,
 		'show_in_admin_bar' => false,
@@ -823,4 +823,5 @@ add_action( 'wp_ajax_foobar', array('ActAppDesigner','foobar_handler') );
 
 //--- Just a demo, consider use case for server side dynamic ***
 //require_once ACTIONAPP_WP_BLOCKS_DIR . '/blocks/actappdesign/ActAppDynamicDemo/Object.php';
+require_once ACTIONAPP_WP_BLOCKS_DIR . '/blocks/actappdesign/ActAppDynoUserInfo/Object.php';
 //require_once ACTIONAPP_WP_BLOCKS_DIR . '/blocks/actappdesign/ActAppReportView/Object.php';

@@ -19,7 +19,7 @@
           },
           {
             ctl: 'div',
-            classes: 'ui message small mar0 pad4',
+            classes: 'ui message small mar0 pad4 hidden',
             attr: {'myspot':'filtered-count'},
             name: 'filtered-count'
           },
@@ -389,6 +389,7 @@
   }
 
 
+  
   ControlCode.refreshSelection = function () {
 
     var tmpLastCounts = this.counts || {
@@ -421,10 +422,10 @@
       + " selected)";
     var tmpFilterCount = "Search found " + (this.counts.filtered || "none");
     if( this.counts.filtered == 0){
-      this.getItemEl('filtered-count').removeClass('green');
+      this.getItemEl('filtered-count').removeClass('green').addClass('hidden');
       tmpFilterCount = ''
     } else {
-      this.getItemEl('filtered-count').addClass('green');
+      this.getItemEl('filtered-count').addClass('green').removeClass('hidden');
     }
     this.loadSpot('selected-count', tmpTotalCount + " " + tmpSelCount)
     this.loadSpot('filtered-count', tmpFilterCount);

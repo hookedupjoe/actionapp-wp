@@ -39,7 +39,7 @@
       color: red;
     }
   </style>
-  <title>ActionApp Developer Console for WP</title>
+  <title>Developer Console</title>
 </head>
 
 <body>
@@ -52,7 +52,7 @@
         <i class="sidebar icon big inverted"></i>
       </a>
       <div style="float:left;margin-left:5px;padding:5px;margin-top:3px;line-height:25px;" class="site-header">
-      ActionApp Developer Console for WP
+      Developer Console
       </div>
       <div style="float:right;padding:0;margin:0;margin-right:10px;margin-left:10px;" appuse="nav-menu"
         class="ui pointing inverted menu nomobile"></div>

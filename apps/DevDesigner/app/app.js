@@ -3,9 +3,9 @@
   ThisApp = null;
 
   var tmpPageNames = [   
+    'AppDataPage',
     'WorkspacePage',
     'ControlsPage',
-    'AppDataPage',
     //'ControlBuilderPage',
     'JsonHelperPage',
     'LogsPage'
@@ -29,7 +29,7 @@
       var tmpRequired = {}
 
       //--- Use tmpRequiredSpecs to preload more using that example
-      ThisApp.init({ hideHeader: true,  pages: thePages, plugins: thePlugins, required: tmpRequired }).then(function (theReply) {
+      ThisApp.init({ hideHeader: false,  pages: thePages, plugins: thePlugins, required: tmpRequired }).then(function (theReply) {
         ThisApp.getByAttr$({ appuse: "app-loader" }).remove();
 
         //--- Extend common with your app specific stuff

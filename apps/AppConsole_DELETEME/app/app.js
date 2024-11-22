@@ -86,7 +86,7 @@
       ThisApp = new siteMod.CoreApp();
 
       var tmpRequired = {}
-      ThisApp.init({  hideheader: true, pages: tmpPageNames, plugins: tmpPluginNames, required: tmpRequired }).then(function (theReply) {
+      ThisApp.init({  hideheader: false, pages: tmpPageNames, plugins: tmpPluginNames, required: tmpRequired }).then(function (theReply) {
         ThisApp.getByAttr$({ appuse: "app-loader" }).remove();
 
         ThisApp.siteLayout.toggle('north');
