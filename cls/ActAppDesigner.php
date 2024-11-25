@@ -229,13 +229,13 @@ class ActAppDesigner {
 		$slug = 'resources';
         $title = 'Data Dashboard';
         $content = 'Internal Use';
-		//ActAppCommon::assure_no_doc($slug, $post_type);
-		$tmpNewDoc = ActAppCommon::assure_doc($slug, $post_type, $title, $content);
+		ActAppCommon::assure_no_doc($slug, $post_type);
+		//$tmpNewDoc = ActAppCommon::assure_doc($slug, $post_type, $title, $content);
 
 		$slug = 'appconsole';
         $title = 'Applications Console';
         $content = 'Internal Use';
-		//ActAppCommon::assure_no_doc($slug, $post_type);
+		ActAppCommon::assure_no_doc($slug, $post_type);
 		//$tmpNewDoc = ActAppCommon::assure_doc($slug, $post_type, $title, $content);
 
 		//--- ToDo: Change to use internal call to build form to support external login types

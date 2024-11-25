@@ -193,6 +193,10 @@
         {
           "title": "Doc Type",
           "field": "__doctype"
+        },
+        {
+          "title": "Post Type",
+          "field": "__posttype"
         }];
   
   

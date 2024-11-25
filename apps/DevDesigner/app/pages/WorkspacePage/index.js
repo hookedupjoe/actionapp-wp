@@ -776,7 +776,12 @@ License: MIT
         createCatalog: '/wp-json/actappdesigner/create-catalog'
     }
     
-    //ThisPage.addData({'endpoints': ThisPage.common.endpoints})
+    
+    actions.refreshCatalogs = refreshCatalogs;
+    function refreshCatalogs(theParams, theTarget) {
+        refreshWorkspace();
+    }
+
     actions.addCatalog = addCatalog;
     function addCatalog(theParams, theTarget) {
         ThisPage.getPanel('frmNewCatalog').prompt(

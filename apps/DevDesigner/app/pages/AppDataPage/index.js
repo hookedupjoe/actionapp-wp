@@ -147,21 +147,21 @@ var thisPageSpecs = {
         ThisPage.ctlBody.loadTabSpot('home','<div class="ui segment"><div class="ui header blue">Browse Post Data</div>View, manage import and export all POST data in this system. </div>');
         ThisPage.ctlBody.gotoTab('home');
 
-        ThisPage.ctlNav.addTab({item:'posts',text: 'Data Browser', icon: 'icon database blue', content:''});
-        ThisPage.ctlNav.addTab({item:'dataviews',text: 'Data Views', icon: 'icon table green', content:''});
+        ThisPage.ctlNav.addTab({item:'posts',text: 'Data', icon: 'icon database blue', content:''});
+        ThisPage.ctlNav.addTab({item:'dataviews',text: 'Management', icon: 'icon cog green', content:''});
         ThisPage.ctlNav.gotoTab('posts');
 
         var tmpHTML = [];
         tmpHTML.push('<div class="ui segment ">');
-        tmpHTML.push('<div pageaction="showDataViewDefs" class="ui fluid button blue">Show Definitions</div>');
+        tmpHTML.push('<div  itemname="dataviewscat" itemtitle="Data Views" pageaction="selectListItem" class="ui fluid button blue">Data Views</div>');
+        tmpHTML.push('<div  itemname="importexport" itemtitle="Import / Export" pageaction="selectListItem" class="ui mart8 fluid button blue">Import / Export</div>');
         tmpHTML.push('</div>');
         tmpHTML = tmpHTML.join('\n');
         ThisApp.addTemplate('DevConsole:DataViewConsole', tmpHTML);
 
         tmpHTML = [];
-        tmpHTML.push('<div class="ui segment raised">');
-        tmpHTML.push('<div class="ui top attached header">Post Data</div>');
-        tmpHTML.push('<div class="ui attached segment">');
+        tmpHTML.push('<div class="ui segment raised pad2">');
+        tmpHTML.push('<div class="ui attached segment pad8">');
         tmpHTML.push('<div class="basic slim buttons vertical fluid">');
         tmpHTML.push('  {{#each data}}{{#if showlink}}');        
         tmpHTML.push('  <div itemname="{{name}}" itemtitle="{{title}}" pageaction="selectListItem" class="ui button fluid basic blue">{{title}}</div>');
@@ -189,6 +189,27 @@ var thisPageSpecs = {
                 showlink: true
             },
             {
+                name:'dataviews',
+                isDataView: true,
+                viewname: 'dataviews',
+                title: 'Data Views',
+                showlink: false
+            },
+            {
+                name:'dvposts',
+                isDataView: true,
+                viewname: 'posts',
+                title: 'Posts',
+                showlink: false
+            },
+            {
+                name:'dvpages',
+                isDataView: true,
+                viewname: 'pages',
+                title: 'Pages',
+                showlink: false
+            },
+            {
                 name:'thetrash',
                 isTrash: true,
                 title: 'The Trash Bin',
@@ -199,20 +220,15 @@ var thisPageSpecs = {
                 catalog: '_designer',
                 controlname: 'ImportExport',
                 title: 'Import / Export',
-                showlink: true
+                showlink: false
             },
             {
-                name:'dvposts',
-                isDataView: true,
-                viewname: 'posts',
-                title: 'Posts'
-            },
-            {
-                name:'dvpages',
-                isDataView: true,
-                viewname: 'pages',
-                title: 'Pages'
-            }            
+                name:'dataviewscat',
+                catalog: '_designer',
+                controlname: 'DataViewDefinitions',
+                title: 'Data Views',
+                showlink: false
+            }      
         ]}
         //--- Examples of app docs ..
         // },
@@ -276,36 +292,36 @@ var thisPageSpecs = {
     }
 
     
-    actions.showDataViewDefs = function(theParams, theTarget){
-        //var tmpParams = ThisApp.getActionParams(theParams, theTarget, ['aaa','bbb']);
-        var tmpTabKey = 'tab-showDataViewDefs';
-        var tmpTabTitle = 'Data Views';
-        if( loadedTabs[tmpTabKey] ){
-            ThisPage.ctlBody.gotoTab(tmpTabKey);
-        } else {
-            var tmpCloseMe = '<i style="margin-right:-5px;margin-left:10px;" tab="' + tmpTabKey + '" pageaction="closeTab" class="icon close grey inverted"></i>';
-            ThisApp.getResourceFromSource('control','DataViewDefinitions','_designer','DataViewDefinitions').then(function(theLoadedControl){
-                var tmpNewTabControl = theLoadedControl.create(tmpTabKey);
-                //var tmpNewTabControl = ThisPage.getControl('DataViewDefinitions').create(tmpTabKey);
+    // actions.showDataViewDefs = function(theParams, theTarget){
+    //     //var tmpParams = ThisApp.getActionParams(theParams, theTarget, ['aaa','bbb']);
+    //     var tmpTabKey = 'tab-showDataViewDefs';
+    //     var tmpTabTitle = 'Data Views';
+    //     if( loadedTabs[tmpTabKey] ){
+    //         ThisPage.ctlBody.gotoTab(tmpTabKey);
+    //     } else {
+    //         var tmpCloseMe = '<i style="margin-right:-5px;margin-left:10px;" tab="' + tmpTabKey + '" pageaction="closeTab" class="icon close grey inverted"></i>';
+    //         ThisApp.getResourceFromSource('control','DataViewDefinitions','_designer','DataViewDefinitions').then(function(theLoadedControl){
+    //             var tmpNewTabControl = theLoadedControl.create(tmpTabKey);
+    //             //var tmpNewTabControl = ThisPage.getControl('DataViewDefinitions').create(tmpTabKey);
 
-                ThisPage.ctlBody.addTab({item:tmpTabKey,text: tmpTabTitle + tmpCloseMe, icon: 'table', content:''})
-                var tmpNewSpot = ThisPage.ctlBody.getTabSpot(tmpTabKey);
-                tmpNewTabControl.loadToElement(tmpNewSpot).then(function () {
-                    loadedTabs[tmpTabKey] = tmpNewTabControl;
-                    //--- Go to the newly added card (to show it and hide others)
-                    if( tmpNewTabControl.setup ){
-                        tmpNewTabControl.setup(tmpParams);
-                    }
-                    ThisApp.delay(1).then(function(){
-                        ThisPage.ctlBody.gotoTab(tmpTabKey);
-                    })
+    //             ThisPage.ctlBody.addTab({item:tmpTabKey,text: tmpTabTitle + tmpCloseMe, icon: 'table', content:''})
+    //             var tmpNewSpot = ThisPage.ctlBody.getTabSpot(tmpTabKey);
+    //             tmpNewTabControl.loadToElement(tmpNewSpot).then(function () {
+    //                 loadedTabs[tmpTabKey] = tmpNewTabControl;
+    //                 //--- Go to the newly added card (to show it and hide others)
+    //                 if( tmpNewTabControl.setup ){
+    //                     tmpNewTabControl.setup(tmpParams);
+    //                 }
+    //                 ThisApp.delay(1).then(function(){
+    //                     ThisPage.ctlBody.gotoTab(tmpTabKey);
+    //                 })
                     
-                });
-            });
+    //             });
+    //         });
             
 
-        }
-    }
+    //     }
+    // }
 
     actions.selectListItem = function(theParams, theTarget){
         var tmpParams = ThisApp.getActionParams(theParams, theTarget, ['itemname','itemtitle','dataview','viewname']);

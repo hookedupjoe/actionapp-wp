@@ -62,7 +62,23 @@ License: MIT
 													"right": true,
 													"icon": "archive",
 													"name": "btn-new-cat",
-													"text": "New Catalog"
+													"text": "Add New Catalog"
+												},
+												{
+													"ctl": "button",
+													"color": "white",
+													"size": "large",
+													"pageaction": "refreshCatalogs",
+													"labeled": true,
+													"right": true,
+													"icon": "recycle",
+													"name": "btn-refresh-cats",
+													"text": "Refresh"
+												},
+												{
+													"ctl": "div",
+													"classes": "pad4",
+													"name": "listpanelpad"
 												},
 												{
 													"ctl": "panel",
