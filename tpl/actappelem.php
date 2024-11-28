@@ -45,14 +45,22 @@ if( $tmpNoFrameParam ){
 }
 
 
+$hideFrame = isset($_GET['fullscreen']) ? true : false;
+
+
+
+
+
+
 // Summary:  ANY-F for unframed; ANY-T for framed 
 // Note: If there is a control with a frame, use a frame always
 
-if( $includeSite ){
+if( $includeSite && $includeFrame ){
 	get_header();
 } else {
 	wp_head();
 }
+
 
 //
 // $tmpLoc = ActAppCommon::getCurrentLocation();
@@ -71,6 +79,7 @@ if( $includeSite ){
 // $tmpObj = json_decode($tmpJson);
 // var_dump($tmpObj);
 ?>
+
 
 <?php
 if( $includeFrame ){
@@ -94,22 +103,50 @@ if( $includeFrame ){
 
 	</div>
 
-	<script>		
+	<script>
+	
 		<?php echo ActAppDesigner::get_code_bubble_start(); ?>
 
 
 		<?php echo ActAppDesigner::get_app_loader_script(); ?>	
+
+		
+		var tmpShowFooter = true;
+		var tmpShowHeader = true;
+		<?php
+			if( !( $includeSite && $includeFrame) || $hideFrame == true){
+				echo 'tmpShowFooter = false; tmpShowHeader=false;';
+			}
+		?>
+
+		console.log('tmpShowFooter',tmpShowFooter);
+		if( tmpShowFooter == false || tmpShowHeader == false){
+			setTimeout(function(){
+				if(!tmpShowHeader){
+					$('.page-header').addClass('hidden');
+				}
+				if(!tmpShowFooter){
+					$('.page-footer').addClass('hidden');
+				}
+				ThisApp.publish('resize');
+			}, 100)
+		}
+			
+
 		function onThisAppLoaded(){
 
+			//--- For console debug
 			ThisApp.delay(1000).then(function(){
 				window.activeControl = ActAppBlocksController.parts.main || ActAppBlocksController.parts.form;
 			});
 			
 			ThisApp.subscribe("resize", function(){
+				
 				var tmpFrame = ThisApp.getByAttr$({appuse:"website-frame-border"});
 				var tmpWPHeader = $("#primary");
+				
 				if( tmpWPHeader && tmpWPHeader.length ){
-					var tmpH = window.innerHeight - tmpWPHeader.offset().top - 40;
+					var tmpH = window.innerHeight - tmpWPHeader.offset().top - 10;
 					if( tmpFrame.height() != tmpH ){
 						tmpFrame.height(tmpH);
 					};
@@ -129,10 +166,11 @@ if( $includeFrame ){
 
 <?php 
 
-if( $includeSite ){
+if( $includeSite && $includeFrame){
 	get_footer(); 
 } else {
-	ActAppDesigner::getAppOnlyFooter();
+	//ActAppDesigner::getAppOnlyFooter();
+	get_footer(); 
 }
 
 

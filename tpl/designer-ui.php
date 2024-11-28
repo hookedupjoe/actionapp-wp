@@ -19,27 +19,27 @@
  * @since actionappwp 1.0.0
  */
 
-echo '<img class="ui image medium" src="'.ACTIONAPP_WP_IMAGE_PATH.'single-page-header.png" />';
+echo '<img class="ui image medium marb10" src="'.ACTIONAPP_WP_IMAGE_PATH.'single-page-header.png" />';
 echo ('<div spot="mainspot"></div>');
 
 //--- Assure there is a data view definition so the dataview control can show dataviews
-$tmpDoc = (object) array(
-    "name" => "dataviews",
-    "title" => "Data View Definitions",
-    "sourceposttype" => "actappdesigndoc",
-    "sourcedoctype" => "dataview",
-    "formname" => "DataViewDefinition",
-    "catalog" => "design",
-    "writecaps" => "actappdesign",
-    "readcaps" => "actappapps",
-    "__doctype" => "dataview",
-    "__title" => "Data View Definitions",
-    "__uid" => "316062cae38715a25_100062d3f28f755e3",
-    "__posttype" => "actappdesigndoc",
-    "__doctitle" => "Data View Definitions",
- );
+// $tmpDoc = (object) array(
+//     "name" => "dataviews",
+//     "title" => "Data View Definitions",
+//     "sourceposttype" => "actappdesigndoc",
+//     "sourcedoctype" => "dataview",
+//     "formname" => "DataViewDefinition",
+//     "catalog" => "design",
+//     "writecaps" => "actappdesign",
+//     "readcaps" => "actappapps",
+//     "__doctype" => "dataview",
+//     "__title" => "Data View Definitions",
+//     "__uid" => "actappdesigndoc_dataviews",
+//     "__posttype" => "actappdesigndoc",
+//     "__doctitle" => "Data View Definitions",
+//  );
 
-ActAppDesignerDataController::import_doc($tmpDoc);
+// ActAppDesignerDataController::import_doc($tmpDoc);
 
 ?>
 <script>
@@ -80,6 +80,11 @@ ActAppDesignerDataController::import_doc($tmpDoc);
                             "ctl": "spot",
                             "name": "body",
                             "text": ""
+                        },
+                        {
+                            "ctl": "spot",
+                            "name": "details",
+                            "text": '<div class="ui message larger blue mart10">Use the link above to open the <b>Developer Console</b> in a new browser tab.</div>'
                         }
                     ]
                 }

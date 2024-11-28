@@ -6,6 +6,14 @@ html, body {
   font-family: Calibri, Tahoma, Geneva, sans-serif;
 }
 
+.cleanzone {
+  -webkit-box-sizing: unset;
+  box-sizing: unset;
+  font-size:unset;
+  font-family: unset;  
+}
+
+
 .fluid-field {
   width: 100%;
 }
@@ -712,6 +720,9 @@ cursor: not-allowed !important;
 .aa-ws {
   min-height:300px;    
 }
+.mongino-ws {
+  min-height:300px;    
+}
 .one-liner {
   white-space: nowrap;
   overflow:auto;
@@ -728,6 +739,16 @@ cursor: not-allowed !important;
   margin:0px;
   padding:0px;
 }
+.mongino-footer {
+  padding:3px;
+  border: solid 1px;
+}
+
+.mongino-outside {
+  margin:0px;
+  padding:0px;
+}
+
 
 /* Context Menu Tweaks */
 .context-menu-icon.context-menu-hover:before {
@@ -744,7 +765,12 @@ cursor: pointer;
 background-color: transparent;
 }
 
-/* Semantic 2.3 not working as expected, work arounds for "top attached", etc */
+
+[action],[myaction],[pageaction] {
+  cursor: pointer; 
+  }
+
+  /* Semantic 2.3 not working as expected, work arounds for "top attached", etc */
 .ontop {
 padding-bottom:0px;
 }
@@ -1012,6 +1038,17 @@ width:150px !important;
 
 /*  INVERTED POPUP MENU UPDATE */
 
+/*--- Black ---*/
+.ui.black.menu.inverted .dropdown.item .menu .item {
+	background-color: black !important;
+	color: #FFFFFF !important;
+}
+
+.ui.black.menu.inverted .dropdown.item .menu .item:hover {
+	background-color: black !important;
+}
+
+
 /*--- Red ---*/
 .ui.red.menu.inverted .dropdown.item .menu .item {
 	background-color: #DB2828 !important;
@@ -1156,6 +1193,20 @@ font-size:18px;
 }
 
 
+
+
+
+.site-layout-north .site-header {
+  color: white!important;
+  font-weight: stong;
+  font-size:18px;
+  }
+  
+  
+  body[appheader="false"] .site-layout-north {
+    display:none !important;
+  }
+  
 .ui.menu .item.plain {
 position: inherit;
 }
@@ -1393,4 +1444,9 @@ div.ui.message.floating {
   padding-bottom:2px !important;
   padding-right:7px !important;
   padding-left:4px !important;
+}
+
+
+body.pushable.clearback {
+  background-color: rgba(0, 0, 0, 0) !important;
 }

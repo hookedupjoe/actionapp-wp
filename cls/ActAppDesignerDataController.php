@@ -160,6 +160,22 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 	  );
 	  register_rest_route( $namespace, '/' . $path, [$routeInfo]);     
 
+	  $path = 'editdoc';
+	  $routeInfo = array(
+		'methods'             => 'POST',
+		'callback'            => array( $this, 'edit_document' ),
+		'permission_callback' => array( $this, 'get_edit_permissions_check' )
+	  );
+	  register_rest_route( $namespace, '/' . $path, [$routeInfo]);     
+
+	  $path = 'unlockdoc';
+	  $routeInfo = array(
+		'methods'             => 'POST',
+		'callback'            => array( $this, 'unlock_document' ),
+		'permission_callback' => array( $this, 'get_edit_permissions_check' )
+	  );
+	  register_rest_route( $namespace, '/' . $path, [$routeInfo]);     
+
 
 //=========== DESIGNER RESOURCE APIs ===============
 
@@ -857,8 +873,124 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 		echo $tmpRet;
 		exit();
 	}
-
 	
+	//--- Mark document as in edit mode and return the current document
+	public static function unlock_document($request) {
+		$json = $request->get_body();
+		$body = json_decode($json);
+		$body->isFound = ($body->id);
+
+		if( $body->isFound ){
+			//$body->doc = ActAppDesigner::get_post_as_doc();
+			self::actapp_unset_post_lock($body->isFound );
+			$body->unlocked = true;
+		}
+		return $body;
+	}	
+
+	//--- Mark document as in edit mode and return the current document
+	public static function edit_document($request) {
+		if ( 0 == ($user_id = get_current_user_id()) )
+			return false;
+
+		$json = $request->get_body();
+		$body = json_decode($json);
+		// $isLockOverride = false;
+		// if(isset($body->lockOverride) && $body->lockOverride == true){
+		// 	$isLockOverride = true;
+		// }
+		
+		$body->isLocked = get_post_meta( $body->id, '__edit_lock_actapp');
+		if( is_array($body->isLocked) ){
+			$body->isLocked = $body->isLocked[0];
+		}
+
+		if (!($body->isLocked)){
+			update_post_meta( $body->id, '__edit_lock_actapp', $user_id );
+			$body->isLocked = false;
+		}
+		//$body->doc = get_post_meta( $body->id );
+		$tmpMeta = get_post_meta( $body->id );
+		//$body->doc = ActAppDesigner::load_meta_to_doc($tmpMeta, array());
+		$body->doc = ActAppDesigner::get_post_as_doc($body->id);
+
+
+// 		$body->isLocked = self::actapp_check_post_lock($body);
+
+// 		//$body->isFound = ActAppCommon::post_exists_by_uid($body->uid);
+// 		//get_post( $body->id );
+// 		$body->isLocked = false;
+// 		if(isset($body->doc->__edit_lock_actapp)){
+// 			$body->isLocked = $body->doc->__edit_lock_actapp;
+// 		}
+// 		if(!$isLockOverride){
+// 			if($body->isLocked){
+// 				return $body;
+// 			}
+// 		}
+// 		//the_post();
+		
+// 		$body->doc = ActAppDesigner::get_post_as_doc();
+// //		self::actapp_unset_post_lock($body->doc->ID);
+		
+		return $body;
+
+	}	
+
+	//---ToDo: Use another internal locking mechanism since we update docs through APIs
+	//         Finish the edit_document API call that will mark the document as being in edit mode
+	public static function actapp_set_post_lock( $post_id ) {
+		if ( 0 == ($user_id = get_current_user_id()) )
+			return false;
+	
+		$now = time();
+		$lock = "$now:$user_id";
+		update_post_meta( $post_id, '__edit_lock_actapp', $lock );
+		return true;
+	}
+
+	public static function actapp_unset_post_lock( $post_id ) {
+		if ( !$post = get_post( $post_id ) )
+			return false;
+	
+			delete_post_meta( $post->ID, '__edit_lock_actapp' );
+		return true;
+	}
+
+	static function actapp_check_post_lock( $post ) {
+		$post = get_post( $post );
+		
+		if ( ! $post ) {
+			return 'nopost';
+		}
+	
+		$lock = get_post_meta( $post->ID, '__edit_lock_actapp', true );
+	
+		if ( ! $lock ) {
+			return false;
+		}
+	
+		$lock = explode( ':', $lock );
+		$time = $lock[0];
+		$user = isset( $lock[1] ) ? (int) $lock[1] : (int) get_post_meta( $post->ID, '_edit_last_actapp', true );
+	
+		if ( ! get_userdata( $user ) ) {
+			return false;
+		}
+	
+		/** This filter is documented in wp-admin/includes/ajax-actions.php */
+		$time_window = apply_filters( 'wp_check_post_lock_window', 150 );
+		//---> $tmpIsCurrentUser = get_current_user_id() !== $user ;
+		//---ToDo: $tmpIsCurrentUser? -> It may be open in another window and we open modal
+		if ( $time && $time > time() - $time_window ) {
+			return $user;
+		}
+	
+		return false;
+	}
+
+
+
 	public static function save_document($request) {
 		return self::save_doc($request,false);
 	}	
@@ -917,6 +1049,9 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 
 		$doctype = $body->__doctype;
 		$doctitle = $body->__doctitle;
+		if( isset($body->__posttype) ){
+			$tmpPostType = $body->__posttype;
+		}
 
 		$tmpContent = isset($body->__postcontent) ? $body->__postcontent : '';
 		$tmpExcerpt = isset($body->__postexcerpt) ? $body->__postexcerpt : '';
@@ -1007,13 +1142,24 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 				'meta_input'=> $body,	
 			));
 		} else {
-			$tmpResultCode = 'updated json';
-			wp_update_post(array(
+			
+			$tmpUpdateDoc = array(
 				'ID'        => $tmpPostID,
 				'post_title'        =>   $doctitle,
 				'post_status'       =>   'publish',
 				'meta_input'=> $body,
-			));
+			);
+
+			$tmpIsLocked = false; //wp_check_post_lock($tmpUpdateDoc);
+			$tmpLockStatus = self::actapp_check_post_lock($tmpUpdateDoc);
+			
+			if( $tmpIsLocked ){
+				$tmpResultCode = 'locked';
+			} else {
+				$tmpResultCode = 'updated json';
+				wp_update_post($tmpUpdateDoc);	
+			}
+			
 		}
 
 		//--- Make return as array and encode it
@@ -1026,6 +1172,7 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 			'doctype' => $doctype,
 			'newpost' => $newpost,
 			'result' => $tmpResultCode,
+			'lockstatus' => $tmpLockStatus,
 			//'body' => $body,
 			//'storeid' => ActAppDesigner::getSUID(),
 			//'data_version' => ActAppDesigner::getPluginSetupVersion(),
@@ -1207,20 +1354,20 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 		}
 
 		if (!empty($dataview)){
-			$tmpDoc = self::getDataViewDoc($dataview);
+			if( $dataview == 'dataviews' ){
+				$posttype = 'actappdesigndoc';
+				$doctype = 'dataview';
+				$posttypeother = '';
+			} else {
+				$tmpDoc = self::getDataViewDoc($dataview);
 
-			$posttype = $tmpDoc['sourceposttype'];
-			$doctype = $tmpDoc['sourcedoctype'];
-			$posttypeother = self::getIfSet($tmpDoc,'sourceposttypeother');
-			if( 'other' == $posttype && $posttypeother != null ){
-				$posttype = $posttypeother;
+				$posttype = $tmpDoc['sourceposttype'];
+				$doctype = $tmpDoc['sourcedoctype'];
+				$posttypeother = self::getIfSet($tmpDoc,'sourceposttypeother');
+				if( 'other' == $posttype && $posttypeother != null ){
+					$posttype = $posttypeother;
+				}
 			}
-			//$capabilities = $tmpDoc['capabilities'];
-			
-			// $doctype = 'person';
-			// $posttype = 'actappdoc';
-			//--- Get access control and apply it here
-			
 		}
 
 		$tmpDocs = self::getPostDocs($posttype,$doctype,$query,$fields,$status);
