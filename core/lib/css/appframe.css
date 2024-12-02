@@ -1353,6 +1353,17 @@ line-height: 36px;
 overflow:hidden;
 }
 
+.button-flow > .ui.button {
+  margin-bottom:4px;
+}
+.button-flow > .ui > .ui.button {
+  margin-bottom:4px;
+}
+
+.ui.centered {
+  text-align:center;
+}
+
 @media print { 
   .noprint { 
      display:none; 

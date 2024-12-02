@@ -36,7 +36,7 @@
 
     BlockEditor.addNumberAtts(info.atts,['parentMaxImgHeight', 'mediaID']);
     BlockEditor.addBooleanAtts(info.atts,['fluid', 'raised','urlopentab']);
-    BlockEditor.addStringAtts(info.atts,['text','title', 'subtitle', 'color', 'parentColor', 'url', 'mediaURL']);
+    BlockEditor.addStringAtts(info.atts,['text','title', 'subtitle', 'color', 'parentColor', 'parentMargin', 'url', 'mediaURL']);
 
     var tmpClassSpecs = {
         boolean: ['fluid','raised'],
@@ -51,17 +51,22 @@
     function getDisplayValue(theProps,theIsEditMode){
         var tmpAtts = theProps.attributes;
         var props = theProps;
-
         var tmpContent = [];
         var tmpClass = getClass(theProps,theIsEditMode);
         var tmpTitle = '';
         var tmpAtt = props.attributes;
         
-        if( tmpAtts.parentColor != '' ){
+        if( tmpAtts.parentColor ){
             tmpClass += ' ' + tmpAtts.parentColor;
         } else if( tmpAtt.color ){
             tmpClass += ' ' + tmpAtt.color;
         }
+
+ 
+
+        
+
+
         if( tmpAtt.title ){
             tmpTitle = tmpAtt.title;
         }
@@ -87,12 +92,14 @@
         if( tmpAtt.text ){
             tmpMainContent.push( newEl('div','description',tmpAtt.text) );
         }
-        tmpContent.push( newEl('div','content',tmpMainContent) );
+        if( tmpMainContent.length > 0){
+            tmpContent.push( newEl('div','content',tmpMainContent) );
+        }
         
         if( theIsEditMode ){
-            tmpContent.push( newEl('div','content', el( wp.blockEditor.InnerBlocks,{renderAppender:wp.blockEditor.InnerBlocks.DefaultBlockAppender} )) );
+            tmpContent.push( newEl('div','extra-content', el( wp.blockEditor.InnerBlocks,{renderAppender:wp.blockEditor.InnerBlocks.DefaultBlockAppender} )) );
         } else {
-            tmpContent.push( newEl('div','content', el( wp.blockEditor.InnerBlocks.Content )));
+            tmpContent.push( newEl('div','extra-content', el( wp.blockEditor.InnerBlocks.Content )));
         }
 
         var tmpExtraContent = [];
@@ -102,11 +109,8 @@
             var tmpAddBtn = el('div',{className:'ui compact button blue basic ',action:'beAddElement', elementname: 'cardsection'}, 'Add Section');
             tmpBarContent.push(tmpAddBtn);
             tmpBarContent.push(el('span', {className:'toright'}, el(wp.blockEditor.InnerBlocks.ButtonBlockAppender, {className: 'actappappender'})));
-            
-
             tmpBtnBar = el('div',{},[el('div',{className:'ui fluid center aligned label blue'},'Card Control'),el('div',{className:'ui segment raised slim'},tmpBarContent,el('div',{className:'endfloat'}))]);
         }
-        
         tmpContent.push(tmpExtraContent);
         if( tmpAtt.url && !theIsEditMode){
             var tmpOpts = {className:tmpClass,href:tmpAtts.url};
@@ -117,9 +121,14 @@
             }
             return el('a',tmpOpts,tmpContent);
         } else {
-            if( theIsEditMode ){
-                return el('div',{className:'pad10'},[tmpBtnBar,newEl('div',tmpClass,[tmpContent])]);    
+            if( tmpAtts.parentMargin ){
+                tmpClass += ' ' + tmpAtts.parentMargin;
             }
+            
+            if( theIsEditMode ){
+                return el('div',{className:tmpClass +' pad10'},[tmpBtnBar,newEl('div',tmpClass,[tmpContent])]);    
+            }
+       
             return newEl('div',tmpClass,tmpContent);
         }
 
@@ -143,7 +152,12 @@
             props.attributes.parentColor = tmpParentAttributes.color || '';
             props.attributes.parentMaxImgHeight = tmpParentAttributes.maxImageHeight || 0;
 
+            if( tmpParentAttributes.margin ){
+                props.attributes.parentMargin = tmpParentAttributes.margin || '';
+            }
+
             var tmpParentColor = tmpParentAttributes.color || '';
+            var tmpParentMargin = tmpParentAttributes.margin || '';
 
             var tmpStandardProperties = [
                 BlockEditor.getStandardProperty(props,'title', 'Card Title'),
@@ -154,7 +168,7 @@
                 BlockEditor.getStandardProperty(props,'url', 'Target Content or Link', 'url' ),
                 !(tmpAtts.url) ? '' : BlockEditor.getStandardProperty(props,'urlopentab', 'Open link in new tab?', 'checkbox' ),                
                 BlockEditor.getStandardProperty(props,'fluid', 'Full width', 'checkbox' ),
-                BlockEditor.getStandardProperty(props,'raised', 'Raised', 'checkbox' ),
+                BlockEditor.getStandardProperty(props,'raised', 'Raised', 'checkbox' )
             ];
 
             var tmpSidebarPanels = [

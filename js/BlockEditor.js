@@ -94,6 +94,7 @@
         
         BlockEditor.getParentAttributes = function(theBlockID){
             var tmpParents = wp.data.select( 'core/block-editor' ).getBlockParents(theBlockID);
+
             var tmpParentAttributes = {};
             if( tmpParents && tmpParents.length > 0 ){
                 //--- Get the direct parent ... 0 is top level
@@ -184,6 +185,16 @@
             }
             return BlockEditor.getSelectControl(theCurrentValue,theOnChangeEvent,tmpSelection);
         }
+
+        BlockEditor.getMarginListControl = function(theCurrentValue, theOnChangeEvent){
+            var tmpSelection = [el("option", {value: ""}, "Default")];
+            var tmpMax = 10; //16 is full max, 10 logical
+            for( var i = 1 ; i <= tmpMax ; i++){
+                tmpSelection.push(el("option", {value: 'mar' + i}, i));
+            }
+            return BlockEditor.getSelectControl(theCurrentValue,theOnChangeEvent,tmpSelection);
+        }
+
         BlockEditor.getDropDownListControl = function(theCurrentValue, theOnChangeEvent, theSelection){
             var tmpSelection = [];
             for( var iPos in theSelection){
@@ -293,7 +304,12 @@
             if( tmpCT == 'columns' ){
                 return 'getColumnListControl';
             }            
+            if( tmpCT == 'margin' ){
+                return 'getMarginListControl';
+            }            
             
+            
+
             if( tmpCT == 'dropdown' ){
                 return 'getDropDownListControl';
             }            
@@ -391,8 +407,8 @@
                 tmpContents.push(BlockEditor.getOptionLabel(theLabel));
             }
             var tmpBindDetails = {controlType:theControlType,props:theProps,attName:theAttName}
-            var tmpOnChange = theOnChange || BlockEditor.standardOnChange.bind(tmpBindDetails);
-
+            var tmpOnChange = theOnChange || BlockEditor.standardOnChange;
+            tmpOnChange = tmpOnChange.bind(tmpBindDetails);
             var tmpFunc = getFunctionForType(theControlType) || '';
             //--- Special Property Editors Used
             if( theControlType == 'dropdown' && theSelectionList ){ 

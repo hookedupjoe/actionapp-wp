@@ -1070,6 +1070,10 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 				$body->id = $tmpExistingID;
 			}
 		}
+
+		//--- Automatically turn off record locking when saved.  Relock if doing save only without closing.
+		//--- ToDo: Reconsider making a second call to unlock the record post save?
+		$body->__edit_lock_actapp = false;
 		
 		if (isset($body->id) && $body->id != ""){
 			$tmpPostID = $body->id;
@@ -1150,7 +1154,7 @@ class ActAppDesignerDataController extends WP_REST_Controller {
 				'meta_input'=> $body,
 			);
 
-			$tmpIsLocked = false; //wp_check_post_lock($tmpUpdateDoc);
+			$tmpIsLocked = false; 
 			$tmpLockStatus = self::actapp_check_post_lock($tmpUpdateDoc);
 			
 			if( $tmpIsLocked ){

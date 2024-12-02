@@ -34,16 +34,29 @@
     };
     const iconEl = BlockEditor.getControlIcon(info.name);
 
-    BlockEditor.addNumberAtts(info.atts,['maxImageHeight']);
-    BlockEditor.addStringAtts(info.atts,['columns','color']);
+    BlockEditor.addNumberAtts(info.atts,['maxImageHeight','minColWidth']);
+    BlockEditor.addStringAtts(info.atts,['columns','color','margin']);
+    BlockEditor.addBooleanAtts(info.atts,['centered']);
 
     var tmpClassSpecs = {
-        boolean: [],
+        boolean: ['centered'],
         string: ['color']
     }
     function getClass(theProps, theIsEditMode){
-        return BlockEditor.getStandardClass( 'ui cards pad0 mar0', tmpClassSpecs, theProps, theIsEditMode);
+        return BlockEditor.getStandardClass( 'ui cards ', tmpClassSpecs, theProps, theIsEditMode);
     }
+
+   function onMarginChange( theEvent ) {
+        var tmpObjAtts = {};
+        var tmpVal = (theEvent.target.value);
+        
+        tmpObjAtts[this.attName] = tmpVal;
+        this.props.setAttributes( tmpObjAtts );
+        //--- The below refresh cause issues with editor in widgets area
+        BlockEditor.refreshBlockEditor();
+        //--- ToDo: Review usage / initial need of the above call
+    }
+
 	function getDisplayValue(theProps,theIsEditMode){
         var props = theProps;
         var tmpClass = getClass(props, true);
@@ -93,10 +106,16 @@
         attributes: info.atts,
         edit: function ( props ) {
 
+            var tmpMargins = ['Default|','1px|mar1','2px|mar2','3px|mar3','4px|mar4','5px|mar5'];
+            
+
             var tmpStandardProperties = [
                 BlockEditor.getStandardProperty(props,'color', 'All Cards Color', 'color' ),
                 BlockEditor.getStandardProperty(props,'columns', 'Columns', 'columns' ),
                 BlockEditor.getStandardProperty(props,'maxImageHeight', 'Max Image Height', 'number' ),
+                BlockEditor.getStandardProperty(props,'minColWidth', 'Minimum Column Width', 'number' ),
+                BlockEditor.getStandardProperty(props,'margin', 'Margin', 'margin', onMarginChange ),
+                BlockEditor.getStandardProperty(props,'centered', 'Centered', 'checkbox' )
             ];
             var tmpSidebarPanels = [
                 BlockEditor.getSidebarPanel('Cards Container Options', tmpStandardProperties)
@@ -126,6 +145,10 @@
             } else {
                 tmpProps["columns"] = props.attributes.columns;
             }
+            if( props.attributes.minColWidth ){
+                tmpProps["mincolwidth"] = props.attributes.minColWidth;
+            }
+                //props.attributes
             var tmpClasses = getClass(props, true);
             if( props.attributes.columns != ''){
                 tmpClasses += ' stackable ' + props.attributes.columns;

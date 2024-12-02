@@ -27,9 +27,9 @@
  * Text Domain: actapp
  * License: GPLv3
  * 
- * Version: 1.0.37
+ * Version: 1.0.39
  */
-define( 'ACTIONAPP_WP_CORE_VERSION', '1.0.37' );
+define( 'ACTIONAPP_WP_CORE_VERSION', '1.0.39' );
 
 if ( !defined( 'ABSPATH' ) ) {
 	exit;

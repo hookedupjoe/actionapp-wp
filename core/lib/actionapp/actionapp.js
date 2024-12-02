@@ -3235,8 +3235,8 @@ window.ActionAppCore = window.ActionAppCore || ActionAppCore;
 
     };
 
-    me.dropMenuOpen = dropMenuOpen;
-    function dropMenuOpen(theParams, theTarget) {
+    me.dropmenuopen = dropmenuopen;
+    function dropmenuopen(theParams, theTarget) {
         // var tmpParams = ThisApp.getActionParams(theParams, theTarget, ['menuname'])
         var tmpEl = $(theTarget);
         var tmpPageEl = tmpEl.closest('[group="app:pages"]');
@@ -3262,7 +3262,7 @@ window.ActionAppCore = window.ActionAppCore || ActionAppCore;
 
         var tmpDropMenu = $('[dropmenu="menu"]', ThisApp.getSpot('flyover-menu'))
         tmpDropMenu.show();
-        tmpFO.css('width', tmpEl.css('width'));
+        tmpFO.css('width', tmpEl.css('width') + 20);
         tmpFO.css('top', (tmpOffset.top - tmpPageOffset.top) + 'px');
         tmpFO.css('left', (tmpOffset.left - tmpPageOffset.left) + 'px');
 
@@ -3374,18 +3374,21 @@ window.ActionAppCore = window.ActionAppCore || ActionAppCore;
             ThisApp.publish('grid16-resized');
         }, 200),
 
-        minCardSizeSm: 245,
-        minCardSize: 350,
-        maxCardSizeSm: 365,
-        maxCardSize: 999,
-        currentCardCount: 0,
-        cutOffSmall: 668,
-        cutOffLarge: 9999,
+        minCardSizeSm: 250,
+        //minCardSize: 350,
+        //maxCardSizeSm: 365,
+        //maxCardSize: 999,
+        //currentCardCount: 0,
+        //cutOffSmall: 668,
+        //cutOffLarge: 9999,
 
         resizeLayoutProcess: function (theForce) {
             try {
                 //--- On layout resize ...
                 this.resizeGrid();
+                this.resizeAutoGrid();
+                this.resizeAutoGrid(theForce,'cards');
+                return;
                 var tmpCardCount = 4;
                 var tmpCards = ThisApp.getByAttr$({ "auto-adapt": "cards" });
 
@@ -3486,9 +3489,92 @@ window.ActionAppCore = window.ActionAppCore || ActionAppCore;
             "gs-m": 8,
             "gs-l": 4
         },
+        resizeAutoGrid: function (theForce, theType) {
+            var tmpGridCount = 4;
+            var tmpType = theType || 'grid';
+            var tmpClassToFind = 'column';
+            var tmpRelatedClass = 'column';
+            if( theType == 'cards'){
+                tmpClassToFind = 'card';
+                tmpRelatedClass = '';
+            }
 
+            var tmpGrids = ThisApp.getByAttr$({ "auto-adapt": tmpType });
+
+            if (tmpGrids && tmpGrids.length) {
+
+                var tmpGridsLen = tmpGrids.length;
+
+                if (tmpGrids && tmpGridsLen > 0) {
+
+                    for (var iPos = 0; iPos < tmpGridsLen; iPos++) {
+                        var tmpGridsEl = $(tmpGrids[iPos]);
+                        
+
+                        if (tmpGridsEl && tmpGridsEl.is(":visible")) {
+                            var tmpIW = tmpGridsEl.innerWidth();
+                            var tmpMin = tmpGridsEl.attr('mincolwidth') || this.minCardSizeSm;
+                            var tmpEach = parseInt(tmpIW / tmpMin);
+                            tmpGridCount = tmpEach;
+                            if (tmpGridCount > 10) {
+                                tmpGridCount = 10;
+                            }
+
+                            var tmpGridEntryEls = tmpGridsEl.find('.' + tmpClassToFind);
+                            //ToDo: Implement with cut off value
+                            // if (this.mode == 'S') {
+                            //   tmpGridEntryEls.css('max-width', this.maxGridSizeSm + 'px');
+                            // } else {
+                            //   tmpGridEntryEls.css('max-width', this.maxGridSize + 'px');
+                            // }
+                            //tmpGridEntryEls.css('max-width', this.maxGridSize + 'px');
+                            //end ToDo
+
+                            var tmpCurrGrids = tmpGridEntryEls.length;
+
+                            var tmpMaxGrids = tmpCurrGrids;
+                            if (tmpGridCount > tmpMaxGrids) {
+                                tmpGridCount = tmpMaxGrids;
+                            }
+
+                            //=== Example of a way to help with dangling single value
+                            //   if (tmpCurrGrids == 4 && tmpGridCount == 3) {
+                            //     if (tmpIW < 800) {
+                            //       tmpGridCount = 2;
+                            //     } else {
+                            //       tmpGridCount = 4;
+                            //     }
+                            //   }
+
+                            var tmpToRemove = '';
+                            var tmpAttrVal = tmpGridsEl.attr('grid16-ccc');
+                            if (tmpAttrVal) {
+                                tmpToRemove = tmpAttrVal;
+                            }
+                            var tmpToAdd = this.numLookup[tmpGridCount];
+                            tmpGridsEl.attr('grid16-ccc', tmpToAdd);
+
+                            if (theForce || (tmpToRemove != tmpToAdd)) {
+                                if (tmpToRemove) {
+                                    if(tmpRelatedClass) tmpGridsEl.removeClass(tmpRelatedClass);
+                                    tmpGridsEl.removeClass(tmpToRemove);
+                                }
+                                if (tmpToAdd) {
+                                    //--- Must be in specific order
+                                    if(tmpRelatedClass) tmpGridsEl.removeClass(tmpRelatedClass);
+                                    tmpGridsEl.addClass(tmpToAdd);
+                                    if(tmpRelatedClass) tmpGridsEl.addClass(tmpRelatedClass);
+                                }
+                            }
+                        }
+                    }
+                }
+
+            }   
+        },
+		
         resizeGrid: function (theOptions) {
-            try {
+                try {
                 var tmpOptions = theOptions || {};
                 // var tmpParent = tmpOptions.parent || false;
                 // was !!(tmpParent) ? tmpParent : 
@@ -4743,6 +4829,8 @@ License: MIT
     me.getByAttr$ = function (theItems, theExcludeBlanks) {
         return ThisApp.getByAttr$(theItems, this.getParent$(), theExcludeBlanks);
     }
+    me.getByAttr = me.getByAttr$;
+
     me.getParent$ = function () {
         var tmpAttribs = {
             group: "app:pages",
@@ -7815,6 +7903,7 @@ License: MIT
         var tmpActionDetails = ThisApp.getActionFromObj(tmpObj, 'myaction');
         var tmpTargetHit = theEvent.target || theEvent.currentTarget || theEvent.delegetTarget || {};
         tmpTargetHit = $(tmpTargetHit);
+        
         //--- Get the acdtual control, not sub item like icon
         var tmpTarget = $(tmpTargetHit).closest('[name][controls]')
         var tmpParams = ThisApp.getAttrs(tmpTarget, ['name', 'controls']);
@@ -7825,6 +7914,7 @@ License: MIT
             if (tmpAppActionDetails.action == 'selectMe') {
                 this.publish('selectMe', [this, tmpAppActionDetails.el])
             }
+           
         }
 
         if (!(tmpActionDetails.hasOwnProperty('action') && tmpActionDetails.hasOwnProperty('el'))) {
@@ -7946,7 +8036,7 @@ License: MIT
                         tmpToBind = tmpParent;
                         break;
                     }
-                    tmpParent = this.parentControl || false;
+                    tmpParent = tmpParent.parentControl || false;
                     if(tmpPCtr > 50){
                         console.error('too many attempts to find parent');
                         return;
@@ -8233,11 +8323,8 @@ License: MIT
         
             var tmpProm = tmpThis.initControlComponents();
            
+            
             tmpProm.then(function (theReply) {
-
-                if (isFunc(tmpThis._onInit)) {
-                    tmpThis._onInit();
-                }
                 
                 if( tmpThis.parentControl && tmpThis.parentControl.subscribe){
                     tmpThis.subscribeEvent(tmpThis.parentControl, 'resized', tmpThis._onParentResizeEvent.bind(tmpThis) );
@@ -8250,11 +8337,12 @@ License: MIT
                 if (tmpDoc) {
                     tmpThis.loadData(tmpDoc);
                 }
+                if (isFunc(tmpThis._onInit)) {
+                    tmpThis._onInit();
+                }
                 if (isFunc(tmpThis._onLoad)) {
                     tmpThis._onLoad();
                 }
-
-
                 dfd.resolve(true);
             });
         });

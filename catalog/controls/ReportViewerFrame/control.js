@@ -361,6 +361,138 @@
       this.rowSelected(row);
     }
   
+    
+    ControlCode.recycleSelected = function() {
+      var tmpViewer = this;
+      ThisApp.confirm('Recycle the selected documents?',
+        'Recycle?').then(function(theIsYes) {
+          if (theIsYes) {
+            tmpViewer.recycleSelectedDocs();
+          }
+        });
+    }
+
+    ControlCode.recycleSelectedDocs = function() {
+      var tmpViewer = this;
+      var tmpSelected = tmpViewer.getSelectedKeys();
+      var tmpData = {
+        ids: tmpSelected
+      };
+  
+      var tmpBaseURL = ActionAppCore.ActAppWP.rootPath;
+      var tmpPostOptions = {
+        formSubmit: false,
+        data: tmpData,
+        url: tmpBaseURL + '/wp-json/actappdesigner/recycle?open'
+      };
+  
+      ThisApp.apiCall(tmpPostOptions).then(function() {
+        tmpViewer.showReport();
+      });
+  
+    };
+
+    ControlCode.addNewDoc = function(theOptions) {
+      var tmpOptions = theOptions || {};
+      var self = this;
+      var tmpForm = tmpOptions.formcontrol;
+      if( !(tmpForm) ){
+        alert("Error adding document, no form provided. Contact support.", "Error Adding Document");
+      }
+      tmpForm.prompt({isNew: true}).then(function(theSubmit, theData) {
+        if (!theSubmit) {
+          return;
+        }
+        tmpForm.submitForm().then(function() {
+          self.showReport();
+        });
+      });
+    }
+
+
+    ControlCode.editSelectedDoc = function(theOptions) {
+      var tmpOptions = theOptions || {};
+      //var tmpForm = tmpOptions.formcontrol;
+      var tmpData = {control:this,options:tmpOptions};
+      //ToDo: Allow onEdit from options?
+      tmpOptions.onEdit = this.promptEditForm.bind(tmpData);
+      this.getDocToEdit(tmpOptions);
+    }
+  
+    ControlCode.promptEditForm = function(theDoc, theViewer) {
+      var self = this.control;
+      var tmpOptions = this.options || {};
+      var tmpDoc = theDoc;
+      var tmpForm = tmpOptions.formcontrol;
+
+      var tmpPromptOptions = tmpOptions.promptOptions || {};
+      tmpPromptOptions.doc = tmpDoc;
+      if( !tmpForm.submitForm ){
+        alert("Form missind submitForm, contact support", "Error Saving Document");
+      }
+
+      var self = this;
+      tmpForm.prompt(tmpPromptOptions).then(function(theSubmit,
+        theData) {
+  
+        if (!theSubmit) {
+          var tmpReqData = {
+            id: tmpDoc.id
+          };
+          ThisApp.apiCall({
+            url: ActionAppCore.ActAppWP.restPath + 'actappdesigner/unlockdoc', data: tmpReqData
+          }).then(function(theReply) {
+            if (!theReply.unlocked) {
+              alert('Could not unlock document. Next time it is edited it may show as locked.', "Error Unlocking Document")
+            }
+          });
+        } else {
+          tmpForm.submitForm().then(function(theReply) {
+            if( !(theReply && theReply.result == 'updated json')){
+              alert("There was an issue saving this document. Check your internet connection and try again, if the error persists, contact support.", "Error Saving Document");
+            }
+            theViewer.showReport();
+          });
+        }
+      });
+    }
+
+    ControlCode.getDocToEdit = function(theOptions) {
+      var tmpOptions = theOptions || {};
+      var tmpEditFunction = tmpOptions.onEdit;
+     
+      if( !(tmpEditFunction) ){
+        alert("There was an issue editing, contact support. No onEdit passed.", "Can not Edit");
+        return;
+      }
+//      var tmpBind = theOptions.bind || false;
+      var tmpViewer = this;
+      var tmpSelected = tmpViewer.getSelectedKeys();
+      var tmpRow = tmpViewer.mainTable.getRow(tmpSelected[0]);
+      var tmpDoc = tmpRow._row.data;
+
+      var tmpReqData = {
+        id: tmpDoc.id,
+        uid: tmpDoc.__uid || ''
+      };
+
+      ThisApp.apiCall({
+        url: ActionAppCore.ActAppWP.restPath + 'actappdesigner/editdoc',
+        data: tmpReqData
+      }).then(function(theReply) {
+        if (theReply.isLocked) {
+          ThisApp.confirm(tmpOptions.recordLockedMsg || "This record is locked. If edited, others may lose changes. Only unlock if you know this was locked in error. Do you want to unlock and edit this document?", tmpOptions.recordLockedTitle || "Document Being Edited")
+          .then(function (theIsYes) {
+            if (theIsYes) {
+              tmpEditFunction(theReply.doc, tmpViewer);
+            }
+          })
+        } else {
+          tmpEditFunction(theReply.doc, tmpViewer);
+        }
+      });
+    };
+
   
     ControlCode.setup = function(theOptions) {
       var tmpOptions = theOptions || {};

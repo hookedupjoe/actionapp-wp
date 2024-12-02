@@ -119,7 +119,6 @@ if( $includeFrame ){
 			}
 		?>
 
-		console.log('tmpShowFooter',tmpShowFooter);
 		if( tmpShowFooter == false || tmpShowHeader == false){
 			setTimeout(function(){
 				if(!tmpShowHeader){

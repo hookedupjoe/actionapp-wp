@@ -39,7 +39,7 @@
         return 'extra content';
     }
 	
-    var newEl = BlockEditor.el;
+    //var newEl = BlockEditor.el;
 
     function getDisplayValue(theProps,theIsEditMode){
         var tmpAtts = theProps.attributes;
@@ -60,7 +60,6 @@
         } else {
             tmpContent.push( el( wp.blockEditor.InnerBlocks.Content ));
         }
-        
         return el('div',{className:tmpClass},tmpContent);
 
 

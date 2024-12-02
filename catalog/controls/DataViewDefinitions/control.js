@@ -244,7 +244,7 @@
         }
   
         self.parts.mainform.submitForm().then(function() {
-          tmpViewer.showReport();
+          self.getViewControl().showReport();
         });
   
       });
