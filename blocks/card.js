@@ -98,6 +98,7 @@
         
         if( theIsEditMode ){
             tmpContent.push( newEl('div','extra-content', el( wp.blockEditor.InnerBlocks,{renderAppender:wp.blockEditor.InnerBlocks.DefaultBlockAppender} )) );
+//            tmpContent.push( newEl('div','extra-content', el( wp.blockEditor.InnerBlocks,{renderAppender:false})) );
         } else {
             tmpContent.push( newEl('div','extra-content', el( wp.blockEditor.InnerBlocks.Content )));
         }

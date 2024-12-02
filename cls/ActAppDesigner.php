@@ -837,5 +837,7 @@ add_action( 'wp_ajax_foobar', array('ActAppDesigner','foobar_handler') );
 
 //--- Just a demo, consider use case for server side dynamic ***
 //require_once ACTIONAPP_WP_BLOCKS_DIR . '/blocks/actappdesign/ActAppDynamicDemo/Object.php';
-require_once ACTIONAPP_WP_BLOCKS_DIR . '/blocks/actappdesign/ActAppDynoUserInfo/Object.php';
 //require_once ACTIONAPP_WP_BLOCKS_DIR . '/blocks/actappdesign/ActAppReportView/Object.php';
+
+//--- This demo shows backend data based on the current user
+//require_once ACTIONAPP_WP_BLOCKS_DIR . '/blocks/actappdesign/ActAppDynoUserInfo/Object.php';

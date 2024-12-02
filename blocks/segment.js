@@ -79,30 +79,37 @@
             if (tmpMe) {
                 var tmpChildren = tmpMe.innerBlocks;
                 if (!(tmpChildren && tmpChildren.length)) {
-                    //--- This assures the drag and drop feature allows a drop in a new unselected segment
-                    var tmpToAddElement = BlockEditor.getCommonBlock('dropindicator');
-                    tmpPropAtts.hasdropindicator = true;
-                    be.insertBlocks(tmpToAddElement, 0, props.clientId);
+                    // console.log('add chlid')
+                    // //--- This assures the drag and drop feature allows a drop in a new unselected segment
+                    // var tmpToAddElement = BlockEditor.getCommonBlock('dropindicator');
+                    // //tmpPropAtts.hasdropindicator = true;
+                    // const tmpToAdd = wp.blocks.createBlock( 
+                    //     'core/paragraph', { content: '' }
+                    //    );
+
+                    // be.insertBlocks(tmpToAdd, 0, props.clientId);
                 } else {
-                    //Find and remove drop indicator
-                    if (tmpPropAtts.hasdropindicator && tmpChildren.length > 1) {
-                        var tmpPos = -1;
-                        for (var iPos = 0; iPos < tmpChildren.length; iPos++) {
-                            var tmpChild = tmpChildren[iPos];
-                            if (tmpChild.name == 'actappui/dropindicator') {
-                                tmpPos = iPos;
-                                break;
-                            }
-                        }
-                        if (tmpPos > -1) {
-                            tmpMe.innerBlocks.splice(tmpPos, 1);
-                            tmpPropAtts.hasdropindicator = false;
-                            ActAppBlockEditor.refreshBlockEditor();
-                        }
-                    }
+                    // //Find and remove drop indicator
+                    // if (tmpPropAtts.hasdropindicator && tmpChildren.length > 1) {
+                    //     var tmpPos = -1;
+                    //     for (var iPos = 0; iPos < tmpChildren.length; iPos++) {
+                    //         var tmpChild = tmpChildren[iPos];
+                    //         if (tmpChild.name == 'actappui/dropindicator') {
+                    //             tmpPos = iPos;
+                    //             break;
+                    //         }
+                    //     }
+                    //     if (tmpPos > -1) {
+                    //         tmpMe.innerBlocks.splice(tmpPos, 1);
+                    //         tmpPropAtts.hasdropindicator = false;
+                    //         ActAppBlockEditor.refreshBlockEditor();
+                    //     }
+                    // }
                 }
+
+                tmpEls.push(el(wp.blockEditor.InnerBlocks));
             }
-            tmpEls.push(el(wp.blockEditor.InnerBlocks, {renderAppender:false}));
+           
         } else {
             tmpEls.push(el(wp.blockEditor.InnerBlocks.Content));
         }
@@ -132,7 +139,7 @@
                 BlockEditor.getStandardProperty(props, 'raised', 'Raised', 'checkbox'),
                 BlockEditor.getStandardProperty(props, 'stacked', 'Stacked', 'checkbox'),
                 BlockEditor.getStandardProperty(props, 'vertical', 'Fitted', 'checkbox'),
-                BlockEditor.getStandardProperty(props,'inverted', 'Inverted', 'checkbox' ),
+                BlockEditor.getStandardProperty(props, 'inverted', 'Inverted', 'checkbox' ),
                 BlockEditor.getStandardProperty(props, 'clearing', 'Contain Floaters', 'checkbox')
             ];
             var tmpFormatProperties = [
@@ -148,17 +155,18 @@
 
             var tmpDisplayObject = getDisplayValue(props, true);
 
+
             var tmpBtnBar = '';
             if (props.isSelected) {
                 var tmpBarContent = [];
-                //tmpBarContent.push(el('div',{className:'ui fluid label blue mar5'},'UI Segment')),
-                tmpBarContent.push(el('div', { className: 'ui compact button blue basic ', action: 'beAddElement', elementname: 'header' }, 'Header'));
-                tmpBarContent.push(el('div', { className: 'ui compact button blue basic ', action: 'beAddElement', elementname: 'corecolumns' }, 'Columns'));
-                tmpBarContent.push(el('div', { className: 'ui compact button blue basic ', action: 'beAddElement', elementname: 'message' }, 'Message'));
-                tmpBarContent.push(el('div', { className: 'ui compact button blue basic ', action: 'beAddElement', elementname: 'image' }, 'Image'));
-                tmpBarContent.push(el('div', { className: 'ui compact button blue basic ', action: 'beAddElement', elementname: 'cards' }, 'Cards'));
                 tmpBarContent.push(el('span', {className:'toright'}, el(wp.blockEditor.InnerBlocks.ButtonBlockAppender, {className: 'actappappender'})));
-                tmpBtnBar = el('div', {}, [el('div', { className: 'ui fluid label blue mar5' }, 'UI Segment'), el('div', { className: 'ui segment raised slim' }, tmpBarContent, el('div', { className: 'endfloat' }))]);
+                tmpBarContent.push(el('div', { className: 'ui compact button blue basic ', action: 'beAddElement', elementname: 'header' }, 'Header'));
+                //tmpBarContent.push(el('div', { className: 'ui compact button blue basic ', action: 'beAddElement', elementname: 'corecolumns' }, 'Columns'));
+                tmpBarContent.push(el('div', { className: 'ui compact button blue basic ', action: 'beAddElement', elementname: 'message' }, 'Message'));
+                //tmpBarContent.push(el('div', { className: 'ui compact button blue basic ', action: 'beAddElement', elementname: 'image' }, 'Image'));
+                tmpBarContent.push(el('div', { className: 'ui compact button blue basic ', action: 'beAddElement', elementname: 'cards' }, 'Cards'));
+            
+                tmpBtnBar = el('div',{},[el('div',{className:'ui fluid center aligned label blue'},'Card Control'),el('div',{className:'ui segment raised slim'},tmpBarContent,el('div',{className:'endfloat'}))]);
             }
 
             return el(

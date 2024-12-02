@@ -46,7 +46,7 @@
         return BlockEditor.getStandardClass( 'ui cards ', tmpClassSpecs, theProps, theIsEditMode);
     }
 
-   function onMarginChange( theEvent ) {
+   function onSelectionChange( theEvent ) {
         var tmpObjAtts = {};
         var tmpVal = (theEvent.target.value);
         
@@ -110,11 +110,11 @@
             
 
             var tmpStandardProperties = [
-                BlockEditor.getStandardProperty(props,'color', 'All Cards Color', 'color' ),
+                BlockEditor.getStandardProperty(props,'color', 'All Cards Color', 'color', onSelectionChange ),
                 BlockEditor.getStandardProperty(props,'columns', 'Columns', 'columns' ),
-                BlockEditor.getStandardProperty(props,'maxImageHeight', 'Max Image Height', 'number' ),
+                BlockEditor.getStandardProperty(props,'maxImageHeight', 'Max Image Height', 'number', onSelectionChange ),
                 BlockEditor.getStandardProperty(props,'minColWidth', 'Minimum Column Width', 'number' ),
-                BlockEditor.getStandardProperty(props,'margin', 'Margin', 'margin', onMarginChange ),
+                BlockEditor.getStandardProperty(props,'margin', 'Margin', 'margin', onSelectionChange ),
                 BlockEditor.getStandardProperty(props,'centered', 'Centered', 'checkbox' )
             ];
             var tmpSidebarPanels = [

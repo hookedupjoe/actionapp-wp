@@ -78,9 +78,10 @@
             if( tmpThis && tmpThis.clientId){
                 tmpBlockClientId = tmpThis.clientId;
             }
+            //console.log('tmpBlockClientId',tmpBlockClientId);
             wp.data.dispatch('core/block-editor').synchronizeTemplate();
             if( tmpBlockClientId ){
-                wp.data.dispatch( 'core/block-editor' ).selectBlock( tmpBlockClientId )
+               // wp.data.dispatch( 'core/block-editor' ).selectBlock( tmpBlockClientId )
             }
 
         }
@@ -187,8 +188,8 @@
         }
 
         BlockEditor.getMarginListControl = function(theCurrentValue, theOnChangeEvent){
-            var tmpSelection = [el("option", {value: ""}, "Default")];
-            var tmpMax = 10; //16 is full max, 10 logical
+            var tmpSelection = [el("option", {value: "mardefault"}, "Default")];
+            var tmpMax = 10; 
             for( var i = 1 ; i <= tmpMax ; i++){
                 tmpSelection.push(el("option", {value: 'mar' + i}, i));
             }
