@@ -34,13 +34,10 @@
     };
     const iconEl = BlockEditor.getControlIcon(info.name);
 
-
     function getClass(theProps, theIsEditMode){
-        return 'extra content';
+        return 'content';
     }
 	
-    //var newEl = BlockEditor.el;
-
     function getDisplayValue(theProps,theIsEditMode){
         var tmpAtts = theProps.attributes;
         var props = theProps;
@@ -64,7 +61,7 @@
 
 
     }
- 
+
     wp.blocks.registerBlockType( info.category + '/' + info.name, {
         title: info.title,
         icon: iconEl,

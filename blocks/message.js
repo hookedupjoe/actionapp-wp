@@ -36,12 +36,12 @@
     const iconEl = BlockEditor.getControlIcon(info.name);
 
     BlockEditor.addBooleanAtts(info.atts,['floating', 'compact']);
-    BlockEditor.addStringAtts(info.atts,['name','ctl','color','size','attached']);
+    BlockEditor.addStringAtts(info.atts,['name','ctl','color','size','attached','margin','padding']);
   
     BlockEditor.addAtt(info.atts,'text',{type: 'string',source: 'html'})
     var tmpClassSpecs = {
         boolean: ['floating','compact'],
-        string: ['color','size', 'attached']
+        string: ['color','size', 'attached', 'margin', 'padding']
     }
 
     function getClass(theProps, theIsEditMode){
@@ -106,7 +106,10 @@
                 BlockEditor.getStandardProperty(props,'attached', 'Attached', 'attached' ),
                 BlockEditor.getStandardProperty(props,'floating', 'Floating', 'checkbox' ),
                 BlockEditor.getStandardProperty(props,'compact', 'Compact', 'checkbox' ),
-                BlockEditor.getStandardProperty(props,'name', 'Unique Name')
+
+                BlockEditor.getStandardProperty(props,'margin', 'Margin', 'margin'),
+                BlockEditor.getStandardProperty(props,'padding', 'Padding', 'padding' ),
+                //BlockEditor.getStandardProperty(props,'name', 'Unique Name')
             ];
             var tmpSidebarPanels = [
                 BlockEditor.getSidebarPanel('Message Options', tmpStandardProperties)

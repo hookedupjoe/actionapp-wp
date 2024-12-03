@@ -41,7 +41,7 @@
     var controlDetailsLoaded = false;
     var controlDirty = false;
 
-    BlockEditor.addBooleanAtts(info.atts, ['hasdropindicator','devonly']);
+    BlockEditor.addBooleanAtts(info.atts, ['devonly']);
     BlockEditor.addStringAtts(info.atts, ['designtype']);
 
     var tmpClassSpecs = {

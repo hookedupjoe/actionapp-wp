@@ -1,6 +1,5 @@
 /**
- * Block Widget: dropindicator.js - Block Editor Drop Placeholder
- *  (used to assure you can drop into a blank container)
+ * Block Widget: card-section.js - Semantic UI Card Inner Section
  * 
  * Copyright (c) 2021-2024 Joseph Francis / hookedup, inc. 
  *
@@ -25,8 +24,8 @@
     var BlockEditor = ActionAppCore.common.blocks.Editor;
     
     var info = {
-        name: 'dropindicator',
-        title: 'UI Drop Indicator',
+        name: 'cardsectionbottom',
+        title: 'UI Card Bottom Section',
         example: {
             
         },
@@ -35,15 +34,34 @@
     };
     const iconEl = BlockEditor.getControlIcon(info.name);
 
-    function getDisplayValue(theProps,theIsEditMode){
-        // if( theIsEditMode ){
-        //     console.log('dsp')
-        //     return el('div',{className:'actapp-be-drop-indicator'},'');
-        // }
-
-        return el('div',{className:'hidden'},'');
+    function getClass(theProps, theIsEditMode){
+        return 'extra content pad0 mar0';
     }
- 
+
+    function getDisplayValue(theProps,theIsEditMode){
+        var tmpAtts = theProps.attributes;
+        var props = theProps;
+
+        var tmpContent = [];
+        var tmpClass = getClass(theProps,theIsEditMode);
+        var tmpAtt = props.attributes;
+        
+        if( theIsEditMode ){
+            
+            if( props.isSelected ){
+                tmpClass += ' actapp-block-is-selected';
+            } else {
+                tmpClass += ' actapp-block-box';
+            }
+            tmpContent.push( el( wp.blockEditor.InnerBlocks ));
+        } else {
+            tmpContent.push( el( wp.blockEditor.InnerBlocks.Content ));
+        }
+        return el('div',{className:tmpClass},tmpContent);
+
+
+    }
+
     wp.blocks.registerBlockType( info.category + '/' + info.name, {
         title: info.title,
         icon: iconEl,
@@ -51,10 +69,12 @@
         example: info.example,
         supports: BlockEditor.defaultSupports,
         attributes: info.atts,
+        parent: 'actappui/card',
         supports: {
             inserter: false,
         },
         edit: function ( props ) {
+            //var tmpParentAttributes = BlockEditor.getParentAttributes(props.clientId);
             var tmpDisplayObject = getDisplayValue(props,true);
 
             return el(
@@ -67,7 +87,11 @@
             
         },
  
-        
+        save: function ( props ) {
+            //not using blockProps, need clean HTML
+            var tmpEl = getDisplayValue(props,false)
+            return tmpEl;
+        },
 
     } );
 } )( window.wp, window.ActionAppCore );

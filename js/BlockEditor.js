@@ -78,10 +78,9 @@
             if( tmpThis && tmpThis.clientId){
                 tmpBlockClientId = tmpThis.clientId;
             }
-            //console.log('tmpBlockClientId',tmpBlockClientId);
             wp.data.dispatch('core/block-editor').synchronizeTemplate();
             if( tmpBlockClientId ){
-               // wp.data.dispatch( 'core/block-editor' ).selectBlock( tmpBlockClientId )
+               wp.data.dispatch( 'core/block-editor' ).selectBlock( tmpBlockClientId )
             }
 
         }
@@ -189,10 +188,26 @@
 
         BlockEditor.getMarginListControl = function(theCurrentValue, theOnChangeEvent){
             var tmpSelection = [el("option", {value: "mardefault"}, "Default")];
-            var tmpMax = 10; 
+            var tmpMax = 20; 
             for( var i = 1 ; i <= tmpMax ; i++){
                 tmpSelection.push(el("option", {value: 'mar' + i}, i));
             }
+            return BlockEditor.getSelectControl(theCurrentValue,theOnChangeEvent,tmpSelection);
+        }
+
+        BlockEditor.getPaddingListControl = function(theCurrentValue, theOnChangeEvent){
+            var tmpSelection = [el("option", {value: "paddefault"}, "Default")];
+            var tmpMax = 20; 
+            for( var i = 1 ; i <= tmpMax ; i++){
+                tmpSelection.push(el("option", {value: 'pad' + i}, i));
+            }
+            return BlockEditor.getSelectControl(theCurrentValue,theOnChangeEvent,tmpSelection);
+        }
+
+        BlockEditor.getInvertedListControl = function(theCurrentValue, theOnChangeEvent){
+            var tmpSelection = [el("option", {value: "default"}, "Default")];
+            tmpSelection.push(el("option", {value: 'light'}, "Light"));
+            tmpSelection.push(el("option", {value: 'inverted'}, "Inverted"));
             return BlockEditor.getSelectControl(theCurrentValue,theOnChangeEvent,tmpSelection);
         }
 
@@ -300,24 +315,25 @@
             if( tmpCT == 'tofloat' ){
                 return 'getFloatControl';
             }            
-            
-            
             if( tmpCT == 'columns' ){
                 return 'getColumnListControl';
             }            
             if( tmpCT == 'margin' ){
                 return 'getMarginListControl';
             }            
+            if( tmpCT == 'padding' ){
+                return 'getPaddingListControl';
+            }            
+            if( tmpCT == 'inverted' ){
+                return 'getInvertedListControl';
+            }            
             
-            
-
             if( tmpCT == 'dropdown' ){
                 return 'getDropDownListControl';
             }            
-            
-            
             return 'getTextControl';
         }
+
         BlockEditor.getStandardClass = function(theTypeClass, theSpecs, theProps, theIsEditMode){
             var tmpAtts = theProps.attributes;
             var tmpCN = theTypeClass;
@@ -350,6 +366,19 @@
                 theSidebarPanels
             );            
         }
+
+        //--- Use this when refreshing the children components is needed on this change
+        BlockEditor.standardOnChangeRefresh = function( theEvent ) {
+            var tmpObjAtts = {};
+            var tmpVal = (theEvent.target.value);
+            
+            tmpObjAtts[this.attName] = tmpVal;
+            this.props.setAttributes( tmpObjAtts );
+            //--- The below refresh cause issues with editor in widgets area
+            BlockEditor.refreshBlockEditor();
+            //--- ToDo: Review usage / initial need of the above call
+        }
+
 
         //---Note: Bind to object {controlType:'',props:{},attName:''}
         BlockEditor.standardOnChange = function ( theEvent ) {
@@ -419,7 +448,7 @@
             } else if( theControlType == 'checkbox' ){
                 var tmpOnChangeFunc = function (theValue){
                     tmpToSet = {};
-                    tmpToSet[theAttName] = theValue;
+                    tmpToSet[theAttName] = theValue;    
                     theProps.setAttributes(tmpToSet);
                 }
                 var tmpIsChecked = tmpAtts[theAttName];
@@ -641,6 +670,11 @@
     var CommonBlocks = {
         //order: ["standard-header","small-header","blue-message"],
         lookup: {
+            "segment": {
+                type: 'actappui/segment',
+                name: "Segment",
+                attr: {}
+            },
             "coreparagraph": {
                 type: 'core/paragraph', 
                 name: "Paragraph",
@@ -686,16 +720,16 @@
                 name: "Card Section",
                 attr: {}
             },
+            "cardsectionbottom": {
+                type: 'actappui/cardsectionbottom', 
+                name: "Card Bottom Section",
+                attr: {}
+            },
             "cardbutton": {
                 type: 'actappui/button', 
                 name: "Button",
                 attr: {attached:'bottom',color:'blue',circular:true,basic:true}
             },
-            "dropindicator": {
-                type: 'actappui/dropindicator', 
-                name: "Drop Indicator",
-                attr: {}
-            },            
             "standard-header": {
                 type: 'actappui/header', 
                 name: "Standard Header",
@@ -753,7 +787,7 @@
     function extendBlockQuoteBlock(settings, name) {
         if (name == 'core/paragraph') {
             //settings.supports = settings.supports || {};
-            if( settings.supports && settings.supports ){
+            if( settings && settings.supports ){
                 settings.supports.anchor = false;
                 settings.supports.className = false;
                 settings.supports.customClassName = false;

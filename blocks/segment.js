@@ -37,7 +37,7 @@
     };
     const iconEl = BlockEditor.getControlIcon(info.name);
 
-    BlockEditor.addBooleanAtts(info.atts, ['raised', 'stacked', 'vertical', 'clearing', 'hasdropindicator', 'inverted']);
+    BlockEditor.addBooleanAtts(info.atts, ['raised', 'stacked', 'vertical', 'clearing', 'inverted']);
     BlockEditor.addStringAtts(info.atts, ['color', 'size', 'attached', 'alignment', 'basic']);
 
     var tmpClassSpecs = {
@@ -77,36 +77,6 @@
             var tmpMe = wp.data.select('core/block-editor').getBlock(props.clientId);
             //--- If doing a preview, there is no active block in the editor
             if (tmpMe) {
-                var tmpChildren = tmpMe.innerBlocks;
-                if (!(tmpChildren && tmpChildren.length)) {
-                    // console.log('add chlid')
-                    // //--- This assures the drag and drop feature allows a drop in a new unselected segment
-                    // var tmpToAddElement = BlockEditor.getCommonBlock('dropindicator');
-                    // //tmpPropAtts.hasdropindicator = true;
-                    // const tmpToAdd = wp.blocks.createBlock( 
-                    //     'core/paragraph', { content: '' }
-                    //    );
-
-                    // be.insertBlocks(tmpToAdd, 0, props.clientId);
-                } else {
-                    // //Find and remove drop indicator
-                    // if (tmpPropAtts.hasdropindicator && tmpChildren.length > 1) {
-                    //     var tmpPos = -1;
-                    //     for (var iPos = 0; iPos < tmpChildren.length; iPos++) {
-                    //         var tmpChild = tmpChildren[iPos];
-                    //         if (tmpChild.name == 'actappui/dropindicator') {
-                    //             tmpPos = iPos;
-                    //             break;
-                    //         }
-                    //     }
-                    //     if (tmpPos > -1) {
-                    //         tmpMe.innerBlocks.splice(tmpPos, 1);
-                    //         tmpPropAtts.hasdropindicator = false;
-                    //         ActAppBlockEditor.refreshBlockEditor();
-                    //     }
-                    // }
-                }
-
                 tmpEls.push(el(wp.blockEditor.InnerBlocks));
             }
            
