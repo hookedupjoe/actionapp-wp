@@ -35,12 +35,12 @@
     const iconEl = BlockEditor.getControlIcon(info.name);
 
     BlockEditor.addNumberAtts(info.atts, []);
-    BlockEditor.addBooleanAtts(info.atts, ['centered']);
-    BlockEditor.addStringAtts(info.atts, []);
+    BlockEditor.addBooleanAtts(info.atts, ['centered','flexbox']);
+    BlockEditor.addStringAtts(info.atts, ['classes']);
     //'text',
 
     var tmpClassSpecs = {
-        boolean: ['centered'],
+        boolean: ['centered','flexbox'],
         string: []
     }
     function getClass(theProps, theIsEditMode) {
@@ -52,14 +52,15 @@
     function getDisplayValue(theProps, theIsEditMode) {
 
         var tmpAtts = theProps.attributes;
-        var props = theProps;
         var tmpContent = [];
         var tmpClass = getClass(theProps, theIsEditMode);
         if( theIsEditMode ){
             tmpClass += ' fluid';
         }
-        var tmpAtt = props.attributes;
-
+      
+        if( tmpAtts.classes ){
+            tmpClass += ' ' + tmpAtts.classes;
+        }
 
         if (theIsEditMode) {
             tmpContent.push(newEl('div', '', el(wp.blockEditor.InnerBlocks,{})));
@@ -107,10 +108,16 @@
 
             var tmpStandardProperties = [
                 BlockEditor.getStandardProperty(props, 'centered', 'Centered', 'checkbox'),
+                BlockEditor.getStandardProperty(props, 'flexbox', 'Flex Content', 'checkbox'),
+            ];
+
+            var tmpFormatProperties = [
+                BlockEditor.getStandardProperty(props,'classes', 'Additional Classes', 'text' )
             ];
 
             var tmpSidebarPanels = [
-                BlockEditor.getSidebarPanel('Column Options', tmpStandardProperties)
+                BlockEditor.getSidebarPanel('Column Options', tmpStandardProperties),
+                BlockEditor.getSidebarPanel('Formatting Options', tmpFormatProperties)
             ];
 
             var tmpSidebarControls = BlockEditor.getSidebarControls(tmpSidebarPanels);
