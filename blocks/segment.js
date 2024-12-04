@@ -29,7 +29,7 @@
     var info = {
         name: 'segment',
         title: 'UI Segment',
-        example: {
+        rem_example: {
             attributes: { color: 'blue' }
         },
         category: 'actappui',
@@ -38,40 +38,32 @@
     const iconEl = BlockEditor.getControlIcon(info.name);
 
     BlockEditor.addBooleanAtts(info.atts, ['raised', 'stacked', 'vertical', 'clearing', 'inverted']);
-    BlockEditor.addStringAtts(info.atts, ['color', 'size', 'attached', 'alignment', 'basic']);
+    BlockEditor.addStringAtts(info.atts, ['color', 'size', 'attached', 'alignment', 'basic', 'margin', 'padding', 'classes']);
 
     var tmpClassSpecs = {
-        boolean: ['raised', 'stacked', 'vertical', 'basic', 'clearing', 'inverted'],
+        boolean: ['raised', 'stacked', 'vertical', 'basic', 'clearing', 'inverted', 'margin', 'padding'],
         string: ['color', 'size', 'attached', 'alignment']
     }
     function getClass(theProps, theIsEditMode) {
         return BlockEditor.getStandardClass('ui segment', tmpClassSpecs, theProps, theIsEditMode);
     }
+    
     function getDisplayValue(theProps, theIsEditMode) {
         var props = theProps;
         var tmpClass = getClass(props, true);
         if (theIsEditMode) { //&& !props.isSelected 
             tmpClass += ' actapp-block-box';
         }
-        var tmpAtts = { className: tmpClass };
+        
+
         var tmpPropAtts = theProps.attributes;
+        if( tmpPropAtts.classes ){
+            tmpClass += ' ' + tmpPropAtts.classes;
+        }
+        var tmpAtts = { className: tmpClass };
 
         var tmpEls = [];
-        // if (tmpPropAtts.spotname && tmpPropAtts.spotname != '') {
-        //     var tmpSpotTopAtts = { spot: tmpPropAtts.spotname };
-        //     if (tmpPropAtts.spotsourcetype) {
-        //         tmpSpotTopAtts.sourcetype = tmpPropAtts.spotsourcetype;
-        //         tmpSpotTopAtts.appuse = 'blockmarkup';
-        //     }
-        //     if (tmpPropAtts.spotsourcename) {
-        //         tmpSpotTopAtts.sourcename = tmpPropAtts.spotsourcename;
-        //     }
-        //     if (tmpPropAtts.spotsourcepartname) {
-        //         tmpSpotTopAtts.sourcepartname = tmpPropAtts.spotsourcepartname;
-        //     }
 
-        //     tmpEls.push(el('div', tmpSpotTopAtts, ''));
-        // }
 
         if (theIsEditMode) {
             var tmpMe = wp.data.select('core/block-editor').getBlock(props.clientId);
@@ -110,10 +102,13 @@
                 BlockEditor.getStandardProperty(props, 'stacked', 'Stacked', 'checkbox'),
                 BlockEditor.getStandardProperty(props, 'vertical', 'Fitted', 'checkbox'),
                 BlockEditor.getStandardProperty(props, 'inverted', 'Inverted', 'checkbox' ),
-                BlockEditor.getStandardProperty(props, 'clearing', 'Contain Floaters', 'checkbox')
+                BlockEditor.getStandardProperty(props, 'clearing', 'Contain Floaters', 'checkbox'),
+                BlockEditor.getStandardProperty(props, 'alignment', 'Alignment', 'alignment')
             ];
             var tmpFormatProperties = [
-                BlockEditor.getStandardProperty(props, 'alignment', 'Alignment', 'alignment')
+                BlockEditor.getStandardProperty(props,'padding', 'Padding', 'padding' ),
+                BlockEditor.getStandardProperty(props,'margin', 'Margin', 'margin'),
+                BlockEditor.getStandardProperty(props,'classes', 'Additional Classes', 'text' )
             ];
 
             var tmpSidebarPanels = [
@@ -136,7 +131,7 @@
                 //tmpBarContent.push(el('div', { className: 'ui compact button blue basic ', action: 'beAddElement', elementname: 'image' }, 'Image'));
                 tmpBarContent.push(el('div', { className: 'ui compact button blue basic ', action: 'beAddElement', elementname: 'cards' }, 'Cards'));
             
-                tmpBtnBar = el('div',{},[el('div',{className:'ui fluid center aligned label blue'},'Card Control'),el('div',{className:'ui segment raised slim'},tmpBarContent,el('div',{className:'endfloat'}))]);
+                tmpBtnBar = el('div',{},[el('div',{className:'ui fluid center aligned label blue'},'Segment'),el('div',{className:'ui segment raised slim'},tmpBarContent,el('div',{className:'endfloat'}))]);
             }
 
             return el(

@@ -2,15 +2,23 @@ html, body {
   width:100%;
   margin:0;
   padding:0;
-  /* overflow: auto; */
+
   font-family: Calibri, Tahoma, Geneva, sans-serif;
 }
 
+/* Unset the blue default color semantic puts on all A text*/
+body a {
+  color: unset;
+}
+
+body a:hover {
+  color: unset;
+}
 
 .cleanzone {
   -webkit-box-sizing: unset;
   box-sizing: unset;
-  font-size:unset;
+  font-size: unset;
   font-family: unset;  
 }
 

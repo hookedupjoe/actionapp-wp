@@ -26,7 +26,7 @@
     var info = {
         name: 'tabledef',
         title: 'Report Table',
-        example: {
+        rem_example: {
             attributes: {color: 'green'}
         },
         category: 'actappdesign',

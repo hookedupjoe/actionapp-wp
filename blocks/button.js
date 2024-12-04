@@ -27,7 +27,7 @@
     var info = {
         name: 'button',
         title: 'UI Button',
-        example: {
+        rem_example: {
             attributes: {color: 'blue',text: 'Button Text', size: 'large'}
         },
         category: 'actappui',

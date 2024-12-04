@@ -27,7 +27,7 @@
     var info = {
         name: 'image',
         title: 'UI Image',
-        example: {
+        rem_example: {
             attributes: { color: 'blue', text: 'Image Text', size: 'large' }
         },
         category: 'actappui',
@@ -36,12 +36,12 @@
     const iconEl = BlockEditor.getControlIcon(info.name);
 
     BlockEditor.addBooleanAtts(info.atts, ['fluid', 'avatar', 'rounded', 'circular', 'urlopentab', 'bordered', 'centered']);
-    BlockEditor.addStringAtts(info.atts, ['text', 'color', 'size', 'alignmentvertical', 'url', 'mediaURL', 'float']);
+    BlockEditor.addStringAtts(info.atts, ['text', 'color', 'size', 'alignmentvertical', 'url', 'mediaURL', 'float','margin','padding', 'classes']);
     BlockEditor.addNumberAtts(info.atts, ['mediaID']);
 
     var tmpClassSpecs = {
         boolean: ['fluid', 'avatar', 'rounded', 'circular', 'bordered', 'centered'],
-        string: ['color', 'size', 'alignmentvertical']
+        string: ['color', 'size', 'alignmentvertical','margin','padding']
     }
 
     function getContent(theProps, theIsEditMode) {
@@ -50,6 +50,9 @@
         var tmpContent = [];
         var tmpNotes = '';
         var tmpCN = getClass(props, true);
+        if( tmpAtts.classes ){
+            tmpCN += ' ' + tmpAtts.classes;
+        }
         if (tmpAtts.float) {
             if (theIsEditMode) {
                 tmpNotes = '** ' + tmpAtts.float
@@ -135,12 +138,15 @@
                 (tmpAtts.size) ? '' : BlockEditor.getStandardProperty(props, 'avatar', 'Show as icon', 'checkbox'),
                 BlockEditor.getStandardProperty(props, 'url', 'Target Content or Link', 'url'),
                 !(tmpAtts.url) ? '' : BlockEditor.getStandardProperty(props, 'urlopentab', 'Open link in new tab?', 'checkbox'),
-                BlockEditor.getStandardProperty(props, 'spaced', 'Add spacing', 'checkbox'),
-            ];
-            var tmpFormatProperties = [
+                BlockEditor.getStandardProperty(props, 'spaced', 'Add spacing to link?', 'checkbox'),
                 (tmpAtts.float) ? '' : BlockEditor.getStandardProperty(props, 'centered', 'Centered', 'checkbox'),
                 (tmpAtts.centered) ? '' : BlockEditor.getStandardProperty(props, 'float', 'Float', 'floatleftright'),
                 BlockEditor.getStandardProperty(props, 'alignmentvertical', 'Veritcal Alignment', 'alignmentvertical'),
+            ];
+            var tmpFormatProperties = [
+                BlockEditor.getStandardProperty(props,'margin', 'Margin', 'margin'),
+                BlockEditor.getStandardProperty(props,'padding', 'Padding', 'padding' ),                
+                BlockEditor.getStandardProperty(props,'classes', 'Additional Classes', 'text' ),
             ];
             var tmpSidebarPanels = [
                 BlockEditor.getSidebarPanel('Image Options', tmpStandardProperties),

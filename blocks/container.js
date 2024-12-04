@@ -29,7 +29,7 @@
     var info = {
         name: 'container',
         title: 'UI Container',
-        example: {
+        rem_example: {
             attributes: { color: 'blue' }
         },
         category: 'actappui',
@@ -41,7 +41,7 @@
 
     var tmpClassSpecs = {
         boolean: ['raised', 'stacked', 'vertical', 'basic', 'clearing', 'inverted'],
-        string: ['color', 'size', 'attached', 'alignment']
+        string: ['color', 'size', 'attached', 'alignment','margin','padding']
     }
     function getClass(theProps, theIsEditMode) {
         return BlockEditor.getStandardClass('ui container', tmpClassSpecs, theProps, theIsEditMode);

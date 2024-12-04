@@ -27,18 +27,18 @@
     var info = {
         name: 'header',
         title: 'UI Header',
-        example: {
+        rem_example: {
             attributes: {color: 'blue',text: 'Header Text', size: 'large'}
         },
         category: 'actappui',
         atts: {}
     };
     const iconEl = BlockEditor.getControlIcon(info.name);
-    BlockEditor.addStringAtts(info.atts,['name','ctl','text','color','size', 'subtext', 'attached', 'alignment']);
-    BlockEditor.addBooleanAtts(info.atts,['dividing','block','inverted']);
+    BlockEditor.addStringAtts(info.atts,['name', 'ctl', 'text', 'color', 'size', 'subtext', 'attached', 'alignment', 'margin', 'padding', 'classes']);
+    BlockEditor.addBooleanAtts(info.atts,['dividing', 'block', 'inverted']);
     var tmpClassSpecs = {
         boolean: ['dividing','block','inverted'],
-        string: ['color','size', 'attached', 'alignment']
+        string: ['color','size', 'attached', 'alignment','margin','padding']
     }
     
     function getContent(theProps, theIsEditMode){
@@ -64,6 +64,9 @@
             var tmpAtts = props.attributes;
 
             var tmpCN = getClass(props, true);
+            if( tmpAtts.classes ){
+                tmpCN += ' ' + tmpAtts.classes;
+            }
             var tmpContent = getContent(props, true);
             
             var tmpText = tmpAtts.text;
@@ -80,12 +83,19 @@
                 BlockEditor.getStandardProperty(props,'dividing', 'Line at bottom', 'checkbox' ),
                 BlockEditor.getStandardProperty(props,'block', 'Show as block', 'checkbox' ),
                 BlockEditor.getStandardProperty(props,'attached', 'Attached', 'attached' ),
-                BlockEditor.getStandardProperty(props,'alignment', 'Alignment', 'alignment' ),
-                BlockEditor.getStandardProperty(props,'name', 'Unique Name')
+                BlockEditor.getStandardProperty(props,'alignment', 'Alignment', 'alignment' )
             ];
 
+            var tmpFormatProperties = [
+                BlockEditor.getStandardProperty(props,'padding', 'Padding', 'padding' ),
+                BlockEditor.getStandardProperty(props,'margin', 'Margin', 'margin'),
+                BlockEditor.getStandardProperty(props,'classes', 'Additional Classes', 'text' )
+            ];
+
+
             var tmpSidebarPanels = [
-                BlockEditor.getSidebarPanel('Header Options', tmpStandardProperties)
+                BlockEditor.getSidebarPanel('Header Options', tmpStandardProperties),
+                BlockEditor.getSidebarPanel('Formatting Options', tmpFormatProperties)
             ];
 
             var tmpSidebarControls = BlockEditor.getSidebarControls(tmpSidebarPanels);

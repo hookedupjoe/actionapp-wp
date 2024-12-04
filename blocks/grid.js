@@ -1,5 +1,5 @@
 /**
- * Block Widget: cards.js - Semantic UI Cards Container
+ * Block Widget: grid.js - Semantic UI Grid Container
  * 
  * Copyright (c) 2021-2024 Joseph Francis / hookedup, inc. 
  *
@@ -24,8 +24,8 @@
     var BlockEditor = ActionAppCore.common.blocks.Editor;
 
     var info = {
-        name: 'cards',
-        title: 'UI Card Container',
+        name: 'grid',
+        title: 'UI Grid Container',
         rem_example: {
             attributes: { color: 'green' }
         },
@@ -35,15 +35,15 @@
     const iconEl = BlockEditor.getControlIcon(info.name);
 
     BlockEditor.addNumberAtts(info.atts, ['minColWidth']);
-    BlockEditor.addStringAtts(info.atts, ['columns', 'color', 'padding', 'headerType', 'imageheight']);
+    BlockEditor.addStringAtts(info.atts, ['columns', 'padding']);
     BlockEditor.addBooleanAtts(info.atts, ['centered']);
 
     var tmpClassSpecs = {
         boolean: ['centered'],
-        string: ['color']
+        string: []
     }
     function getClass(theProps, theIsEditMode) {
-        return BlockEditor.getStandardClass('ui cards ', tmpClassSpecs, theProps, theIsEditMode);
+        return BlockEditor.getStandardClass('ui grid ', tmpClassSpecs, theProps, theIsEditMode);
     }
 
     function getDisplayValue(theProps, theIsEditMode) {
@@ -52,16 +52,18 @@
 
         if (theIsEditMode) {
             var tmpUIColor = ''; //was props.attributes.color || 
-            var tmpHeaderMsg = 'Cards Container';
+            var tmpHeaderMsg = 'Grid Container';
+           
             if (props.attributes.columns) {
                 tmpHeaderMsg += " (" + props.attributes.columns + " columns)";
             } else {
                 tmpHeaderMsg += " (columns auto-adjust )";
             }
+          
             var tmpAddBtn = '';
             var tmpBtnBar = ''
             if (props.isSelected) {
-                tmpAddBtn = el('div', { className: 'ui compact button basic blue ', action: 'beAddCard' }, 'Add Card');
+                tmpAddBtn = el('div', { className: 'ui compact button basic blue ', action: 'beAddGridColumn' }, 'Add Column');
                 tmpBtnBar = el('div', { className: 'ui segment raised slim' }, [
                     tmpAddBtn
                 ], el('div', { className: 'endfloat' }));
@@ -71,9 +73,9 @@
 
             return el('div', { className: 'ui segment ' + theProps.attributes.color || '' }, null,
                 tmpHdr,
-                el('div', { className: 'edit-cards' + props.attributes.color + ' ' + props.attributes.columns },
+                el('div', { className: 'edit-grid' + props.attributes.color + ' ' + props.attributes.columns },
                     [
-                        el(wp.blockEditor.InnerBlocks, { allowedBlocks: ['actappui/card'], renderAppender: false }),
+                        el(wp.blockEditor.InnerBlocks, { allowedBlocks: ['actappui/gridcolumn'], renderAppender: false }),
                     ]
                 )
 
@@ -85,7 +87,7 @@
     }
 
 
-    wp.blocks.registerBlockType('actappui/cards', {
+    wp.blocks.registerBlockType('actappui/grid', {
         title: info.title,
         icon: iconEl,
         category: info.category,
@@ -96,15 +98,12 @@
 
             var tmpStandardProperties = [
                 BlockEditor.getStandardProperty(props, 'columns', 'Columns', 'columns'),
-                BlockEditor.getStandardProperty(props, 'imageheight', 'Max Image Height', 'text', BlockEditor.standardOnChangeRefresh),
-                BlockEditor.getStandardProperty(props, 'color', 'All Cards Color', 'color', BlockEditor.standardOnChangeRefresh),
-                BlockEditor.getStandardProperty(props, 'padding', 'Space Between Cards', 'padding', BlockEditor.standardOnChangeRefresh),
+                BlockEditor.getStandardProperty(props, 'padding', 'Space Between Columns', 'padding', BlockEditor.standardOnChangeRefresh),
                 BlockEditor.getStandardProperty(props, 'minColWidth', 'Minimum Column Width', 'number'),
                 BlockEditor.getStandardProperty(props, 'centered', 'Centered', 'checkbox'),
-                BlockEditor.getStandardProperty(props, 'headerType', 'Header Type', 'inverted', BlockEditor.standardOnChangeRefresh),
             ];
             var tmpSidebarPanels = [
-                BlockEditor.getSidebarPanel('Cards Container Options', tmpStandardProperties)
+                BlockEditor.getSidebarPanel('Columns Container Options', tmpStandardProperties)
             ];
 
             var tmpSidebarControls = BlockEditor.getSidebarControls(tmpSidebarPanels);
@@ -127,7 +126,7 @@
             var tmpProps = {};
 
             if (props.attributes.columns == '') {
-                tmpProps["auto-adapt"] = "cards";
+                tmpProps["auto-adapt"] = "grid";
             } else {
                 tmpProps["columns"] = props.attributes.columns;
             }
@@ -137,9 +136,11 @@
 
             var tmpClasses = getClass(props, true);
             if (props.attributes.columns != '') {
-                tmpClasses += ' stackable ' + props.attributes.columns;
+                tmpClasses += ' stackable ' + (props.attributes.columns || '') + ' column';
+                console.log('tmpClasses',tmpClasses);
             }
-
+            
+            tmpProps.className = tmpProps.className || '';
             tmpProps.className += ' ' + tmpClasses;
 
             return el(

@@ -101,6 +101,14 @@ class ActAppWidgetManager {
 		wp_enqueue_style ( 'aa-core-admin_css' );
 	}
 	
+	//--- Add here when new widgets are added
+	public static function get_custom_widget_list($theReturnFullName = false){
+		$tmpPrefix = '';
+		if( $theReturnFullName ){
+			$tmpPrefix = 'actappui/';
+		}
+		return array($tmpPrefix.'segment',$tmpPrefix.'header',$tmpPrefix.'message',$tmpPrefix.'button',$tmpPrefix.'image',$tmpPrefix.'cards',$tmpPrefix.'grid',$tmpPrefix.'gridcolumn',$tmpPrefix.'card',$tmpPrefix.'cardsection',$tmpPrefix.'cardsectionbottom',$tmpPrefix.'container',$tmpPrefix.'spot');
+	}
 	public static function actapp_init_blocks($theHook) {
 		
 	    $my_css_ver = '1';//Todo
@@ -117,7 +125,7 @@ class ActAppWidgetManager {
 
 		//,'richtext'
 		//--- Load standardly created widgets;
-		$tmpWidgetList = array('segment','header','card', 'cards', 'message', 'button', 'image', 'cardsection', 'cardsectionbottom','container','spot');
+		$tmpWidgetList =  self::get_custom_widget_list();
 		//ToAdd _. , 'buttons'
 		foreach ($tmpWidgetList as $aName) {
 			self::loadStandardBlock($aName);
@@ -129,8 +137,6 @@ class ActAppWidgetManager {
 	public static function init() {
 //		add_action( 'admin_menu', array( 'ActAppWidgetManager', 'registerAdminPageWidgetsSettings' ) );
 		
-		
-
 		add_filter('block_categories',  array('ActAppWidgetManager','actapp_block_category'), 10, 2);
 		add_action('enqueue_block_editor_assets',  array('ActAppWidgetManager','actapp_init_blocks_content'),10,2);
 		add_action('enqueue_block_editor_assets',  array('ActAppWidgetManager','actapp_init_blocks'),10,2);

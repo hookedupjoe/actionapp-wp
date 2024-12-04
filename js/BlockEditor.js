@@ -189,7 +189,7 @@
         BlockEditor.getMarginListControl = function(theCurrentValue, theOnChangeEvent){
             var tmpSelection = [el("option", {value: "mardefault"}, "Default")];
             var tmpMax = 20; 
-            for( var i = 1 ; i <= tmpMax ; i++){
+            for( var i = 0 ; i <= tmpMax ; i++){
                 tmpSelection.push(el("option", {value: 'mar' + i}, i));
             }
             return BlockEditor.getSelectControl(theCurrentValue,theOnChangeEvent,tmpSelection);
@@ -198,7 +198,7 @@
         BlockEditor.getPaddingListControl = function(theCurrentValue, theOnChangeEvent){
             var tmpSelection = [el("option", {value: "paddefault"}, "Default")];
             var tmpMax = 20; 
-            for( var i = 1 ; i <= tmpMax ; i++){
+            for( var i = 0 ; i <= tmpMax ; i++){
                 tmpSelection.push(el("option", {value: 'pad' + i}, i));
             }
             return BlockEditor.getSelectControl(theCurrentValue,theOnChangeEvent,tmpSelection);
@@ -515,6 +515,20 @@
     }
 
     function addBlockEditorActions(){
+        
+        //--- ToDo: Refactor these ...
+
+        ThisApp.actions.beAddGridColumn = function(){
+            console.log('beAddGridColumn');
+            var tmpThis = wp.data.select( 'core/block-editor' ).getSelectedBlock();
+            var tmpPos = 0;
+            if( tmpThis.innerBlocks && tmpThis.innerBlocks.length ){
+                tmpPos = tmpThis.innerBlocks.length;
+            }
+            var tmpItemToAdd = 'gridcolumn';
+            var tmpToAddElement = BlockEditor.getCommonBlock(tmpItemToAdd);
+            wp.data.dispatch('core/block-editor').insertBlocks(tmpToAddElement,tmpPos,tmpThis.clientId) 
+        }
 
         ThisApp.actions.beAddCard = function(){
             var tmpThis = wp.data.select( 'core/block-editor' ).getSelectedBlock();
@@ -713,6 +727,16 @@
             "card": {
                 type: 'actappui/card', 
                 name: "Card",
+                attr: {}
+            },            
+            "grid": {
+                type: 'actappui/grid', 
+                name: "Grid",
+                attr: {}
+            },
+            "gridcolumn": {
+                type: 'actappui/gridcolumn', 
+                name: "Grid Column",
                 attr: {}
             },            
             "cardsection": {

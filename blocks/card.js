@@ -36,7 +36,7 @@
 
     BlockEditor.addNumberAtts(info.atts, ['mediaID']);
     BlockEditor.addBooleanAtts(info.atts, ['fluid', 'raised', 'urlopentab']);
-    BlockEditor.addStringAtts(info.atts, ['parentMaxImgHeight', 'title', 'subtitle', 'color', 'headerColor', 'parentColor', 'parentPadding', 'parentHeaderType', 'url', 'mediaURL']);
+    BlockEditor.addStringAtts(info.atts, ['text','parentMaxImgHeight', 'title', 'text', 'subtitle', 'color', 'headerColor', 'parentColor', 'parentPadding', 'parentHeaderType', 'url', 'mediaURL']);
     //'text',
 
     var tmpClassSpecs = {
@@ -55,6 +55,9 @@
         var props = theProps;
         var tmpContent = [];
         var tmpClass = getClass(theProps, theIsEditMode);
+        if( theIsEditMode ){
+            tmpClass += ' fluid';
+        }
         var tmpTitle = '';
         var tmpAtt = props.attributes;
 
@@ -102,6 +105,7 @@
                 tmpItems.push(newEl('div', 'ui header inverted ' + ' ' + tmpHeaderSize, [tmpTitle, tmpSub]));
                 tmpMainContent.push(newEl('div', 'ui label fluid pad10 mart0  ' + tmpInverted + tmpHeaderColor, [tmpItems]));
             }
+           
 
         } else if (tmpAtt.parentHeaderType == 'light') {
             var tmpItems = [];
@@ -125,6 +129,10 @@
                 tmpMainContent.push(newEl('div', 'ui pad10 mart0 marb0  ' + tmpHeaderColor, [tmpItems]));
             }
 
+        }
+
+        if( tmpAtt.text ){
+            tmpMainContent.push( newEl('div','pad10 description',tmpAtt.text) );
         }
 
 
@@ -184,21 +192,18 @@
 
             return newEl('div', tmpClass, tmpContent);
         }
-
-
     }
+
+    var tmpSupports = BlockEditor.defaultSupports;
+    tmpSupports.inserter = true
 
     wp.blocks.registerBlockType('actappui/card', {
         title: info.title,
         icon: iconEl,
         category: info.category,
-        example: info.example,
-        supports: BlockEditor.defaultSupports,
+        rem_example: info.example,
+        supports: tmpSupports,
         attributes: info.atts,
-        rem_parent: 'actappui/cards',
-        supports: {
-            inserter: true,
-        },
         edit: function (props) {
             var tmpAtts = props.attributes;
             var tmpParentAttributes = BlockEditor.getParentAttributes(props.clientId);
@@ -215,6 +220,7 @@
             var tmpStandardProperties = [
                 BlockEditor.getStandardProperty(props, 'title', 'Card Title'),
                 BlockEditor.getStandardProperty(props, 'subtitle', 'Subtitle'),
+                BlockEditor.getStandardProperty(props,'text', 'Text' ),
                 tmpParentColor ? '' : BlockEditor.getStandardProperty(props, 'color', 'Card Color', 'color'),
                 BlockEditor.getStandardProperty(props, { mediaID: 'mediaID', mediaURL: 'mediaURL' }, 'Card Image', 'image'),
                 BlockEditor.getStandardProperty(props, 'url', 'Target Content or Link', 'url'),

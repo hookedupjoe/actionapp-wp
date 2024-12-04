@@ -19,6 +19,19 @@
  * @since actionappwp 1.0.0
  */
 
+//$registeredBlocks = WP_Block_Type_Registry::get_instance()->get_all_registered();
+// foreach($registeredBlocks as $i => $i_value) {
+//     echo '<br /><b>' . $i_value->name . '</b>: ' . $i_value->title . ' (' . $i_value->category . ")";
+// }
+
+// $registeredPatterns = WP_Block_Patterns_Registry::get_instance()->get_all_registered();
+
+// foreach($registeredPatterns as $i => $i_value) {
+//     echo '<br /><b>' . $i_value['name'] . '</b>: ' . $i_value['title'];
+// }
+
+//var_dump($registeredPatterns);
+
 echo '<img class="ui image medium marb10" src="'.ACTIONAPP_WP_IMAGE_PATH.'single-page-header.png" />';
 echo ('<div spot="mainspot"></div>');
 

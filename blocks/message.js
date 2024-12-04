@@ -27,7 +27,7 @@
     var info = {
         name: 'message',
         title: 'UI Message',
-        example: {
+        rem_example: {
             attributes: {color: 'blue'}
         },
         category: 'actappui',
@@ -36,11 +36,11 @@
     const iconEl = BlockEditor.getControlIcon(info.name);
 
     BlockEditor.addBooleanAtts(info.atts,['floating', 'compact']);
-    BlockEditor.addStringAtts(info.atts,['name','ctl','color','size','attached','margin','padding']);
+    BlockEditor.addStringAtts(info.atts,['name', 'ctl', 'color', 'size', 'attached', 'margin', 'padding', 'classes']);
   
-    BlockEditor.addAtt(info.atts,'text',{type: 'string',source: 'html'})
+    BlockEditor.addAtt(info.atts,'text',{type: 'string', source: 'html'})
     var tmpClassSpecs = {
-        boolean: ['floating','compact'],
+        boolean: ['floating', 'compact'],
         string: ['color','size', 'attached', 'margin', 'padding']
     }
 
@@ -50,12 +50,16 @@
 
     function getDisplayValue(theProps,theIsEditMode){
         var props = theProps;
-        theProps.attributes.ctl = 'message';
+        var tmpAtts = theProps.attributes;
+        tmpAtts.ctl = 'message';
         var tmpClass = getClass(props, true);
-
+        
+        if( tmpAtts.classes ){
+            tmpClass += ' ' + tmpAtts.classes;
+        }
 
         var tmpMe = wp.data.select('core/block-editor').getBlock(props.clientId);
-        theProps.attributes.text = '';
+        tmpAtts.text = '';
         if (tmpMe) {
             var tmpChildren = tmpMe.innerBlocks;
             if (!(tmpChildren && tmpChildren.length)) {
@@ -68,11 +72,11 @@
                     for (var iPosChildPos in tmpChildren) {
                         var tmpChild = tmpChildren[iPosChildPos];
                         if( tmpChild && tmpChild.attributes && tmpChild.attributes.content){
-                            if( theProps.attributes.text != ''){
+                            if( tmpAtts.text != ''){
                                 //ToDo: Wrap in div with class instead?  Wrap in p?
-                                theProps.attributes.text += "<br />";
+                                tmpAtts.text += "<br />";
                             }
-                            theProps.attributes.text += tmpChild.attributes.content;
+                            tmpAtts.text += tmpChild.attributes.content;
                         }
                     }
                 }
@@ -107,12 +111,18 @@
                 BlockEditor.getStandardProperty(props,'floating', 'Floating', 'checkbox' ),
                 BlockEditor.getStandardProperty(props,'compact', 'Compact', 'checkbox' ),
 
-                BlockEditor.getStandardProperty(props,'margin', 'Margin', 'margin'),
-                BlockEditor.getStandardProperty(props,'padding', 'Padding', 'padding' ),
                 //BlockEditor.getStandardProperty(props,'name', 'Unique Name')
             ];
+            var tmpFormatProperties = [
+                BlockEditor.getStandardProperty(props,'padding', 'Padding', 'padding' ),
+                BlockEditor.getStandardProperty(props,'margin', 'Margin', 'margin'),
+                BlockEditor.getStandardProperty(props,'classes', 'Additional Classes', 'text' )
+            ];
+
+
             var tmpSidebarPanels = [
-                BlockEditor.getSidebarPanel('Message Options', tmpStandardProperties)
+                BlockEditor.getSidebarPanel('Message Options', tmpStandardProperties),
+                BlockEditor.getSidebarPanel('Formatting Options', tmpFormatProperties)
             ];
 
             var tmpSidebarControls = BlockEditor.getSidebarControls(tmpSidebarPanels);
