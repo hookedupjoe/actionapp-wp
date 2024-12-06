@@ -185,9 +185,19 @@
             }
             return BlockEditor.getSelectControl(theCurrentValue,theOnChangeEvent,tmpSelection);
         }
+        
+        BlockEditor.getPaddingListControl = function(theCurrentValue, theOnChangeEvent){
+            var tmpSelection = [el("option", {value: ""}, "Default")];
+            var tmpMax = 20; 
+            for( var i = 0 ; i <= tmpMax ; i++){
+                tmpSelection.push(el("option", {value: 'pad' + i}, i));
+            }
+            return BlockEditor.getSelectControl(theCurrentValue,theOnChangeEvent,tmpSelection);
+        }
 
+        //ToDo: Consider , el("option", {value: "mardefault"}, "Template Default") and paddefault ??
         BlockEditor.getMarginListControl = function(theCurrentValue, theOnChangeEvent){
-            var tmpSelection = [el("option", {value: "mardefault"}, "Default")];
+            var tmpSelection = [el("option", {value: ""}, "Default")];
             var tmpMax = 20; 
             for( var i = 0 ; i <= tmpMax ; i++){
                 tmpSelection.push(el("option", {value: 'mar' + i}, i));
@@ -195,14 +205,24 @@
             return BlockEditor.getSelectControl(theCurrentValue,theOnChangeEvent,tmpSelection);
         }
 
-        BlockEditor.getPaddingListControl = function(theCurrentValue, theOnChangeEvent){
-            var tmpSelection = [el("option", {value: "paddefault"}, "Default")];
-            var tmpMax = 20; 
+        BlockEditor.getBottomMarginListControl = function(theCurrentValue, theOnChangeEvent){
+            var tmpSelection = [el("option", {value: ""}, "Default")];
+            var tmpMax = 10; 
             for( var i = 0 ; i <= tmpMax ; i++){
-                tmpSelection.push(el("option", {value: 'pad' + i}, i));
+                tmpSelection.push(el("option", {value: 'marb' + i}, i));
             }
             return BlockEditor.getSelectControl(theCurrentValue,theOnChangeEvent,tmpSelection);
         }
+
+        BlockEditor.getTopMarginListControl = function(theCurrentValue, theOnChangeEvent){
+            var tmpSelection = [el("option", {value: ""}, "Default")];
+            var tmpMax = 10; 
+            for( var i = 0 ; i <= tmpMax ; i++){
+                tmpSelection.push(el("option", {value: 'mart' + i}, i));
+            }
+            return BlockEditor.getSelectControl(theCurrentValue,theOnChangeEvent,tmpSelection);
+        }
+
 
         BlockEditor.getInvertedListControl = function(theCurrentValue, theOnChangeEvent){
             var tmpSelection = [el("option", {value: "default"}, "Default")];
@@ -320,6 +340,12 @@
             }            
             if( tmpCT == 'margin' ){
                 return 'getMarginListControl';
+            }            
+            if( tmpCT == 'topmargin' ){
+                return 'getTopMarginListControl';
+            }            
+            if( tmpCT == 'bottommargin' ){
+                return 'getBottomMarginListControl';
             }            
             if( tmpCT == 'padding' ){
                 return 'getPaddingListControl';

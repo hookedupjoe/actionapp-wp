@@ -34,22 +34,39 @@
         atts: {}
     };
     const iconEl = BlockEditor.getControlIcon(info.name);
-    BlockEditor.addStringAtts(info.atts,['name', 'ctl', 'text', 'color', 'size', 'subtext', 'attached', 'alignment', 'margin', 'padding', 'classes']);
+
+    BlockEditor.addStringAtts(info.atts,['name', 'ctl', 'text', 'color', 'size', 'subtext', 'attached', 'alignment', 'margin', 'bottommargin', 'padding', 'classes']);
     BlockEditor.addBooleanAtts(info.atts,['dividing', 'block', 'inverted']);
+    
     var tmpClassSpecs = {
         boolean: ['dividing','block','inverted'],
-        string: ['color','size', 'attached', 'alignment','margin','padding']
+        string: ['color','size', 'attached', 'alignment','margin','bottommargin','padding']
     }
     
-    function getContent(theProps, theIsEditMode){
+    function getDisplayValue(theProps,theIsEditMode){
         var tmpAtts = theProps.attributes;
         tmpAtts.ctl = 'header';
+
+        var tmpCN = getClass(theProps, true);
+        if( tmpAtts.classes ){
+            tmpCN += ' ' + tmpAtts.classes;
+        }
+        
+        var tmpText = tmpAtts.text;
+        if( theIsEditMode ){
+            if(  (!(tmpAtts.text || tmpAtts.subtext))){
+                tmpText = '(blank) - Update in settings sidebar';
+            }
+        }
         var tmpContent = [];
         if( tmpAtts.subtext != '' ){
             tmpContent.push( BlockEditor.el('div','sub header',tmpAtts.subtext) );
         }
-        return tmpContent;
+        
+        var tmpDisplayObject = el('div',{className:tmpCN},[tmpText,tmpContent]);
+        return tmpDisplayObject;
     }
+
     function getClass(theProps, theIsEditMode){
         return BlockEditor.getStandardClass( 'ui header', tmpClassSpecs, theProps, theIsEditMode);
     }
@@ -60,20 +77,9 @@
         example: info.example,
         supports: BlockEditor.defaultSupports,
         attributes: info.atts,
+        
         edit: function ( props ) {
-            var tmpAtts = props.attributes;
 
-            var tmpCN = getClass(props, true);
-            if( tmpAtts.classes ){
-                tmpCN += ' ' + tmpAtts.classes;
-            }
-            var tmpContent = getContent(props, true);
-            
-            var tmpText = tmpAtts.text;
-            if(  (!(tmpAtts.text || tmpAtts.subtext))){
-                tmpText = 'Blank Header: Enter details on the sidebar **';
-            }
-           
             var tmpStandardProperties = [
                 BlockEditor.getStandardProperty(props,'text', 'Header Text'),
                 BlockEditor.getStandardProperty(props,'subtext', 'Sub Text' ),
@@ -89,6 +95,7 @@
             var tmpFormatProperties = [
                 BlockEditor.getStandardProperty(props,'padding', 'Padding', 'padding' ),
                 BlockEditor.getStandardProperty(props,'margin', 'Margin', 'margin'),
+                BlockEditor.getStandardProperty(props,'bottommargin', 'Bottom Margin', 'bottommargin'),
                 BlockEditor.getStandardProperty(props,'classes', 'Additional Classes', 'text' )
             ];
 
@@ -100,7 +107,7 @@
 
             var tmpSidebarControls = BlockEditor.getSidebarControls(tmpSidebarPanels);
 
-            var tmpDisplayObject = el('div',{className:tmpCN},[tmpText,tmpContent]);
+            var tmpDisplayObject = getDisplayValue(props,true);
 
             return el(
                 'div',
@@ -113,15 +120,8 @@
         },
  
         save: function ( props ) {
-            var tmpCN = getClass(props, false);
-            var tmpContent = getContent(props, false);
-            return el('div',
-                {className:tmpCN},
-                [
-                    props.attributes.text,
-                    tmpContent
-                ]
-            );
+            var tmpEl = getDisplayValue(props,false)
+            return tmpEl;
         },
     } );
 } )( window.wp, window.ActionAppCore );

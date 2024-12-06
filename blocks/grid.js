@@ -43,7 +43,7 @@
         string: []
     }
     function getClass(theProps, theIsEditMode) {
-        return BlockEditor.getStandardClass('ui grid ', tmpClassSpecs, theProps, theIsEditMode);
+        return BlockEditor.getStandardClass('ui grid stackable ', tmpClassSpecs, theProps, theIsEditMode);
     }
 
     function getDisplayValue(theProps, theIsEditMode) {
