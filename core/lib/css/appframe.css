@@ -12,6 +12,13 @@ body a:hover {
   color: unset;
 }
 
+figure {
+  margin: auto auto;
+}
+figure.ui {
+  margin: .5rem 10px;
+}
+
 .cleanzone {
   -webkit-box-sizing: unset;
   box-sizing: unset;
@@ -153,7 +160,17 @@ body a:hover {
   margin-bottom: .5em;
 }
 
+
+body .ui.cards>.card {
+  margin-top: .437em .25em;
+}
+
+
 /* SLIM VERSIONS */
+
+body .ui.cards.slimspace>.card {
+  margin: .25em !important;
+}
 
 
 .ui.one.cards.slimspace {
