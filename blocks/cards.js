@@ -26,17 +26,14 @@
     var info = {
         name: 'cards',
         title: 'UI Card Container',
-        rem_example: {
-            attributes: { color: 'green' }
-        },
         category: 'actappui',
         atts: {}
     };
     const iconEl = BlockEditor.getControlIcon(info.name);
 
     BlockEditor.addNumberAtts(info.atts, ['minColWidth']);
-    BlockEditor.addStringAtts(info.atts, ['columns', 'color', 'padding', 'headerType', 'imageheight']);
-    BlockEditor.addBooleanAtts(info.atts, ['centered']);
+    BlockEditor.addStringAtts(info.atts, ['columns', 'color', 'headerType', 'imageheight','cardpadding']);
+    BlockEditor.addBooleanAtts(info.atts, ['centered','slimspacing']);
 
     var tmpClassSpecs = {
         boolean: ['centered'],
@@ -97,10 +94,12 @@
             var tmpStandardProperties = [
                 BlockEditor.getStandardProperty(props, 'columns', 'Columns', 'columns'),
                 BlockEditor.getStandardProperty(props, 'imageheight', 'Max Image Height', 'text', BlockEditor.standardOnChangeRefresh),
-                BlockEditor.getStandardProperty(props, 'color', 'All Cards Color', 'color', BlockEditor.standardOnChangeRefresh),
-                BlockEditor.getStandardProperty(props, 'padding', 'Space Between Cards', 'padding', BlockEditor.standardOnChangeRefresh),
                 BlockEditor.getStandardProperty(props, 'minColWidth', 'Minimum Column Width', 'number'),
                 BlockEditor.getStandardProperty(props, 'centered', 'Centered', 'checkbox'),
+                BlockEditor.getStandardProperty(props, 'color', 'All Cards Color', 'color', BlockEditor.standardOnChangeRefresh),
+                BlockEditor.getStandardProperty(props, 'cardpadding', 'All Cards Padding', 'padding', BlockEditor.standardOnChangeRefresh),
+                BlockEditor.getStandardProperty(props, 'slimspacing', 'Slim Space Between Cards?', 'checkbox'),
+                
                 BlockEditor.getStandardProperty(props, 'headerType', 'Header Type', 'inverted', BlockEditor.standardOnChangeRefresh),
             ];
             var tmpSidebarPanels = [
@@ -124,7 +123,8 @@
 
         save: function (props) {
             // *** using blockProps, need clean HTML
-            var tmpProps = {};
+            var tmpProps = {className: ''};
+            
 
             if (props.attributes.columns == '') {
                 tmpProps["auto-adapt"] = "cards";
@@ -136,11 +136,15 @@
             }
 
             var tmpClasses = getClass(props, true);
+            
             if (props.attributes.columns != '') {
-                tmpClasses += ' stackable ' + props.attributes.columns;
+                tmpClasses += ' stackable' + props.attributes.columns;
             }
-
-            tmpProps.className += ' ' + tmpClasses;
+            if (props.attributes.slimspacing) {
+                tmpClasses += ' slim';
+            }
+            
+            tmpProps.className += ' ' + tmpClasses.trim();
 
             return el(
                 'div',

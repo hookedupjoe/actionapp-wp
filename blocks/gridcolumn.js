@@ -35,12 +35,12 @@
     const iconEl = BlockEditor.getControlIcon(info.name);
 
     BlockEditor.addNumberAtts(info.atts, []);
-    BlockEditor.addBooleanAtts(info.atts, ['centered','flexbox']);
+    BlockEditor.addBooleanAtts(info.atts, ['centered','flexgrowbox']);
     BlockEditor.addStringAtts(info.atts, ['classes']);
     //'text',
 
     var tmpClassSpecs = {
-        boolean: ['centered','flexbox'],
+        boolean: ['centered','flexgrowbox'],
         string: []
     }
     function getClass(theProps, theIsEditMode) {
@@ -71,9 +71,6 @@
         var tmpExtraContent = [];
        
         tmpContent.push(tmpExtraContent);
-        if (tmpAtts.parentPadding) {
-            tmpClass += ' ' + tmpAtts.parentPadding;
-        }
 
         if (theIsEditMode) {
             return el('div', { className: tmpClass }, [newEl('div', tmpClass, [tmpContent])]);
@@ -102,13 +99,9 @@
             props.attributes.parentMaxImgHeight = tmpParentAttributes.imageheight || '';
             props.attributes.parentHeaderType = tmpParentAttributes.headerType || 'default';
 
-            if (tmpParentAttributes.padding) {
-                props.attributes.parentPadding = tmpParentAttributes.padding || '';
-            }
-
             var tmpStandardProperties = [
                 BlockEditor.getStandardProperty(props, 'centered', 'Centered', 'checkbox'),
-                BlockEditor.getStandardProperty(props, 'flexbox', 'Flex Content', 'checkbox'),
+                BlockEditor.getStandardProperty(props, 'flexgrowbox', 'Fill column with first item?', 'checkbox'),
             ];
 
             var tmpFormatProperties = [

@@ -33,15 +33,15 @@
         atts: {}
     };
     const iconEl = BlockEditor.getControlIcon(info.name);
+    const defaultPadding = 'pad8';
 
     BlockEditor.addNumberAtts(info.atts, ['mediaID']);
     BlockEditor.addBooleanAtts(info.atts, ['fluid', 'raised', 'urlopentab']);
-    BlockEditor.addStringAtts(info.atts, ['text','parentMaxImgHeight', 'title', 'text', 'subtitle', 'color', 'headerColor', 'parentColor', 'parentPadding', 'parentHeaderType', 'url', 'mediaURL']);
-    //'text',
+    BlockEditor.addStringAtts(info.atts, ['text','parentMaxImgHeight', 'title', 'text', 'subtitle', 'color', 'headerColor', 'parentColor', 'parentHeaderType', 'parentPadding', 'url', 'mediaURL']);
 
     var tmpClassSpecs = {
         boolean: ['fluid', 'raised'],
-        string: []
+        string: ['color'],
     }
     function getClass(theProps, theIsEditMode) {
         return BlockEditor.getStandardClass('ui card', tmpClassSpecs, theProps, theIsEditMode);
@@ -53,16 +53,17 @@
 
         var tmpAtts = theProps.attributes;
         var props = theProps;
+        var tmpAtt = props.attributes;
+
         var tmpContent = [];
         var tmpClass = getClass(theProps, theIsEditMode);
         if( theIsEditMode ){
             tmpClass += ' fluid';
         }
         var tmpTitle = '';
-        var tmpAtt = props.attributes;
 
         if (tmpAtts.parentColor) {
-            tmpClass += ' ' + tmpAtts.parentColor;
+            //tmpClass += ' ' + tmpAtts.parentColor;
         } else if (tmpAtt.color) {
             tmpClass += ' ' + tmpAtt.color;
         }
@@ -88,7 +89,7 @@
         var tmpMainContent = [];
         var tmpSub = [];
         var tmpHeaderSize = 'medium';
-        var tmpHeaderColor = tmpAtts.parentColor || '';
+        var tmpHeaderColor = tmpAtts.color || tmpAtts.parentColor || '';
         var tmpInverted = '';
 
         tmpInverted = ' inverted ';
@@ -114,7 +115,7 @@
                 tmpSub = newEl('div', 'subheader', tmpAtt.subtitle);
             }
             if (tmpTitle) {
-                tmpItems.push(newEl('div', 'ui header ' + + tmpHeaderColor + ' ' + tmpHeaderSize, [tmpTitle, tmpSub]));
+                tmpItems.push(newEl('div', 'ui header ' + tmpHeaderColor + ' ' + tmpHeaderSize, [tmpTitle, tmpSub]));
                 tmpMainContent.push(newEl('div', 'ui message attached pad10 mart0 marb0  ' + tmpHeaderColor, [tmpItems]));
 
             }
@@ -126,7 +127,7 @@
             }
             if (tmpTitle) {
                 tmpItems.push(newEl('div', 'ui header ' + tmpHeaderColor + ' ' + tmpHeaderSize, [tmpTitle, tmpSub]));
-                tmpMainContent.push(newEl('div', 'ui pad10 mart0 marb0  ' + tmpHeaderColor, [tmpItems]));
+                tmpMainContent.push(newEl('div', 'ui ' + tmpHeaderColor, [tmpItems]));
             }
 
         }
@@ -135,6 +136,8 @@
             tmpMainContent.push( newEl('div','pad10 description',tmpAtt.text) );
         }
 
+        var tmpPadding = tmpAtt.parentPadding || defaultPadding;
+        tmpClass += ' ' + tmpPadding;
 
         if (tmpMainContent.length > 0) {
             tmpContent.push(newEl('div', '', tmpMainContent));
@@ -182,9 +185,7 @@
             }
             return el('a', tmpOpts, tmpContent);
         } else {
-            if (tmpAtts.parentPadding) {
-                tmpClass += ' ' + tmpAtts.parentPadding;
-            }
+            
 
             if (theIsEditMode) {
                 return el('div', { className: tmpClass }, [newEl('div', tmpClass, [tmpContent])]);
@@ -192,6 +193,7 @@
 
             return newEl('div', tmpClass, tmpContent);
         }
+        
     }
 
     var tmpSupports = BlockEditor.defaultSupports;
@@ -210,18 +212,19 @@
             props.attributes.parentColor = tmpParentAttributes.color || '';
             props.attributes.parentMaxImgHeight = tmpParentAttributes.imageheight || '';
             props.attributes.parentHeaderType = tmpParentAttributes.headerType || 'default';
+            props.attributes.parentPadding = tmpParentAttributes.cardpadding || defaultPadding;
+            
+            
 
-            if (tmpParentAttributes.padding) {
-                props.attributes.parentPadding = tmpParentAttributes.padding || '';
-            }
 
-            var tmpParentColor = tmpParentAttributes.color || '';
+            //var tmpParentColor = tmpParentAttributes.color || '';
+            //tmpParentColor ? '' : 
 
             var tmpStandardProperties = [
                 BlockEditor.getStandardProperty(props, 'title', 'Card Title'),
                 BlockEditor.getStandardProperty(props, 'subtitle', 'Subtitle'),
                 BlockEditor.getStandardProperty(props,'text', 'Text' ),
-                tmpParentColor ? '' : BlockEditor.getStandardProperty(props, 'color', 'Card Color', 'color'),
+                BlockEditor.getStandardProperty(props, 'color', 'Card Color', 'color'),
                 BlockEditor.getStandardProperty(props, { mediaID: 'mediaID', mediaURL: 'mediaURL' }, 'Card Image', 'image'),
                 BlockEditor.getStandardProperty(props, 'url', 'Target Content or Link', 'url'),
                 !(tmpAtts.url) ? '' : BlockEditor.getStandardProperty(props, 'urlopentab', 'Open link in new tab?', 'checkbox'),

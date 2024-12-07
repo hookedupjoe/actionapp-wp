@@ -108,7 +108,7 @@
  
         save: function ( props ) {
             //not using blockProps, need clean HTML
-            var tmpProps = {};
+            var tmpProps = {className: ''};
             
             if( props.attributes.columns == '' ){
                 tmpProps["auto-adapt"] = "buttons";

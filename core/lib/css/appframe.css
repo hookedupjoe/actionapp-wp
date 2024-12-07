@@ -1,8 +1,5 @@
 html, body {
-  width:100%;
-  margin:0;
-  padding:0;
-
+  font-size: 14px;
   font-family: Calibri, Tahoma, Geneva, sans-serif;
 }
 
@@ -21,6 +18,386 @@ body a:hover {
   font-size: unset;
   font-family: unset;  
 }
+
+/* Update margins to be thinner by defaulit between cards and add wide option that is current spacing */
+
+.ui.one.cards {
+  margin-left: -.5em;
+  margin-right: -.5em
+}
+
+.ui.one.cards>.card {
+  margin-top:.5em;
+  margin-bottom: .5em;
+}
+
+.ui.two.cards {
+  margin-left: -.5em;
+  margin-right: -.5em
+}
+
+.ui.two.cards>.card {
+  width: calc(50% - 1em);
+  margin-left: .5em;
+  margin-right: .5em;
+  margin-top:.5em;
+  margin-bottom: .5em;
+}
+
+.ui.three.cards {
+  margin-left: -.5em;
+  margin-right: -.5em;
+}
+
+.ui.three.cards>.card {
+  width: calc(33.33333333% - 1em);
+  margin-left: .5em;
+  margin-right: .5em;
+  margin-top:.5em;
+  margin-bottom: .5em;
+}
+
+.ui.four.cards {
+  margin-left: -.375em;
+  margin-right: -.375em
+}
+
+.ui.four.cards>.card {
+  width: calc(25% - .75em);
+  margin-left: .375em;
+  margin-right: .375em;
+  margin-top:.5em;
+  margin-bottom: .5em;
+}
+
+.ui.five.cards {
+  margin-left: -.375em;
+  margin-right: -.375em
+}
+
+.ui.five.cards>.card {
+  width: calc(20% - .75em);
+  margin-left: .375em;
+  margin-right: .375em;
+  margin-top:.5em;
+  margin-bottom: .5em;
+}
+
+.ui.six.cards {
+  margin-left: -.375em;
+  margin-right: -.375em
+}
+
+.ui.six.cards>.card {
+  width: calc(16.66666667% - .75em);
+  margin-left: .375em;
+  margin-right: .375em;
+  margin-top:.5em;
+  margin-bottom: .5em;
+}
+
+.ui.seven.cards {
+  margin-left: -.5em;
+  margin-right: -.5em
+}
+
+.ui.seven.cards>.card {
+  width: calc(14.28571429% - 1em);
+  margin-left: .5em;
+  margin-right: .5em;
+  margin-top:.5em;
+  margin-bottom: .5em;
+}
+
+.ui.eight.cards {
+  margin-left: -.5em;
+  margin-right: -.5em
+}
+
+.ui.eight.cards>.card {
+  width: calc(12.5% - 1em);
+  margin-left: .5em;
+  margin-right: .5em;
+  font-size: smaller;
+  margin-top:.5em;
+  margin-bottom: .5em;
+}
+
+.ui.nine.cards {
+  margin-left: -.5em;
+  margin-right: -.5em;
+  margin-top:.5em;
+  margin-bottom: .5em;
+}
+
+.ui.nine.cards>.card {
+  width: calc(11.11111111% - 1em);
+  margin-left: .5em;
+  margin-right: .5em;
+  font-size: smaller;
+  margin-top:.5em;
+  margin-bottom: .5em;
+}
+
+.ui.ten.cards {
+  margin-left: -.5em;
+  margin-right: -.5em
+}
+
+.ui.ten.cards>.card {
+  width: calc(10% - 1em);
+  margin-left: .5em;
+  margin-right: .5em;
+  font-size: smaller;
+  margin-top:.5em;
+  margin-bottom: .5em;
+}
+
+/* SLIM VERSIONS */
+
+
+.ui.one.cards.slim {
+  margin-left: -.25em;
+  margin-right: -.25em
+}
+
+.ui.one.cards.slim>.card {
+  margin-top:.25em;
+  margin-bottom: .25em;
+}
+
+.ui.two.cards.slim {
+  margin-left: -.25em;
+  margin-right: -.25em
+}
+
+.ui.two.cards.slim>.card {
+  width: calc(50% - .5em);
+  margin-left: .25em;
+  margin-right: .25em;
+  margin-top:.25em;
+  margin-bottom: .25em;
+}
+
+.ui.three.cards.slim {
+  margin-left: -.25em;
+  margin-right: -.25em;
+}
+
+.ui.three.cards.slim>.card {
+  width: calc(33.33333333% - .5em);
+  margin-left: .25em;
+  margin-right: .25em;
+  margin-top:.25em;
+  margin-bottom: .25em;
+}
+
+.ui.four.cards.slim {
+  margin-left: -.1875em;
+  margin-right: -.1875em
+}
+
+.ui.four.cards.slim>.card {
+  width: calc(25% - .375em);
+  margin-left: .1875em;
+  margin-right: .1875em;
+  margin-top:.25em;
+  margin-bottom: .25em;
+  padding: .125em;
+}
+
+.ui.five.cards.slim {
+  margin-left: -.1875em;
+  margin-right: -.1875em
+}
+
+.ui.five.cards.slim>.card {
+  width: calc(20% - .375em);
+  margin-left: .1875em;
+  margin-right: .1875em;
+  margin-top:.25em;
+  margin-bottom: .25em;
+}
+
+.ui.six.cards.slim {
+  margin-left: -.1875em;
+  margin-right: -.1875em
+}
+
+.ui.six.cards.slim>.card {
+  width: calc(16.66666667% - .375em);
+  margin-left: .1875em;
+  margin-right: .1875em;
+  margin-top:.25em;
+  margin-bottom: .25em;
+}
+
+.ui.seven.cards.slim {
+  margin-left: -.25em;
+  margin-right: -.25em
+}
+
+.ui.seven.cards.slim>.card {
+  width: calc(14.28571429% - .5em);
+  margin-left: .25em;
+  margin-right: .25em;
+  margin-top:.25em;
+  margin-bottom: .25em;
+}
+
+.ui.eight.cards.slim {
+  margin-left: -.25em;
+  margin-right: -.25em
+}
+
+.ui.eight.cards.slim>.card {
+  width: calc(12.5% - .5em);
+  margin-left: .25em;
+  margin-right: .25em;
+  font-size: smaller;
+  margin-top:.25em;
+  margin-bottom: .25em;
+}
+
+.ui.nine.cards.slim {
+  margin-left: -.25em;
+  margin-right: -.25em;
+  margin-top:.25em;
+  margin-bottom: .25em;
+}
+
+.ui.nine.cards.slim>.card {
+  width: calc(11.11111111% - .5em);
+  margin-left: .25em;
+  margin-right: .25em;
+  font-size: smaller;
+  margin-top:.25em;
+  margin-bottom: .25em;
+}
+
+.ui.ten.cards.slim {
+  margin-left: -.25em;
+  margin-right: -.25em
+}
+
+.ui.ten.cards.slim>.card {
+  width: calc(10% - .5em);
+  margin-left: .25em;
+  margin-right: .25em;
+  font-size: smaller;
+  margin-top:.25em;
+  margin-bottom: .25em;
+}
+
+.ui.grid {
+  margin-top: -.25rem;
+  margin-bottom: -.25rem;
+  margin-left: -.25rem;
+  margin-right: -.25rem
+}
+
+
+.ui.grid>.column:not(.row),.ui.grid>.row>.column {
+  position: relative;
+  display: inline-block;
+  width: 6.25%;
+  padding-left: .25rem !important;
+  padding-right: .25rem !important;
+  vertical-align: top
+}
+
+.ui.grid>* {
+  padding-left: .25rem;
+  padding-right: .25rem
+}
+
+.ui.grid>.row {
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  -webkit-box-pack: inherit;
+  -ms-flex-pack: inherit;
+  justify-content: inherit;
+  -webkit-box-align: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+  width: 100%!important;
+  padding: 0;
+  padding-top: .25rem;
+  padding-bottom: .25rem
+}
+
+.ui.grid>.column:not(.row) {
+  padding-top: .25rem;
+  padding-bottom: .25rem
+}
+
+@media only screen and (max-width: 767px) {
+ 
+  .ui.grid>.stackable.stackable.row>.column,.ui.stackable.grid>.column.grid>.column,.ui.stackable.grid>.column.row>.column,.ui.stackable.grid>.column:not(.row),.ui.stackable.grid>.row>.column,.ui.stackable.grid>.row>.wide.column,.ui.stackable.grid>.wide.column {
+      padding: .25rem .25rem!important
+  }
+
+}
+
+/* SLIM VERSION */
+
+
+.ui.grid.slim {
+  margin-top: -.125rem;
+  margin-bottom: -.125rem;
+  margin-left: -.125rem;
+  margin-right: -.125rem
+}
+
+
+.ui.grid.slim>.column:not(.row),.ui.grid.slim>.row>.column {
+  padding-left: .125rem !important;
+  padding-right: .125rem !important;
+}
+
+.ui.grid.slim>* {
+  padding-left: .125rem;
+  padding-right: .125rem
+}
+
+.ui.grid.slim>.row {
+  padding-top: .125rem;
+  padding-bottom: .125rem
+}
+
+.ui.grid.slim>.column:not(.row) {
+  padding-top: .125rem;
+  padding-bottom: .125rem
+}
+
+@media only screen and (max-width: 767px) {
+ 
+  .ui.grid.slim>.stackable.stackable.row>.column,.ui.stackable.grid.slim>.column.grid.slim>.column,.ui.stackable.grid.slim>.column.row>.column,.ui.stackable.grid.slim>.column:not(.row),.ui.stackable.grid.slim>.row>.column,.ui.stackable.grid.slim>.row>.wide.column,.ui.stackable.grid.slim>.wide.column {
+      padding: .125rem .125rem!important
+  }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 .fluid-field {
@@ -66,18 +443,10 @@ iframe.full-frame {
 .site-layout-north {
   overflow: hidden;
 }
-.ui.grid {
-  margin-top: 0; 
-  margin-bottom: 0;
-  margin-left: 0;
-  margin-right: 0;
-}
 
 
-.ui.grid>.column:not(.row) {
-  padding-top: 1px;
-  padding-bottom: 1px;
-}
+
+/* Augment Menu Items */
 
 .ui.tight.menu {
   min-height:25px;
@@ -101,8 +470,12 @@ iframe.full-frame {
   padding-left:8px !important;
 }
 
-.ui.flexbox {
+.flexgrowbox {
   display: flex !important;
+}
+
+.flexgrowbox>div {
+  flex-grow: 1 !important;
 }
 
 .full.ui.disabled.dropdown, .full.ui.dropdown .menu>.disabled.item {

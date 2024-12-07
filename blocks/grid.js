@@ -35,21 +35,25 @@
     const iconEl = BlockEditor.getControlIcon(info.name);
 
     BlockEditor.addNumberAtts(info.atts, ['minColWidth']);
-    BlockEditor.addStringAtts(info.atts, ['columns', 'padding']);
-    BlockEditor.addBooleanAtts(info.atts, ['centered']);
+    BlockEditor.addStringAtts(info.atts, ['columns']);
+    BlockEditor.addBooleanAtts(info.atts, ['centered', 'slimspacing']);
 
     var tmpClassSpecs = {
         boolean: ['centered'],
         string: []
     }
     function getClass(theProps, theIsEditMode) {
-        return BlockEditor.getStandardClass('ui grid stackable ', tmpClassSpecs, theProps, theIsEditMode);
+        var tmpClass = BlockEditor.getStandardClass('ui grid stackable ', tmpClassSpecs, theProps, theIsEditMode);
+        if (theProps.attributes.slimspacing) {
+            tmpClass += ' slim';
+        }
+        return tmpClass;
     }
 
     function getDisplayValue(theProps, theIsEditMode) {
         var props = theProps;
         var tmpClass = getClass(props, true);
-
+        
         if (theIsEditMode) {
             var tmpUIColor = ''; //was props.attributes.color || 
             var tmpHeaderMsg = 'Grid Container';
@@ -98,8 +102,9 @@
 
             var tmpStandardProperties = [
                 BlockEditor.getStandardProperty(props, 'columns', 'Columns', 'columns'),
-                BlockEditor.getStandardProperty(props, 'padding', 'Space Between Columns', 'padding', BlockEditor.standardOnChangeRefresh),
                 BlockEditor.getStandardProperty(props, 'minColWidth', 'Minimum Column Width', 'number'),
+                BlockEditor.getStandardProperty(props, 'slimspacing', 'Slim Space Between Columns?', 'checkbox'),
+                BlockEditor.getStandardProperty(props, 'cardpadding', 'Add Cards Padding', 'padding', BlockEditor.standardOnChangeRefresh),
                 BlockEditor.getStandardProperty(props, 'centered', 'Centered', 'checkbox'),
             ];
             var tmpSidebarPanels = [
@@ -123,7 +128,7 @@
 
         save: function (props) {
             // *** using blockProps, need clean HTML
-            var tmpProps = {};
+            var tmpProps = {className: ''};
 
             if (props.attributes.columns == '') {
                 tmpProps["auto-adapt"] = "grid";
@@ -137,7 +142,6 @@
             var tmpClasses = getClass(props, true);
             if (props.attributes.columns != '') {
                 tmpClasses += ' stackable ' + (props.attributes.columns || '') + ' column';
-                console.log('tmpClasses',tmpClasses);
             }
             
             tmpProps.className = tmpProps.className || '';
