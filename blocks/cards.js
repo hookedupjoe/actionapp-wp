@@ -93,13 +93,12 @@
 
             var tmpStandardProperties = [
                 BlockEditor.getStandardProperty(props, 'columns', 'Columns', 'columns'),
-                BlockEditor.getStandardProperty(props, 'imageheight', 'Exact Image Height', 'number',BlockEditor.standardOnChangeRefresh),
                 BlockEditor.getStandardProperty(props, 'minColWidth', 'Minimum Column Width', 'number'),
-                BlockEditor.getStandardProperty(props, 'centered', 'Centered', 'checkbox'),
+                BlockEditor.getStandardProperty(props, 'cardspacing', 'Space Between Columns', 'gridspacing'),
+                BlockEditor.getStandardProperty(props, 'imageheight', 'Exact Image Height', 'number',BlockEditor.standardOnChangeRefresh),
                 BlockEditor.getStandardProperty(props, 'color', 'All Cards Color', 'color'),
-                BlockEditor.getStandardProperty(props, 'cardspacing', 'Space Between Cards', 'cardspacing'),
-                
                 BlockEditor.getStandardProperty(props, 'headerType', 'Header Type', 'inverted', BlockEditor.standardOnChangeRefresh),
+                BlockEditor.getStandardProperty(props, 'centered', 'Centered', 'checkbox'),
             ];
             var tmpSidebarPanels = [
                 BlockEditor.getSidebarPanel('Cards Container Options', tmpStandardProperties)

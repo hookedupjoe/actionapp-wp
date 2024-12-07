@@ -35,12 +35,12 @@
     const iconEl = BlockEditor.getControlIcon(info.name);
 
     BlockEditor.addNumberAtts(info.atts, ['minColWidth']);
-    BlockEditor.addStringAtts(info.atts, ['columns']);
-    BlockEditor.addBooleanAtts(info.atts, ['centered', 'slimspacing']);
+    BlockEditor.addStringAtts(info.atts, ['columns','gridspacing']);
+    BlockEditor.addBooleanAtts(info.atts, ['centered']);
 
     var tmpClassSpecs = {
         boolean: ['centered'],
-        string: []
+        string: ['gridspacing']
     }
     function getClass(theProps, theIsEditMode) {
         var tmpClass = BlockEditor.getStandardClass('ui grid stackable ', tmpClassSpecs, theProps, theIsEditMode);
@@ -103,8 +103,7 @@
             var tmpStandardProperties = [
                 BlockEditor.getStandardProperty(props, 'columns', 'Columns', 'columns'),
                 BlockEditor.getStandardProperty(props, 'minColWidth', 'Minimum Column Width', 'number'),
-                BlockEditor.getStandardProperty(props, 'slimspacing', 'Slim Space Between Columns?', 'checkbox'),
-                BlockEditor.getStandardProperty(props, 'cardpadding', 'Add Cards Padding', 'padding', BlockEditor.standardOnChangeRefresh),
+                BlockEditor.getStandardProperty(props, 'gridspacing', 'Space Between Columns', 'gridspacing'),
                 BlockEditor.getStandardProperty(props, 'centered', 'Centered', 'checkbox'),
             ];
             var tmpSidebarPanels = [
