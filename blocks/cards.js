@@ -32,7 +32,7 @@
     const iconEl = BlockEditor.getControlIcon(info.name);
 
     BlockEditor.addNumberAtts(info.atts, ['minColWidth', 'imageheight']);
-    BlockEditor.addStringAtts(info.atts, ['columns', 'color', 'headerType','cardpadding']);
+    BlockEditor.addStringAtts(info.atts, ['columns', 'color', 'headerType']);
     BlockEditor.addBooleanAtts(info.atts, ['centered','slimspacing']);
 
     var tmpClassSpecs = {
@@ -58,11 +58,11 @@
             var tmpAddBtn = '';
             var tmpBtnBar = ''
             if (props.isSelected) {
-                tmpAddBtn = el('div', { className: 'ui compact button basic blue ', action: 'beAddCard' }, 'Add Card');
+                tmpAddBtn = el('div', { className: 'ui compact button basic brown ', action: 'beAddCard' }, 'Add Card');
                 tmpBtnBar = el('div', { className: 'ui segment raised slim' }, [
                     tmpAddBtn
                 ], el('div', { className: 'endfloat' }));
-                tmpUIColor = 'blue';
+                tmpUIColor = 'brown';
             }
             var tmpHdr = el('div', { className: 'ui header top attached center aligned fluid ' + tmpUIColor }, tmpHeaderMsg, tmpBtnBar);
 
@@ -93,11 +93,10 @@
 
             var tmpStandardProperties = [
                 BlockEditor.getStandardProperty(props, 'columns', 'Columns', 'columns'),
-                BlockEditor.getStandardProperty(props, 'imageheight', 'Max Image Height', 'number', BlockEditor.standardOnChangeRefresh),
+                BlockEditor.getStandardProperty(props, 'imageheight', 'Max Image Height', 'number',BlockEditor.standardOnChangeRefresh),
                 BlockEditor.getStandardProperty(props, 'minColWidth', 'Minimum Column Width', 'number'),
                 BlockEditor.getStandardProperty(props, 'centered', 'Centered', 'checkbox'),
-                BlockEditor.getStandardProperty(props, 'color', 'All Cards Color', 'color', BlockEditor.standardOnChangeRefresh),
-                BlockEditor.getStandardProperty(props, 'cardpadding', 'All Cards Padding', 'padding', BlockEditor.standardOnChangeRefresh),
+                BlockEditor.getStandardProperty(props, 'color', 'All Cards Color', 'color'),
                 BlockEditor.getStandardProperty(props, 'slimspacing', 'Slim Space Between Cards?', 'checkbox'),
                 
                 BlockEditor.getStandardProperty(props, 'headerType', 'Header Type', 'inverted', BlockEditor.standardOnChangeRefresh),
@@ -105,6 +104,7 @@
             var tmpSidebarPanels = [
                 BlockEditor.getSidebarPanel('Cards Container Options', tmpStandardProperties)
             ];
+            
 
             var tmpSidebarControls = BlockEditor.getSidebarControls(tmpSidebarPanels);
 

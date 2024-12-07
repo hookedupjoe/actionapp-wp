@@ -395,14 +395,9 @@
 
         //--- Use this when refreshing the children components is needed on this change
         BlockEditor.standardOnChangeRefresh = function( theEvent ) {
-            var tmpObjAtts = {};
-            var tmpVal = (theEvent.target.value);
-            
-            tmpObjAtts[this.attName] = tmpVal;
-            this.props.setAttributes( tmpObjAtts );
+            BlockEditor.standardOnChange.bind(this)(theEvent);
             //--- The below refresh cause issues with editor in widgets area
             BlockEditor.refreshBlockEditor();
-            //--- ToDo: Review usage / initial need of the above call
         }
 
 
@@ -418,8 +413,6 @@
             }
             tmpObjAtts[this.attName] = tmpVal;
             this.props.setAttributes( tmpObjAtts );
-            //--- The below refresh cause issues with editor in widgets area
-            //BlockEditor.refreshBlockEditor();
             //--- ToDo: Review usage / initial need of the above call
         }
 
@@ -532,7 +525,6 @@
             } else {
                 //--- Call the dynamic function to get the type for this property
                 tmpContents.push(BlockEditor[tmpFunc](tmpAtts[theAttName],tmpOnChange));
-                //tmpContents.push(BlockEditor.getOptionSep());
             }
             
             return el('div',{className:'pad3'},tmpContents);
@@ -545,7 +537,6 @@
         //--- ToDo: Refactor these ...
 
         ThisApp.actions.beAddGridColumn = function(){
-            console.log('beAddGridColumn');
             var tmpThis = wp.data.select( 'core/block-editor' ).getSelectedBlock();
             var tmpPos = 0;
             if( tmpThis.innerBlocks && tmpThis.innerBlocks.length ){
@@ -618,7 +609,7 @@
                     children: wp.element.createElement('div',{},'hello popup'),
                     title: 'Label Options', 
                     onClose: function() {
-                        console.log('onClose this,props',this,props)
+                        //console.log('onClose this,props',this,props)
                     }
                 }
                 
@@ -641,7 +632,7 @@
                             })
                             
                         );
-                        console.log('props',props)
+                        //console.log('props',props)
                     }
                     
                 }
@@ -778,7 +769,12 @@
             "cardbutton": {
                 type: 'actappui/button', 
                 name: "Button",
-                attr: {attached:'bottom',color:'blue',circular:true,basic:true}
+                attr: {attached:'bottom attached',color:'blue',circular:true,basic:true}
+            },
+            "bottomattachedbutton": {
+                type: 'actappui/button', 
+                name: "Button",
+                attr: {attached:'bottom attached'}
             },
             "standard-header": {
                 type: 'actappui/header', 
@@ -803,6 +799,13 @@
                     color: 'blue'
                 }
             },
+            "bottomattachedmessage": {
+                type: 'actappui/message', 
+                name: "Blue Message",
+                attr: {
+                    attached: 'bottom attached'
+                }
+            },            
             "field": {
                 type: 'actappdesign/field', 
                 name: "Field",

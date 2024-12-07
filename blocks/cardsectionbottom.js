@@ -12,6 +12,9 @@
  * GNU General Public License for more details.
  *
  * This header and all notices must be kept intact.
+ * 
+ * 
+ *     NO LONGER USED _ GOING AWAY _ HERE TO HOLD VALUES FROM WHEN IN USE ONLY
  *
  * @author Joseph Francis
  * @package actionappwp

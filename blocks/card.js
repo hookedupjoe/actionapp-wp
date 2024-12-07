@@ -33,10 +33,11 @@
         atts: {}
     };
     const iconEl = BlockEditor.getControlIcon(info.name);
-    const defaultPadding = 'pad8';
+    //--- Use another method
+    const headeClass = 'actappui ';
 
     BlockEditor.addNumberAtts(info.atts, ['mediaID','parentMaxImgHeight']);
-    BlockEditor.addBooleanAtts(info.atts, ['fluid', 'raised', 'urlopentab']);
+    BlockEditor.addBooleanAtts(info.atts, ['fluid', 'raised', 'urlopentab', 'includeBottom']);
     BlockEditor.addStringAtts(info.atts, ['text', 'title', 'text', 'subtitle', 'color', 'headerColor', 'parentColor', 'parentHeaderType', 'url', 'mediaURL']);
 
     var tmpClassSpecs = {
@@ -44,7 +45,7 @@
         string: ['color'],
     }
     function getClass(theProps, theIsEditMode) {
-        return BlockEditor.getStandardClass('ui card', tmpClassSpecs, theProps, theIsEditMode);
+        return BlockEditor.getStandardClass('ui card ', tmpClassSpecs, theProps, theIsEditMode);
     }
 
     var newEl = BlockEditor.el;
@@ -56,11 +57,12 @@
         var tmpAtt = props.attributes;
 
         var tmpContent = [];
+
         var tmpClass = getClass(theProps, theIsEditMode);
-        if( theIsEditMode ){
-            tmpClass += ' fluid';
-        }
         var tmpTitle = '';
+        if (tmpAtt.title) {
+            tmpTitle = tmpAtt.title;
+        }
 
         if (tmpAtts.parentColor) {
             //tmpClass += ' ' + tmpAtts.parentColor;
@@ -68,12 +70,17 @@
             tmpClass += ' ' + tmpAtt.color;
         }
 
-
-
-
-        if (tmpAtt.title) {
-            tmpTitle = tmpAtt.title;
+        if( theIsEditMode ){
+            tmpClass += ' fluid';
+            var tmpHM = 'Card';
+            if( tmpTitle ){
+                tmpHM += ' [' + tmpTitle + ']';
+            } 
+            var tmpEditHeader = el('div', {className:"ui message bolder center aligned pad8 brown small"}, tmpHM);
+            tmpContent.push(tmpEditHeader)
         }
+
+
         if (tmpAtt.mediaURL) {
             var tmpMediaAtts = { src: tmpAtt.mediaURL };
             if (tmpAtts.parentMaxImgHeight > 0) {
@@ -103,7 +110,7 @@
                 if (!(tmpHeaderColor)) {
                     tmpHeaderColor = 'black';
                 }
-                tmpItems.push(newEl('div', 'ui header inverted  attached mar0 ' + defaultPadding + ' ' + tmpHeaderSize, [tmpTitle, tmpSub]));
+                tmpItems.push(newEl('div', 'ui header inverted  attached mar0 ' + headeClass + tmpHeaderSize, [tmpTitle, tmpSub]));
                 tmpMainContent.push(newEl('div', '  ' + tmpInverted + tmpHeaderColor, [tmpItems]));
             }
 
@@ -115,7 +122,7 @@
             }
             if (tmpTitle) {
                 tmpItems.push(newEl('div', 'ui header ' + tmpHeaderColor + ' ' + tmpHeaderSize, [tmpTitle, tmpSub]));
-                tmpMainContent.push(newEl('div', 'ui message attached mart0 marb0  '+ defaultPadding + tmpHeaderColor, [tmpItems]));
+                tmpMainContent.push(newEl('div', 'ui message attached mart0 marb0  '+ headeClass + tmpHeaderColor, [tmpItems]));
 
             }
 
@@ -125,7 +132,7 @@
                 tmpSub = newEl('div', 'subheader', tmpAtt.subtitle);
             }
             if (tmpTitle) {
-                tmpItems.push(newEl('div', 'ui header ' + defaultPadding + tmpHeaderColor + ' ' + tmpHeaderSize, [tmpTitle, tmpSub]));
+                tmpItems.push(newEl('div', 'ui header ' + headeClass + tmpHeaderColor + ' ' + tmpHeaderSize, [tmpTitle, tmpSub]));
                 tmpMainContent.push(newEl('div', 'ui ' + tmpHeaderColor, [tmpItems]));
             }
 
@@ -145,14 +152,17 @@
                 template: [
                     [
                         'actappui/cardsection',
-                        {},
+                        {extra: false},
                         [
 
                         ]
                     ],
                     [
-                        'actappui/cardsectionbottom',
-                        {},
+                        'actappui/cardsection',
+                        {
+                            extra: true, 
+                            padding: 'pad0'
+                        },
                         [
 
                         ]
@@ -167,9 +177,9 @@
         // var tmpBtnBar = '';
         // if (theIsEditMode && props.isSelected) {
         //     var tmpBarContent = [];
-        //     var tmpAddBtn = el('div', { className: 'ui compact button blue basic ', action: 'beAddElement', elementname: 'cardsection' }, 'Add Section');
+        //     var tmpAddBtn = el('div', { className: 'ui compact button brown basic ', action: 'beAddElement', elementname: 'cardsection' }, 'Add Section');
         //     tmpBarContent.push(tmpAddBtn);
-        //     tmpBtnBar = el('div', {}, [el('div', { className: 'ui fluid center aligned label blue' }, 'Card Control'), el('div', { className: 'ui segment raised slim' }, tmpBarContent, el('div', { className: 'endfloat' }))]);
+        //     tmpBtnBar = el('div', {}, [el('div', { className: 'ui fluid center aligned label brown' }, 'Card Control'), el('div', { className: 'ui segment raised slim' }, tmpBarContent, el('div', { className: 'endfloat' }))]);
         // }
         tmpContent.push(tmpExtraContent);
         if (tmpAtt.url && !theIsEditMode) {
@@ -217,7 +227,7 @@
             var tmpStandardProperties = [
                 BlockEditor.getStandardProperty(props, 'title', 'Card Title'),
                 BlockEditor.getStandardProperty(props, 'subtitle', 'Subtitle'),
-                BlockEditor.getStandardProperty(props,'text', 'Text' ),
+                BlockEditor.getStandardProperty(props,'text', 'Text (DO NOT USE - DEPRECATED)' ),
                 BlockEditor.getStandardProperty(props, 'color', 'Card Color', 'color'),
                 BlockEditor.getStandardProperty(props, { mediaID: 'mediaID', mediaURL: 'mediaURL' }, 'Card Image', 'image'),
                 BlockEditor.getStandardProperty(props, 'url', 'Target Content or Link', 'url'),

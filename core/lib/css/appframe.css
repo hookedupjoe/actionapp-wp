@@ -19,7 +19,8 @@ body a:hover {
   font-family: unset;  
 }
 
-/* Update margins to be thinner by defaulit between cards and add wide option that is current spacing */
+
+/* Update margins to be thinner by default between cards and add wide option that is current spacing */
 
 .ui.one.cards {
   margin-left: -.5em;
@@ -2084,10 +2085,15 @@ table th[class*="col-"] {
   z-index: 2; 
 }
 
+
+/* Update margins to be thinner by default between cards and add wide option that is current spacing */
+body .ui.message {
+  padding: .5em .75em;
+}
+
 .ui.segment.ui-layout-pane {  
   border: 0px;
 }
-
 
 div.ui.message.floating {
   -webkit-box-shadow: 0 0 0 1px rgb(34 36 38 / 22%) inset, 0 0 0 0 transparent; 

@@ -36,13 +36,14 @@
     const defaultPadding = 'pad8';
 
     BlockEditor.addNumberAtts(info.atts, []);
-    BlockEditor.addBooleanAtts(info.atts, []);
+    BlockEditor.addBooleanAtts(info.atts, ['extra']);
     BlockEditor.addStringAtts(info.atts, ['padding','margin','classes']);
 
     var tmpClassSpecs = {
-        boolean: [],
+        boolean: ['extra'],
         string: ['padding','margin']
     }
+
     function getClass(theProps, theIsEditMode){
         return BlockEditor.getStandardClass( 'content', tmpClassSpecs, theProps, theIsEditMode);
     }
@@ -70,6 +71,26 @@
         } else {
             tmpContent.push( el( wp.blockEditor.InnerBlocks.Content ));
         }
+        if( theIsEditMode ){
+            if( tmpAtts.extra && props.isSelected ){
+               // tmpContent.push(el('div', {className: 'ui label brown basic fluid pointing up center aligned'}, 'Bottom Area: Optional'));
+
+                var tmpAddBtn = '';
+                var tmpBtnBar = ''
+                
+                    tmpAddBtn = el('div', { className: 'ui compact button basic brown ', elementname: 'bottomattachedbutton', action: 'beAddElement' }, 'Add Button');
+                    tmpAddMsg = el('div', { className: 'ui compact button basic brown ', elementname: 'bottomattachedmessage', action: 'beAddElement' }, 'Add Message');
+                    tmpBtnBar = el('div', { className: 'ui segment raised slim' }, [
+                        tmpAddBtn, tmpAddMsg
+                    ], el('div', { className: 'endfloat' }));
+                    tmpUIColor = 'brown';
+                
+                var tmpFooter = el('div', { className: 'ui header top attached center aligned fluid ' + 'brown' }, el('div', {className: 'ui label brown basic fluid pointing up center aligned'}, 'Bottom Area: Optional'), tmpBtnBar);
+                tmpContent.push(tmpFooter);
+                
+            }
+        }
+
         return el('div',{className:tmpClass},tmpContent);
 
 
@@ -93,6 +114,7 @@
             var tmpFormatProperties = [
                 BlockEditor.getStandardProperty(props,'padding', 'Padding', 'padding' ),
                 BlockEditor.getStandardProperty(props,'margin', 'Margin', 'margin'),
+                BlockEditor.getStandardProperty(props,'extra', 'Show at bottom', 'checkbox'),
                 BlockEditor.getStandardProperty(props,'classes', 'Additional Classes', 'text' )
             ];
 
