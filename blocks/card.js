@@ -84,7 +84,7 @@
         if (tmpAtt.mediaURL) {
             var tmpMediaAtts = { src: tmpAtt.mediaURL };
             if (tmpAtts.parentMaxImgHeight > 0) {
-                tmpMediaAtts.style = { "max-height": tmpAtts.parentMaxImgHeight + "px", "object-fit": "cover" };
+                tmpMediaAtts.style = { "height": tmpAtts.parentMaxImgHeight + "px", "object-fit": "cover" };
             }
 
             tmpContent.push(newEl('div', 'image', el('img', tmpMediaAtts)));
@@ -227,7 +227,7 @@
             var tmpStandardProperties = [
                 BlockEditor.getStandardProperty(props, 'title', 'Card Title'),
                 BlockEditor.getStandardProperty(props, 'subtitle', 'Subtitle'),
-                BlockEditor.getStandardProperty(props,'text', 'Text (DO NOT USE - DEPRECATED)' ),
+                //BlockEditor.getStandardProperty(props,'text', 'Text (DO NOT USE - DEPRECATED)' ),
                 BlockEditor.getStandardProperty(props, 'color', 'Card Color', 'color'),
                 BlockEditor.getStandardProperty(props, { mediaID: 'mediaID', mediaURL: 'mediaURL' }, 'Card Image', 'image'),
                 BlockEditor.getStandardProperty(props, 'url', 'Target Content or Link', 'url'),

@@ -32,12 +32,12 @@
     const iconEl = BlockEditor.getControlIcon(info.name);
 
     BlockEditor.addNumberAtts(info.atts, ['minColWidth', 'imageheight']);
-    BlockEditor.addStringAtts(info.atts, ['columns', 'color', 'headerType']);
-    BlockEditor.addBooleanAtts(info.atts, ['centered','slimspacing']);
+    BlockEditor.addStringAtts(info.atts, ['columns', 'color', 'headerType','cardspacing']);
+    BlockEditor.addBooleanAtts(info.atts, ['centered']);
 
     var tmpClassSpecs = {
         boolean: ['centered'],
-        string: ['color']
+        string: ['color','cardspacing']
     }
     function getClass(theProps, theIsEditMode) {
         return BlockEditor.getStandardClass('ui cards ', tmpClassSpecs, theProps, theIsEditMode);
@@ -93,11 +93,11 @@
 
             var tmpStandardProperties = [
                 BlockEditor.getStandardProperty(props, 'columns', 'Columns', 'columns'),
-                BlockEditor.getStandardProperty(props, 'imageheight', 'Max Image Height', 'number',BlockEditor.standardOnChangeRefresh),
+                BlockEditor.getStandardProperty(props, 'imageheight', 'Exact Image Height', 'number',BlockEditor.standardOnChangeRefresh),
                 BlockEditor.getStandardProperty(props, 'minColWidth', 'Minimum Column Width', 'number'),
                 BlockEditor.getStandardProperty(props, 'centered', 'Centered', 'checkbox'),
                 BlockEditor.getStandardProperty(props, 'color', 'All Cards Color', 'color'),
-                BlockEditor.getStandardProperty(props, 'slimspacing', 'Slim Space Between Cards?', 'checkbox'),
+                BlockEditor.getStandardProperty(props, 'cardspacing', 'Space Between Cards', 'cardspacing'),
                 
                 BlockEditor.getStandardProperty(props, 'headerType', 'Header Type', 'inverted', BlockEditor.standardOnChangeRefresh),
             ];
@@ -140,9 +140,9 @@
             if (props.attributes.columns != '') {
                 tmpClasses += ' stackable' + props.attributes.columns;
             }
-            if (props.attributes.slimspacing) {
-                tmpClasses += ' slim';
-            }
+            // if (props.attributes.slimspacing) {
+            //     tmpClasses += ' slim';
+            // }
             
             tmpProps.className += ' ' + tmpClasses.trim();
 

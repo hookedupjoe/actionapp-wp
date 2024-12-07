@@ -114,7 +114,7 @@
             var tmpFormatProperties = [
                 BlockEditor.getStandardProperty(props,'padding', 'Padding', 'padding' ),
                 BlockEditor.getStandardProperty(props,'margin', 'Margin', 'margin'),
-                BlockEditor.getStandardProperty(props,'extra', 'Show at bottom', 'checkbox'),
+//--> hidden property                BlockEditor.getStandardProperty(props,'extra', 'Show at bottom', 'checkbox'),
                 BlockEditor.getStandardProperty(props,'classes', 'Additional Classes', 'text' )
             ];
 

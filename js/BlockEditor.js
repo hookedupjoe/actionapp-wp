@@ -223,6 +223,12 @@
             return BlockEditor.getSelectControl(theCurrentValue,theOnChangeEvent,tmpSelection);
         }
 
+        BlockEditor.getCardSpacingListControl = function(theCurrentValue, theOnChangeEvent){
+            var tmpSelection = [el("option", {value: "default"}, "Default")];
+            tmpSelection.push(el("option", {value: 'slimspace'}, "Slim"));
+            tmpSelection.push(el("option", {value: 'widespace'}, "Wide"));
+            return BlockEditor.getSelectControl(theCurrentValue,theOnChangeEvent,tmpSelection);
+        }
 
         BlockEditor.getInvertedListControl = function(theCurrentValue, theOnChangeEvent){
             var tmpSelection = [el("option", {value: "default"}, "Default")];
@@ -352,6 +358,9 @@
             }            
             if( tmpCT == 'inverted' ){
                 return 'getInvertedListControl';
+            }            
+            if( tmpCT == 'cardspacing' ){
+                return 'getCardSpacingListControl';
             }            
             
             if( tmpCT == 'dropdown' ){

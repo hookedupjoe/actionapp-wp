@@ -19,8 +19,7 @@ body a:hover {
   font-family: unset;  
 }
 
-
-/* Update margins to be thinner by default between cards and add wide option that is current spacing */
+/* CARD UPDATES */
 
 .ui.one.cards {
   margin-left: -.5em;
@@ -157,22 +156,22 @@ body a:hover {
 /* SLIM VERSIONS */
 
 
-.ui.one.cards.slim {
+.ui.one.cards.slimspace {
   margin-left: -.25em;
   margin-right: -.25em
 }
 
-.ui.one.cards.slim>.card {
+.ui.one.cards.slimspace>.card {
   margin-top:.25em;
   margin-bottom: .25em;
 }
 
-.ui.two.cards.slim {
+.ui.two.cards.slimspace {
   margin-left: -.25em;
   margin-right: -.25em
 }
 
-.ui.two.cards.slim>.card {
+.ui.two.cards.slimspace>.card {
   width: calc(50% - .5em);
   margin-left: .25em;
   margin-right: .25em;
@@ -180,12 +179,12 @@ body a:hover {
   margin-bottom: .25em;
 }
 
-.ui.three.cards.slim {
+.ui.three.cards.slimspace {
   margin-left: -.25em;
   margin-right: -.25em;
 }
 
-.ui.three.cards.slim>.card {
+.ui.three.cards.slimspace>.card {
   width: calc(33.33333333% - .5em);
   margin-left: .25em;
   margin-right: .25em;
@@ -193,26 +192,25 @@ body a:hover {
   margin-bottom: .25em;
 }
 
-.ui.four.cards.slim {
+.ui.four.cards.slimspace {
   margin-left: -.1875em;
   margin-right: -.1875em
 }
 
-.ui.four.cards.slim>.card {
+.ui.four.cards.slimspace>.card {
   width: calc(25% - .375em);
   margin-left: .1875em;
   margin-right: .1875em;
   margin-top:.25em;
   margin-bottom: .25em;
-  padding: .125em;
 }
 
-.ui.five.cards.slim {
+.ui.five.cards.slimspace {
   margin-left: -.1875em;
   margin-right: -.1875em
 }
 
-.ui.five.cards.slim>.card {
+.ui.five.cards.slimspace>.card {
   width: calc(20% - .375em);
   margin-left: .1875em;
   margin-right: .1875em;
@@ -220,12 +218,12 @@ body a:hover {
   margin-bottom: .25em;
 }
 
-.ui.six.cards.slim {
+.ui.six.cards.slimspace {
   margin-left: -.1875em;
   margin-right: -.1875em
 }
 
-.ui.six.cards.slim>.card {
+.ui.six.cards.slimspace>.card {
   width: calc(16.66666667% - .375em);
   margin-left: .1875em;
   margin-right: .1875em;
@@ -233,12 +231,12 @@ body a:hover {
   margin-bottom: .25em;
 }
 
-.ui.seven.cards.slim {
+.ui.seven.cards.slimspace {
   margin-left: -.25em;
   margin-right: -.25em
 }
 
-.ui.seven.cards.slim>.card {
+.ui.seven.cards.slimspace>.card {
   width: calc(14.28571429% - .5em);
   margin-left: .25em;
   margin-right: .25em;
@@ -246,12 +244,12 @@ body a:hover {
   margin-bottom: .25em;
 }
 
-.ui.eight.cards.slim {
+.ui.eight.cards.slimspace {
   margin-left: -.25em;
   margin-right: -.25em
 }
 
-.ui.eight.cards.slim>.card {
+.ui.eight.cards.slimspace>.card {
   width: calc(12.5% - .5em);
   margin-left: .25em;
   margin-right: .25em;
@@ -260,14 +258,14 @@ body a:hover {
   margin-bottom: .25em;
 }
 
-.ui.nine.cards.slim {
+.ui.nine.cards.slimspace {
   margin-left: -.25em;
   margin-right: -.25em;
   margin-top:.25em;
   margin-bottom: .25em;
 }
 
-.ui.nine.cards.slim>.card {
+.ui.nine.cards.slimspace>.card {
   width: calc(11.11111111% - .5em);
   margin-left: .25em;
   margin-right: .25em;
@@ -276,12 +274,12 @@ body a:hover {
   margin-bottom: .25em;
 }
 
-.ui.ten.cards.slim {
+.ui.ten.cards.slimspace {
   margin-left: -.25em;
   margin-right: -.25em
 }
 
-.ui.ten.cards.slim>.card {
+.ui.ten.cards.slimspace>.card {
   width: calc(10% - .5em);
   margin-left: .25em;
   margin-right: .25em;
@@ -289,6 +287,123 @@ body a:hover {
   margin-top:.25em;
   margin-bottom: .25em;
 }
+
+
+/* WIDE */
+
+.ui.one.cards.widespace {
+  margin-left: 0em;
+  margin-right: 0em;
+}
+
+.ui.one.cards.widespace > .card {
+  width: 100%;
+}
+
+.ui.two.cards.widespace {
+  margin-left: -1em;
+  margin-right: -1em;
+}
+
+.ui.two.cards.widespace > .card {
+  width: calc( 50%  -  2em );
+  margin-left: 1em;
+  margin-right: 1em;
+}
+
+.ui.three.cards.widespace {
+  margin-left: -1em;
+  margin-right: -1em;
+}
+
+.ui.three.cards.widespace > .card {
+  width: calc( 33.33333333%  -  2em );
+  margin-left: 1em;
+  margin-right: 1em;
+}
+
+.ui.four.cards.widespace {
+  margin-left: -0.75em;
+  margin-right: -0.75em;
+}
+
+.ui.four.cards.widespace > .card {
+  width: calc( 25%  -  1.5em );
+  margin-left: 0.75em;
+  margin-right: 0.75em;
+}
+
+.ui.five.cards.widespace {
+  margin-left: -0.75em;
+  margin-right: -0.75em;
+}
+
+.ui.five.cards.widespace > .card {
+  width: calc( 20%  -  1.5em );
+  margin-left: 0.75em;
+  margin-right: 0.75em;
+}
+
+.ui.six.cards.widespace {
+  margin-left: -0.75em;
+  margin-right: -0.75em;
+}
+
+.ui.six.cards.widespace > .card {
+  width: calc( 16.66666667%  -  1.5em );
+  margin-left: 0.75em;
+  margin-right: 0.75em;
+}
+
+.ui.seven.cards.widespace {
+  margin-left: -0.5em;
+  margin-right: -0.5em;
+}
+
+.ui.seven.cards.widespace > .card {
+  width: calc( 14.28571429%  -  1em );
+  margin-left: 0.5em;
+  margin-right: 0.5em;
+}
+
+.ui.eight.cards.widespace {
+  margin-left: -0.5em;
+  margin-right: -0.5em;
+}
+
+.ui.eight.cards.widespace > .card {
+  width: calc( 12.5%  -  1em );
+  margin-left: 0.5em;
+  margin-right: 0.5em;
+  font-size: 11px;
+}
+
+.ui.nine.cards.widespace {
+  margin-left: -0.5em;
+  margin-right: -0.5em;
+}
+
+.ui.nine.cards.widespace > .card {
+  width: calc( 11.11111111%  -  1em );
+  margin-left: 0.5em;
+  margin-right: 0.5em;
+  font-size: 10px;
+}
+
+.ui.ten.cards.widespace {
+  margin-left: -0.5em;
+  margin-right: -0.5em;
+}
+
+.ui.ten.cards.widespace > .card {
+  width: calc( 10%  -  1em );
+  margin-left: 0.5em;
+  margin-right: 0.5em;
+}
+
+
+
+/* GRID UPDATES */
 
 .ui.grid {
   margin-top: -.25rem;
@@ -2010,7 +2125,7 @@ overflow:hidden;
   margin-bottom:4px;
 }
 
-.ui.centered {
+.ui.center-text {
   text-align:center;
 }
 
