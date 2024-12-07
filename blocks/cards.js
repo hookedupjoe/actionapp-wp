@@ -31,8 +31,8 @@
     };
     const iconEl = BlockEditor.getControlIcon(info.name);
 
-    BlockEditor.addNumberAtts(info.atts, ['minColWidth']);
-    BlockEditor.addStringAtts(info.atts, ['columns', 'color', 'headerType', 'imageheight','cardpadding']);
+    BlockEditor.addNumberAtts(info.atts, ['minColWidth', 'imageheight']);
+    BlockEditor.addStringAtts(info.atts, ['columns', 'color', 'headerType','cardpadding']);
     BlockEditor.addBooleanAtts(info.atts, ['centered','slimspacing']);
 
     var tmpClassSpecs = {
@@ -93,7 +93,7 @@
 
             var tmpStandardProperties = [
                 BlockEditor.getStandardProperty(props, 'columns', 'Columns', 'columns'),
-                BlockEditor.getStandardProperty(props, 'imageheight', 'Max Image Height', 'text', BlockEditor.standardOnChangeRefresh),
+                BlockEditor.getStandardProperty(props, 'imageheight', 'Max Image Height', 'number', BlockEditor.standardOnChangeRefresh),
                 BlockEditor.getStandardProperty(props, 'minColWidth', 'Minimum Column Width', 'number'),
                 BlockEditor.getStandardProperty(props, 'centered', 'Centered', 'checkbox'),
                 BlockEditor.getStandardProperty(props, 'color', 'All Cards Color', 'color', BlockEditor.standardOnChangeRefresh),

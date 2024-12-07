@@ -470,6 +470,7 @@ iframe.full-frame {
   padding-left:8px !important;
 }
 
+
 .flexgrowbox {
   display: flex !important;
 }
@@ -1038,6 +1039,10 @@ input[readonly]:not(.showborder), .ui.disabled.dropdown {
 }
 
 
+
+body .ui.card>.content,.ui.cards>.card>.content {
+  padding: .5em;
+}
 
 .ui.card .content.basic {
   border-top: none !important;

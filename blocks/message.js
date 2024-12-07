@@ -53,10 +53,10 @@
         var tmpAtts = theProps.attributes;
         tmpAtts.ctl = 'message';
         var tmpClass = getClass(props, true);
-        
         if( tmpAtts.classes ){
             tmpClass += ' ' + tmpAtts.classes;
         }
+        
 
         var tmpMe = wp.data.select('core/block-editor').getBlock(props.clientId);
         tmpAtts.text = '';

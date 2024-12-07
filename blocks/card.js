@@ -35,9 +35,9 @@
     const iconEl = BlockEditor.getControlIcon(info.name);
     const defaultPadding = 'pad8';
 
-    BlockEditor.addNumberAtts(info.atts, ['mediaID']);
+    BlockEditor.addNumberAtts(info.atts, ['mediaID','parentMaxImgHeight']);
     BlockEditor.addBooleanAtts(info.atts, ['fluid', 'raised', 'urlopentab']);
-    BlockEditor.addStringAtts(info.atts, ['text','parentMaxImgHeight', 'title', 'text', 'subtitle', 'color', 'headerColor', 'parentColor', 'parentHeaderType', 'parentPadding', 'url', 'mediaURL']);
+    BlockEditor.addStringAtts(info.atts, ['text', 'title', 'text', 'subtitle', 'color', 'headerColor', 'parentColor', 'parentHeaderType', 'url', 'mediaURL']);
 
     var tmpClassSpecs = {
         boolean: ['fluid', 'raised'],
@@ -103,10 +103,9 @@
                 if (!(tmpHeaderColor)) {
                     tmpHeaderColor = 'black';
                 }
-                tmpItems.push(newEl('div', 'ui header inverted ' + ' ' + tmpHeaderSize, [tmpTitle, tmpSub]));
-                tmpMainContent.push(newEl('div', 'ui label fluid pad10 mart0  ' + tmpInverted + tmpHeaderColor, [tmpItems]));
+                tmpItems.push(newEl('div', 'ui header inverted  attached mar0 ' + defaultPadding + ' ' + tmpHeaderSize, [tmpTitle, tmpSub]));
+                tmpMainContent.push(newEl('div', '  ' + tmpInverted + tmpHeaderColor, [tmpItems]));
             }
-           
 
         } else if (tmpAtt.parentHeaderType == 'light') {
             var tmpItems = [];
@@ -116,7 +115,7 @@
             }
             if (tmpTitle) {
                 tmpItems.push(newEl('div', 'ui header ' + tmpHeaderColor + ' ' + tmpHeaderSize, [tmpTitle, tmpSub]));
-                tmpMainContent.push(newEl('div', 'ui message attached pad10 mart0 marb0  ' + tmpHeaderColor, [tmpItems]));
+                tmpMainContent.push(newEl('div', 'ui message attached mart0 marb0  '+ defaultPadding + tmpHeaderColor, [tmpItems]));
 
             }
 
@@ -126,7 +125,7 @@
                 tmpSub = newEl('div', 'subheader', tmpAtt.subtitle);
             }
             if (tmpTitle) {
-                tmpItems.push(newEl('div', 'ui header ' + tmpHeaderColor + ' ' + tmpHeaderSize, [tmpTitle, tmpSub]));
+                tmpItems.push(newEl('div', 'ui header ' + defaultPadding + tmpHeaderColor + ' ' + tmpHeaderSize, [tmpTitle, tmpSub]));
                 tmpMainContent.push(newEl('div', 'ui ' + tmpHeaderColor, [tmpItems]));
             }
 
@@ -135,9 +134,6 @@
         if( tmpAtt.text ){
             tmpMainContent.push( newEl('div','pad10 description',tmpAtt.text) );
         }
-
-        var tmpPadding = tmpAtt.parentPadding || defaultPadding;
-        tmpClass += ' ' + tmpPadding;
 
         if (tmpMainContent.length > 0) {
             tmpContent.push(newEl('div', '', tmpMainContent));
@@ -210,10 +206,8 @@
             var tmpAtts = props.attributes;
             var tmpParentAttributes = BlockEditor.getParentAttributes(props.clientId);
             props.attributes.parentColor = tmpParentAttributes.color || '';
-            props.attributes.parentMaxImgHeight = tmpParentAttributes.imageheight || '';
+            props.attributes.parentMaxImgHeight = tmpParentAttributes.imageheight || 0;
             props.attributes.parentHeaderType = tmpParentAttributes.headerType || 'default';
-            props.attributes.parentPadding = tmpParentAttributes.cardpadding || defaultPadding;
-            
             
 
 

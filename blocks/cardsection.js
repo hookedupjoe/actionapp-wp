@@ -33,10 +33,20 @@
         atts: {}
     };
     const iconEl = BlockEditor.getControlIcon(info.name);
+    const defaultPadding = 'pad8';
 
-    function getClass(theProps, theIsEditMode){
-        return 'content';
+    BlockEditor.addNumberAtts(info.atts, []);
+    BlockEditor.addBooleanAtts(info.atts, []);
+    BlockEditor.addStringAtts(info.atts, ['padding','margin','classes']);
+
+    var tmpClassSpecs = {
+        boolean: [],
+        string: ['padding','margin']
     }
+    function getClass(theProps, theIsEditMode){
+        return BlockEditor.getStandardClass( 'content', tmpClassSpecs, theProps, theIsEditMode);
+    }
+
 	
     function getDisplayValue(theProps,theIsEditMode){
         var tmpAtts = theProps.attributes;
@@ -45,7 +55,10 @@
         var tmpContent = [];
         var tmpClass = getClass(theProps,theIsEditMode);
         var tmpAtt = props.attributes;
-        
+        if( tmpAtt.classes ){
+            tmpClass += ' ' + tmpAtt.classes;
+        }
+
         if( theIsEditMode ){
             
             if( props.isSelected ){
@@ -74,13 +87,29 @@
             inserter: false,
         },
         edit: function ( props ) {
-            //var tmpParentAttributes = BlockEditor.getParentAttributes(props.clientId);
+
+            var tmpStandardProperties = [
+            ];
+            var tmpFormatProperties = [
+                BlockEditor.getStandardProperty(props,'padding', 'Padding', 'padding' ),
+                BlockEditor.getStandardProperty(props,'margin', 'Margin', 'margin'),
+                BlockEditor.getStandardProperty(props,'classes', 'Additional Classes', 'text' )
+            ];
+
+
+            var tmpSidebarPanels = [
+                BlockEditor.getSidebarPanel('Formatting Options', tmpFormatProperties)
+            ];
+
+            var tmpSidebarControls = BlockEditor.getSidebarControls(tmpSidebarPanels);
+            
             var tmpDisplayObject = getDisplayValue(props,true);
 
             return el(
                 'div',
                 {},
                 [
+                    tmpSidebarControls,               
                     tmpDisplayObject
                 ]
             );
