@@ -11,14 +11,31 @@ i.arrow:after {
     box-shadow: none;
 }
 
-.actapp-block-is-selected {
-    border:dashed 5px purple;
-    min-height:80px;
+.actapp-block-box.is-selected{
+    border:dashed 5px #a5673f;
+    min-height:80px !important;
 }
+
+.actapp-block-is-selected {
+    border:dashed 5px #a5673f;
+    min-height:80px !important;
+}
+
 .actapp-block-box {
     border:dashed 3px gray !important;
     min-height:30px !important;
 }
+
+/* .actapp-block-is-selected {
+    border:dashed 5px purple;
+    min-height:80px;
+} 
+.actapp-block-box {
+    border:dashed 3px gray !important;
+    min-height:30px !important;
+}
+    */
+
 .block-editor-block-list__layout {
     min-height: 40px;
 }

@@ -166,6 +166,10 @@ body .ui.cards>.card {
 }
 
 
+[appuse="cards"]{
+  padding: 0px;
+}
+
 /* SLIM VERSIONS */
 
 body .ui.cards.slimspace>.card {

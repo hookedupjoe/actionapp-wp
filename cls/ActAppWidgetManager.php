@@ -30,6 +30,16 @@ class ActAppWidgetManager {
 		return self::$instance;
 	}
 
+	//===============================================================
+	//===> Add here when new widgets are added
+	public static function get_custom_widget_list($theReturnFullName = false){
+		$tmpPrefix = '';
+		if( $theReturnFullName ){
+			$tmpPrefix = 'actappui/';
+		}
+		return array($tmpPrefix.'segment',$tmpPrefix.'header',$tmpPrefix.'message',$tmpPrefix.'button',$tmpPrefix.'image',$tmpPrefix.'cards',$tmpPrefix.'grid',$tmpPrefix.'gridcolumn',$tmpPrefix.'card',$tmpPrefix.'cardsection',$tmpPrefix.'cardsectionbottom',$tmpPrefix.'tabs',$tmpPrefix.'tab',$tmpPrefix.'container',$tmpPrefix.'spot');
+	}
+	//===============================================================
 
 	public static function actapp_block_category( $categories, $post ) {
 		return array_merge(
@@ -101,14 +111,7 @@ class ActAppWidgetManager {
 		wp_enqueue_style ( 'aa-core-admin_css' );
 	}
 	
-	//--- Add here when new widgets are added
-	public static function get_custom_widget_list($theReturnFullName = false){
-		$tmpPrefix = '';
-		if( $theReturnFullName ){
-			$tmpPrefix = 'actappui/';
-		}
-		return array($tmpPrefix.'segment',$tmpPrefix.'header',$tmpPrefix.'message',$tmpPrefix.'button',$tmpPrefix.'image',$tmpPrefix.'cards',$tmpPrefix.'grid',$tmpPrefix.'gridcolumn',$tmpPrefix.'card',$tmpPrefix.'cardsection',$tmpPrefix.'cardsectionbottom',$tmpPrefix.'container',$tmpPrefix.'spot');
-	}
+
 	public static function actapp_init_blocks($theHook) {
 		
 	    $my_css_ver = '1';//Todo

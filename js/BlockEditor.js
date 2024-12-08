@@ -279,10 +279,17 @@
             var tmpRet = el("div",{className:'pad2'});
             return tmpRet;
         }
+        
         BlockEditor.addStringAtts = function(theAtts,theNames){
             for (var iPos = 0; iPos < theNames.length; iPos++) {
                 var tmpName = theNames[iPos];
                 BlockEditor.addAtt(theAtts,tmpName);       
+            }
+         }
+         BlockEditor.addOjectAtts = function(theAtts,theNames){
+            for (var iPos = 0; iPos < theNames.length; iPos++) {
+                var tmpName = theNames[iPos];
+                theAtts[tmpName] = {type:'object'};
             }
          }
          BlockEditor.addBooleanAtts = function(theAtts,theNames){
@@ -309,6 +316,11 @@
             theAtts[theAttName] = tmpOptions;
         }
         
+        BlockEditor.getBlockInEditor = function(theObjectOrID){
+            return wp.data.select('core/block-editor').getBlock(theObjectOrID.clientId || theObjectOrID);
+        }
+
+
         function getFunctionForType(theControlType){
             var tmpCT = (theControlType||'').toLowerCase();
             if( tmpCT == 'text'  || tmpCT == 'number' ){
@@ -544,6 +556,7 @@
     function addBlockEditorActions(){
         
         //--- ToDo: Refactor these ...
+        
 
         ThisApp.actions.beAddGridColumn = function(){
             var tmpThis = wp.data.select( 'core/block-editor' ).getSelectedBlock();
@@ -580,6 +593,7 @@
 
         ThisApp.actions.beAddElement = function(theParams, theTarget){
             var tmpParams = ThisApp.getActionParams(theParams, theTarget, ['elementname']);
+         
             var tmpThis = wp.data.select( 'core/block-editor' ).getSelectedBlock();
             var tmpPos = 0;
             if( tmpThis.innerBlocks && tmpThis.innerBlocks.length ){
@@ -745,16 +759,6 @@
                 name: "Message",
                 attr: {}
             },
-            "cards": {
-                type: 'actappui/cards', 
-                name: "Card",
-                attr: {}
-            },
-            "card": {
-                type: 'actappui/card', 
-                name: "Card",
-                attr: {}
-            },            
             "grid": {
                 type: 'actappui/grid', 
                 name: "Grid",
@@ -763,6 +767,26 @@
             "gridcolumn": {
                 type: 'actappui/gridcolumn', 
                 name: "Grid Column",
+                attr: {}
+            },            
+            "tabs": {
+                type: 'actappui/tabs', 
+                name: "Tabs",
+                attr: {}
+            },
+            "tab": {
+                type: 'actappui/tab', 
+                name: "Tab",
+                attr: {}
+            },            
+            "cards": {
+                type: 'actappui/cards', 
+                name: "Card",
+                attr: {}
+            },
+            "card": {
+                type: 'actappui/card', 
+                name: "Card",
                 attr: {}
             },            
             "cardsection": {
