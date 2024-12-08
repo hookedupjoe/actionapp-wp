@@ -94,10 +94,9 @@
         },
         attributes: info.atts,
         edit: function (props) {
+            console.log('edit',props);
             var tmpAtts = props.attributes;
-            var tmpParentAttributes = BlockEditor.getParentAttributes(props.clientId);
-            props.attributes.parentMaxImgHeight = tmpParentAttributes.imageheight || '';
-            props.attributes.parentHeaderType = tmpParentAttributes.headerType || 'default';
+//            var tmpParentAttributes = BlockEditor.getParentAttributes(props.clientId);
 
             var tmpStandardProperties = [
                 BlockEditor.getStandardProperty(props, 'centered', 'Centered', 'checkbox'),
@@ -116,15 +115,24 @@
             var tmpSidebarControls = BlockEditor.getSidebarControls(tmpSidebarPanels);
 
             var tmpDisplayObject = getDisplayValue(props, true);
+            var tmpTabNameLabel = el('div',{className: 'ui label green small'}, 'Grid Column');
+            //ar tmpTabNameLabel = tmpTabPrefix; //el('div',{className: 'ui label green basic toright padr10'}, 'column ' + (parseInt(tmpAtts.colpos) + 1));
+    
+            //var tmpHM = tmpTabLabel;
+            var tmpEditHeader = el('div', {className:"ui message bolder center aligned pad8 green small"}, tmpTabNameLabel);
+ 
 
-            return el(
+            
+            var tmpRetEl = el(
                 'div',
                 {},
                 [
                     tmpSidebarControls,
                     tmpDisplayObject
                 ]
-            );
+            )
+            return el('div',{},tmpEditHeader, tmpRetEl);
+            //return tmpRetEl;
 
         },
 

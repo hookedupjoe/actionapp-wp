@@ -58,12 +58,13 @@
             var tmpAddBtn = '';
             var tmpBtnBar = ''
             if (props.isSelected) {
-                tmpAddBtn = el('div', { className: 'ui compact button basic brown ', action: 'beAddCard' }, 'Add Card');
+                tmpAddBtn = el('div', { className: 'ui compact button basic blue ', action: 'beAddCard' }, 'Add Card');
                 tmpBtnBar = el('div', { className: 'ui segment raised slim' }, [
                     tmpAddBtn
                 ], el('div', { className: 'endfloat' }));
-                tmpUIColor = 'brown';
+                
             }
+            tmpUIColor = 'blue';
             var tmpHdr = el('div', { className: 'ui header top attached center aligned fluid ' + tmpUIColor }, tmpHeaderMsg, tmpBtnBar);
 
             return el('div', { className: 'ui segment ' + theProps.attributes.color || '' }, null,

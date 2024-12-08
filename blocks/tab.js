@@ -55,7 +55,6 @@
 
         var props = theProps;
         var tmpAtts = props.attributes;
-        var tmpContent = [];
 
         var tmpItemName = tmpAtts.itemname || ''
         var tmpTabLabel = tmpAtts.tablabel || '';
@@ -79,7 +78,6 @@
        
         tmpContent.push(tmpExtraContent);
         
-        var tmpEC = '';
         var tmpTabPos = parseInt(tmpAtts.tabpos);
 
         var tmpNewElAtts = {
@@ -119,14 +117,10 @@
             var tmpItemName = tmpAtts.itemname || ''
             var tmpTabLabel = tmpAtts.tablabel || '';
 
-            var tmpParentAttributes = BlockEditor.getParentAttributes(props.clientId);
-            props.attributes.parentMaxImgHeight = tmpParentAttributes.imageheight || '';
-            props.attributes.parentHeaderType = tmpParentAttributes.headerType || 'default';
 
             var tmpStandardProperties = [
                 BlockEditor.getStandardProperty(props, 'itemname', 'Unique Item Name (Required)', 'text'),
                 BlockEditor.getStandardProperty(props, 'tablabel', 'Tab Label', 'text'),
-               // BlockEditor.getStandardProperty(props, 'groupname', 'Group Name', 'text'),
             ];
 
             var tmpFormatProperties = [
@@ -147,17 +141,14 @@
             } else {
                 tmpEditorClass += ' actapp-block-box';
             }
-
-  
             
-            var tmpTabPrefix = el('div',{className: 'ui label brown right pointing small compact'}, 'Tab:');
-            var tmpTabNameLabel = el('div',{className: 'ui label brown basic toright padr10'}, tmpAtts.itemname);
+            var tmpTabPrefix = el('div',{className: 'ui label brown'}, tmpTabLabel);
+            var tmpTabNameLabel = el('div',{className: 'ui label brown basic  padr10'}, tmpItemName);
     
-            var tmpHM = tmpTabLabel;
-            var tmpEditHeader = el('div', {className:"ui message bolder center aligned pad8 brown small"}, tmpTabPrefix, tmpHM,tmpTabNameLabel);
-           // tmpContent.push(tmpEditHeader)
-            var tmpContent = [];
-            tmpContent.push(tmpEditHeader);
+            //var tmpHM = tmpTabLabel;
+            var tmpEditHeader = el('div', {className:"ui message bolder center aligned pad8 brown small"}, tmpTabPrefix,tmpTabNameLabel);
+ 
+
             
             var tmpRetEl = el(
                 'div',

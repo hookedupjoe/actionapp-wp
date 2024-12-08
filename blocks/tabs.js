@@ -117,8 +117,9 @@
                 tmpBtnBar = el('div', { className: 'ui segment raised slim' }, [
                     tmpAddBtn
                 ], el('div', { className: 'endfloat' }));
-                tmpUIColor = 'brown';
+                
             }
+            tmpUIColor = 'brown';
             var tmpHdr = el('div', { className: 'ui header top attached center aligned fluid ' + tmpUIColor }, tmpHeaderMsg, tmpBtnBar);
             var tmpRetEl = el('div', { className: 'ui segment ' + theProps.attributes.color || '' }, null,
                 tmpHdr,

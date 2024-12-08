@@ -72,12 +72,23 @@
 
         if( theIsEditMode ){
             tmpClass += ' fluid';
-            var tmpHM = 'Card';
-            if( tmpTitle ){
-                tmpHM += ' [' + tmpTitle + ']';
-            } 
-            var tmpEditHeader = el('div', {className:"ui message bolder center aligned pad8 brown small"}, tmpHM);
+            // var tmpHM = 'Card';
+            // if( tmpTitle ){
+            //     tmpHM += ' [' + tmpTitle + ']';
+            // } 
+            // var tmpEditHeader = el('div', {className:"ui message bolder center aligned pad8 blue small"}, tmpHM);
+            // tmpContent.push(tmpEditHeader)
+
+            var tmpPrefix = el('div',{className: 'ui label blue'}, 'Card');
+            var tmpNameLabel = el('div',{className: 'ui label blue basic  padr10'}, tmpTitle || '(no title)');
+    
+            //var tmpHM = tmpTabLabel;
+            var tmpEditHeader = el('div', {className:"ui message pad8 blue small"}, tmpPrefix,tmpNameLabel);
             tmpContent.push(tmpEditHeader)
+
+           // tmpEditHeader
+           
+
         }
 
 
@@ -177,9 +188,9 @@
         // var tmpBtnBar = '';
         // if (theIsEditMode && props.isSelected) {
         //     var tmpBarContent = [];
-        //     var tmpAddBtn = el('div', { className: 'ui compact button brown basic ', action: 'beAddElement', elementname: 'cardsection' }, 'Add Section');
+        //     var tmpAddBtn = el('div', { className: 'ui compact button blue basic ', action: 'beAddElement', elementname: 'cardsection' }, 'Add Section');
         //     tmpBarContent.push(tmpAddBtn);
-        //     tmpBtnBar = el('div', {}, [el('div', { className: 'ui fluid center aligned label brown' }, 'Card Control'), el('div', { className: 'ui segment raised slim' }, tmpBarContent, el('div', { className: 'endfloat' }))]);
+        //     tmpBtnBar = el('div', {}, [el('div', { className: 'ui fluid center aligned label blue' }, 'Card Control'), el('div', { className: 'ui segment raised slim' }, tmpBarContent, el('div', { className: 'endfloat' }))]);
         // }
         tmpContent.push(tmpExtraContent);
         if (tmpAtt.url && !theIsEditMode) {

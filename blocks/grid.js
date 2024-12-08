@@ -26,9 +26,6 @@
     var info = {
         name: 'grid',
         title: 'UI Grid Container',
-        rem_example: {
-            attributes: { color: 'green' }
-        },
         category: 'actappui',
         atts: {}
     };
@@ -64,15 +61,37 @@
                 tmpHeaderMsg += " (columns auto-adjust )";
             }
           
+
+            // if( theIsEditMode ){
+            //     var tmpMe = BlockEditor.getBlockInEditor(props);
+            //     var tmpBlocks = tmpMe.innerBlocks;
+            //     //---> Use if tracking info: var tmpBlocksLinks = [];
+                
+            //     if(tmpBlocks.length){
+            //         for( var iPos in tmpBlocks){
+            //             var tmpBlock = tmpBlocks[iPos];
+            //             var tmpBlockAtts = tmpBlock.attributes;
+            //             tmpBlockAtts.colpos = iPos;
+            //         }
+                    
+            //         //---> Use if tracking info: tmpAtts.blocksinfo = JSON.stringify(tmpBlocksLinks);
+            //     } else {
+            //         //---> Use if tracking info: tmpAtts.blocksinfo = '[]';
+            //     }
+    
+            // }
+
+
             var tmpAddBtn = '';
             var tmpBtnBar = ''
             if (props.isSelected) {
-                tmpAddBtn = el('div', { className: 'ui compact button basic blue ', action: 'beAddGridColumn' }, 'Add Column');
+                tmpAddBtn = el('div', { className: 'ui compact button basic green ', action: 'beAddGridColumn' }, 'Add Column');
                 tmpBtnBar = el('div', { className: 'ui segment raised slim' }, [
                     tmpAddBtn
                 ], el('div', { className: 'endfloat' }));
-                tmpUIColor = 'blue';
+                
             }
+            tmpUIColor = 'green';
             var tmpHdr = el('div', { className: 'ui header top attached center aligned fluid ' + tmpUIColor }, tmpHeaderMsg, tmpBtnBar);
 
             return el('div', { className: 'ui segment ' + theProps.attributes.color || '' }, null,
