@@ -49,23 +49,26 @@
 
         if (theIsEditMode) {
             var tmpUIColor = ''; //was props.attributes.color || 
-            var tmpHeaderMsg = 'Cards Container';
-            if (props.attributes.columns) {
-                tmpHeaderMsg += " (" + props.attributes.columns + " columns)";
-            } else {
-                tmpHeaderMsg += " (columns auto-adjust )";
-            }
+            var tmpHeaderText = 'UI Cards';
+            var tmpIcon = BlockEditor.getControlIcon();
+            var tmpHeaderMsg = el('div',{className: 'ui larger bolder'}, tmpHeaderText)
+
+            // if (props.attributes.columns) {
+            //     tmpHeaderMsg += " (" + props.attributes.columns + " columns)";
+            // } else {
+            //     tmpHeaderMsg += " (columns auto-adjust )";
+            // }
             var tmpAddBtn = '';
             var tmpBtnBar = ''
             if (props.isSelected) {
-                tmpAddBtn = el('div', { className: 'ui compact button basic blue ', action: 'beAddCard' }, 'Add Card');
+                tmpAddBtn = el('div', { className: 'ui compact button basic grey ', action: 'beAddCard' }, 'Add Card');
                 tmpBtnBar = el('div', { className: 'ui segment raised slim' }, [
                     tmpAddBtn
                 ], el('div', { className: 'endfloat' }));
                 
             }
-            tmpUIColor = 'blue';
-            var tmpHdr = el('div', { className: 'ui header top attached center aligned fluid ' + tmpUIColor }, tmpHeaderMsg, tmpBtnBar);
+            tmpUIColor = 'grey';
+            var tmpHdr = el('div', { className: 'ui mar2 pad5 segment inverted center aligned fluid ' + tmpUIColor }, tmpIcon, tmpHeaderMsg, tmpBtnBar);
 
             return el('div', { className: 'ui segment ' + theProps.attributes.color || '' }, null,
                 tmpHdr,

@@ -319,7 +319,10 @@
         BlockEditor.getBlockInEditor = function(theObjectOrID){
             return wp.data.select('core/block-editor').getBlock(theObjectOrID.clientId || theObjectOrID);
         }
-
+        BlockEditor.getControlIcon = function(){
+            return el('img', {src: ActionAppCore.ActAppWP.actappBaseURL + '/images/aa-icon-simple-white.png', className:"actappeditor-icon left"})
+        }
+        
 
         function getFunctionForType(theControlType){
             var tmpCT = (theControlType||'').toLowerCase();

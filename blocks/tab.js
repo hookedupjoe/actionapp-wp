@@ -142,11 +142,11 @@
                 tmpEditorClass += ' actapp-block-box';
             }
             
-            var tmpTabPrefix = el('div',{className: 'ui label brown'}, tmpTabLabel);
-            var tmpTabNameLabel = el('div',{className: 'ui label brown basic  padr10'}, tmpItemName);
+            var tmpTabPrefix = el('div',{className: 'ui label grey right pointing'}, 'Tab');
+            var tmpTabNameLabel = el('div',{className: 'ui label grey basic  padr10'}, tmpTabLabel + ' [' + tmpItemName + ']');
     
             //var tmpHM = tmpTabLabel;
-            var tmpEditHeader = el('div', {className:"ui message bolder center aligned pad8 brown small"}, tmpTabPrefix,tmpTabNameLabel);
+            var tmpEditHeader = el('div', {className:"ui message bolder center aligned pad8 grey small"}, tmpTabPrefix,tmpTabNameLabel);
  
 
             

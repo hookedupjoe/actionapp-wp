@@ -115,12 +115,18 @@
             var tmpSidebarControls = BlockEditor.getSidebarControls(tmpSidebarPanels);
 
             var tmpDisplayObject = getDisplayValue(props, true);
-            var tmpTabNameLabel = el('div',{className: 'ui label green small'}, 'Grid Column');
-            //ar tmpTabNameLabel = tmpTabPrefix; //el('div',{className: 'ui label green basic toright padr10'}, 'column ' + (parseInt(tmpAtts.colpos) + 1));
+            var tmpTabNameLabel = el('div',{className: 'ui label grey small'}, 'Grid Column');
+            //ar tmpTabNameLabel = tmpTabPrefix; //el('div',{className: 'ui label grey basic toright padr10'}, 'column ' + (parseInt(tmpAtts.colpos) + 1));
     
             //var tmpHM = tmpTabLabel;
-            var tmpEditHeader = el('div', {className:"ui message bolder center aligned pad8 green small"}, tmpTabNameLabel);
+//            var tmpEditHeader = el('div', {className:"ui message bolder center aligned pad8 grey small"}, tmpTabNameLabel);
  
+var tmpTabPrefix = el('div',{className: 'ui label grey'}, 'Grid Column');
+//var tmpTabNameLabel = el('div',{className: 'ui label brown basic  padr10'}, tmpTabLabel + ' [' + tmpItemName + ']');
+
+//var tmpHM = tmpTabLabel;
+var tmpEditHeader = el('div', {className:"ui message bolder center aligned pad8 grey small"}, tmpTabPrefix);
+
 
             
             var tmpRetEl = el(

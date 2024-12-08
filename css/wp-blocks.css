@@ -12,12 +12,12 @@ i.arrow:after {
 }
 
 .actapp-block-box.is-selected{
-    border:dashed 5px #a5673f;
+    border:dashed 5px #767676;
     min-height:80px !important;
 }
 
 .actapp-block-is-selected {
-    border:dashed 5px #a5673f;
+    border:dashed 5px #767676;
     min-height:80px !important;
 }
 

@@ -99,6 +99,7 @@ class ActAppCommon {
 		);
 		$tmpConfig = array(
 			'rootPath'=>self::getRootPath(),
+			'actappBaseURL'=> ACTIONAPP_WP_BASE_URL . '/', 
 			'actappCatalogURL'=> ACTIONAPP_WP_BASE_URL . '/catalog/', 
 			'libCatalogsURL'=> ACTIONAPP_WP_BASE_URL . '/core/catalogs/', 
 			'restPath' => esc_url_raw( rest_url() ),

@@ -108,19 +108,21 @@
         if (theIsEditMode) {
             
             var tmpUIColor = ''; 
-            var tmpHeaderMsg = 'Tab Container';
-           
+            var tmpHeaderText = 'UI Tabs';
+            var tmpIcon = BlockEditor.getControlIcon();
+
+            var tmpHeaderMsg = el('div',{className: 'ui larger bolder'}, tmpHeaderText)
             var tmpAddBtn = '';
             var tmpBtnBar = ''
             if (props.isSelected) {
-                tmpAddBtn = el('div', { className: 'ui compact button basic brown ', elementname: 'tab', action: 'beAddElement' }, 'Add New Tab');
+                tmpAddBtn = el('div', { className: 'ui compact button basic grey ', elementname: 'tab', action: 'beAddElement' }, 'Add New Tab');
                 tmpBtnBar = el('div', { className: 'ui segment raised slim' }, [
                     tmpAddBtn
                 ], el('div', { className: 'endfloat' }));
                 
             }
-            tmpUIColor = 'brown';
-            var tmpHdr = el('div', { className: 'ui header top attached center aligned fluid ' + tmpUIColor }, tmpHeaderMsg, tmpBtnBar);
+            tmpUIColor = 'grey';
+            var tmpHdr = el('div', { className: 'ui mar2 pad5 segment inverted center aligned fluid ' + tmpUIColor },  tmpIcon, tmpHeaderMsg, tmpBtnBar);
             var tmpRetEl = el('div', { className: 'ui segment ' + theProps.attributes.color || '' }, null,
                 tmpHdr,
                 el('div', { className: 'edit-tabs' + props.attributes.color + ' ' + props.attributes.columns },
