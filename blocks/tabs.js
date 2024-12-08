@@ -50,12 +50,10 @@
         var props = theProps;
         var tmpAtts = props.attributes;
         var tmpClass = getClass(props, true);
-        //console.log('wp.blockEditor.InnerBlocks',wp.blockEditor.InnerBlocks);
 
         var tmpTabsColor = 'blue';
 
-       // console.log( tmpThis,  'we have ' + tmpIBs.length + ' tabs' ); // This will log all the inner blocks on your browser console
-       var tmpTablinksEl = (el('div',{},''));
+        var tmpTablinksEl = (el('div',{},''));
         if( theIsEditMode ){
             var tmpMe = BlockEditor.getBlockInEditor(props);
             var tmpTabs = tmpMe.innerBlocks;
@@ -76,7 +74,7 @@
                     if( iPos == 0){
                         tmpExtraClasses += 'active'
                     }
-//                    console.log('tmpExtraClasses',tmpExtraClasses);
+
                     var tmpAddAtts = {
                         item: tmpTabItem,
                         group: tmpTabGroup,
@@ -87,9 +85,7 @@
                         position: iPos
                     };
 
-                    //appuse="tablinks" group="maintabs" item="maintab1" action="showSubPage" class="item blue active "
                     tmpTabLinks.push(tmpAddAtts)
-    // console.log('tmpTab',tmpTab);
                 }
                 
                 tmpAtts.tabsinfo = JSON.stringify(tmpTabLinks);
@@ -100,11 +96,6 @@
         }
         
 
-        //console.log('tmpAtts.tabsinfo',tmpAtts.tabsinfo);
-        //--> REBUILD --> tmpTablinksEl = el('div',{className: 'mar0 pad0 ui top attached tabular menu'}, tmpAtts.tabsinfo);
-
-        //console.log('Tabs: ',tmpTabs, tmpTabCount);
-        
         if (theIsEditMode) {
             
             var tmpUIColor = ''; 
@@ -131,7 +122,6 @@
                     ]
                 ));
                 
-                //console.log('on edit',props.attributes.tabsinfo);
                 return el('div',{}, tmpRetEl); 
 
             
@@ -161,8 +151,7 @@
         supports: BlockEditor.defaultSupports,
         attributes: info.atts,
         edit: function (props) {
-
-            var tmpStandardProperties = [
+           var tmpStandardProperties = [
                 BlockEditor.getStandardProperty(props, 'groupname', 'Group Name', 'text'),
             ];
 
@@ -193,23 +182,6 @@
         save: function (props) {
             var tmpEl = getDisplayValue(props, false)
             return tmpEl;
-            // // *** using blockProps, need clean HTML
-            // var tmpProps = {className: ''};
-            
-
-
-            // var tmpClasses = getClass(props, true);
-           
-            // tmpProps.className += ' ' + tmpClasses.trim();
-
-            // return el(
-            //     'div',
-            //     tmpProps,
-            //     el(wp.blockEditor.InnerBlocks.Content)
-
-            // );
         },
     });
 })(window.wp, window.ActionAppCore);
-
-

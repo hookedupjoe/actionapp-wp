@@ -119,8 +119,8 @@
 
 
             var tmpStandardProperties = [
-                BlockEditor.getStandardProperty(props, 'itemname', 'Unique Item Name (Required)', 'text'),
-                BlockEditor.getStandardProperty(props, 'tablabel', 'Tab Label', 'text'),
+                BlockEditor.getStandardProperty(props, 'itemname', 'Unique Item Name (Required)', 'text', BlockEditor.standardOnChangeRefresh),
+                BlockEditor.getStandardProperty(props, 'tablabel', 'Tab Label', 'text', BlockEditor.standardOnChangeRefresh),
             ];
 
             var tmpFormatProperties = [

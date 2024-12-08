@@ -93,20 +93,27 @@
         }
         
         BlockEditor.getParentAttributes = function(theBlockID){
+            var tmpParentAttributes = {};
+            var tmpParentBlock = BlockEditor.getParentBlock(theBlockID);
+            if( tmpParentBlock && tmpParentBlock.attributes ){
+                tmpParentAttributes = tmpParentBlock.attributes || {};
+            }
+            return tmpParentAttributes;
+        }
+
+        BlockEditor.getParentBlock = function(theBlockID){
             var tmpParents = wp.data.select( 'core/block-editor' ).getBlockParents(theBlockID);
 
-            var tmpParentAttributes = {};
             if( tmpParents && tmpParents.length > 0 ){
                 //--- Get the direct parent ... 0 is top level
                 var tmpParentID = tmpParents[tmpParents.length-1];
                 var tmpParentBlock = wp.data.select('core/block-editor').getBlocksByClientId(tmpParentID);
                 if( tmpParentBlock && tmpParentBlock.length > 0 ){
-                    tmpParentAttributes = tmpParentBlock[0].attributes || {};
+                    return tmpParentBlock[0];
                 }
             }
-            return tmpParentAttributes;
+            return false;
         }
-
 
         //Todo: Review need for this ...
         BlockEditor.el = function (theType,theClass,theContent,theOptionalAtts){
