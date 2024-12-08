@@ -48,6 +48,7 @@
 
     function getDisplayValue(theProps, theIsEditMode) {
         var props = theProps;
+        var tmpAtts = props.attributes;
         var tmpClass = getClass(props, true);
         //console.log('wp.blockEditor.InnerBlocks',wp.blockEditor.InnerBlocks);
 
@@ -60,20 +61,30 @@
             var tmpTabs = tmpMe.innerBlocks;
             var tmpTabCount = tmpTabs.length;
             var tmpTabLinks = [];
+            
             if(tmpTabCount){
                 for( var iPos in tmpTabs){
                     var tmpTab = tmpTabs[iPos];
                     var tmpTabAtts = tmpTab.attributes;
+                    tmpTabAtts.groupname = tmpAtts.groupname;
+                    tmpTabAtts.tabpos = iPos;
+
                     var tmpTabGroup = tmpTabAtts.groupname;
                     var tmpTabItem = tmpTabAtts.itemname || 'tab-' + (iPos+1);
                     var tmpTabLabel = tmpTabAtts.tablabel || ('Tab: ' + tmpTabItem)
+                    var tmpExtraClasses = '';
+                    if( iPos == 0){
+                        tmpExtraClasses += 'active'
+                    }
+//                    console.log('tmpExtraClasses',tmpExtraClasses);
                     var tmpAddAtts = {
                         item: tmpTabItem,
                         group: tmpTabGroup,
                         appuse: 'tablinks',
                         action: "showSubPage",
-                        className: "item " + tmpTabsColor,
-                        label: tmpTabLabel
+                        className: "item " + tmpTabsColor + ' ' + tmpExtraClasses,
+                        label: tmpTabLabel,
+                        position: iPos
                     };
 
                     //appuse="tablinks" group="maintabs" item="maintab1" action="showSubPage" class="item blue active "
@@ -81,16 +92,16 @@
     // console.log('tmpTab',tmpTab);
                 }
                 
-                props.attributes.tabsinfo = JSON.stringify(tmpTabLinks);
+                tmpAtts.tabsinfo = JSON.stringify(tmpTabLinks);
             } else {
-                props.attributes.tabsinfo = '[]';
+                tmpAtts.tabsinfo = '[]';
             }
 
         }
         
 
-        //console.log('props.attributes.tabsinfo',props.attributes.tabsinfo);
-        //--> REBUILD --> tmpTablinksEl = el('div',{className: 'mar0 pad0 ui top attached tabular menu'}, props.attributes.tabsinfo);
+        //console.log('tmpAtts.tabsinfo',tmpAtts.tabsinfo);
+        //--> REBUILD --> tmpTablinksEl = el('div',{className: 'mar0 pad0 ui top attached tabular menu'}, tmpAtts.tabsinfo);
 
         //console.log('Tabs: ',tmpTabs, tmpTabCount);
         

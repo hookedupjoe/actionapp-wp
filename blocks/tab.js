@@ -34,7 +34,7 @@
     };
     const iconEl = BlockEditor.getControlIcon(info.name);
 
-    BlockEditor.addNumberAtts(info.atts, []);
+    BlockEditor.addNumberAtts(info.atts, ['tabpos']);
     BlockEditor.addBooleanAtts(info.atts, []);
     BlockEditor.addStringAtts(info.atts, ['itemname', 'groupname', 'tablabel']);
 
@@ -44,69 +44,12 @@
     }
 
     function getClass(theProps, theIsEditMode) {
-        return BlockEditor.getStandardClass('ui column', tmpClassSpecs, theProps, theIsEditMode);
+        var tmpExtraClasses = '';
+
+        return BlockEditor.getStandardClass('ui ' + tmpExtraClasses, tmpClassSpecs, theProps, theIsEditMode);
     }
 
     var newEl = BlockEditor.el;
-
-    function BAD____getDisplayValue(theProps, theIsEditMode) {
-        var props = theProps;
-        var tmpAtts = props.attributes;
-        var tmpContent = [];
-
-        var tmpItemName = tmpAtts.itemname || ''
-        var tmpTabLabel = tmpAtts.tablabel || '';
-
-        var tmpClass = getClass(theProps, theIsEditMode);
-        if( !theIsEditMode ){
-            tmpClass += 'tempnot_hidden ';
-        }
-      
-        if( tmpAtts.classes ){
-            tmpClass += tmpAtts.classes + ' ';
-        }
-        var tmpTabPrefix = el('div',{className: 'ui label brown right pointing small compact'}, 'Tab:');
-        var tmpTabNameLabel = el('div',{className: 'ui label brown basic toright padr10'}, tmpItemName);
-
-        var tmpHM = tmpTabLabel;
-        var tmpEditHeader = el('div', {className:"ui message bolder center aligned pad8 brown small"}, tmpTabPrefix, tmpHM,tmpTabNameLabel);
-        tmpContent.push(tmpEditHeader)
-
-
-        if (theIsEditMode) {
-            tmpContent.push(newEl('div', '', el(wp.blockEditor.InnerBlocks,{})));
-        } else {
-            tmpContent.push(el(wp.blockEditor.InnerBlocks.Content));
-        }
-
-        var tmpAttrs = {
-            classname: tmpClass,
-            appuse: 'cards',
-            item: tmpItemName,
-            group: tmpAtts.groupname || '',
-        }
-
-
-        if (theIsEditMode) {
-            if (props.isSelected) {
-                tmpAddBtn = el('div', { className: 'ui compact button basic brown ', action: 'beAddCard' }, 'Add Card');
-                tmpBtnBar = el('div', { className: 'ui segment raised slim' }, [
-                    tmpAddBtn
-                ], el('div', { className: 'endfloat' }));
-                tmpUIColor = 'brown';
-            }
-            var tmpEditorClass = '';
-            if( props.isSelected ){
-                tmpEditorClass += ' actapp-block-is-selected';
-            } else {
-                tmpEditorClass += ' actapp-block-box';
-            }
-
-            return el('div', {}, [newEl('div', tmpAttrs, [tmpContent])]);
-        }
-        el('div', {}, [newEl('div', tmpAttrs, [tmpContent])])
-       // return newEl('div', tmpClass, tmpContent);
-    }
 
     function getDisplayValue(theProps, theIsEditMode) {
 
@@ -135,9 +78,12 @@
         var tmpExtraContent = [];
        
         tmpContent.push(tmpExtraContent);
+        
+        var tmpEC = '';
+        var tmpTabPos = parseInt(tmpAtts.tabpos);
 
         var tmpNewElAtts = {
-            classname: tmpClass,
+            className: tmpClass,
             appuse: 'cards',
             item: tmpItemName,
             group: tmpAtts.groupname || '',
@@ -147,6 +93,9 @@
             return el('div', tmpNewElAtts, [newEl('div', tmpClass, [tmpContent])]);
         }
 
+        if(tmpTabPos > 0 ){
+            tmpNewElAtts.className += ' hidden';
+        }
         return el('div', tmpNewElAtts, tmpContent);
     }
 
@@ -177,7 +126,7 @@
             var tmpStandardProperties = [
                 BlockEditor.getStandardProperty(props, 'itemname', 'Unique Item Name (Required)', 'text'),
                 BlockEditor.getStandardProperty(props, 'tablabel', 'Tab Label', 'text'),
-                BlockEditor.getStandardProperty(props, 'groupname', 'Group Name', 'text'),
+               // BlockEditor.getStandardProperty(props, 'groupname', 'Group Name', 'text'),
             ];
 
             var tmpFormatProperties = [

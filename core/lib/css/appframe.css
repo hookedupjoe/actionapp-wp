@@ -1536,6 +1536,19 @@ cursor: not-allowed !important;
   padding-top: 3px;
 }
 
+body .ui.tabular.menu .item {
+  padding: .5em 1em;
+}
+
+body .ui.tabular.menu.slimtab .item {
+  padding: .5em .75em;
+}
+
+body .ui.tabular.menu.widetab .item {
+  padding: .92857143em 1.42857143em;
+}
+
+
 .toright {
   float:right;
   margin-right:5px;
