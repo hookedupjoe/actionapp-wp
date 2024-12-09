@@ -46,7 +46,7 @@ class ActAppWidgetManager {
 			array(
 				array(
 					'slug' => 'actappui',
-					'title' => __( 'UI Widgets'),
+					'title' => __( 'Action Blocks'),
 				),
 			),
 			$categories
@@ -209,7 +209,7 @@ class ActAppWidgetManager {
 	public static function registerAdminPageWidgetsSettings(){
 		add_menu_page( 
 			__( 'UI Widget Settings'),
-			'UI Widgets',
+			'Action Blocks',
 			'manage_options',
 			'actappwidgetsettings',
 			array( 'ActAppWidgetManager', 'showAdminPageWidgetsSettings' ),

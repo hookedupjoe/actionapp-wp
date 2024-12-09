@@ -50,7 +50,7 @@
         if (theIsEditMode) {
             var tmpUIColor = ''; //was props.attributes.color || 
             var tmpHeaderText = 'UI Cards';
-            var tmpIcon = BlockEditor.getControlIcon();
+            var tmpIcon = BlockEditor.getControlImage();
             var tmpHeaderMsg = el('div',{className: 'ui larger bolder'}, tmpHeaderText)
 
             // if (props.attributes.columns) {

@@ -100,7 +100,7 @@
             
             var tmpUIColor = ''; 
             var tmpHeaderText = 'UI Tabs';
-            var tmpIcon = BlockEditor.getControlIcon();
+            var tmpIcon = BlockEditor.getControlImage();
 
             var tmpHeaderMsg = el('div',{className: 'ui larger bolder'}, tmpHeaderText)
             var tmpAddBtn = '';
