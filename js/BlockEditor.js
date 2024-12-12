@@ -230,15 +230,15 @@
             return BlockEditor.getSelectControl(theCurrentValue,theOnChangeEvent,tmpSelection);
         }
 
-        BlockEditor.getGridSpacingListControl = function(theCurrentValue, theOnChangeEvent){
-            var tmpSelection = [el("option", {value: "default"}, "Default")];
+        BlockEditor.geSlimWideSpacingListControl = function(theCurrentValue, theOnChangeEvent){
+            var tmpSelection = [el("option", {value: ""}, "Default")];
             tmpSelection.push(el("option", {value: 'slimspace'}, "Slim"));
             tmpSelection.push(el("option", {value: 'widespace'}, "Wide"));
             return BlockEditor.getSelectControl(theCurrentValue,theOnChangeEvent,tmpSelection);
         }
 
         BlockEditor.getInvertedListControl = function(theCurrentValue, theOnChangeEvent){
-            var tmpSelection = [el("option", {value: "default"}, "Default")];
+            var tmpSelection = [el("option", {value: ""}, "Default")];
             tmpSelection.push(el("option", {value: 'light'}, "Light"));
             tmpSelection.push(el("option", {value: 'inverted'}, "Inverted"));
             return BlockEditor.getSelectControl(theCurrentValue,theOnChangeEvent,tmpSelection);
@@ -381,10 +381,10 @@
             if( tmpCT == 'inverted' ){
                 return 'getInvertedListControl';
             }            
-            if( tmpCT == 'gridspacing' ){
-                return 'getGridSpacingListControl';
+            if( tmpCT == 'slimwidespacing' ){
+                return 'geSlimWideSpacingListControl';
             }            
-            
+
             if( tmpCT == 'dropdown' ){
                 return 'getDropDownListControl';
             }            
@@ -447,6 +447,9 @@
             //--- ToDo: Review usage / initial need of the above call
         }
 
+        BlockEditor.getRandomID = function(){
+            return window.crypto.randomUUID();
+        }
         //--- Returns React element from universal DOM specs
         BlockEditor.elFromUDom = function(theSpecs){
             var tmpSpec = theSpecs;

@@ -32,8 +32,8 @@
     const iconEl = BlockEditor.getControlIcon(info.name);
 
     BlockEditor.addNumberAtts(info.atts, []);
-    BlockEditor.addStringAtts(info.atts, ['groupname','tabsinfo']);
-    BlockEditor.addBooleanAtts(info.atts, []);
+    BlockEditor.addStringAtts(info.atts, ['groupname','tabsinfo','labelpadding','bodyonly','color']);
+    BlockEditor.addBooleanAtts(info.atts, ['inverted']);
     BlockEditor.addOjectAtts(info.atts, []);
     
 
@@ -51,7 +51,12 @@
         var tmpAtts = props.attributes;
         var tmpClass = getClass(props, true);
 
-        var tmpTabsColor = 'blue';
+        var tmpInvertedClass = '';
+        if( tmpAtts.inverted == true ){
+            tmpInvertedClass = 'inverted'
+        }
+
+        var tmpTabsColor = tmpAtts.color || '';
 
         var tmpTablinksEl = (el('div',{},''));
         if( theIsEditMode ){
@@ -74,7 +79,6 @@
                     if( iPos == 0){
                         tmpExtraClasses += 'active'
                     }
-
                     var tmpAddAtts = {
                         item: tmpTabItem,
                         group: tmpTabGroup,
@@ -87,8 +91,12 @@
 
                     tmpTabLinks.push(tmpAddAtts)
                 }
+                var tmpTabLinkText = JSON.stringify(tmpTabLinks);
+                if( tmpAtts.tabsinfo != tmpTabLinkText ){
+                    tmpAtts.tabsinfo = tmpTabLinkText;
+                    BlockEditor.refreshBlockEditor();
+                }
                 
-                tmpAtts.tabsinfo = JSON.stringify(tmpTabLinks);
             } else {
                 tmpAtts.tabsinfo = '[]';
             }
@@ -97,24 +105,30 @@
         
 
         if (theIsEditMode) {
-            
             var tmpUIColor = ''; 
-            var tmpHeaderText = 'UI Tabs';
+            var tmpHeaderText = 'UI Tabs Container';
             var tmpIcon = BlockEditor.getControlImage();
 
             var tmpHeaderMsg = el('div',{className: 'ui larger bolder'}, tmpHeaderText)
             var tmpAddBtn = '';
             var tmpBtnBar = ''
             if (props.isSelected) {
-                tmpAddBtn = el('div', { className: 'ui compact button basic grey ', elementname: 'tab', action: 'beAddElement' }, 'Add New Tab');
+                if( tmpAtts.groupname != '' ){
+                    tmpAddBtn = el('div', { className: 'ui compact button basic grey ', elementname: 'tab', action: 'beAddElement' }, 'Add New Tab');
+                } else {
+                    tmpAddBtn = el('div', { className: 'ui messsage orange compact small '}, 'Group Name Required. Add in settings.  Each set of tabs should have a unique group name.');
+                }
                 tmpBtnBar = el('div', { className: 'ui segment raised slim' }, [
                     tmpAddBtn
                 ], el('div', { className: 'endfloat' }));
                 
             }
             tmpUIColor = 'grey';
+           
             var tmpHdr = el('div', { className: 'ui mar2 pad5 segment inverted center aligned fluid ' + tmpUIColor },  tmpIcon, tmpHeaderMsg, tmpBtnBar);
-            var tmpRetEl = el('div', { className: 'ui segment ' + theProps.attributes.color || '' }, null,
+            var tmpSegClasses = theProps.attributes.color || '' ;
+            
+            var tmpRetEl = el('div', { className: 'ui segment ' + tmpSegClasses}, null,
                 tmpHdr,
                 el('div', { className: 'edit-tabs' + props.attributes.color + ' ' + props.attributes.columns },
                     [
@@ -135,9 +149,23 @@
                 tmpTabLinkEls.push(el('div',tmpTabInfo,tmpTabInfo.label));
             }
             //---> Can add slim as an option
-            tmpTablinksEl = el('div',{className: 'mar0 pad0 ui top attached tabular menu'}, tmpTabLinkEls);
-            var tmpTabsEl = el('div',{className: 'ui  bottom attached slim blue segment'}, BlockEditor.el('div', tmpClass, el(wp.blockEditor.InnerBlocks.Content)));
-
+            var tmpMenuClass = 'mar0 pad0 ui top attached tabular menu ' + tmpInvertedClass;
+            
+            if( tmpAtts.labelpadding ){
+                tmpMenuClass += ' ' + tmpAtts.labelpadding;
+            }
+            
+            // if( tmpInvertedClass ){
+            //     tmpTabsColor = 'black';
+            // }
+            tmpTablinksEl = el('div',{className: tmpMenuClass}, tmpTabLinkEls);
+            var tmpContents = el('div', {className:"ui segment theme-default-padding " + tmpTabsColor}, BlockEditor.el('div', tmpClass, el(wp.blockEditor.InnerBlocks.Content)));
+            
+            var tmpTabsEl = el('div',{className: ''}, tmpContents);
+            if( tmpAtts.bodyonly == true ){
+                tmpTablinksEl = el('div');
+                tmpTabsEl =  el(wp.blockEditor.InnerBlocks.Content);
+            }
             return el('div',{}, tmpTablinksEl, tmpTabsEl);
         }
 
@@ -151,9 +179,17 @@
         supports: BlockEditor.defaultSupports,
         attributes: info.atts,
         edit: function (props) {
+            var tmpAtts = props.attributes;
+            if( tmpAtts.groupname == ''){
+                tmpAtts.groupname = BlockEditor.getRandomID();
+            }
            var tmpStandardProperties = [
-                BlockEditor.getStandardProperty(props, 'groupname', 'Group Name', 'text'),
-            ];
+            BlockEditor.getStandardProperty(props, 'groupname', 'Group Name', 'text'),
+            BlockEditor.getStandardProperty(props, 'color', 'Tabs Color', 'color'),
+            BlockEditor.getStandardProperty(props, 'inverted', 'Inverted', 'checkbox'),
+            BlockEditor.getStandardProperty(props, 'labelpadding', 'Label Padding', 'slimwidespacing'),
+            BlockEditor.getStandardProperty(props, 'bodyonly', 'Exclude the tabs?', 'checkbox'),
+           ];
 
             var tmpFormatProperties = [
                 BlockEditor.getStandardProperty(props,'classes', 'Additional Classes', 'text' )

@@ -49,7 +49,7 @@
 
         if (theIsEditMode) {
             var tmpUIColor = ''; //was props.attributes.color || 
-            var tmpHeaderText = 'UI Cards';
+            var tmpHeaderText = 'UI Cards Container';
             var tmpIcon = BlockEditor.getControlImage();
             var tmpHeaderMsg = el('div',{className: 'ui larger bolder'}, tmpHeaderText)
 
@@ -98,7 +98,7 @@
             var tmpStandardProperties = [
                 BlockEditor.getStandardProperty(props, 'columns', 'Columns', 'columns'),
                 BlockEditor.getStandardProperty(props, 'minColWidth', 'Minimum Column Width', 'number'),
-                BlockEditor.getStandardProperty(props, 'cardspacing', 'Space Between Columns', 'gridspacing'),
+                BlockEditor.getStandardProperty(props, 'cardspacing', 'Space Between Columns', 'slimwidespacing'),
                 BlockEditor.getStandardProperty(props, 'imageheight', 'Exact Image Height', 'number',BlockEditor.standardOnChangeRefresh),
                 BlockEditor.getStandardProperty(props, 'color', 'All Cards Color', 'color'),
                 BlockEditor.getStandardProperty(props, 'headerType', 'Header Type', 'inverted', BlockEditor.standardOnChangeRefresh),

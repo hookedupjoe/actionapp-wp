@@ -60,9 +60,9 @@
         var tmpTabLabel = tmpAtts.tablabel || '';
         var tmpContent = [];
         var tmpClass = getClass(theProps, theIsEditMode);
-        if( theIsEditMode ){
-            tmpClass += ' fluid';
-        }
+        // if( theIsEditMode ){
+        //     tmpClass += ' fluid';
+        // }
       
         if( tmpAtts.classes ){
             tmpClass += ' ' + tmpAtts.classes;
@@ -79,7 +79,6 @@
         tmpContent.push(tmpExtraContent);
         
         var tmpTabPos = parseInt(tmpAtts.tabpos);
-
         var tmpNewElAtts = {
             className: tmpClass,
             appuse: 'cards',
@@ -91,8 +90,9 @@
             return el('div', tmpNewElAtts, [newEl('div', tmpClass, [tmpContent])]);
         }
 
+        //--- Why do they stick?
         if(tmpTabPos > 0 ){
-            tmpNewElAtts.className += ' hidden';
+            tmpNewElAtts.className += ' xhidden';
         }
         return el('div', tmpNewElAtts, tmpContent);
     }
@@ -113,6 +113,23 @@
         attributes: info.atts,
         edit: function (props) {
             var tmpAtts = props.attributes;
+            var tmpParentBlock = BlockEditor.getParentBlock(props.clientId);
+            
+            var tmpIBs = tmpParentBlock.innerBlocks;
+            for( var iPos in tmpIBs){
+                var tmPIB = tmpIBs[iPos];
+                if( tmPIB.clientId == props.clientId ){
+                    //--- This is me
+                    if( tmpAtts.tabpos != iPos ){
+                        tmpAtts.tabpos = iPos;
+                        BlockEditor.refreshBlockEditor();
+                    }
+                }
+                
+            }
+            if( tmpAtts.itemname == ''){
+                tmpAtts.itemname = BlockEditor.getRandomID();
+            }
 
             var tmpItemName = tmpAtts.itemname || ''
             var tmpTabLabel = tmpAtts.tablabel || '';
@@ -120,7 +137,7 @@
 
             var tmpStandardProperties = [
                 BlockEditor.getStandardProperty(props, 'itemname', 'Unique Item Name (Required)', 'text', BlockEditor.standardOnChangeRefresh),
-                BlockEditor.getStandardProperty(props, 'tablabel', 'Tab Label', 'text', BlockEditor.standardOnChangeRefresh),
+                BlockEditor.getStandardProperty(props, 'tablabel', 'Tab Label (Required)', 'text', BlockEditor.standardOnChangeRefresh),
             ];
 
             var tmpFormatProperties = [
@@ -143,8 +160,17 @@
             }
             
             var tmpTabPrefix = el('div',{className: 'ui label grey right pointing'}, 'Tab');
-            var tmpTabNameLabel = el('div',{className: 'ui label grey basic  padr10'}, tmpTabLabel + ' [' + tmpItemName + ']');
+            var tmpAddedInfo = '';
+            if(tmpItemName.length < 30){
+                tmpAddedInfo = ' [' + tmpItemName + ']'
+            }
+            var tmpTabNameLabel = el('div',{className: 'ui label grey basic  padr10'}, tmpTabLabel + tmpAddedInfo);
     
+            if(tmpTabLabel == '' ){
+                var tmpTabPrefix = el('div',{className: 'ui label orange right pointing'}, 'Required: ');
+                var tmpTabNameLabel = el('div',{className: 'ui label grey basic  padr10'}, 'Every tab entry needs a tab label.', el('span',{'className': 'ui bolder padt8 larger marl10'}, 'Set value in settings.'));
+            }
+
             //var tmpHM = tmpTabLabel;
             var tmpEditHeader = el('div', {className:"ui message bolder center aligned pad8 grey small"}, tmpTabPrefix,tmpTabNameLabel);
  

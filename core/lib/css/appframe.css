@@ -1540,11 +1540,11 @@ body .ui.tabular.menu .item {
   padding: .5em 1em;
 }
 
-body .ui.tabular.menu.slimtab .item {
-  padding: .5em .75em;
+body .ui.tabular.menu.slimspace .item {
+  padding: .25em .5em;
 }
 
-body .ui.tabular.menu.widetab .item {
+body .ui.tabular.menu.widespace .item {
   padding: .92857143em 1.42857143em;
 }
 
@@ -1984,16 +1984,21 @@ width:150px !important;
 
 /*  INVERTED POPUP MENU UPDATE */
 
+.ui.menu.inverted .item:hover {
+  color: #FFFFFF !important;
+}
+
+
+.ui.inverted.menu .item{
+  background: 0 0;
+  color: rgba(255, 255, 255, .9);
+}
+
 /*--- Black ---*/
 .ui.black.menu.inverted .dropdown.item .menu .item {
 	background-color: black !important;
 	color: #FFFFFF !important;
 }
-
-.ui.black.menu.inverted .dropdown.item .menu .item:hover {
-	background-color: black !important;
-}
-
 
 /*--- Red ---*/
 .ui.red.menu.inverted .dropdown.item .menu .item {
@@ -2275,7 +2280,6 @@ line-height: 18px;
 .container
 {
 max-width:768px;
-margin-bottom:20px;
 }
 
 .roundedbox

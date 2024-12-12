@@ -150,7 +150,7 @@
         }
 
         if( tmpAtt.text ){
-            tmpMainContent.push( newEl('div','pad10 description',tmpAtt.text) );
+            tmpMainContent.push( newEl('div','description',tmpAtt.text) );
         }
 
         if (tmpMainContent.length > 0) {

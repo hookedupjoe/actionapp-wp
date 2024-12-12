@@ -124,7 +124,7 @@
             var tmpStandardProperties = [
                 BlockEditor.getStandardProperty(props, 'columns', 'Columns', 'columns'),
                 BlockEditor.getStandardProperty(props, 'minColWidth', 'Minimum Column Width', 'number'),
-                BlockEditor.getStandardProperty(props, 'gridspacing', 'Space Between Columns', 'gridspacing'),
+                BlockEditor.getStandardProperty(props, 'gridspacing', 'Space Between Columns', 'slimwidespacing'),
                 BlockEditor.getStandardProperty(props, 'centered', 'Centered', 'checkbox'),
             ];
             var tmpSidebarPanels = [

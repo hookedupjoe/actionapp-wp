@@ -650,6 +650,16 @@ class ActAppDesigner {
 
 	}
 
+	//--- Used when replacing custom fields simple data calls
+	public static function get_field_value($theID, $theName){
+		$tmpRet = get_post_meta($theID, $theName);
+		if( is_array($tmpRet)){
+			$tmpRet = $tmpRet[0]; //join?
+		}
+
+		return $tmpRet;
+	}
+
 	//--- Return the current post as a "document" array
 	public static function get_post_as_doc($theOptionalID = null, $theFields = null, $theIncludePostFields = null){
 		global $post;
