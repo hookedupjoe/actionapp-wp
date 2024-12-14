@@ -60,7 +60,7 @@
         }
         var tmpContent = [];
         if( tmpAtts.subtext != '' ){
-            tmpContent.push( BlockEditor.el('div','sub header',tmpAtts.subtext) );
+            tmpContent.push( BlockEditor.el('div','ui sub header',tmpAtts.subtext) );
         }
         
         var tmpDisplayObject = el('div',{className:tmpCN},[tmpText,tmpContent]);

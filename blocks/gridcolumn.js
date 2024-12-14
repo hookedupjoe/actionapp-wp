@@ -94,9 +94,7 @@
         },
         attributes: info.atts,
         edit: function (props) {
-            console.log('edit',props);
             var tmpAtts = props.attributes;
-//            var tmpParentAttributes = BlockEditor.getParentAttributes(props.clientId);
 
             var tmpStandardProperties = [
                 BlockEditor.getStandardProperty(props, 'centered', 'Centered', 'checkbox'),

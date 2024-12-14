@@ -26,6 +26,11 @@ figure.ui {
   font-family: unset;  
 }
 
+body .ui.header>.ui.sub.header {
+  text-transform: none !important;
+  color: unset !important;
+}
+
 /* CARD UPDATES */
 
 .ui.one.cards {

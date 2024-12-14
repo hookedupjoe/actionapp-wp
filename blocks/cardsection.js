@@ -77,6 +77,7 @@
 
                 var tmpAddBtn = '';
                 var tmpBtnBar = ''
+                var tmpAddMsg = '';
                 
                     tmpAddBtn = el('div', { className: 'ui compact button basic brown ', elementname: 'bottomattachedbutton', action: 'beAddElement' }, 'Add Button');
                     tmpAddMsg = el('div', { className: 'ui compact button basic brown ', elementname: 'bottomattachedmessage', action: 'beAddElement' }, 'Add Message');

@@ -40,7 +40,7 @@
         string: ['gridspacing']
     }
     function getClass(theProps, theIsEditMode) {
-        var tmpClass = BlockEditor.getStandardClass('ui grid stackable ', tmpClassSpecs, theProps, theIsEditMode);
+        var tmpClass = BlockEditor.getStandardClass('ui grid ', tmpClassSpecs, theProps, theIsEditMode);
         if (theProps.attributes.slimspacing) {
             tmpClass += ' slim';
         }
